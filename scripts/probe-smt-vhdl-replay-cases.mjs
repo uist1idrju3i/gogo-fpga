@@ -113,6 +113,11 @@ metadata.versions.yosys = execFileSync(path.join(root, "build/native/yosys"), ["
 const ghdlNative = path.join(root, "build/ghdl-native/bin/ghdl");
 const ghdlWasm = path.join(root, "build/ghdl-wasm/ghdl-synth.wasm");
 assert.equal(digest(readFileSync(ghdlNative)), original.ghdl.sha256, "GHDL native binary changed");
+const ghdlVersion = spawnSync(ghdlNative, ["--version"], { encoding: "utf8", timeout: 30_000 });
+assert.ifError(ghdlVersion.error); assert.equal(ghdlVersion.status, 0);
+json("versions/ghdl-native.json", { status: ghdlVersion.status, stdout: ghdlVersion.stdout, stderr: ghdlVersion.stderr });
+metadata.versions.ghdl = ghdlVersion.stdout.split("\n")[0].trim();
+assert.equal(metadata.versions.ghdl, original.ghdl.version, "GHDL version changed");
 function loadTree(directory) {
   return Object.fromEntries(readdirSync(directory).map((name) => {
     const file = path.join(directory, name);
@@ -123,7 +128,17 @@ const librariesTree = loadTree(path.join(root, "build/ghdl-native/lib/ghdl"));
 const ghdlManifest = readFileSync(path.join(root, "build/ghdl-wasm/build-manifest.tsv"), "utf8");
 const ghdlChecksums = readFileSync(path.join(root, "build/ghdl-wasm/SHA256SUMS"), "utf8");
 assert.equal(ghdlChecksums.split(/\s+/)[0], digest(readFileSync(ghdlWasm)), "GHDL WASM binary changed");
-metadata.ghdl = { native: original.ghdl, wasmManifest: digest(ghdlManifest), wasmChecksums: digest(ghdlChecksums) };
+const libraryFiles = (directory, prefix = "") => readdirSync(directory).sort().flatMap((name) => {
+  const file = path.join(directory, name);
+  return statSync(file).isDirectory() ? libraryFiles(file, prefix + name + "/") : [[prefix + name, digest(readFileSync(file))]];
+});
+metadata.ghdl = { native: original.ghdl, wasm: { sha256: digest(readFileSync(ghdlWasm)) }, wasmManifest: digest(ghdlManifest), wasmChecksums: digest(ghdlChecksums),
+  libraries: Object.fromEntries(libraryFiles(path.join(root, "build/ghdl-native/lib/ghdl"))) };
+save("build/ghdl-wasm-build-manifest.tsv", ghdlManifest);
+if (values.formal) {
+  input("ghdl-native/ghdl", ghdlNative, original.ghdl.sha256);
+  input("ghdl-wasm/ghdl-synth.wasm", ghdlWasm, metadata.ghdl.wasm.sha256);
+}
 const vpiConfig = Object.fromEntries(["cflags", "ldflags", "include-dir", "library-dir"].map((name) => [name,
   execFileSync(ghdlNative, [`--vpi-${name}`], { encoding: "utf8" }).trim()]));
 const replayPlugin = buildGhdlReplayPlugin(ghdlNative, path.join(out, "ghdl-replay-plugin"));
@@ -225,13 +240,22 @@ for (const solver of solvers) {
     assert.ok(reference, "Missing native reference");
     if (reference.error) {
       // The upstream baseline itself failed for this case (e.g. smtbmc crashing
-      // on a solver's output format): record it as a solver-side tool error.
-      for (const origin of ["native", "pyodide"]) {
-        record({ solver, case: fixture.name, origin, runtime: "none", target: "none",
-          phase: fixture.mode === "prove" ? "basecase" : "bmc", expected: "tool-error", actual: "tool-error",
-          exitCode: reference.exitCode ?? "", elapsedMs: reference.elapsedMs ?? "",
-          sourceSha256: digest(fixture.source), vhdlSha256: digest(fixture.source), error: `baseline: ${reference.error}` });
+      // on a solver's output format): keep its logs and record a solver-side tool error.
+      assert.ok(fixture.kind === "counterexample" && reference.status === "ERROR" && reference.exitCode === 16, reference.error);
+      const label = solver + "-" + fixture.name;
+      json(label + "/upstream.json", reference);
+      const engineLogs = Object.keys(reference.files).filter(name => /^result\/engine_0\/logfile[^/]*\.txt$/.test(name)).sort();
+      assert.ok(engineLogs.length > 0, "Missing upstream engine log");
+      for (const name of ["top.vhd", "top.v", ...engineLogs, "result/logfile.txt"]) {
+        const bytes = readFileSync(path.join(baseline, label, name));
+        assert.equal(digest(bytes), reference.files[name].sha256, name);
+        save(label + "/baseline/" + name, bytes);
       }
+      record({ solver, case: fixture.name, origin: "native", runtime: "none", target: "none",
+        phase: fixture.mode === "prove" ? "basecase" : "bmc", expected: "tool-error", actual: "tool-error",
+        exitCode: reference.exitCode, elapsedMs: reference.elapsedMs,
+        sourceSha256: digest(fixture.source), vhdlSha256: digest(fixture.source), loweredSha256: reference.files["top.v"].sha256,
+        error: "Upstream SBY ERROR exit 16" });
       continue;
     }
     const lowered = lowerVhdl(fixture, path.join(out, "lowered", fixture.name));
@@ -359,7 +383,7 @@ for (const solver of solvers) {
           elapsedMs, steps: replay.steps, failures: JSON.stringify(verification.failures ?? []),
           replaySha256: digest(replay.content), stdoutSha256: digest(execution.stdout), stderrSha256: digest(execution.stderr),
           vcdSha256: digest(wave ?? ""), error: verification.reason });
-        if (verification.status !== "verified") console.error(`${label}/lowered-${runtime}: ${verification.reason}`);
+        assert.equal(verification.status, "verified", `${label}/lowered-${runtime}: ${verification.reason}`);
       }
       const ghdlPlan = createGhdlReplay(replay, { top: "top", psl: fixture.psl });
       save(label + "/ghdl-replay.txt", ghdlPlan.content); json(label + "/ghdl-plan.json", { ...ghdlPlan, content: undefined, contentSha256: digest(ghdlPlan.content) });
