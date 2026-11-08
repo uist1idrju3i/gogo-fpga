@@ -193,6 +193,7 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 | [SMT反例の原回路による再実行](docs/experiments/S15-smt-original-replay.md) | 原本の生成testbenchは内部初期値を代入するため無条件で独立検証とはしない。[記録層の独立監査](docs/experiments/S15-smt-trace-audit.md)は正式5回・A/A 2回の全896行19列、改変対照170件、ZIP復元後監査を通過。元Verilog/VHDL再実行・画面接続は未完了 |
 | [SMT反例の元Verilog再実行](docs/experiments/S15-smt-verilog-replay.md) | DUTの内部状態を設定せず、入力駆動とport・内部信号・clock・時刻・propertyの独立照合を追加。正式5回・A/A 2回の全1,484行23列、改変対照316件、ZIP全96,592ファイルの復元後監査を通過。元VHDL/PSL、画面統合は未完了 |
 | [SMT反例の元VHDL/PSLと下位化Verilog再実行](docs/experiments/S15-smt-vhdl-replay.md) | GHDL+VPIによる元VHDL再実行とIcarus両版による下位化再実行。違反周期・instance path・全port値・VCD・PSL reportの照合を追加。正式5回・A/A 2回の全1,785行27列、改変対照493件、ZIP全74,316ファイルの復元後監査を通過。z3はsmtbmcクラッシュで候補外。画面統合は未完了 |
+| [SMT反例再実行の言語横断監査](docs/experiments/S15-smt-replay-coverage-audit.md) | Verilog/VHDL両経路の反例再実行をまとめ、全2,889行でexpected=actual一致を確認。cover・induction・AIGER/BTOR・SAT未反復部分・z3+VHDLを検証済みにしない境界を監査。画面統合とSAT経路の正式反復は残件 |
 | [形式検証の候補と有効化条件](docs/research/formal-capabilities.md) | SMT全9選択肢・SBY全6エンジンと内蔵SAT。反復検証と製品資材を分離し、未対応候補は理由付きで無効。追加solverの製品認定は残件 |
 | [原本SBY・SMTBMCのprocess境界](docs/experiments/S15-sby-process.md) | Pyodideの制約、SQLite、native SBY12条件、SMTBMC仮想processの16条件・AST照合、Yosys子workerと安全なファイル差分、初期の失敗記録 |
 | [SBY全体の仮想process接続](docs/experiments/S15-sby-runtime.md) | SbyPopen・単一slot・子差分・両solver各6条件の比較 |
