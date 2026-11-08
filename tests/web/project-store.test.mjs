@@ -5,13 +5,14 @@ import { defaultSimulationSettings } from "../../web/lib/project.mjs";
 import { createLibraryProject } from "./library-fixture.mjs";
 
 const project = {
-  version: 3,
+  version: 4,
   libraries: [],
   name: "blink",
   board: "tangnano9k",
   top: "top",
   vhdlStandard: "2008",
   simulation: defaultSimulationSettings(),
+  formal: null,
   files: [{ path: "src/top.v" }, { path: "build/top.fs" }],
 };
 
@@ -58,7 +59,8 @@ test("memory project store migrates version 1 projects to default simulation set
     ]]),
   });
   const loaded = await store.load("blink");
-  assert.equal(loaded.project.version, 3);
+  assert.equal(loaded.project.version, 4);
+  assert.equal(loaded.project.formal, null);
   assert.deepEqual(loaded.project.libraries, []);
   assert.deepEqual(loaded.project.simulation, defaultSimulationSettings());
 });
@@ -167,12 +169,14 @@ test("OPFS reads the legacy layout, keeps it usable on a failed migration and re
   }
   const legacy = { ...project, name: "legacy", version: 2, files: [{ path: "top.v" }] };
   delete legacy.libraries;
+  delete legacy.formal;
   await put(legacyDirectory, "project.json", JSON.stringify(legacy));
   await put(legacyDirectory, "top.v", "module top; endmodule\n");
   const store = createOpfsStore(mock.storage);
   const migrated = await store.load("legacy");
-  assert.equal(migrated.project.version, 3);
+  assert.equal(migrated.project.version, 4);
   assert.deepEqual(migrated.project.libraries, []);
+  assert.equal(migrated.project.formal, null);
   mock.state.failClose = true;
   await assert.rejects(store.save(migrated.project, migrated.files), /保存できません/);
   assert.equal((await store.load("legacy")).project.name, "legacy");

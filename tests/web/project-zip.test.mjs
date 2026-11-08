@@ -140,6 +140,7 @@ test("legacy project ZIPs migrate to default simulation settings", async () => {
   template.project.version = 1;
   delete template.project.simulation;
   delete template.project.libraries;
+  delete template.project.formal;
   const imported = await importProjectZip(
     makeZip(manifestEntries(
       template.project,
@@ -148,8 +149,9 @@ test("legacy project ZIPs migrate to default simulation settings", async () => {
       ),
     )),
   );
-  assert.equal(imported.project.version, 3);
+  assert.equal(imported.project.version, 4);
   assert.deepEqual(imported.project.libraries, []);
+  assert.equal(imported.project.formal, null);
   assert.deepEqual(imported.project.simulation, {
     top: "top_tb",
     files: null,
@@ -305,7 +307,8 @@ test("version 2 ZIPs gain an empty library selection without changing simulation
   delete project.libraries;
   project.simulation.timeLimitSeconds = 25;
   const imported = await importProjectZip(makeZip(manifestEntries(project, Object.fromEntries(files))));
-  assert.equal(imported.project.version, 3);
+  assert.equal(imported.project.version, 4);
   assert.deepEqual(imported.project.libraries, []);
+  assert.equal(imported.project.formal, null);
   assert.equal(imported.project.simulation.timeLimitSeconds, 25);
 });

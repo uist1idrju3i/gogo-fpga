@@ -7,13 +7,14 @@ import {
 } from "../../web/lib/project.mjs";
 
 const validProject = {
-  version: 3,
+  version: 4,
   libraries: [],
   name: "blink",
   board: "tangnano9k",
   top: "top",
   files: [{ path: "src/top.v" }, { path: "src/top.vhd" }],
   simulation: { top: "top_tb", files: null, timeLimitSeconds: 10 },
+  formal: null,
 };
 
 test("project schema accepts the supported shape", () => {
@@ -33,9 +34,9 @@ test("project schema rejects unknown keys and versions", () => {
   assert.equal(unknownKey.ok, false);
   assert.match(unknownKey.errors.join(" "), /未対応の項目/);
 
-  const wrongVersion = validateProject({ ...validProject, version: 1 });
+  const wrongVersion = validateProject({ ...validProject, version: 3 });
   assert.equal(wrongVersion.ok, false);
-  assert.match(wrongVersion.errors.join(" "), /版は 3/);
+  assert.match(wrongVersion.errors.join(" "), /版は 4/);
 });
 
 test("project schema validates simulation settings and selected Verilog files", () => {
@@ -58,6 +59,61 @@ test("project schema validates simulation settings and selected Verilog files", 
     }).ok,
     true,
   );
+});
+
+test("project schema validates formal settings and selected HDL files", () => {
+  const formal = {
+    engine: "smtbmc",
+    solver: "yices2",
+    mode: "bmc",
+    depth: 20,
+    timeoutSeconds: 30,
+    memoryMiB: 512,
+    top: "top",
+    clock: "clk",
+    edge: "posedge",
+    files: ["src/top.v"],
+    sby: null,
+  };
+  assert.equal(
+    validateProject({ ...validProject, formal }).ok,
+    true,
+  );
+  assert.equal(
+    validateProject({
+      ...validProject,
+      files: [...validProject.files, { path: "formal/top.sby" }],
+      formal: { ...formal, sby: "formal/top.sby", files: null },
+    }).ok,
+    true,
+  );
+  const badSolvers = [
+    { ...formal, solver: "missing" },
+    { ...formal, solver: null },
+    { ...formal, engine: "yosys-sat" },
+    { ...formal, engine: "yosys-sat", solver: null, mode: "cover" },
+    { ...formal, mode: "live" },
+    { ...formal, depth: 0 },
+    { ...formal, depth: 1001 },
+    { ...formal, timeoutSeconds: 301 },
+    { ...formal, memoryMiB: 32 },
+    { ...formal, top: "not valid!" },
+    { ...formal, clock: "bad name" },
+    { ...formal, edge: "both" },
+    { ...formal, files: ["src/missing.v"] },
+    { ...formal, files: ["src/top.vhd", "src/top.vhd"] },
+    { ...formal, files: ["src/top.cst"] },
+    { ...formal, extra: true },
+    { ...formal, sby: "src/top.v" },
+    { ...formal, sby: "formal/missing.sby" },
+  ];
+  for (const broken of badSolvers) {
+    assert.equal(
+      validateProject({ ...validProject, formal: broken }).ok,
+      false,
+      JSON.stringify(broken),
+    );
+  }
 });
 
 test("project schema rejects unknown boards and duplicate paths", () => {

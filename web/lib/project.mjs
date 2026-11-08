@@ -1,4 +1,5 @@
 import { getBoard } from "./boards.mjs";
+import { FORMAL_ENGINES, FORMAL_SOLVERS } from "./formal-capabilities.mjs";
 import { inspectInstalledLibraries, isLibraryPath, validateLibrarySelections } from "./libraries.mjs";
 
 const PROJECT_KEYS = new Set([
@@ -10,10 +11,39 @@ const PROJECT_KEYS = new Set([
   "vhdlStandard",
   "simulation",
   "libraries",
+  "formal",
 ]);
 const FILE_KEYS = new Set(["path"]);
 const SIMULATION_KEYS = new Set(["top", "files", "timeLimitSeconds"]);
-export const PROJECT_VERSION = 3;
+const FORMAL_KEYS = new Set([
+  "engine",
+  "solver",
+  "mode",
+  "depth",
+  "timeoutSeconds",
+  "memoryMiB",
+  "top",
+  "clock",
+  "edge",
+  "files",
+  "sby",
+]);
+const FORMAL_EDGES = new Set(["posedge", "negedge"]);
+const IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_$]*$/;
+export const PROJECT_VERSION = 4;
+export const DEFAULT_FORMAL_SETTINGS = Object.freeze({
+  engine: "smtbmc",
+  solver: "yices2",
+  mode: "bmc",
+  depth: 20,
+  timeoutSeconds: 30,
+  memoryMiB: 512,
+  top: "",
+  clock: null,
+  edge: "posedge",
+  files: null,
+  sby: null,
+});
 export const DEFAULT_SIMULATION_SETTINGS = Object.freeze({
   top: "top_tb",
   files: null,
@@ -33,6 +63,8 @@ const ALLOWED_EXTENSIONS = new Set([
   ".mem",
   ".bin",
   ".dat",
+  ".sby",
+  ".smtc",
 ]);
 
 function isObject(value) {
@@ -139,10 +171,89 @@ export function migrateProject(project) {
     migrated.simulation ??= defaultSimulationSettings();
   }
   if (migrated.version === 2) {
-    migrated.version = PROJECT_VERSION;
+    migrated.version = 3;
     if (!Object.hasOwn(migrated, "libraries")) migrated.libraries = [];
   }
+  if (migrated.version === 3) {
+    migrated.version = PROJECT_VERSION;
+    if (!Object.hasOwn(migrated, "formal")) migrated.formal = null;
+  }
   return migrated;
+}
+
+function validateFormalSettings(formal, projectPaths) {
+  const errors = [];
+  if (!isObject(formal)) {
+    return ["形式検証設定の形式が正しくありません。"];
+  }
+  for (const key of Object.keys(formal)) {
+    if (!FORMAL_KEYS.has(key)) {
+      errors.push(`形式検証設定に未対応の項目があります: ${key}`);
+    }
+  }
+  const engine = FORMAL_ENGINES.find((entry) => entry.id === formal.engine);
+  if (!engine) {
+    errors.push("形式検証の engine が不正です。");
+  }
+  if (typeof formal.top !== "string" || !IDENTIFIER.test(formal.top)) {
+    errors.push("形式検証のトップモジュール名を指定してください。");
+  }
+  if (formal.clock !== null && formal.clock !== undefined) {
+    if (typeof formal.clock !== "string" || !IDENTIFIER.test(formal.clock)) {
+      errors.push("形式検証のクロック名を指定してください。");
+    }
+  }
+  if (!FORMAL_EDGES.has(formal.edge)) {
+    errors.push("形式検証のクロック極性は posedge または negedge にしてください。");
+  }
+  if (!Number.isInteger(formal.depth) || formal.depth < 1 || formal.depth > 1000) {
+    errors.push("形式検証の深さは 1 から 1000 にしてください。");
+  }
+  if (!Number.isInteger(formal.timeoutSeconds) || formal.timeoutSeconds < 1 || formal.timeoutSeconds > 300) {
+    errors.push("形式検証の時間上限は 1 から 300 秒にしてください。");
+  }
+  if (!Number.isInteger(formal.memoryMiB) || formal.memoryMiB < 64 || formal.memoryMiB > 1024) {
+    errors.push("形式検証のメモリー上限は 64 から 1024 MiB にしてください。");
+  }
+  if (engine) {
+    if (!engine.modes.includes(formal.mode)) {
+      errors.push(`形式検証の mode ${String(formal.mode)} は ${engine.id} では使えません。`);
+    }
+    if (engine.id === "smtbmc") {
+      const solver = FORMAL_SOLVERS.find((entry) => entry.id === formal.solver);
+      if (!solver) errors.push("形式検証の solver が不正です。");
+    } else if (formal.solver !== null && formal.solver !== undefined) {
+      errors.push("形式検証の solver は SMTBMC のときだけ指定してください。");
+    }
+  }
+  if (formal.files !== null && formal.files !== undefined) {
+    if (!Array.isArray(formal.files)) {
+      errors.push("形式検証のファイル一覧の形式が正しくありません。");
+    } else {
+      const seen = new Set();
+      for (const path of formal.files) {
+        if (typeof path !== "string" || !projectPaths.has(path)) {
+          errors.push(`形式検証のファイルがプロジェクトにありません: ${String(path)}`);
+          continue;
+        }
+        if (seen.has(path)) {
+          errors.push(`形式検証のファイルが複数選択されています: ${path}`);
+        }
+        seen.add(path);
+        if (isLibraryPath(path) || !/\.(?:v|vh|vhd|vhdl)$/i.test(path)) {
+          errors.push(`形式検証には HDL ファイルを選んでください: ${path}`);
+        }
+      }
+    }
+  }
+  if (formal.sby !== null && formal.sby !== undefined) {
+    if (typeof formal.sby !== "string" || !projectPaths.has(formal.sby)) {
+      errors.push(`形式検証の SBY 設定がプロジェクトにありません: ${String(formal.sby)}`);
+    } else if (!/\.sby$/i.test(formal.sby)) {
+      errors.push(`形式検証の SBY 設定は .sby ファイルにしてください: ${formal.sby}`);
+    }
+  }
+  return errors;
 }
 
 export function validateProject(project) {
@@ -272,6 +383,17 @@ export function validateProject(project) {
         errors.push(`シミュレーションには Verilog ファイルを選んでください: ${path}`);
       }
     }
+  }
+
+  if (project.formal !== null && project.formal !== undefined) {
+    const projectPaths = new Set(
+      Array.isArray(project.files)
+        ? project.files
+          .filter((file) => isObject(file))
+          .map(({ path }) => path)
+        : [],
+    );
+    errors.push(...validateFormalSettings(project.formal, projectPaths));
   }
 
   return { ok: errors.length === 0, errors };
