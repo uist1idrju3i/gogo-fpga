@@ -45,7 +45,7 @@ export function createSatScripts({ sources, includeDirs = [], top, mode = "bmc",
   const common = `-set-assumes -show-ports -show-regs -timeout ${timeout}`;
   return {
     prepare: [
-      ...read, `hierarchy -check -top ${top}`, "proc", "flatten", "chformal -lower",
+      ...read, `hierarchy -check -top ${top}`, "proc", "flatten", "async2sync", "chformal -lower",
       `write_json ${prefix}before.json`, `prep -top ${top} -flatten`, "memory_map", "opt_clean", "check -assert",
       `write_json ${prefix}after.json`, `write_rtlil ${prefix}prepared.il`,
     ].join("; "),

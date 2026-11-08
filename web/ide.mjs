@@ -16,8 +16,24 @@ import { parseToolDiagnostics } from "./lib/tool-diagnostics.mjs";
 import { createSimRunner, vcdRootScopes } from "./lib/sim-runner.mjs";
 import { isLibraryPath } from "./lib/libraries.mjs";
 import { createLibrarySelector } from "./lib/library-selector.mjs";
+import { FORMAL_ENGINES, FORMAL_SOLVERS } from "./lib/formal-capabilities.mjs";
+import { createFormalAssetLoader, snapshotHash } from "./lib/formal-assets.mjs";
+import { createFormalRunner } from "./lib/formal-runner.mjs";
 
 const UI_STATE_PREFIX = "toolchain.ide.";
+
+const FORMAL_KIND_LABELS = {
+  "bounded-pass": "境界付きで安全を確認しました（bmc の範囲内です）",
+  proved: "証明できました。",
+  covered: "cover の目標に到達しました。",
+  unreached: "cover の目標に到達しませんでした。",
+  counterexample: "反例が見つかりました。",
+  unknown: "判定できませんでした。",
+  "tool-error": "ツールがエラーを返しました。",
+  timeout: "時間上限に達しました。",
+  cancelled: "停止しました。",
+  unavailable: "この製品では実行できません。",
+};
 
 function isBinaryPath(path) {
   return typeof path === "string" && /\.(?:fs|bin)$/.test(path);
@@ -144,6 +160,20 @@ export function initializeIde({
   const simulationTop = document.querySelector("#simulation-top");
   const simulationFiles = document.querySelector("#simulation-files");
   const simulationTimeLimit = document.querySelector("#simulation-time-limit");
+  const formalButton = document.querySelector("#formal-button");
+  const formalStatus = document.querySelector("#formal-status");
+  const formalReason = document.querySelector("#formal-reason");
+  const formalEngine = document.querySelector("#formal-engine");
+  const formalSolver = document.querySelector("#formal-solver");
+  const formalSolverField = document.querySelector("#formal-solver-field");
+  const formalMode = document.querySelector("#formal-mode");
+  const formalDepth = document.querySelector("#formal-depth");
+  const formalTimeout = document.querySelector("#formal-timeout");
+  const formalTop = document.querySelector("#formal-top");
+  const formalClock = document.querySelector("#formal-clock");
+  const formalEdge = document.querySelector("#formal-edge");
+  const formalFilesNote = document.querySelector("#formal-files-note");
+  const formalFiles = document.querySelector("#formal-files");
   const waveformStatus = document.querySelector("#waveform-status");
   const waveformFileField = document.querySelector("#waveform-file-field");
   const waveformFile = document.querySelector("#waveform-file");
@@ -167,8 +197,12 @@ export function initializeIde({
   let projectSwitchVersion = 0;
   const buildRunner = createBuildRunner();
   const simRunner = createSimRunner();
+  const formalRunner = createFormalRunner();
+  const formalAssetLoader = createFormalAssetLoader();
   let buildRunning = false;
   let simulationRunning = false;
+  let formalRunning = false;
+  let formalVersion = 0;
   let surferFrame = null;
   let surferBridgePromise = null;
   let resolveSurferBridge = null;
@@ -214,8 +248,10 @@ export function initializeIde({
       simulationVersion += 1;
       buildRunner.cancel();
       simRunner.stop();
+      formalRunner.stop();
       buildRunning = false;
       simulationRunning = false;
+      formalRunning = false;
       onSimulationStateChange(false);
       onBuildStateChange(libraryBusy);
       clearWaveforms();
@@ -317,7 +353,7 @@ export function initializeIde({
     const hasVhdl = (project?.files ?? []).some(({ path }) => /\.(?:vhd|vhdl)$/i.test(path));
     const board = BOARDS.find(({ id }) => id === boardSelect.value);
     const supported = (hasVerilog || hasVhdl) && Boolean(board);
-    synthesisButton.disabled = (!supported && !buildRunning) || simulationRunning || libraryBusy;
+    synthesisButton.disabled = (!supported && !buildRunning) || simulationRunning || formalRunning || libraryBusy;
     synthesisReason.textContent = supported ? "" : "HDL プロジェクトを開いてください。";
     vhdlStandardControl.hidden = !hasVhdl;
     if (project) {
@@ -349,6 +385,7 @@ export function initializeIde({
         });
     }
     updateSimulationControls();
+    updateFormalControls();
   }
 
   function renderSimulationSettings() {
@@ -400,7 +437,7 @@ export function initializeIde({
         : "";
     simulationButton.disabled = libraryBusy || (simulationRunning
       ? false
-      : !hasVerilog || !board || buildRunning || !canStartSimulation() ||
+      : !hasVerilog || !board || buildRunning || formalRunning || !canStartSimulation() ||
         !simulationTop.value.trim() ||
         !Number.isInteger(Number(simulationTimeLimit.value)) ||
         Number(simulationTimeLimit.value) < 1 ||
@@ -408,6 +445,139 @@ export function initializeIde({
     simulationTop.disabled = simulationRunning || buildRunning || libraryBusy;
     simulationTimeLimit.disabled = simulationRunning || buildRunning || libraryBusy;
     renderSimulationSettings();
+  }
+
+  function syncFormalSolverOptions() {
+    const previous = formalSolver.value;
+    formalSolver.replaceChildren();
+    for (const entry of FORMAL_SOLVERS) {
+      const option = document.createElement("option");
+      option.value = entry.id;
+      option.textContent = entry.status === "probe-verified" ? entry.label : `${entry.label}（未対応）`;
+      option.disabled = entry.status !== "probe-verified";
+      formalSolver.append(option);
+    }
+    if (FORMAL_SOLVERS.some((entry) => entry.id === previous)) {
+      formalSolver.value = previous;
+    }
+  }
+
+  function syncFormalModeOptions() {
+    const engine = FORMAL_ENGINES.find((entry) => entry.id === formalEngine.value);
+    const modes = engine?.modes ?? ["bmc"];
+    const previous = formalMode.value;
+    formalMode.replaceChildren();
+    for (const mode of modes) {
+      const option = document.createElement("option");
+      option.value = mode;
+      option.textContent = { bmc: "bmc（境界付き）", prove: "prove（証明）", cover: "cover（到達性）" }[mode] ?? mode;
+      formalMode.append(option);
+    }
+    if (modes.includes(previous)) formalMode.value = previous;
+  }
+
+  function renderFormalSettings() {
+    if (!project) return;
+    const candidates = project.files.filter(({ path }) => !isLibraryPath(path) && /\.(?:v|vh)$/i.test(path));
+    project.formal ??= {
+      engine: "yosys-sat",
+      solver: null,
+      mode: "bmc",
+      depth: 20,
+      timeoutSeconds: 30,
+      memoryMiB: 512,
+      top: "top",
+      clock: null,
+      edge: "posedge",
+      files: candidates.filter(({ path }) => !/(?:^|\/)[^/]*_tb\.v$/i.test(path)).map(({ path }) => path),
+      sby: null,
+    };
+    const formal = project.formal;
+    formalEngine.value = FORMAL_ENGINES.some((entry) => entry.id === formal.engine) ? formal.engine : "yosys-sat";
+    syncFormalSolverOptions();
+    if (formal.engine === "smtbmc" && !formal.solver) formal.solver = FORMAL_SOLVERS[0]?.id ?? null;
+    formalSolver.value = formal.solver ?? "";
+    syncFormalModeOptions();
+    const engineEntry = FORMAL_ENGINES.find((entry) => entry.id === formalEngine.value);
+    if (!engineEntry?.modes.includes(formal.mode)) {
+      formal.mode = "bmc";
+      formalMode.value = "bmc";
+    } else {
+      formalMode.value = formal.mode;
+    }
+    formalDepth.value = String(formal.depth);
+    formalTimeout.value = String(formal.timeoutSeconds);
+    formalTop.value = formal.top;
+    formalClock.value = formal.clock ?? "";
+    formalEdge.value = formal.edge === "negedge" ? "negedge" : "posedge";
+    formalFiles.replaceChildren();
+    for (const { path } of candidates) {
+      const label = document.createElement("label");
+      label.className = "simulation-file";
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.value = path;
+      input.checked = formal.files === null || formal.files.includes(path);
+      input.disabled = formalRunning || buildRunning || libraryBusy;
+      input.addEventListener("change", () => {
+        project.formal.files = [
+          ...formalFiles.querySelectorAll("input:checked"),
+        ].map((element) => element.value);
+        scheduleSave();
+        renderFormalSettings();
+      });
+      label.append(input, document.createTextNode(path));
+      formalFiles.append(label);
+    }
+    if (candidates.length === 0) {
+      const message = document.createElement("p");
+      message.textContent = "Verilog ファイルがありません。";
+      formalFiles.append(message);
+    }
+    formalFilesNote.textContent = `対象は選択した ${formal.files?.length ?? candidates.length} 件の Verilog ファイルです。*_tb.v は既定で対象外です。`;
+  }
+
+  function updateFormalControls() {
+    const paths = (project?.files ?? []).map(({ path }) => path);
+    const hasVerilog = paths.some((path) => /\.(?:v|vh)$/i.test(path));
+    const depth = Number(formalDepth.value);
+    const timeout = Number(formalTimeout.value);
+    const top = formalTop.value.trim();
+    const solverReady = formalEngine.value !== "smtbmc" || Boolean(formalSolver.value);
+    formalButton.textContent = formalRunning ? "停止" : "形式検証";
+    formalReason.textContent = !hasVerilog
+      ? "形式検証には Verilog ファイルを含むプロジェクトを開いてください。"
+      : "";
+    formalButton.disabled = libraryBusy || (formalRunning
+      ? false
+      : !hasVerilog || buildRunning || simulationRunning || !solverReady ||
+        !Number.isInteger(depth) || depth < 1 || depth > 1000 ||
+        !Number.isInteger(timeout) || timeout < 1 || timeout > 300 ||
+        !/^[A-Za-z_][A-Za-z0-9_$]*$/.test(top));
+    const editing = formalRunning || buildRunning || simulationRunning || libraryBusy;
+    formalEngine.disabled = editing;
+    formalMode.disabled = editing;
+    formalDepth.disabled = editing;
+    formalTimeout.disabled = editing;
+    formalTop.disabled = editing;
+    formalClock.disabled = editing;
+    formalEdge.disabled = editing;
+    formalSolverField.hidden = formalEngine.value !== "smtbmc";
+    formalSolver.disabled = editing || formalEngine.value !== "smtbmc";
+    renderFormalSettings();
+  }
+
+  function persistFormalSettings() {
+    if (!project?.formal) return;
+    project.formal.engine = formalEngine.value;
+    project.formal.solver = formalEngine.value === "smtbmc" ? formalSolver.value || null : null;
+    project.formal.mode = formalMode.value;
+    project.formal.depth = Number(formalDepth.value);
+    project.formal.timeoutSeconds = Number(formalTimeout.value);
+    project.formal.top = formalTop.value.trim();
+    project.formal.clock = formalClock.value.trim() || null;
+    project.formal.edge = formalEdge.value;
+    scheduleSave();
   }
 
   function ensureSurferFrame() {
@@ -530,13 +700,13 @@ export function initializeIde({
       simRunner.stop();
       return;
     }
-    if (!project || buildRunning || !canStartSimulation()) {
+    if (!project || buildRunning || formalRunning || !canStartSimulation()) {
       simulationStatus.textContent = "ほかの処理が終わってから実行してください。";
       return;
     }
     const simulationProject = project;
     await flushPendingSave();
-    if (project !== simulationProject || simulationRunning || buildRunning || !canStartSimulation()) return;
+    if (project !== simulationProject || simulationRunning || buildRunning || formalRunning || !canStartSimulation()) return;
     const version = ++simulationVersion;
     clearWaveforms();
     simulationRunning = true;
@@ -589,8 +759,77 @@ export function initializeIde({
     }
   }
 
+  async function runProjectFormal() {
+    if (libraryBusy) return;
+    if (formalRunning) {
+      formalRunner.stop();
+      return;
+    }
+    if (!project || buildRunning || simulationRunning || formalRunning) {
+      formalStatus.textContent = "ほかの処理が終わってから実行してください。";
+      return;
+    }
+    const formalProject = project;
+    await flushPendingSave();
+    if (project !== formalProject || formalRunning || buildRunning || simulationRunning) return;
+    const version = ++formalVersion;
+    clearWaveforms();
+    formalRunning = true;
+    updateSynthesisControls();
+    formalStatus.dataset.outcome = "running";
+    formalStatus.textContent = "形式検証を実行しています。";
+    programLog.textContent = "";
+    renderProblems();
+    try {
+      const assets = await formalAssetLoader.loadAll();
+      if (version !== formalVersion) return;
+      const hash = await snapshotHash(formalProject, fileContents);
+      if (version !== formalVersion) return;
+      const outcome = await formalRunner.run({
+        project: formalProject,
+        files: fileContents,
+        assets,
+        snapshotHash: hash,
+      });
+      if (version !== formalVersion) return;
+      const kindLabel = FORMAL_KIND_LABELS[outcome.kind] ?? outcome.kind;
+      formalStatus.dataset.outcome =
+        outcome.kind === "bounded-pass" || outcome.kind === "proved" || outcome.kind === "covered"
+          ? "ok"
+          : "failed";
+      formalStatus.textContent = outcome.message ? `${kindLabel}（${outcome.message}）` : kindLabel;
+      if (outcome.inventory?.counts) {
+        const { assert, assume, cover } = outcome.inventory.counts;
+        appendProjectLog(
+          `形式検証の性質: assert ${assert} 件、assume ${assume} 件、cover ${cover} 件`,
+        );
+      }
+      if (outcome.replay) {
+        const replayLabel = { verified: "確認済み", rejected: "不一致", unavailable: "利用不可" }[outcome.replay.status]
+          ?? outcome.replay.status;
+        appendProjectLog(
+          `反例の再実行: ${replayLabel}${outcome.replay.reason ? `（${outcome.replay.reason}）` : ""}`,
+        );
+      }
+      if (outcome.vcd?.bytes?.length) {
+        setWaveforms([outcome.vcd], outcome.vcd);
+        updateTabs("waveform");
+      }
+    } catch (error) {
+      if (version !== formalVersion) return;
+      formalStatus.dataset.outcome = "failed";
+      formalStatus.textContent = "形式検証に失敗しました。";
+      appendProjectLog(`形式検証エラー: ${error.message}`);
+    } finally {
+      if (version === formalVersion) {
+        formalRunning = false;
+        updateSynthesisControls();
+      }
+    }
+  }
+
   async function runProjectBuild() {
-    if (libraryBusy || simulationRunning) return;
+    if (libraryBusy || simulationRunning || formalRunning) return;
     if (buildRunning) {
       buildRunner.cancel();
       return;
@@ -1129,9 +1368,14 @@ export function initializeIde({
     simRunner.stop();
     simulationRunning = false;
     onSimulationStateChange(false);
+    formalVersion += 1;
+    formalRunner.stop();
+    formalRunning = false;
     clearWaveforms();
     simulationStatus.textContent = "";
     simulationStatus.dataset.outcome = "";
+    formalStatus.textContent = "";
+    formalStatus.dataset.outcome = "";
     project = loaded.project;
     project.vhdlStandard ??= "2008";
     fileContents = loaded.files;
@@ -1382,6 +1626,19 @@ export function initializeIde({
     }
   });
   simulationButton.addEventListener("click", () => void runProjectSimulation());
+  formalButton.addEventListener("click", () => void runProjectFormal());
+  for (const control of [formalEngine, formalSolver, formalMode]) {
+    control.addEventListener("change", () => {
+      persistFormalSettings();
+      updateFormalControls();
+    });
+  }
+  for (const control of [formalDepth, formalTimeout, formalTop, formalClock, formalEdge]) {
+    control.addEventListener("change", () => {
+      persistFormalSettings();
+      updateFormalControls();
+    });
+  }
   waveformFile.addEventListener("change", () => {
     const vcd = availableVcds.find(({ name }) => name === waveformFile.value);
     if (vcd) void loadVcd(vcd);
@@ -1403,6 +1660,7 @@ export function initializeIde({
   });
   window.addEventListener("pagehide", () => {
     simRunner.dispose();
+    formalRunner.dispose();
     if (vcdObjectUrl) URL.revokeObjectURL(vcdObjectUrl);
   }, { once: true });
   toggleFilesButton.addEventListener("click", () => {

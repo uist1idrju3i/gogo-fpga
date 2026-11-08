@@ -63,6 +63,11 @@
                 <p id="simulation-status" role="status" aria-live="polite" data-outcome=""></p>
                 <p id="simulation-reason" class="simulation-reason"></p>
               </div>
+              <div class="synthesis-control">
+                <button id="formal-button" type="button" disabled>形式検証</button>
+                <p id="formal-status" role="status" aria-live="polite" data-outcome=""></p>
+                <p id="formal-reason" class="simulation-reason"></p>
+              </div>
               <button id="program-button" type="submit" disabled>書き込む</button>
               <button
                 id="toggle-files-pane"
@@ -128,6 +133,56 @@
                 <span>時間上限（秒）</span>
                 <input id="simulation-time-limit" type="number" min="1" max="120" value="10" />
               </label>
+            </section>
+            <section class="simulation-settings" aria-labelledby="formal-settings-heading">
+              <h3 id="formal-settings-heading">形式検証設定</h3>
+              <label class="field" for="formal-engine">
+                <span>エンジン</span>
+                <select id="formal-engine">
+                  <option value="yosys-sat">Yosys SAT</option>
+                  <option value="smtbmc">SBY / SMTBMC</option>
+                </select>
+              </label>
+              <label class="field" for="formal-solver" id="formal-solver-field">
+                <span>ソルバー</span>
+                <select id="formal-solver"></select>
+              </label>
+              <label class="field" for="formal-mode">
+                <span>モード</span>
+                <select id="formal-mode">
+                  <option value="bmc">bmc（境界付き）</option>
+                  <option value="prove">prove（証明）</option>
+                  <option value="cover">cover（到達性）</option>
+                </select>
+              </label>
+              <label class="field" for="formal-depth">
+                <span>深さ</span>
+                <input id="formal-depth" type="number" min="1" max="1000" value="20" />
+              </label>
+              <label class="field" for="formal-timeout">
+                <span>時間上限（秒）</span>
+                <input id="formal-timeout" type="number" min="1" max="300" value="30" />
+              </label>
+              <label class="field" for="formal-top">
+                <span>トップモジュール</span>
+                <input id="formal-top" type="text" value="top" />
+              </label>
+              <label class="field" for="formal-clock">
+                <span>クロック（空欄なら組合せのみ）</span>
+                <input id="formal-clock" type="text" placeholder="clk" />
+              </label>
+              <label class="field" for="formal-edge">
+                <span>クロック極性</span>
+                <select id="formal-edge">
+                  <option value="posedge">posedge</option>
+                  <option value="negedge">negedge</option>
+                </select>
+              </label>
+              <fieldset>
+                <legend>対象 Verilog ファイル</legend>
+                <div id="formal-files"></div>
+              </fieldset>
+              <p id="formal-files-note" class="simulation-reason"></p>
             </section>
             <div class="project-archive-actions">
               <button id="export-project-button" type="button" class="secondary">

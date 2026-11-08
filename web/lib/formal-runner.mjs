@@ -161,7 +161,10 @@ export function createFormalRunner({
     const { selected, error } = selectFormalSources(input, formal, base, started, now, "Yosys SAT");
     if (error) return error;
     const sources = selected.map(({ path }) => path);
-    const workspace = selected.map(({ path, bytes }) => ({ path: `model/${path}`, bytes }));
+    const workspace = [
+      ...selected.map(({ path, bytes }) => ({ path: `model/${path}`, bytes })),
+      { path: "model/__formal/.keep", bytes: new Uint8Array(0) },
+    ];
     if (!input.assets?.yosys) {
       return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-assets",
         message: "形式検証の Yosys 資材が読み込まれていません" });
@@ -246,16 +249,21 @@ export function createFormalRunner({
     for (const { path, bytes } of context.workspace) {
       if (path.startsWith("model/")) files.set(path.slice("model/".length), bytes);
     }
-    return { exitCode: outcome.exitCode, stdout, stderr, files };
+    const log = files.get(`design_${phase}.log`);
+    const logText = log ? decoder.decode(log) : "";
+    const mergedStdout = logText
+      ? `${stdout}${stdout.endsWith("\n") || stdout.length === 0 ? "" : "\n"}${logText}`
+      : stdout;
+    return { exitCode: outcome.exitCode, stdout: mergedStdout, stderr, files };
   }
 
   async function replaySatCounterexample({ input, formal, base, sat, sources, started, now, simulate }) {
-    const empty = { status: "unavailable", reason: "replay simulator is not configured" };
+    const empty = { status: "unavailable", reason: "再実行シミュレーターが設定されていません" };
     if (!simulate) return empty;
     try {
       const prepare = sat.observations?.find((observation) => observation.phase === "prepare");
       const after = prepare?.files?.get?.("__formal/after.json");
-      if (!after) return { status: "unavailable", reason: "formal property document is missing" };
+      if (!after) return { status: "unavailable", reason: "形式検証の性質ドキュメントがありません" };
       const document = JSON.parse(decoder.decode(after));
       const witness = typeof sat.witness === "string" ? JSON.parse(sat.witness) : sat.witness;
       const replay = createSatReplay({
@@ -269,13 +277,13 @@ export function createFormalRunner({
       });
       const execution = await simulate({ replay, top: formal.top, sources, files: input.files });
       if (!execution || typeof execution !== "object") {
-        return { status: "rejected", reason: "Replay execution did not finish normally" };
+        return { status: "rejected", reason: "再実行が正常に終了しませんでした" };
       }
       const verdict = verifySatReplay(replay, execution);
       if (verdict.status === "verified") {
         return { status: "verified", steps: verdict.steps, failures: verdict.failures };
       }
-      return { status: "rejected", reason: verdict.reason ?? "Replay did not reproduce the violation" };
+      return { status: "rejected", reason: verdict.reason ?? "再実行で違反を再現できませんでした" };
     } catch (error) {
       return { status: "rejected", reason: String(error?.message ?? error).slice(0, 1024) };
     }
@@ -374,7 +382,7 @@ export function createFormalRunner({
   async function replaySmtCounterexample({ input, formal, solver, selected, outputFiles, context, started, now, deadline, simulate }) {
     const witnessVcd = outputFiles.find((file) => file.path.endsWith("engine_0/trace.vcd"))?.bytes ?? null;
     const unavailableReplay = (reason) => ({ replay: { status: "unavailable", reason }, inventory: null, vcd: witnessVcd });
-    if (!simulate) return unavailableReplay("replay simulator is not configured");
+    if (!simulate) return unavailableReplay("再実行シミュレーターが設定されていません");
     try {
       const modelEntries = outputFiles.filter((file) => file.path.endsWith("model/design_smt2.smt2"));
       if (modelEntries.length !== 1) return unavailableReplay("SMT model is missing or ambiguous");
@@ -393,7 +401,7 @@ export function createFormalRunner({
         top: formal.top, clock: formal.clock, edge: formal.edge, mode: formal.mode });
       const remaining = Math.ceil(deadline - now());
       if (context.stopped || remaining <= 0) {
-        return { replay: { status: "unavailable", reason: "formal job reached its deadline" }, inventory, vcd: witnessVcd };
+        return { replay: { status: "unavailable", reason: "形式検証ジョブが制限時間に達しました" }, inventory, vcd: witnessVcd };
       }
       const traceStdout = [];
       const traceStderr = [];
@@ -418,13 +426,13 @@ export function createFormalRunner({
         if (context.process === traceJob) context.process = null;
       }
       if (trace.status !== "exited") {
-        return { replay: { status: "unavailable", reason: `trace recording failed: ${trace.status}` }, inventory, vcd: witnessVcd };
+        return { replay: { status: "unavailable", reason: `トレース記録に失敗しました: ${trace.status}` }, inventory, vcd: witnessVcd };
       }
       const traceFiles = trace.files ?? [];
       const captureEntry = traceFiles.find((file) => file.path === "formal-trace.json");
       const vcdEntry = traceFiles.find((file) => file.path === "trace.vcd");
       if (!captureEntry || !vcdEntry) {
-        return { replay: { status: "unavailable", reason: "trace recording artifacts are missing" }, inventory, vcd: witnessVcd };
+        return { replay: { status: "unavailable", reason: "トレース記録の成果物がありません" }, inventory, vcd: witnessVcd };
       }
       const capture = JSON.parse(decoder.decode(captureEntry.bytes));
       const replay = await createSmtReplay({
@@ -441,13 +449,13 @@ export function createFormalRunner({
       });
       const execution = await simulate({ replay, top: formal.top, sources: selected.map(({ path }) => path), files: input.files });
       if (!execution || typeof execution !== "object") {
-        return { replay: { status: "rejected", reason: "Replay execution did not finish normally" }, inventory, vcd: witnessVcd };
+        return { replay: { status: "rejected", reason: "再実行が正常に終了しませんでした" }, inventory, vcd: witnessVcd };
       }
       const verdict = verifySatReplay(replay, execution);
       if (verdict.status === "verified") {
         return { replay: { status: "verified", steps: verdict.steps, failures: verdict.failures }, inventory, vcd: witnessVcd };
       }
-      return { replay: { status: "rejected", reason: verdict.reason ?? "Replay did not reproduce the violation" }, inventory, vcd: witnessVcd };
+      return { replay: { status: "rejected", reason: verdict.reason ?? "再実行で違反を再現できませんでした" }, inventory, vcd: witnessVcd };
     } catch (error) {
       return { replay: { status: "rejected", reason: String(error?.message ?? error).slice(0, 1024) }, inventory: null, vcd: witnessVcd };
     }
