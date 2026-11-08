@@ -6,6 +6,7 @@ import path from "node:path";
 import test from "node:test";
 import { runSatFormal } from "../../web/lib/formal-sat.mjs";
 import { createFormalExecutors } from "./formal-helpers.mjs";
+import { satFormalCases } from "./formal-sat-cases.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const nativePath = path.join(root, "build/native/yosys");
@@ -22,34 +23,7 @@ writeFileSync(path.join(evidence, "manifest.json"), JSON.stringify({
 }, null, 2));
 console.log(`Retained formal SAT evidence: ${evidence}`);
 
-const combinational = (property) => `module top(input [3:0] a, output [3:0] y);
-  assign y = ~a;
-  always @* begin P_ID: assert (${property}); end
-endmodule`;
-const counter = `module top(input clk, output reg [3:0] q = 0);
-  always @(posedge clk) q <= q + 1'b1;
-  always @* begin P_BOUND: assert (q < 4'd3); end
-endmodule`;
-const invariant = `module top(input clk, output reg [3:0] x = 0, output reg [3:0] y = 0);
-  always @(posedge clk) begin x <= x + 1'b1; y <= y + 1'b1; end
-  always @* begin P_SAME: assert(x == y); end
-endmodule`;
-
-for (const scenario of [
-  { name: "identity", source: combinational("(a ^ y) == 4'hf"), expected: "bounded-safe" },
-  { name: "broken-identity", source: combinational("(a ^ y) == 4'h0"), expected: "counterexample" },
-  { name: "depth3", source: counter, depth: 3, clock: "clk", expected: "bounded-safe" },
-  { name: "depth4", source: counter, depth: 4, clock: "clk", expected: "counterexample" },
-  { name: "depth5", source: counter, depth: 5, clock: "clk", expected: "counterexample" },
-  { name: "induction", source: invariant, clock: "clk", mode: "prove", expected: "proved" },
-  { name: "false-induction", source: counter, clock: "clk", mode: "prove", expected: "counterexample" },
-  { name: "contradictory-assumes", source: `module top(input a); always @* begin
-    A: assume(a); B: assume(!a); P: assert(a); end endmodule`, expected: "inconsistent-assumptions" },
-  { name: "zero-properties", source: "module top(input a, output y); assign y=a; endmodule", expected: "error" },
-  { name: "wrong-clock", source: counter, clock: "missing", expected: "error" },
-  { name: "wrong-edge", source: counter, clock: "clk", edge: "negedge", expected: "error" },
-  { name: "unsupported-syntax", source: "module top(input clk); assert property (@(posedge clk) 1); endmodule", expected: "error" },
-]) {
+for (const { kind: _kind, ...scenario } of satFormalCases) {
   test(`formal native/WASI ${scenario.name}`, async () => {
     const execute = createFormalExecutors(evidence, scenario.name, scenario.source);
     const results = [];
