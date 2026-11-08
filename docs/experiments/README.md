@@ -56,6 +56,7 @@
 | [S15 SMT反例の原回路による再実行](S15-smt-original-replay.md) | 原本SMTBMCのVCD出力境界から値を独立記録 | 記録と原回路の反例検証を区別。元Verilog/VHDL再実行・画面接続は未完了 |
 | [S15 SMT記録の独立監査](S15-smt-trace-audit.md) | 原本VCDを再生成し全17列をraw evidenceと照合 | 正式5回・A/A 2回の全896行19列、改変対照170件とZIP全18,753 filesの復元後監査が成功 |
 | [S15 SMT反例の元Verilog再実行](S15-smt-verilog-replay.md) | Icarus native/WASMで入力だけを駆動し、内部信号・clock・時刻・propertyを独立照合 | 正式5回・A/A 2回の全1,484行23列、改変対照316件とZIP全96,592 filesの復元後監査が成功。元VHDL/PSLと画面統合は未完了 |
+| [S15 SMT反例の元VHDL/PSLと下位化Verilog再実行](S15-smt-vhdl-replay.md) | GHDL+VPIによる元VHDL再実行とIcarus両版による下位化再実行。違反周期・instance path・全port値・VCD・PSL reportを照合 | 正式5回・A/A 2回の全1,785行27列、改変対照493件とZIP全74,316 filesの復元後監査が成功。z3はsmtbmcクラッシュで候補外。画面統合は未完了 |
 | [S15 P1 VHDL・PSL property保持](S15-vhdl-formal.md) | 上流GHDLの解析とmonitorを再利用し、明示した形式出力をYosysへ渡す | 清浄な72080beで33件成功、生CSV44行11列を監査。PSL解析の失敗も記録。独立再実行と正式反復は未完了 |
 | [S15 P1 元VHDLの独立再実行](S15-vhdl-native-replay.md) | GHDL標準VPI・PSLレポートと独立VCDで反例を照合 | 清浄な同一commitで55件×5回とA/Aの2回成功。CSV全280行19列を監査。下位化後比較・追加fixtureは未完了 |
 | [S15 P1 VHDLと下位化Verilog](S15-vhdl-lowered-replay.md) | 上流Yosysで下位化し、元VHDLとIcarus native/WASMを比較 | 69件の5回反復とA/Aが成功。[生CSV](S15-vhdl-lowered-results.csv)全420行20列を[監査](S15-vhdl-lowered-audit.json)。[失敗試行](S15-vhdl-lowered-failures.md)も保持 |

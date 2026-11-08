@@ -134,7 +134,13 @@ def measure(args):
                     command = ["node", "scripts/" + script, "--formal", *options, "--out", str(directory / name)]
                     commands.append(command)
                     with (directory / (name + ".log")).open("xb") as stream:
-                        subprocess.run(command, cwd=ROOT, stdout=stream, stderr=subprocess.STDOUT, check=True, timeout=3600)
+                        completed = subprocess.run(command, cwd=ROOT, stdout=stream, stderr=subprocess.STDOUT, timeout=3600)
+                    # The upstream probe exits 1 when a row carries a legitimate error (e.g.
+                    # z3's smtbmc crash); it only writes results.json after finishing every
+                    # case, so a nonzero exit with complete output is still a finished probe.
+                    require(completed.returncode == 0
+                            or name == "native" and (directory / "native/results.json").is_file() and (directory / "native/metadata.json").is_file(),
+                            f"{script} exit {completed.returncode}")
                 report = AUDIT.audit(directory / "replay", formal=True)
                 write(directory / "audit.json", report)
                 print(encoded({"series": series, "iteration": iteration, "solver": solver, **report}), flush=True)
