@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { classifySbyStatus, readSbyStatus } from "../../scripts/probe-upstream-formal.mjs";
+import { classifySbyStatus, readSbyStatus } from "../../web/lib/formal-sby-status.mjs";
 
 test("the SBY status file, process exit and final line must agree", () => {
   for (const [status, code] of Object.entries({ PASS: 0, FAIL: 2, UNKNOWN: 4, ERROR: 16, TIMEOUT: 8, CANCELLED: 32 })) {

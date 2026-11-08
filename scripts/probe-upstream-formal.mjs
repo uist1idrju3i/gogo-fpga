@@ -7,36 +7,8 @@ import { pathToFileURL } from "node:url";
 import { digest, loadSolverProbe, root, verifyNativeSolver } from "../tests/synth/solver-protocol-helpers.mjs";
 import { sbyCases, sbyConfig, selectFormalSolvers } from "../tests/synth/formal-sby-cases.mjs";
 
-const codes = { PASS: 0, FAIL: 2, UNKNOWN: 4, ERROR: 16, TIMEOUT: 8, CANCELLED: 32 };
-
-function filesBelow(directory, prefix = "") {
-  return readdirSync(directory, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name, "en")).flatMap(entry => {
-    const name = path.posix.join(prefix, entry.name);
-    return entry.isDirectory() ? filesBelow(path.join(directory, entry.name), name) : [name];
-  });
-}
-
-export function classifySbyStatus(mode, status) {
-  const kinds = {
-    bmc: { PASS: "bounded-pass", FAIL: "counterexample" },
-    prove: { PASS: "proved", FAIL: "counterexample" },
-    cover: { PASS: "covered", FAIL: "unreached" },
-  };
-  assert.ok(Object.hasOwn(kinds, mode), "Unsupported SBY mode");
-  assert.ok(Object.hasOwn(codes, status), "Unsupported SBY status");
-  return kinds[mode][status] ?? { UNKNOWN: "unknown", ERROR: "tool-error", TIMEOUT: "timeout", CANCELLED: "cancelled" }[status];
-}
-
-export function readSbyStatus(text, exitCode, stdout) {
-  const match = /^(PASS|FAIL|UNKNOWN|ERROR|TIMEOUT|CANCELLED) (\d+) (\d+(?:\.\d+)?)\n$/.exec(text);
-  assert.ok(match && match[0] === text, "Missing or malformed upstream SBY status");
-  const [, status, code, elapsed] = match;
-  assert.equal(Number(code), codes[status], "Unexpected SBY status/return-code pair");
-  assert.equal(exitCode, codes[status], "Process exit disagrees with SBY status");
-  assert.ok(stdout.includes(`DONE (${status}, rc=${code})`), "Missing SBY termination line");
-  assert.ok(Number.isFinite(Number(elapsed)));
-  return status;
-}
+export { classifySbyStatus, readSbyStatus } from "../web/lib/formal-sby-status.mjs";
+import { classifySbyStatus, readSbyStatus } from "../web/lib/formal-sby-status.mjs";
 
 export function probeNative({ manifestFile, out, formal = false, solver, cases = sbyCases, casesFile = null }) {
   const solvers = selectFormalSolvers(solver);
