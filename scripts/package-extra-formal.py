@@ -30,11 +30,14 @@ REPLAY_AUDITORS = ("measure-smt-replay.py", "audit-smt-replay.py", "negative-smt
 VHDL_REPLAY_AUDITORS = ("measure-smt-vhdl-replay.py", "audit-smt-vhdl-replay.py", "negative-smt-vhdl-replay.py",
                         "audit-smt-replay.py", "audit-formal-trace.py", "audit-formal-sby.py", "sby-artifact-audit.py",
                         "formal-solver-audit.py")
+SAT_FORMAL_AUDITORS = ("measure-sat-formal.py", "audit-sat-formal.py", "negative-sat-formal.py")
 
 
 def campaign_sources(plan):
     kind = plan.get("kind")
-    require(kind in [None, "formal-trace-v1", "smt-replay-v1", "smt-vhdl-replay-v1"], "unknown campaign kind")
+    require(kind in [None, "formal-trace-v1", "smt-replay-v1", "smt-vhdl-replay-v1", "sat-formal-campaign-v1"], "unknown campaign kind")
+    if kind == "sat-formal-campaign-v1":
+        return ["scripts/" + name for name in SAT_FORMAL_AUDITORS]
     if kind == "smt-vhdl-replay-v1":
         return ["scripts/" + name for name in VHDL_REPLAY_AUDITORS] + ["vendor/yosys/backends/smt2/smtio.py"]
     if kind == "smt-replay-v1":
