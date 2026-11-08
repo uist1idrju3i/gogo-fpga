@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import test from "node:test";
 import { createFormalRunner } from "../../web/lib/formal-runner.mjs";
 import { packWorkspaceDelta } from "../../web/lib/formal-workspace.mjs";
@@ -150,8 +151,8 @@ test("formal runner rejects disabled projects and unqualified engines", async ()
   const smt = await runner.run(input({
     project: project({ formal: { ...project().formal, engine: "smtbmc", solver: "yices2" } }),
   }));
-  assert.equal(smt.kind, "unavailable");
-  assert.equal(smt.status, "engine-not-wired");
+  assert.equal(smt.kind, "tool-error");
+  assert.equal(smt.status, "missing-assets");
 });
 
 test("SAT bounded-safe run returns bounded-pass with inventory", async () => {
@@ -289,4 +290,246 @@ test("formal runner rejects concurrent runs", async () => {
   await assert.rejects(runner.run(input()), /already running/);
   runner.stop();
   await pending;
+});
+
+const smtDocument = {
+  modules: {
+    top: {
+      ports: { clk: { direction: "input", bits: [2] }, q: { direction: "output", bits: [3, 4] } },
+      netnames: { clk: { bits: [2] }, q: { bits: [3, 4], attributes: { init: "00" } }, hidden: { bits: [5] } },
+      cells: {
+        P: { type: "$assert", attributes: { src: "top.v:3.1-3.20" }, connections: { A: [5], EN: ["1"] } },
+        state: { type: "$dff", parameters: { CLK_POLARITY: "1" }, connections: { CLK: [2], Q: [3, 4] } },
+      },
+    },
+  },
+};
+
+function smtAssets() {
+  return {
+    yosys: input().assets.yosys,
+    sources: [{ path: "upstream/sby.py", bytes: new Uint8Array([1]) }],
+    manifest: { format: "formal-python/v1", files: {} },
+    solvers: { yices: { wasm: new Uint8Array([1]), sha256: "d".repeat(64) } },
+  };
+}
+
+function smtProject(overrides = {}) {
+  return project({
+    formal: {
+      ...project().formal,
+      engine: "smtbmc",
+      solver: "yices2",
+      clock: "clk",
+      depth: 6,
+      ...overrides,
+    },
+  });
+}
+
+function smtInput(overrides = {}) {
+  return input({ project: smtProject(), assets: smtAssets(), ...overrides });
+}
+
+function fakePython({ sby, trace, hang = false } = {}) {
+  const calls = [];
+  return {
+    calls,
+    startPython({ entrypoint, args, files, onStdout, onStderr }) {
+      calls.push({
+        entrypoint,
+        args: [...args],
+        files: files.map(({ path, bytes }) => ({ path, text: new TextDecoder().decode(bytes) })),
+      });
+      if (hang) {
+        let resolveCompletion;
+        const completion = new Promise((resolve) => { resolveCompletion = resolve; });
+        return { completion, cancel() { resolveCompletion({ status: "cancelled" }); } };
+      }
+      const response = entrypoint === "sby" ? sby : trace;
+      const completion = (async () => {
+        if (response?.stdout) onStdout(response.stdout);
+        if (response?.stderr) onStderr(response.stderr);
+        return { status: "exited", exitCode: response?.exitCode ?? 0, files: response?.files ?? [] };
+      })();
+      return { completion, cancel() {} };
+    },
+  };
+}
+
+function sbyStatus(status, code) {
+  return {
+    exitCode: code,
+    stdout: `SBY 0:00:00 [result] DONE (${status}, rc=${code})\n`,
+    files: [{ path: "result/status", bytes: encoder.encode(`${status} ${code} 0.0\n`) }],
+  };
+}
+
+function smtTraceFiles(model, vcd) {
+  const sha = (bytes) => createHash("sha256").update(bytes).digest("hex");
+  const capture = {
+    format_version: 1,
+    model: { path: "model.smt2", sha256: sha(model) },
+    upstreamExitCode: 1,
+    traces: [{
+      path: "trace.vcd",
+      sha256: sha(vcd),
+      endTime: 4,
+      signals: [
+        { path: ["top", "clk"], width: 1, clock: "posedge" },
+        { path: ["top", "q"], width: 2, clock: null },
+        { path: ["top", "hidden"], width: 1, clock: null },
+      ],
+      steps: ["00", "01", "10", "11"].map((bits, time) => ({ time, values: [
+        { path: ["top", "clk"], bits: "0" },
+        { path: ["top", "q"], bits },
+        { path: ["top", "hidden"], bits: "1" },
+      ] })),
+    }],
+  };
+  return [
+    { path: "formal-trace.json", bytes: jsonBytes(capture) },
+    { path: "trace.vcd", bytes: vcd },
+  ];
+}
+
+test("SMT bounded run passes SBY status through and generates the .sby", async () => {
+  const python = fakePython({ sby: sbyStatus("PASS", 0) });
+  const runner = createFormalRunner({ startPython: python.startPython });
+  const outcome = await runner.run(smtInput());
+  assert.equal(outcome.kind, "bounded-pass");
+  assert.equal(outcome.status, "PASS");
+  assert.equal(outcome.engine, "smtbmc");
+  assert.equal(outcome.solver, "yices2");
+  assert.equal(python.calls.length, 1);
+  assert.equal(python.calls[0].entrypoint, "sby");
+  assert.deepEqual(python.calls[0].args.slice(-1), ["formal.sby"]);
+  const sbyFile = python.calls[0].files.find(({ path }) => path === "formal.sby");
+  assert.match(sbyFile.text, /mode bmc/);
+  assert.match(sbyFile.text, /depth 6/);
+  assert.match(sbyFile.text, /smtbmc yices/);
+  assert.match(sbyFile.text, /read -formal "top\.v"/);
+  assert.match(sbyFile.text, /prep -top top/);
+});
+
+test("SMT prove and cover statuses map to their kinds", async () => {
+  for (const [mode, status, code, kind] of [
+    ["prove", "PASS", 0, "proved"],
+    ["cover", "PASS", 0, "covered"],
+    ["cover", "FAIL", 2, "unreached"],
+  ]) {
+    const python = fakePython({ sby: sbyStatus(status, code) });
+    const runner = createFormalRunner({ startPython: python.startPython });
+    const outcome = await runner.run(input({
+      project: smtProject({ mode }),
+      assets: smtAssets(),
+    }));
+    assert.equal(outcome.kind, kind, `${mode}/${status}`);
+    assert.equal(outcome.status, status);
+  }
+});
+
+test("SMT counterexample records the trace and verifies the replay", async () => {
+  const model = encoder.encode("source-bound SMT model");
+  const vcd = encoder.encode("upstream VCD bytes");
+  const python = fakePython({
+    sby: { ...sbyStatus("FAIL", 2), files: [
+      ...sbyStatus("FAIL", 2).files,
+      { path: "result/model/design_smt2.smt2", bytes: model },
+      { path: "result/engine_0/trace.vcd", bytes: encoder.encode("$enddefinitions $end\n") },
+    ] },
+    trace: { exitCode: 0, files: smtTraceFiles(model, vcd) },
+  });
+  const tool = fakeTool({
+    phases: {
+      inventory: { exitCode: 0, stdout: "", files: { "__formal/before.json": jsonBytes(smtDocument) } },
+    },
+  });
+  const simulateReplay = async (request) => {
+    assert.equal(request.replay.origin, "smt");
+    assert.equal(request.top, "top");
+    return verifiedExecution;
+  };
+  const runner = createFormalRunner({
+    startTool: tool.startTool,
+    startPython: python.startPython,
+    simulateReplay,
+  });
+  const outcome = await runner.run(smtInput());
+  assert.equal(outcome.kind, "counterexample");
+  assert.equal(outcome.status, "FAIL");
+  assert.equal(outcome.replay.status, "verified");
+  assert.equal(outcome.replay.failures[0].source, "top.v:3.1-3.20");
+  assert.equal(outcome.vcd.name, "formal/trace.vcd");
+  assert.equal(outcome.inventory.counts.assert, 1);
+  assert.deepEqual(python.calls.map((call) => call.entrypoint), ["sby", "formal_trace"]);
+  const trace = python.calls[1];
+  assert.equal(trace.args.at(-1), "model.smt2");
+  assert.deepEqual(trace.args.slice(0, 2), ["-s", "yices"]);
+  assert.ok(trace.files.some(({ path }) => path === "model.smt2"));
+  assert.ok(tool.calls.some(({ args }) => args[3] === "design_inventory.ys"));
+});
+
+test("SMT counterexample without a simulator stays unverified", async () => {
+  const model = encoder.encode("source-bound SMT model");
+  const vcd = encoder.encode("upstream VCD bytes");
+  const python = fakePython({
+    sby: { ...sbyStatus("FAIL", 2), files: [
+      ...sbyStatus("FAIL", 2).files,
+      { path: "result/model/design_smt2.smt2", bytes: model },
+      { path: "result/engine_0/trace.vcd", bytes: encoder.encode("$enddefinitions $end\n") },
+    ] },
+    trace: { exitCode: 0, files: smtTraceFiles(model, vcd) },
+  });
+  const tool = fakeTool({
+    phases: {
+      inventory: { exitCode: 0, stdout: "", files: { "__formal/before.json": jsonBytes(smtDocument) } },
+    },
+  });
+  const runner = createFormalRunner({ startTool: tool.startTool, startPython: python.startPython });
+  const outcome = await runner.run(smtInput());
+  assert.equal(outcome.kind, "counterexample");
+  assert.equal(outcome.replay.status, "unavailable");
+  assert.equal(outcome.vcd.name, "formal/trace.vcd");
+});
+
+test("SMT unsupported inputs and user .sby files fail closed", async () => {
+  const python = fakePython({ sby: sbyStatus("PASS", 0) });
+  const runner = createFormalRunner({ startPython: python.startPython });
+
+  const sby = await runner.run(input({
+    project: smtProject({ sby: "custom.sby" }),
+    assets: smtAssets(),
+  }));
+  assert.equal(sby.kind, "tool-error");
+  assert.equal(sby.status, "unsupported-input");
+
+  const collision = await runner.run(input({
+    project: smtProject({ files: ["src/top.v", "lib/top.v"] }),
+    files: new Map([["src/top.v", "module top; endmodule\n"], ["lib/top.v", "module top; endmodule\n"]]),
+    assets: smtAssets(),
+  }));
+  assert.equal(collision.kind, "tool-error");
+  assert.equal(collision.status, "ambiguous-source");
+
+  const vhdl = await runner.run(input({
+    project: smtProject({ files: ["src/top.vhd"] }),
+    files: new Map([["src/top.vhd", "entity top is end;"]]),
+    assets: smtAssets(),
+  }));
+  assert.equal(vhdl.kind, "tool-error");
+  assert.equal(vhdl.status, "unsupported-input");
+
+  assert.equal(python.calls.length, 0);
+});
+
+test("SMT runner stops a hanging python job", async () => {
+  const python = fakePython({ hang: true });
+  const runner = createFormalRunner({ startPython: python.startPython });
+  const pending = runner.run(smtInput());
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  assert.equal(runner.stop(), true);
+  const stopped = await pending;
+  assert.equal(stopped.kind, "cancelled");
+  assert.equal(stopped.status, "cancelled");
 });

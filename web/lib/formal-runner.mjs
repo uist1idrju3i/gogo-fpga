@@ -1,6 +1,9 @@
 import { FORMAL_ENGINES, FORMAL_SOLVERS } from "./formal-capabilities.mjs";
 import { runSatFormal } from "./formal-sat.mjs";
-import { createSatReplay, verifySatReplay } from "./formal-replay.mjs";
+import { createSatReplay, createSmtReplay, verifySatReplay } from "./formal-replay.mjs";
+import { validateFormalProperties } from "./formal-properties.mjs";
+import { readSbyStatus, classifySbyStatus } from "./formal-sby-status.mjs";
+import { startFormalPython } from "./formal-python-process.mjs";
 import { startFormalToolProcess } from "./formal-tool-process.mjs";
 import { applyWorkspaceDelta } from "./formal-workspace.mjs";
 
@@ -71,6 +74,7 @@ function unavailable(input, kind, status, message) {
 
 export function createFormalRunner({
   startTool = startFormalToolProcess,
+  startPython = startFormalPython,
   simulateReplay = null,
   pythonFactory,
   workerFactory,
@@ -133,6 +137,9 @@ export function createFormalRunner({
       if (engine.id === "yosys-sat") {
         return await runSatEngine(input, formal, engine, solver, context, jobId, started, deadline);
       }
+      if (engine.id === "smtbmc") {
+        return await runSmtEngine(input, formal, engine, solver, context, jobId, started, deadline);
+      }
       context.stopped = "unsupported-engine";
       return result({
         jobId, engine: engine.id, solver: solver?.id ?? null, mode: formal.mode, depth: formal.depth,
@@ -151,27 +158,10 @@ export function createFormalRunner({
       jobId, engine: engine.id, solver: solver?.id ?? null, mode: formal.mode, depth: formal.depth,
       timeoutSeconds: formal.timeoutSeconds, snapshotHash: input.snapshotHash ?? null,
     };
-    const paths = formal.files ?? projectFilePaths(input.project);
-    const sources = [];
-    const workspace = [];
-    for (const path of paths) {
-      if (!HDL_PATTERN.test(path) || path.startsWith("libraries/")) continue;
-      if (!/\.v$/i.test(path) && !/\.vh$/i.test(path)) {
-        return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "unsupported-input",
-          message: "Yosys SAT の形式検証には Verilog ファイルを選んでください" });
-      }
-      if (!input.files?.has?.(path)) {
-        return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-source",
-          message: `形式検証のソースが見つかりません: ${path}` });
-      }
-      const bytes = toBytes(input.files.get(path));
-      sources.push(path);
-      workspace.push({ path: `model/${path}`, bytes });
-    }
-    if (!sources.length) {
-      return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-source",
-        message: "形式検証に使える Verilog ファイルがありません" });
-    }
+    const { selected, error } = selectFormalSources(input, formal, base, started, now, "Yosys SAT");
+    if (error) return error;
+    const sources = selected.map(({ path }) => path);
+    const workspace = selected.map(({ path, bytes }) => ({ path: `model/${path}`, bytes }));
     if (!input.assets?.yosys) {
       return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-assets",
         message: "形式検証の Yosys 資材が読み込まれていません" });
@@ -291,7 +281,240 @@ export function createFormalRunner({
     }
   }
 
+  async function runSmtEngine(input, formal, engine, solver, context, jobId, started, deadline) {
+    const base = {
+      jobId, engine: engine.id, solver: solver.id, mode: formal.mode, depth: formal.depth,
+      timeoutSeconds: formal.timeoutSeconds, snapshotHash: input.snapshotHash ?? null,
+    };
+    const stopped = (kind) => result({ ...base, elapsedMs: now() - started,
+      kind: context.timedOut ? "timeout" : kind, status: context.timedOut ? "timeout" : kind });
+    const { selected, error } = selectFormalSources(input, formal, base, started, now, "SBY/SMTBMC");
+    if (error) return error;
+    const sources = selected.map(({ path }) => path);
+    const basenames = new Map();
+    for (const path of sources) {
+      const base1 = path.split("/").at(-1);
+      if (basenames.has(base1)) {
+        return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "ambiguous-source",
+          message: `SBY は同名のソースを区別できません: ${basenames.get(base1)} と ${path}` });
+      }
+      basenames.set(base1, path);
+    }
+    if (formal.sby !== null && formal.sby !== undefined) {
+      return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "unsupported-input",
+        message: "プロジェクト指定の .sby ファイルはまだ接続されていません" });
+    }
+    if (!Array.isArray(input.assets?.sources) || !input.assets.sources.length || !input.assets?.manifest ||
+        !input.assets?.yosys || !input.assets?.solvers) {
+      return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-assets",
+        message: "形式検証の Python/SBY 資材が読み込まれていません" });
+    }
+    const sbyName = "formal.sby";
+    const files = [...selected, { path: sbyName, bytes: encoder.encode(generateSby({ sources, top: formal.top, mode: formal.mode, depth: formal.depth, solver })) }];
+    const stdoutParts = [];
+    const stderrParts = [];
+    const remaining = Math.ceil(deadline - now());
+    if (context.stopped || remaining <= 0) return stopped("cancelled");
+    const job = startPython({
+      sources: input.assets.sources,
+      manifest: input.assets.manifest,
+      entrypoint: "sby",
+      args: ["--yosys", "yosys", "--smtbmc", "yosys-smtbmc", "--witness", "yosys-witness",
+        "-j", "1", "-d", "result", sbyName],
+      files,
+      solvers: input.assets.solvers,
+      yosys: input.assets.yosys,
+      cwd: null,
+      timeoutMs: Math.min(300_000, remaining),
+      onStdout: (text) => stdoutParts.push(text),
+      onStderr: (text) => stderrParts.push(text),
+    });
+    context.process = job;
+    let sby;
+    try {
+      sby = await job.completion;
+    } finally {
+      if (context.process === job) context.process = null;
+    }
+    const stdout = stdoutParts.join("");
+    const stderr = stderrParts.join("");
+    if (context.stopped) return stopped(context.stopped === "timeout" ? "timeout" : "cancelled");
+    if (sby.status !== "exited") {
+      return result({ ...base, elapsedMs: now() - started,
+        kind: context.timedOut ? "timeout" : "tool-error",
+        status: context.timedOut ? "timeout" : `sby-${sby.status}`,
+        message: `SBY の実行に失敗しました: ${String(sby.error ?? sby.status).slice(0, 512)}` });
+    }
+    const statusFile = (sby.files ?? []).find((file) => file.path === "result/status");
+    let sbyStatus;
+    try {
+      sbyStatus = readSbyStatus(statusFile ? decoder.decode(statusFile.bytes) : "", sby.exitCode, stdout);
+    } catch (error) {
+      return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "sby-status-error",
+        message: String(error?.message ?? error).slice(0, 512) });
+    }
+    let kind;
+    try {
+      kind = classifySbyStatus(formal.mode, sbyStatus);
+    } catch (error) {
+      return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "sby-status-error",
+        message: String(error?.message ?? error).slice(0, 512) });
+    }
+    const outputFiles = sby.files ?? [];
+    if (kind !== "counterexample") {
+      return result({ ...base, elapsedMs: now() - started, kind, status: sbyStatus });
+    }
+    const { replay, inventory, vcd } = await replaySmtCounterexample({
+      input, formal, solver, selected, outputFiles, context, started, now, deadline, simulate: simulateReplay });
+    return result({ ...base, elapsedMs: now() - started, kind: "counterexample", status: sbyStatus,
+      message: stderr.trim() ? stderr.trim().slice(0, 512) : "", inventory,
+      vcd: vcd ? { name: "formal/trace.vcd", bytes: vcd } : null, replay });
+  }
+
+  async function replaySmtCounterexample({ input, formal, solver, selected, outputFiles, context, started, now, deadline, simulate }) {
+    const witnessVcd = outputFiles.find((file) => file.path.endsWith("engine_0/trace.vcd"))?.bytes ?? null;
+    const unavailableReplay = (reason) => ({ replay: { status: "unavailable", reason }, inventory: null, vcd: witnessVcd });
+    if (!simulate) return unavailableReplay("replay simulator is not configured");
+    try {
+      const modelEntries = outputFiles.filter((file) => file.path.endsWith("model/design_smt2.smt2"));
+      if (modelEntries.length !== 1) return unavailableReplay("SMT model is missing or ambiguous");
+      const modelBytes = modelEntries[0].bytes;
+      context.workspace = selected.map(({ path, bytes }) => ({ path: `model/${path}`, bytes }));
+      const inventoryRun = await executeSatPhase({
+        context, input, phase: "inventory",
+        script: smtInventoryScript({ sources: selected.map(({ path }) => path), top: formal.top }),
+        deadline, now });
+      const documentBytes = inventoryRun.files.get("__formal/before.json");
+      if (inventoryRun.exitCode !== 0 || !documentBytes) {
+        return unavailableReplay(`formal property document failed: ${inventoryRun.stderr.trim().slice(0, 256) || "missing"}`);
+      }
+      const document = JSON.parse(decoder.decode(documentBytes));
+      const inventory = validateFormalProperties(document, document, {
+        top: formal.top, clock: formal.clock, edge: formal.edge, mode: formal.mode });
+      const remaining = Math.ceil(deadline - now());
+      if (context.stopped || remaining <= 0) {
+        return { replay: { status: "unavailable", reason: "formal job reached its deadline" }, inventory, vcd: witnessVcd };
+      }
+      const traceStdout = [];
+      const traceStderr = [];
+      const traceJob = startPython({
+        sources: input.assets.sources,
+        manifest: input.assets.manifest,
+        entrypoint: "formal_trace",
+        args: smtTraceArgs(solver, formal.depth),
+        files: [...selected, { path: "model.smt2", bytes: modelBytes }],
+        solvers: input.assets.solvers,
+        yosys: input.assets.yosys,
+        cwd: null,
+        timeoutMs: Math.min(300_000, remaining),
+        onStdout: (text) => traceStdout.push(text),
+        onStderr: (text) => traceStderr.push(text),
+      });
+      context.process = traceJob;
+      let trace;
+      try {
+        trace = await traceJob.completion;
+      } finally {
+        if (context.process === traceJob) context.process = null;
+      }
+      if (trace.status !== "exited") {
+        return { replay: { status: "unavailable", reason: `trace recording failed: ${trace.status}` }, inventory, vcd: witnessVcd };
+      }
+      const traceFiles = trace.files ?? [];
+      const captureEntry = traceFiles.find((file) => file.path === "formal-trace.json");
+      const vcdEntry = traceFiles.find((file) => file.path === "trace.vcd");
+      if (!captureEntry || !vcdEntry) {
+        return { replay: { status: "unavailable", reason: "trace recording artifacts are missing" }, inventory, vcd: witnessVcd };
+      }
+      const capture = JSON.parse(decoder.decode(captureEntry.bytes));
+      const replay = await createSmtReplay({
+        document,
+        top: formal.top,
+        capture,
+        model: modelBytes,
+        vcd: vcdEntry.bytes,
+        clock: formal.clock,
+        edge: formal.edge,
+        mode: formal.mode,
+        phase: formal.mode === "prove" ? "basecase" : "bmc",
+        depth: formal.depth,
+      });
+      const execution = await simulate({ replay, top: formal.top, sources: selected.map(({ path }) => path), files: input.files });
+      if (!execution || typeof execution !== "object") {
+        return { replay: { status: "rejected", reason: "Replay execution did not finish normally" }, inventory, vcd: witnessVcd };
+      }
+      const verdict = verifySatReplay(replay, execution);
+      if (verdict.status === "verified") {
+        return { replay: { status: "verified", steps: verdict.steps, failures: verdict.failures }, inventory, vcd: witnessVcd };
+      }
+      return { replay: { status: "rejected", reason: verdict.reason ?? "Replay did not reproduce the violation" }, inventory, vcd: witnessVcd };
+    } catch (error) {
+      return { replay: { status: "rejected", reason: String(error?.message ?? error).slice(0, 1024) }, inventory: null, vcd: witnessVcd };
+    }
+  }
+
   return { run, stop, dispose };
+}
+
+function selectFormalSources(input, formal, base, started, now, label) {
+  const paths = formal.files ?? projectFilePaths(input.project);
+  const selected = [];
+  for (const path of paths) {
+    if (!HDL_PATTERN.test(path) || path.startsWith("libraries/")) continue;
+    if (!/\.v$/i.test(path) && !/\.vh$/i.test(path)) {
+      return { error: result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "unsupported-input",
+        message: `${label} の形式検証には Verilog ファイルを選んでください` }) };
+    }
+    if (!input.files?.has?.(path)) {
+      return { error: result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-source",
+        message: `形式検証のソースが見つかりません: ${path}` }) };
+    }
+    selected.push({ path, bytes: toBytes(input.files.get(path)) });
+  }
+  if (!selected.length) {
+    return { error: result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-source",
+      message: "形式検証に使える Verilog ファイルがありません" }) };
+  }
+  return { selected };
+}
+
+function generateSby({ sources, top, mode, depth, solver }) {
+  const basenames = sources.map((path) => path.split("/").at(-1));
+  return [
+    "[options]",
+    `mode ${mode}`,
+    `depth ${depth}`,
+    "",
+    "[engines]",
+    `smtbmc ${solver.smtbmc}`,
+    "",
+    "[script]",
+    `read -formal ${basenames.map((name) => `"${name}"`).join(" ")}`,
+    `prep -top ${top}`,
+    "",
+    "[files]",
+    ...sources,
+    "",
+  ].join("\n");
+}
+
+function smtTraceArgs(solver, depth) {
+  return ["-s", solver.smtbmc, "--presat", "--noprogress",
+    ...(solver.id === "yices2" ? ["--unroll"] : []),
+    "-t", String(depth), "--dump-vcd", "trace.vcd", "--dump-yw", "trace.yw",
+    "--dump-vlogtb", "trace_tb.v", "model.smt2"];
+}
+
+function smtInventoryScript({ sources, top }) {
+  return [
+    ...sources.map((path) => `read_verilog -formal "${path}"`),
+    `hierarchy -check -top ${top}`,
+    "proc",
+    "flatten",
+    "async2sync",
+    "chformal -lower",
+    "write_json __formal/before.json",
+  ].join("; ");
 }
 
 function projectFilePaths(project) {
