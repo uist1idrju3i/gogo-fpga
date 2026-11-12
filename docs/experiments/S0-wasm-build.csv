@@ -1,0 +1,138 @@
+record_type,variant,case,repeat,elapsed_ms,peak_rss_kb,artifact,raw_bytes,gzip_bytes,sha256,notes
+tool,emsdk,tag,,,,,,,,vendor/emsdk tag 6.0.13; gitlink 35659964bc2762fffec0d257997fb61475f765b7
+tool,emcc,version,,,,,,,,6.0.13 e13ee988ce3d87a738dd8f3661d02223308c412a
+tool,em++,version,,,,,,,,6.0.13 e13ee988ce3d87a738dd8f3661d02223308c412a
+tool,clang,version,,,,,,,,24.0.0git LLVM 83ee07799c341b60965f07892f7bb3d175da05be
+tool,node,versions,,,,,,,,host v24.21.0; emsdk v24.19.0
+tool,autotools,versions,,,,,,,,Homebrew autoconf 2.73; automake 1.19; libtool 2.6.2
+tool,source-date-epoch,repro-prefix-map,,,,,,,,1792953561 for both builds
+build,jspi-pthread,total,,89780,242816,build/jspi-pthread/build.log,,,,exit 0; SOURCE_DATE_EPOCH=1792950293; reduced vendor config
+link,jspi-pthread,final,,37240,211368,build/jspi-pthread/openFPGALoader-build/link-time.txt,,,,exit 0; full command is in S0-wasm-build.md and link.txt
+artifact,jspi-pthread,mjs,,,,build/jspi-pthread/openFPGALoader.mjs,99393,27345,9005540841199936d9f983124e7a890e3661bd21f250b11e580346e8e7c0df27,primary artifact
+artifact,jspi-pthread,wasm,,,,build/jspi-pthread/openFPGALoader.wasm,2281255,635229,26112f8c1ccf49910624d4a212e9f3f7b64138a2c1fe26af6d7005e5a6e09344,primary artifact
+build,jspi-pthread-repro,total,,91130,243088,build/repro/jspi-pthread/build.log,,,,exit 0; second clean build
+link,jspi-pthread-repro,final,,38590,214192,build/repro/jspi-pthread/openFPGALoader-build/link-time.txt,,,,exit 0
+artifact,jspi-pthread-repro,mjs,,,,build/repro/jspi-pthread/openFPGALoader.mjs,99393,27345,9005540841199936d9f983124e7a890e3661bd21f250b11e580346e8e7c0df27,byte-for-byte reproducible with primary mjs
+artifact,jspi-pthread-repro,wasm,,,,build/repro/jspi-pthread/openFPGALoader.wasm,2281303,635267,86fc91b7db4da5551e7d175e30634a4c4cf3ae01472475de1f506f481d7dbe74,hash differs; embedded absolute build paths differ
+reproducibility,jspi-pthread,mjs,,,,,,,,primary and second SHA-256 match
+reproducibility,jspi-pthread,wasm,,,,,,,,primary and second SHA-256 differ; strings diff shows build-root source paths
+build,jspi-pthread-prefix-map-a,total,,90180,243364,build/repro-a-build-time.txt,,,,exit 0; SOURCE_DATE_EPOCH=1792953561; -ffile-prefix-map enabled
+link,jspi-pthread-prefix-map-a,final,,38700,212576,build/repro-a/jspi-pthread/openFPGALoader-build/link-time.txt,,,,exit 0
+artifact,jspi-pthread-prefix-map-a,mjs,,,,build/repro-a/jspi-pthread/openFPGALoader.mjs,99393,27345,9005540841199936d9f983124e7a890e3661bd21f250b11e580346e8e7c0df27,clean build A
+artifact,jspi-pthread-prefix-map-a,wasm,,,,build/repro-a/jspi-pthread/openFPGALoader.wasm,2280999,635196,7c17316b513940c4380f823bee1960eb34982ae590fa443f4bde3cccf2f556dd,clean build A
+build,jspi-pthread-prefix-map-b,total,,90560,243232,build/repro-b-build-time.txt,,,,exit 0; SOURCE_DATE_EPOCH=1792953561; -ffile-prefix-map enabled
+link,jspi-pthread-prefix-map-b,final,,37350,213660,build/repro-b/jspi-pthread/openFPGALoader-build/link-time.txt,,,,exit 0
+artifact,jspi-pthread-prefix-map-b,mjs,,,,build/repro-b/jspi-pthread/openFPGALoader.mjs,99393,27345,9005540841199936d9f983124e7a890e3661bd21f250b11e580346e8e7c0df27,clean build B
+artifact,jspi-pthread-prefix-map-b,wasm,,,,build/repro-b/jspi-pthread/openFPGALoader.wasm,2280999,635196,7c17316b513940c4380f823bee1960eb34982ae590fa443f4bde3cccf2f556dd,clean build B
+reproducibility,jspi-pthread-prefix-map,mjs,,,,,,,,repro-a and repro-b SHA-256 match
+reproducibility,jspi-pthread-prefix-map,wasm,,,,,,,,repro-a and repro-b SHA-256 match
+test,jspi-pthread-prefix-map,detect-suite,,4888,,build/repro-b/jspi-pthread-tests.log,,,,9 passed; 0 failed; exact board part names asserted
+build,asyncify-pthread,total,,1358620,7446564,build/asyncify-pthread/build.log,,,,local attempt reached 7.4 GiB peak and was SIGKILLed; author baseline incomplete and deferred to 16 GB GitHub-hosted runner
+link,asyncify-pthread,local-attempt,,1289150,7446564,build/asyncify-pthread/openFPGALoader-build/link-time.txt,,,,wasm-opt received SIGKILL (-9); no final artifact; not a design failure
+detect,jspi-pthread,Tang Nano 1K plain,1,112.611,,,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread,Tang Nano 1K plain,2,92.754,,,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread,Tang Nano 1K plain,3,88.958,,,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread,Tang Nano 1K plain,4,85.703,,,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread,Tang Nano 1K plain,5,83.874,,,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread,Tang Nano 1K board option,1,87.073,,,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread,Tang Nano 1K board option,2,96.691,,,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread,Tang Nano 1K board option,3,100.619,,,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread,Tang Nano 1K board option,4,97.032,,,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread,Tang Nano 1K board option,5,101.762,,,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread,Tang Nano 4K plain,1,124.499,,,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread,Tang Nano 4K plain,2,110.140,,,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread,Tang Nano 4K plain,3,89.255,,,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread,Tang Nano 4K plain,4,87.272,,,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread,Tang Nano 4K plain,5,86.550,,,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread,Tang Nano 4K board option,1,87.145,,,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread,Tang Nano 4K board option,2,84.050,,,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread,Tang Nano 4K board option,3,91.210,,,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread,Tang Nano 4K board option,4,90.705,,,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread,Tang Nano 4K board option,5,90.129,,,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread,Tang Nano 9K plain,1,86.286,,,,,,fake sends 0x1100481b; detected table reports masked 0x0100481b
+detect,jspi-pthread,Tang Nano 9K plain,2,89.329,,,,,,fake sends 0x1100481b; detected table reports masked 0x0100481b
+detect,jspi-pthread,Tang Nano 9K plain,3,87.880,,,,,,fake sends 0x1100481b; detected table reports masked 0x0100481b
+detect,jspi-pthread,Tang Nano 9K plain,4,88.535,,,,,,fake sends 0x1100481b; detected table reports masked 0x0100481b
+detect,jspi-pthread,Tang Nano 9K plain,5,89.426,,,,,,fake sends 0x1100481b; detected table reports masked 0x0100481b
+detect,jspi-pthread,Tang Nano 9K board option,1,84.510,,,,,,fake sends 0x1100481b; detected table reports masked 0x0100481b
+detect,jspi-pthread,Tang Nano 9K board option,2,88.973,,,,,,fake sends 0x1100481b; detected table reports masked 0x0100481b
+detect,jspi-pthread,Tang Nano 9K board option,3,88.270,,,,,,fake sends 0x1100481b; detected table reports masked 0x0100481b
+detect,jspi-pthread,Tang Nano 9K board option,4,94.139,,,,,,fake sends 0x1100481b; detected table reports masked 0x0100481b
+detect,jspi-pthread,Tang Nano 9K board option,5,86.110,,,,,,fake sends 0x1100481b; detected table reports masked 0x0100481b
+detect,jspi-pthread,Tang Nano 20K plain,1,90.072,,,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread,Tang Nano 20K plain,2,91.592,,,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread,Tang Nano 20K plain,3,85.305,,,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread,Tang Nano 20K plain,4,91.443,,,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread,Tang Nano 20K plain,5,90.448,,,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread,Tang Nano 20K board option,1,87.241,,,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread,Tang Nano 20K board option,2,85.761,,,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread,Tang Nano 20K board option,3,90.271,,,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread,Tang Nano 20K board option,4,86.199,,,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread,Tang Nano 20K board option,5,86.877,,,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread,no-device,1,82.638,,,,,,exit nonzero; sensible device-not-found message
+failure,history,early-config,,,,build/retry1..retry4,,,,zlib feature probes; undefined lseek/read/close/write
+failure,history,libusb-host,,,,build/retry1..retry4,,,,config.sub rejected wasm32-emscripten; ac_cv_host workaround
+failure,history,clock-gettime,,,,build/retry1..retry4,,,,libusb configure reported clock_gettime() is required; cached sysroot-supported result
+failure,history,strict-setting,,,,build/retry1..retry4,,,,legacy setting used in strict mode: USE_ES6_IMPORT_META
+failure,threads-off,run1-emsdk-6.0.9,,,,build/run1/threads-off/build.log,,,,superseded by emsdk 6.0.13 correction
+failure,threads-off,run2-pthread-flag,,,,build/run2/threads-off/build.log,,,,libusb generated Makefile inserted THREAD_CFLAGS=-pthread
+failure,threads-off,run3-atomics,,,,build/run3/threads-off/build.log,,,,events_posix.c:40; __builtin_wasm_memory_atomic_notify and wait32 need target feature atomics
+failure,threads-off,run4-reduced-wasm-opt,,,,build/run4/threads-off/build.log,,,,wasm-opt failed with received SIGKILL (-9)
+failure,threads-off,run4-full-wasm-opt,,,,build/run4/threads-off/openFPGALoader-full-build,,,,stopped after 1:42:19; incomplete intermediate only
+failure,threads-on,run5-autotools,,,,build/run5/threads-on.log,,,,exec: autoreconf: not found
+failure,threads-on,run6-autotools,,,,build/run6/threads-on.log,,,,aclocal could not open /usr/share/aclocal-1.16
+failure,threads-on,run7-autotools,,,,build/run7/threads-on.log,,,,autom4te missing /usr/share/autoconf/autoconf/trailer.m4
+failure,threads-on,run8-reduced-wasm-opt,,,,build/run8/threads-on.log,,,,wasm-opt failed with received SIGKILL (-9)
+failure,threads-on,run8-full-wasm-opt,,,,build/run8/threads-on/openFPGALoader-full-build,,,,stopped after 00:16:20; incomplete intermediate only
+failure,jspi-pthread,run9-autotools,,,,build/run9/jspi-threads-off-bootstrap-failure/,,,,aclocal failed: Can't locate Automake/Config.pm in @INC
+failure,jspi-js-ehe,initRuntime-suspend,,,,build/negative-jspi-js-ehexceptions/jspi-threads-off/,,,,SuspendError: trying to suspend without WebAssembly.promising; stack invoke_iii to initRuntime
+failure,jspi-js-ehe,JSPI_IMPORTS,,,,build/jspi-import-test/jspi-threads-off/,,,,adding __asyncjs__em_libusb_wait_async did not fix SuspendError
+failure,jspi-nonshared,Atomics-waitAsync,,,,build/jspi-threads-off/,,,,TypeError: [object Int32Array] is not a shared typed array
+failure,jspi-shm,undefined-pthread-symbols,,,,build/negative-jspi-shm-pthread-link-failure/,,,,undefined pthread_mutex_lock/unlock/init/destroy and pthread_getspecific
+failure,jspi-shm,undefined-pthread-self,,,,build/negative-jspi-shm-pthread-self-link-failure/,,,,pthread_self remained undefined after first stub attempt
+failure,jspi-shm,duplicate-futex-symbol,,,,build/jspi-shm/,,,,duplicate emscripten_futex_wake from library_pthread_stub.o and libc-mt.a; cause of -lc-mt selection not established
+deferred,asyncify-pthread,rerun,,,,build/asyncify-pthread/openFPGALoader-build/link-time.txt,,,,not completed on the local VM; rerun on a 16 GB GitHub-hosted runner; not a design failure
+failure,test-harness,print-callback,,,,build/jspi-pthread-tests.log,,,,9 assertions failed because C++ output bypassed Module.print callback
+failure,test-harness,process-stream-patch,,,,build/jspi-pthread-tests-capture-fix.log,,,,Node test runner failed: Unable to deserialize cloned data
+failure,test-command,directory-form,,,,previous terminal output,,,,Node 24 cannot resolve node --test tests/sim/ as a directory; wildcard form works
+detect,jspi-pthread-prefix-map,Tang Nano 1K plain,1,96.325,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread-prefix-map,Tang Nano 1K plain,2,104.702,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread-prefix-map,Tang Nano 1K plain,3,86.655,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread-prefix-map,Tang Nano 1K plain,4,89.101,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread-prefix-map,Tang Nano 1K plain,5,87.995,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread-prefix-map,Tang Nano 1K board option,1,88.825,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread-prefix-map,Tang Nano 1K board option,2,90.828,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread-prefix-map,Tang Nano 1K board option,3,88.755,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread-prefix-map,Tang Nano 1K board option,4,85.837,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread-prefix-map,Tang Nano 1K board option,5,88.538,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100681b
+detect,jspi-pthread-prefix-map,Tang Nano 4K plain,1,88.757,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread-prefix-map,Tang Nano 4K plain,2,87.015,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread-prefix-map,Tang Nano 4K plain,3,85.245,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread-prefix-map,Tang Nano 4K plain,4,94.718,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread-prefix-map,Tang Nano 4K plain,5,96.562,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread-prefix-map,Tang Nano 4K board option,1,103.596,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread-prefix-map,Tang Nano 4K board option,2,97.031,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread-prefix-map,Tang Nano 4K board option,3,94.962,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread-prefix-map,Tang Nano 4K board option,4,101.505,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread-prefix-map,Tang Nano 4K board option,5,92.568,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100981b
+detect,jspi-pthread-prefix-map,Tang Nano 9K plain,1,90.903,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100481b after mask
+detect,jspi-pthread-prefix-map,Tang Nano 9K plain,2,87.472,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100481b after mask
+detect,jspi-pthread-prefix-map,Tang Nano 9K plain,3,147.262,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100481b after mask
+detect,jspi-pthread-prefix-map,Tang Nano 9K plain,4,88.927,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100481b after mask
+detect,jspi-pthread-prefix-map,Tang Nano 9K plain,5,88.572,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100481b after mask
+detect,jspi-pthread-prefix-map,Tang Nano 9K board option,1,88.234,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100481b after mask
+detect,jspi-pthread-prefix-map,Tang Nano 9K board option,2,86.909,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100481b after mask
+detect,jspi-pthread-prefix-map,Tang Nano 9K board option,3,91.998,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100481b after mask
+detect,jspi-pthread-prefix-map,Tang Nano 9K board option,4,85.194,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100481b after mask
+detect,jspi-pthread-prefix-map,Tang Nano 9K board option,5,86.578,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0100481b after mask
+detect,jspi-pthread-prefix-map,Tang Nano 20K plain,1,83.664,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread-prefix-map,Tang Nano 20K plain,2,92.518,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread-prefix-map,Tang Nano 20K plain,3,86.835,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread-prefix-map,Tang Nano 20K plain,4,90.256,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread-prefix-map,Tang Nano 20K plain,5,104.630,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread-prefix-map,Tang Nano 20K board option,1,86.555,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread-prefix-map,Tang Nano 20K board option,2,87.159,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread-prefix-map,Tang Nano 20K board option,3,89.502,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread-prefix-map,Tang Nano 20K board option,4,86.851,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread-prefix-map,Tang Nano 20K board option,5,88.189,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,displayed IDCODE 0x0000081b
+detect,jspi-pthread-prefix-map,no-device,1,108.455,,build/repro-b/jspi-pthread/openFPGALoader.wasm,,,,no device attached

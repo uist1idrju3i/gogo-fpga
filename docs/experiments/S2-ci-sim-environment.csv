@@ -1,0 +1,46 @@
+run_id,variant,repeat,metric,value,unit,valid,note
+python314,fixture-build,1,exit code,1,code,false,Yosys ABC9 Wasmtime trap on Tang Nano 1K
+python312,fixture-snapshot,1,fixture files matched,4,files,true,build fixtures equal preserved Python 3.12 files
+python312,tangnano1k,1,SHA-256,999b7e160d98654c150d21c72e53d19e86e21b308e0188457763fb113e889998,hash,true,Python 3.12 fixture
+python312,tangnano4k,1,SHA-256,63b030bf66d9dfc88fc14cdc3287df4efa179f7773808fdc6940860fa9ee8017,hash,true,Python 3.12 fixture
+python312,tangnano9k,1,SHA-256,191b09be744a28461a55b44da0e91b4c70e00e47cf61b824c8f0040a99f47b83,hash,true,Python 3.12 fixture
+python312,tangnano20k,1,SHA-256,7e66b61bab06d9f7f7ce31e88a97a26b467b3aa2d5bc3afc53cf0ffdefb11b7d,hash,true,Python 3.12 fixture
+cpu-stress,taskset-cpu0-two-yes,1,Tang Nano 1K flash,8122.069214,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,1,Tang Nano 4K flash,10166.235477,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,1,Tang Nano 9K flash,12626.179548,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,1,USB disconnect,368.574696,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,1,suite duration,31410.498011,ms,true,4 of 4 tests passed
+cpu-stress,taskset-cpu0-two-yes,2,Tang Nano 1K flash,8033.996718,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,2,Tang Nano 4K flash,10264.541113,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,2,Tang Nano 9K flash,12518.920931,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,2,USB disconnect,407.421000,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,2,suite duration,31331.785199,ms,true,4 of 4 tests passed
+cpu-stress,taskset-cpu0-two-yes,3,Tang Nano 1K flash,8160.453980,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,3,Tang Nano 4K flash,10595.109674,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,3,Tang Nano 9K flash,12571.312094,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,3,USB disconnect,381.596416,ms,true,pass
+cpu-stress,taskset-cpu0-two-yes,3,suite duration,31817.946419,ms,true,4 of 4 tests passed
+local-trace,python312-fixture,1,affected tests,3,tests,true,3 of 3 passed
+local-trace,python312-fixture,1,trace log,1748834,bytes,true,17880 trace lines
+local-trace,tangnano1k,1,DR update 0x71,11180,updates,true,0x0a and 0x13 were absent
+local-trace,tangnano4k,1,DR update 0x71,37050,updates,true,0x0a and 0x13 were absent
+local-trace,tangnano9k,1,DR update 0x71,65715,updates,true,0x0a and 0x13 were absent
+ci,fixtures,1,hash matches,4,files,true,all Python 3.12 fixture hashes match CI
+ci,trace,1,0x13 DR reads,3,events,true,one zero usercode read per GW1N board
+ci,trace,1,0x0a IR or DR events,0,events,true,flash programming does not update usercode through SRAM instruction
+ci,trace,1,device state resets,0,events,true,no device reset observed before CRC reads
+ci,trace,1,diagnostic tests,3,failed,true,each first CRC assertion reads usercode zero
+local-fix,affected-sim-tests,1,pass count,5,tests,true,three flash tests USB disconnect and checksum parser
+local-fix,full-sim-suite,1,pass count,41,tests,true,duration 429458.670334 ms
+trace,mpsse-parser-before-fix,1,Tang Nano 1K queued bytes,2,bytes,true,0x3b and 0x6b response bytes
+trace,mpsse-parser-before-fix,1,Tang Nano 4K queued bytes,636,bytes,true,631 bytes attributed to false 0x26 command
+trace,mpsse-parser-before-fix,1,Tang Nano 9K queued bytes,1518,bytes,true,1513 bytes attributed to false 0x26 command
+trace,mpsse-parser-after-fix,1,Tang Nano 1K queued bytes,0,bytes,true,0x13 response matches usercode 0x0000a9ee
+trace,mpsse-parser-after-fix,1,Tang Nano 4K queued bytes,0,bytes,true,0x13 response matches usercode 0x00001042
+trace,mpsse-parser-after-fix,1,Tang Nano 9K queued bytes,0,bytes,true,0x13 response matches usercode 0x0000c5d5
+ci,mpsse-parser-fix,1,USB disconnect duration,421.364,ms,true,pass; causal queue trace was not collected
+review,checksum-refactor-first-run,1,full-sim failures,1,test,true,9K checksum was 0x59e7 instead of 0xc5d5 due to per-row bit alignment
+review,corrected-checksum-focused,1,pass count,7,tests,true,duration 84899.777769 ms
+review,corrected-checksum-full-suite,1,pass count,43,tests,true,duration 514014.683145 ms
+review,eflash-corruption,1,corrupted word index,23,word,true,stored eflash byte at address 92 had bit 0 flipped
+review,eflash-corruption-local,1,upstream CRC output,skipped,branch,true,skip_checksum undefined value skipped check; eflash-derived checksum mismatch was asserted
