@@ -1,0 +1,13 @@
+kind,variant,build_root,artifact,bytes,sha256,gzip_bytes,zstd_bytes,result
+wasm,wasi,build/S10/wasi-eh-build18,ivlpp.wasm,428432,7ab296df67635fc272b5dfa95c3e0e5f0e7176271b4035d26f847e266c6936af,142149,125975,pass
+wasm,wasi,build/S10/wasi-eh-build18,ivl.wasm,6630370,936223cd9204283fe16a1b3232684a9766573088d2d0da3fa08a2c94fcfdb30f,1652779,1334178,pass
+wasm,wasi,build/S10/wasi-eh-build18,vvp.wasm,4824816,909014061e6dbde49f2f86b47c4a2b536abaea0c79678a7b901e6b816de1bc83,1268575,1031036,pass
+wasm,reproducibility,build/S10/wasi-eh-build19,ivlpp.wasm,428432,7ab296df67635fc272b5dfa95c3e0e5f0e7176271b4035d26f847e266c6936af,,,identical-to-build18
+wasm,reproducibility,build/S10/wasi-eh-build19,ivl.wasm,6630370,936223cd9204283fe16a1b3232684a9766573088d2d0da3fa08a2c94fcfdb30f,,,identical-to-build18
+wasm,reproducibility,build/S10/wasi-eh-build19,vvp.wasm,4824816,909014061e6dbde49f2f86b47c4a2b536abaea0c79678a7b901e6b816de1bc83,,,identical-to-build18
+native,native,build/S10/native-final8,ivl,4424520,093c01331b72871fd1fc5b09a01a8bba56e627911868d5caa1d4d3c2b77b42da,,,built
+native,native,build/S10/native-final8,ivlpp,86008,8fe4d06517c55c67c0bc95f25d4a162031d3f7a55dd77ff7a80fbf6691062a8d,,,built
+native,native,build/S10/native-final8,vvp,2307032,103c9af07330834dcf4febfeedb978272e1dfa1af141f7ad90be1da267d88609,,,built
+tests,node,build/S10/wasi-eh-build18,seven-fixtures-and-four-board-templates,,,,,5-runs-pass
+negative-controls,wasi,build/S10/wasi-eh-build18,syntax-error-undefined-module-fatal-vhd-corrupt-wasm,,,,,pass
+timing,node,build/S10/wasi-eh-build18,full-test-suite-median-ms,972.691133,,,,5-runs

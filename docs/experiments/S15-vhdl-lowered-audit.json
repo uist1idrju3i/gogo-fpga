@@ -1,0 +1,218 @@
+{
+  "revision": "6c502038eaf71554f8a2da68efb1e7a9bf3bf901",
+  "workingTree": "",
+  "rows": 420,
+  "originalColumns": 20,
+  "combinedColumns": 21,
+  "originalValuesRead": 8400,
+  "aa": "passed",
+  "deterministicDifferencesExcluded": {
+    "elapsedMs": 240,
+    "GHDL VCD date hash": 240
+  },
+  "combinedCsvSha256": "740c6b9296134ed714ac99b110f579c4995a64d504b5f0bd25128f423ca7970d",
+  "node": "v24.21.0",
+  "host": {
+    "platform": "linux",
+    "architecture": "x64",
+    "release": "6.8.0-1061-aws",
+    "cpus": [
+      "Intel(R) Xeon(R) Processor",
+      "Intel(R) Xeon(R) Processor"
+    ],
+    "memoryBytes": 8327749632,
+    "osRelease": "PRETTY_NAME=\"Ubuntu 26.04.1 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"26.04\"\nVERSION=\"26.04.1 LTS (Resolute Raccoon)\"\nVERSION_CODENAME=resolute\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=resolute\nLOGO=ubuntu-logo\n"
+  },
+  "ghdlVersion": "GHDL 6.0.0 (tarball) [Dunoon edition]\n Compiled with GNAT Version: 14.3.0\n static elaboration, mcode JIT code generator\nWritten by Tristan Gingold.\n\nCopyright (C) 2003 - 2026 Tristan Gingold.\nGHDL is free software, covered by the GNU General Public License.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n",
+  "compiler": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "yosysVersion": "Yosys 0.70 (git sha1 28ba3cb92, Release, GNU /usr/bin/c++ 11.4.0)\n",
+  "vvpVersion": "Icarus Verilog runtime version 13.0 (stable) (v13_0)\n\nCopyright (c) 2001-2026 Stephen Williams (steve@icarus.com)\n\n  This program is free software; you can redistribute it and/or modify\n  it under the terms of the GNU General Public License as published by\n  the Free Software Foundation; either version 2 of the License, or\n  (at your option) any later version.\n\n  This program is distributed in the hope that it will be useful,\n  but WITHOUT ANY WARRANTY; without even the implied warranty of\n  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n  GNU General Public License for more details.\n\n  You should have received a copy of the GNU General Public License along\n  with this program; if not, write to the Free Software Foundation, Inc.,\n  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\n",
+  "samples": [
+    {
+      "sample": "repeat1",
+      "directory": "p1-vhdl-lowered-4aNWI6",
+      "revision": "6c502038eaf71554f8a2da68efb1e7a9bf3bf901",
+      "preliminary": false,
+      "rows": 60,
+      "columns": 20,
+      "csvSha256": "18f9913157488b3bde3bb29f6ed8bf74bc9a162c967230983d5b429a4ddcbf20",
+      "files": 3569,
+      "counts": {
+        "verified": 40,
+        "counterexample": 8,
+        "error": 8,
+        "bounded-safe": 4
+      },
+      "elapsedMs": {
+        "minimum": 62.6386360000015,
+        "median": 70.2124624999999,
+        "maximum": 153.68892200000005
+      },
+      "manifestSha256": "778a00bd7227dcb1a5bb7dda0509612aac648d86e0063feb8c1b0216c252e77b"
+    },
+    {
+      "sample": "repeat2",
+      "directory": "p1-vhdl-lowered-Lh4eZK",
+      "revision": "6c502038eaf71554f8a2da68efb1e7a9bf3bf901",
+      "preliminary": false,
+      "rows": 60,
+      "columns": 20,
+      "csvSha256": "d82bfc4e438bd541ac25d9214652a53c7853d2aae6e7bb908f4b73cd8a2d0404",
+      "files": 3569,
+      "counts": {
+        "verified": 40,
+        "counterexample": 8,
+        "error": 8,
+        "bounded-safe": 4
+      },
+      "elapsedMs": {
+        "minimum": 62.81730399999924,
+        "median": 70.61596300000019,
+        "maximum": 117.35255999999981
+      },
+      "manifestSha256": "1aeaa55a4ce2406e9a55950c22146d1218e954ce8b76d80c3e1d8cab1f678dae"
+    },
+    {
+      "sample": "repeat3",
+      "directory": "p1-vhdl-lowered-bIsMKs",
+      "revision": "6c502038eaf71554f8a2da68efb1e7a9bf3bf901",
+      "preliminary": false,
+      "rows": 60,
+      "columns": 20,
+      "csvSha256": "3056cd8e4e7aa0592798e217871234f3ff2985bb0f69a2a3c5f08eb45b3a79b4",
+      "files": 3569,
+      "counts": {
+        "verified": 40,
+        "counterexample": 8,
+        "error": 8,
+        "bounded-safe": 4
+      },
+      "elapsedMs": {
+        "minimum": 60.63878399999976,
+        "median": 69.48685600000022,
+        "maximum": 121.32086299999992
+      },
+      "manifestSha256": "82a8f524cd806f8d3ff0ad7ed490cca5781cc26d234a84f0f081219b2541d121"
+    },
+    {
+      "sample": "repeat4",
+      "directory": "p1-vhdl-lowered-s9Z04M",
+      "revision": "6c502038eaf71554f8a2da68efb1e7a9bf3bf901",
+      "preliminary": false,
+      "rows": 60,
+      "columns": 20,
+      "csvSha256": "d619884eb6005ff716578cd70213fdcd48926f38ea846795d09bff861e6ad39e",
+      "files": 3569,
+      "counts": {
+        "verified": 40,
+        "counterexample": 8,
+        "error": 8,
+        "bounded-safe": 4
+      },
+      "elapsedMs": {
+        "minimum": 64.56625900000017,
+        "median": 71.14562350000006,
+        "maximum": 145.39014999999972
+      },
+      "manifestSha256": "26d07f7ebc64bae4e86e4f41c1e5a9d805df90805a71d5e72daa3d0c576dcb77"
+    },
+    {
+      "sample": "repeat5",
+      "directory": "p1-vhdl-lowered-hp9bMG",
+      "revision": "6c502038eaf71554f8a2da68efb1e7a9bf3bf901",
+      "preliminary": false,
+      "rows": 60,
+      "columns": 20,
+      "csvSha256": "f58a9f6e7aeef519b89d1f02f01e0a1a55d27e5ad48a4e853ed41b8f8789f98a",
+      "files": 3569,
+      "counts": {
+        "verified": 40,
+        "counterexample": 8,
+        "error": 8,
+        "bounded-safe": 4
+      },
+      "elapsedMs": {
+        "minimum": 63.03802200000018,
+        "median": 77.16009800000006,
+        "maximum": 136.91711300000043
+      },
+      "manifestSha256": "57e606317adf0879493f1e70d1da28118514f2ae2cb01a3ad930e56929c273f4"
+    },
+    {
+      "sample": "aa1",
+      "directory": "p1-vhdl-lowered-fouJli",
+      "revision": "6c502038eaf71554f8a2da68efb1e7a9bf3bf901",
+      "preliminary": false,
+      "rows": 60,
+      "columns": 20,
+      "csvSha256": "dd85c5498997d9da812e8dcea69d940d0cf81df46bd05f6d939b1c75f9e28fb3",
+      "files": 3569,
+      "counts": {
+        "verified": 40,
+        "counterexample": 8,
+        "error": 8,
+        "bounded-safe": 4
+      },
+      "elapsedMs": {
+        "minimum": 65.58713200000057,
+        "median": 74.82453650000025,
+        "maximum": 142.95756400000005
+      },
+      "manifestSha256": "1f2c79d2c41ef9e4254c46f96c7ee40c791b710dbb74a9854f4f8f2828d6aa3c"
+    },
+    {
+      "sample": "aa2",
+      "directory": "p1-vhdl-lowered-7Cf2kT",
+      "revision": "6c502038eaf71554f8a2da68efb1e7a9bf3bf901",
+      "preliminary": false,
+      "rows": 60,
+      "columns": 20,
+      "csvSha256": "b864d70073aa06a815eec9b3598b6bbfb913d4e9737d0d0ee81e3c4d6c1f81c4",
+      "files": 3569,
+      "counts": {
+        "verified": 40,
+        "counterexample": 8,
+        "error": 8,
+        "bounded-safe": 4
+      },
+      "elapsedMs": {
+        "minimum": 61.951548,
+        "median": 69.4738739999998,
+        "maximum": 130.36223900000005
+      },
+      "manifestSha256": "a28dcc563caa0a5aef883ea9839e6b4d8adeb336541d4098106db06546abca00"
+    }
+  ],
+  "sourceAndBinaryHashes": {
+    "build/S15/vhdl-formal-build4/ghdl-native/bin/ghdl": "ccb93bf7a700b692cff3fe16e833f5ba6b5842393cfd07e8af062c8c441ff6d5",
+    "build/S15/vhdl-formal-build4/ghdl-wasm/ghdl-synth.wasm": "a0bd7fe303e7531d606aac5181ee67bb1ee6ce88fce2360947a7d5e1399c85e8",
+    "build/native/yosys": "d298997c12f89e845b76ba0a8b484ad5ebbe63b604397948bbd0d8ecfd9e318c",
+    "build/wasi/yosys/yosys.wasm": "85812d62f2aaf0a4ab9ed8c933a862cc4eec18a874160b4fc36e5871d82ff644",
+    "build/iverilog-native/output/ivlpp": "272678cb06591880763219b60da8adcbfa80ba273d1ec55fc63ec33bad937f49",
+    "build/iverilog-wasm/output/ivlpp.wasm": "7ab296df67635fc272b5dfa95c3e0e5e0f7176271b4035d26f847e266c6936af",
+    "build/iverilog-native/output/ivl": "fa80c74f3c275b34c27a6fa578fce90b00f8c0b3bd8013314007c29f3b90694e",
+    "build/iverilog-wasm/output/ivl.wasm": "936223cd9204283fe16a1b3232684a9766573088d2d0da3fa08a2c94fcfdb30f",
+    "build/iverilog-native/output/vvp": "06b819775608ce66b35ad23a75e9473658f492617bc8499a6311bb5057addeae",
+    "build/iverilog-wasm/output/vvp.wasm": "909014061e6dbde49f2f86b47c4a2b536abaea0c79678a7b901e6b816de1bc83",
+    "scripts/audit-lowered-replay.mjs": "3b1bd00da2b27ee0534c21db414a021d99ec4c4ed86793961a7815e04101af62",
+    "tests/synth/formal-vhdl-lowered.test.mjs": "a932921d65b8e5eb9ccc9f199d2895c780af0a710ca41d1df02fabff3e909d55",
+    "tests/synth/ghdl-lowered-replay.mjs": "102d192fe7b365a59b592a08cb42024dcb235d25cc73e9bc2b8e3d7eafb4b647",
+    "tests/synth/ghdl-replay-helpers.mjs": "d8d40567028cbfed1d33eefddbef535499501f6471f286584f302c2333bd783a",
+    "tests/synth/ghdl-replay-vcd.mjs": "75c02e3d613948c908407b7b515ca0748f96757ed91f4c7bebea1a776e4901b7",
+    "tests/synth/ghdl-replay-vpi.c": "611b2336b622021e17a61633849a3f963cf3b192e5f78d18cfb5da8217668145",
+    "tests/synth/formal-helpers.mjs": "db27bf6ba9da931ed9b80319536b5a47d9f8e3e070750115c5235f0ed0457ce1",
+    "tests/synth/iverilog-helpers.mjs": "0a9d46eb9b9c259ca67ee10d90a2e1c792bb214ffbeb423694ae16d427e74e74",
+    "web/lib/formal-sat.mjs": "ef76b5eb2c91fc0fe97df40a4cc13954304b41a49c29d83bda46f86aa2e337e9",
+    "web/lib/formal-replay.mjs": "a9d3e88ec0a77c738cf89346c80b8a6db3547ec8d81e80f27a9fd90986505baa",
+    "web/lib/formal-properties.mjs": "5888cb279650ce3a2ab95f32d901bbedf03d82c8daa3dc85ec6ae092cca1ff6a",
+    "web/lib/ghdl-host.mjs": "eaac6e4a5583ce205d7d5e955da333d419fd08cd27a7aa6e9c0280797b6af49c",
+    "web/lib/iverilog-host.mjs": "f7419b59345642d2d020f196cce19ac3ff6f77f75796b8e7237fa08526d7db35",
+    "web/lib/wasi-p1.mjs": "b42d696cee920930d9aff494554aca54108e3486090c385c8f22c4bc5d796344"
+  },
+  "evidence": {
+    "files": 62590,
+    "indexSha256": "a955f3d68d9952dc069bbf8daf445e49781bd3d8ed032c21ab7f7ac422926f64",
+    "zipSha256": "7afc0638d9349a591fdbeb30f027dcab2738a96ec527f4e6a86abb5c2e1eeeb1",
+    "zipBytes": 56226639
+  }
+}

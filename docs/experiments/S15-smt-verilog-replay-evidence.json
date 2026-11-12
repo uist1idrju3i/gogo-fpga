@@ -1,0 +1,65 @@
+{
+  "aaRows": 424,
+  "binaryIdentity": {
+    "bitwuzla": {
+      "nativeSha256": "c618a94953cbce37d14e94db9f53f9f408a463e94f213b9a5535e0c3ec2b8020",
+      "source": "8d1eb01093ae54d9b4586456b69c3bf31000a4c2",
+      "wasiSha256": "069d676fb4408352344bab80474fc74b5a8e39caf31747b40c2951f6cc43ead7"
+    },
+    "boolector": {
+      "nativeSha256": "19fbca1674a11dfa9caee74292203624de002fdcb43a31667ebb580129e27067",
+      "source": "393cdfba3735d334bb4e6525500b8a0280dd41e6",
+      "wasiSha256": "043b2d62ed145e59d5aa87ca0b22caa7fb69ec6bd829504b74453b0a1832dd24"
+    },
+    "yices2": {
+      "nativeSha256": "03ed31aadc9fcdb02864fa68785fddfbcfd28051cadd8c509128093403dfa3de",
+      "source": "85cf17e44eac76b5d14b297c09fc9bfecf47ef65",
+      "wasiSha256": "478fcb7fe5b3baa45420d2fb7087ae8508850cdb824a9968d871df13de66f7ad"
+    },
+    "z3": {
+      "nativeSha256": "0ceec28f441342dac24ac23787ad68d126f54775f170686b99da92828fedfc46",
+      "source": "430d19e697e2ec9bad79ff210d41b4a7a5fcfa3e",
+      "wasiSha256": "1a08dac12bab2e302bc4c1c53d4cdc0e0b8c48c6422df8f4b05c9e0de09e39b9"
+    }
+  },
+  "columns": 23,
+  "commit": "98b6b2eca954dccfdc96e68f6e8e10fc9f9ce886",
+  "csvSha256": "b1352a1911ba6658352c925b1fc4100d0077b5a1285d3a657288295e8720a484",
+  "formalRows": 1060,
+  "negativeControls": {
+    "bitwuzla": 79,
+    "boolector": 79,
+    "yices2": 79,
+    "z3": 79
+  },
+  "package": {
+    "bytes": 69870106,
+    "files": 96592,
+    "manifestSha256": "9df62248e0c47d79932f11883fe3f414343faac8c202b1f903cb59dd7c8055ab",
+    "objects": 13201,
+    "sha256": "256fbabf37d4755533ddf33b2f2a7c62f63966fe14111c0940f85faad661fce1"
+  },
+  "packageCommit": "820cba4fd20d30ab27396430509205e051433bff",
+  "recoveryArchive": {
+    "files": 90322,
+    "sha256": "0ef98629e0d1f0259e01ca7b31cb97d217294cc5b0f779ab3125ee8fec71c7d6",
+    "symlinks": 94
+  },
+  "restore": {
+    "archiveSha256": "256fbabf37d4755533ddf33b2f2a7c62f63966fe14111c0940f85faad661fce1",
+    "commit": "98b6b2eca954dccfdc96e68f6e8e10fc9f9ce886",
+    "files": 96592,
+    "manifestSha256": "9df62248e0c47d79932f11883fe3f414343faac8c202b1f903cb59dd7c8055ab",
+    "status": "pass"
+  },
+  "restoredNegativeAudits": "pass",
+  "rows": 1484,
+  "staging": {
+    "excludedBytecode": 10,
+    "files": 96591,
+    "materializedCloneLaunchers": 12,
+    "materializedLaunchers": 86
+  },
+  "status": "pass",
+  "timingConditions": 212
+}

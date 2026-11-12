@@ -1,0 +1,41 @@
+scenario,run_id,job,step,nproc,free_total_gib,free_used_gib,free_free_gib,free_available_gib,wall_minutes,max_rss_kib,rss_availability
+W1,41003258404,synth,Yosys WASI 版をビルド,4,15,1,12,14,0.000,,not exposed in public job log/API; step-summary only
+W1,41003258404,synth-native,Yosys native 版をビルド,4,15,1,13,14,0.000,,not exposed in public job log/API; step-summary only
+W1,41003258404,nextpnr,WASI nextpnr と chipdb をビルド,4,15,1,10,14,2.600,,not exposed in public job log/API; step-summary only
+W1,41003258404,nextpnr,native nextpnr をビルド,4,15,1,10,14,1.317,,not exposed in public job log/API; step-summary only
+W1,41003258404,ghdl,GHDL WASM と native 版をビルド,4,15,1,11,14,3.700,,not exposed in public job log/API; step-summary only
+W2,41004784275,synth,Yosys WASI 版をビルド,4,15,1,12,14,0.000,,not exposed in public job log/API; step-summary only
+W2,41004784275,synth-native,Yosys native 版をビルド,4,15,1,13,14,0.000,,not exposed in public job log/API; step-summary only
+W2,41004784275,nextpnr,WASI nextpnr と chipdb をビルド,4,15,1,10,13,2.783,,not exposed in public job log/API; step-summary only
+W2,41004784275,nextpnr,native nextpnr をビルド,4,15,1,10,14,1.367,,not exposed in public job log/API; step-summary only
+W2,41004784275,ghdl,GHDL WASM と native 版をビルド,4,15,1,11,14,3.850,,not exposed in public job log/API; step-summary only
+W3,41005982616,synth,Yosys WASI 版をビルド,4,15,1,12,14,0.000,,not exposed in public job log/API; step-summary only
+W3,41005982616,synth-native,Yosys native 版をビルド,4,15,1,13,14,0.000,,not exposed in public job log/API; step-summary only
+W3,41005982616,nextpnr,WASI nextpnr と chipdb をビルド,4,15,1,10,14,1.867,,not exposed in public job log/API; step-summary only
+W3,41005982616,nextpnr,native nextpnr をビルド,4,15,1,10,14,1.083,,not exposed in public job log/API; step-summary only
+W3,41005982616,ghdl,GHDL WASM と native 版をビルド,4,15,1,11,14,3.400,,not exposed in public job log/API; step-summary only
+M2,41007222906,synth,Yosys WASI 版をビルド,4,15,0,13,14,15.867,,not exposed in public job log/API; step-summary only
+M2,41007222906,synth-native,Yosys native 版をビルド,4,15,1,13,14,19.667,,not exposed in public job log/API; step-summary only
+M2,41007222906,nextpnr,WASI nextpnr と chipdb をビルド,4,15,1,10,14,1.600,,not exposed in public job log/API; step-summary only
+M2,41007222906,nextpnr,native nextpnr をビルド,4,15,1,10,14,0.917,,not exposed in public job log/API; step-summary only
+M2,41007222906,ghdl,GHDL WASM と native 版をビルド,4,15,1,10,13,3.950,,not exposed in public job log/API; step-summary only
+M3,41009940210,synth,Yosys WASI 版をビルド,4,15,0,13,14,18.950,,not exposed in public job log/API; step-summary only
+M3,41009940210,synth-native,Yosys native 版をビルド,4,15,1,13,14,17.350,,not exposed in public job log/API; step-summary only
+M3,41009940210,nextpnr,WASI nextpnr と chipdb をビルド,4,15,1,10,14,2.217,,not exposed in public job log/API; step-summary only
+M3,41009940210,nextpnr,native nextpnr をビルド,4,15,1,10,14,1.350,,not exposed in public job log/API; step-summary only
+M3,41009940210,ghdl,GHDL WASM と native 版をビルド,4,15,1,11,14,3.217,,not exposed in public job log/API; step-summary only
+W4,41012642448,synth,Yosys WASI 版をビルド,4,15,1,12,14,0.000,,not exposed in public job log/API; step-summary only
+W4,41012642448,synth-native,Yosys native 版をビルド,4,15,1,13,14,0.000,,not exposed in public job log/API; step-summary only
+W4,41012642448,nextpnr,WASI nextpnr と chipdb をビルド,4,15,1,10,14,2.683,,not exposed in public job log/API; step-summary only
+W4,41012642448,nextpnr,native nextpnr をビルド,4,15,1,10,14,1.350,,not exposed in public job log/API; step-summary only
+W4,41012642448,ghdl,GHDL WASM と native 版をビルド,4,15,1,11,14,4.167,,not exposed in public job log/API; step-summary only
+R7,41016216564,Yosys WASI synthesis,Yosys WASI 版をビルド,4,15,1,12,14,0.000,,"cache hit; build step skipped, no RSS sample"
+R7,41016216564,Yosys native synthesis,Yosys native 版をビルド,4,15,1,13,14,0.000,,"cache hit; build step skipped, no RSS sample"
+R7,41016216564,nextpnr WASI place and route,WASI nextpnr と chipdb をビルド,4,15,1,13,14,2.983,1249336,public job log resource summary
+R7,41016216564,nextpnr WASI place and route,native nextpnr をビルド,4,15,1,10,14,0.783,871464,public job log resource summary
+R7,41016216564,GHDL WASM synthesis,GHDL WASM と native 版をビルド,4,15,1,11,14,4.117,165868,public job log resource summary
+R8,41019492664,Yosys WASI synthesis,Yosys WASI 版をビルド,4,15,1,12,14,0.000,,"cache hit; build step skipped, no RSS sample"
+R8,41019492664,Yosys native synthesis,Yosys native 版をビルド,4,15,0,13,14,0.000,,"cache hit; build step skipped, no RSS sample"
+R8,41019492664,nextpnr WASI place and route,WASI nextpnr と chipdb をビルド,4,15,1,10,14,2.450,1249624,public job log resource summary
+R8,41019492664,nextpnr WASI place and route,native nextpnr をビルド,4,15,1,10,14,1.267,871436,public job log resource summary
+R8,41019492664,GHDL WASM synthesis,GHDL WASM と native 版をビルド,4,15,1,10,13,4.017,165980,public job log resource summary

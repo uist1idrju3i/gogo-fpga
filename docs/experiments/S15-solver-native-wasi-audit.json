@@ -1,0 +1,2174 @@
+{
+  "format": 1,
+  "status": "pass",
+  "preliminary": false,
+  "harnessCommit": "3ea717e965a24b9d5738301b0c1a49c7e83fdf6b",
+  "rows": 329,
+  "columns": 31,
+  "csvSha256": "6e1cbc2f1c0907db79f8423badfebc5c8fa32737bed883bcb09fe43b264b8786",
+  "negativeControls": 294,
+  "resources": {
+    "aa/yices2/native/incremental-bv": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 8.767614000000322,
+        "median": 10.613535000000184,
+        "max": 12.459456000000046
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 2432,
+        "median": 2432.0,
+        "max": 2432
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/incremental-bv": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 46.99567699999898,
+        "median": 57.068294999999466,
+        "max": 67.14091299999995
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/yices2/native/incremental-array": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 8.512042999999949,
+        "median": 9.076336499999002,
+        "max": 9.640629999998055
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 2560,
+        "median": 2560.0,
+        "max": 2560
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/incremental-array": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 53.52754399999685,
+        "median": 59.187837999998465,
+        "max": 64.84813200000008
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/yices2/native/long-value": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 9.544960999999603,
+        "median": 10.14432999999974,
+        "max": 10.743698999999879
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 2432,
+        "median": 2432.0,
+        "max": 2432
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/long-value": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 100.2581620000019,
+        "median": 105.52469400000086,
+        "max": 110.79122599999982
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/yices2/native/malformed": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 6.867944000001444,
+        "median": 7.468703000000687,
+        "max": 8.06946199999993
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 1792,
+        "median": 1792.0,
+        "max": 1792
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/malformed": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 54.32903100000112,
+        "median": 59.16042400000049,
+        "max": 63.991816999999855
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/yices2/native/missing-response": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 6.3784730000006675,
+        "median": 6.626450500000374,
+        "max": 6.87442800000008
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 1792,
+        "median": 1792.0,
+        "max": 1792
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/missing-response": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 41.61956899999859,
+        "median": 45.529120499999294,
+        "max": 49.438672
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/yices2/wasi/timeout": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 2999.550586000001,
+        "median": 3007.2513695000007,
+        "max": 3014.952153
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/cancel": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 50.20675500000016,
+        "median": 56.40345550000029,
+        "max": 62.600156000000425
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/busy-timeout": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 3010.5032329999995,
+        "median": 3012.2856019999995,
+        "max": 3014.0679709999995
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/busy-cancel": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 160.08688400000028,
+        "median": 167.79898049999974,
+        "max": 175.5110769999992
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/stale": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 53.63278999999966,
+        "median": 63.18778899999961,
+        "max": 72.74278799999956
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/yices2/wasi/hash-mismatch": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 32.93332600000031,
+        "median": 33.6867814999996,
+        "max": 34.44023699999889
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/corrupt-wasm": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 35.05780400000003,
+        "median": 221.5406149999999,
+        "max": 408.02342599999974
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/worker-crash": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 25.03491000000031,
+        "median": 37.78841949999969,
+        "max": 50.54192899999907
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/missing-termination": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 3002.019241,
+        "median": 3002.100068999999,
+        "max": 3002.1808969999984
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/output-limit": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 96.72063700000035,
+        "median": 103.76845349999803,
+        "max": 110.81626999999571
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/yices2/wasi/unsupported-alarm": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 46.302277999999205,
+        "median": 50.92050749999726,
+        "max": 55.53873699999531
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/z3/native/incremental-bv": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 19.585376999999426,
+        "median": 26.171940499998527,
+        "max": 32.75850399999763
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 29056,
+        "median": 29056.0,
+        "max": 29056
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/incremental-bv": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 232.97125199999937,
+        "median": 269.09435049999774,
+        "max": 305.2174489999961
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/z3/native/incremental-array": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 27.65819999999985,
+        "median": 32.754862999999204,
+        "max": 37.85152599999856
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 30592,
+        "median": 30656.0,
+        "max": 30720
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/incremental-array": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 234.98268699999971,
+        "median": 293.77039550000154,
+        "max": 352.55810400000337
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/z3/native/long-value": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 22.9938089999996,
+        "median": 23.99826949999988,
+        "max": 25.002730000000156
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 28672,
+        "median": 28672.0,
+        "max": 28672
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/long-value": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 266.29488500000116,
+        "median": 307.0761960000009,
+        "max": 347.8575070000006
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/z3/native/malformed": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 9.724387999998726,
+        "median": 12.788439999998445,
+        "max": 15.852491999998165
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 8192,
+        "median": 8256.0,
+        "max": 8320
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/malformed": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 187.66419399999904,
+        "median": 213.4640604999995,
+        "max": 239.26392699999997
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/z3/native/missing-response": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 11.492836999999781,
+        "median": 13.596898999997393,
+        "max": 15.700960999995004
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 7808,
+        "median": 7808.0,
+        "max": 7808
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/missing-response": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 197.4118870000002,
+        "median": 223.89796350000233,
+        "max": 250.38404000000446
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/z3/wasi/timeout": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 3001.9991999999984,
+        "median": 3008.0073834999994,
+        "max": 3014.0155670000004
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/cancel": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 191.07097900000372,
+        "median": 203.20263250000153,
+        "max": 215.33428599999934
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/busy-timeout": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 3000.8326180000004,
+        "median": 3002.3298415,
+        "max": 3003.8270649999995
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/busy-cancel": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 297.63108700000157,
+        "median": 312.7073960000016,
+        "max": 327.78370500000165
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/stale": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 222.85364900000422,
+        "median": 234.842864000002,
+        "max": 246.8320789999998
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/z3/wasi/hash-mismatch": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 91.12583100000484,
+        "median": 100.48094550000314,
+        "max": 109.83606000000145
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/corrupt-wasm": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 112.29478099999687,
+        "median": 114.47812599999816,
+        "max": 116.66147099999944
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/worker-crash": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 21.73391999999876,
+        "median": 22.14187049999964,
+        "max": 22.54982100000052
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/missing-termination": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 3003.093703999999,
+        "median": 3003.2381105000004,
+        "max": 3003.382517000002
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/output-limit": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 250.78066599999875,
+        "median": 253.60635999999795,
+        "max": 256.43205399999715
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/native/unknown": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 23.01135300000169,
+        "median": 26.6215274999995,
+        "max": 30.231701999997313
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 28672,
+        "median": 28672.0,
+        "max": 28672
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/unknown": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 228.64173200000005,
+        "median": 233.7818849999985,
+        "max": 238.92203799999697
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/z3/native/software-fp": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 28.214029000002483,
+        "median": 28.397625000001426,
+        "max": 28.58122100000037
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 37888,
+        "median": 38080.0,
+        "max": 38272
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/software-fp": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 239.23702799999955,
+        "median": 250.80859400000008,
+        "max": 262.3801600000006
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "aa/z3/native/unsupported-hwf": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 21.574969999997847,
+        "median": 23.788219499996558,
+        "max": 26.001468999995268
+      },
+      "native_max_rss_kib": {
+        "count": 2,
+        "missing": 0,
+        "min": 30848,
+        "median": 30912.0,
+        "max": 30976
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "aa/z3/wasi/unsupported-hwf": {
+      "elapsed_ms": {
+        "count": 2,
+        "missing": 0,
+        "min": 192.81714399999692,
+        "median": 215.3375679999972,
+        "max": 237.85799199999747
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 2,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 2,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432.0,
+        "max": 33554432
+      }
+    },
+    "formal/yices2/native/incremental-bv": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 7.719404000003124,
+        "median": 12.328448000000208,
+        "max": 13.262117000005674
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 2432,
+        "median": 2432,
+        "max": 2432
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/incremental-bv": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 47.38225400001102,
+        "median": 55.07696299999952,
+        "max": 85.19085100000666
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/yices2/native/incremental-array": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 7.615804000000935,
+        "median": 9.93602799999644,
+        "max": 13.21565600001486
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 2560,
+        "median": 2560,
+        "max": 2560
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/incremental-array": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 53.35335699999996,
+        "median": 63.259829000002355,
+        "max": 117.57623399997829
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/yices2/native/long-value": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 8.21300100001099,
+        "median": 10.266438999999082,
+        "max": 26.58674699999392
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 2432,
+        "median": 2432,
+        "max": 2432
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/long-value": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 102.12199999998847,
+        "median": 106.25664099999995,
+        "max": 114.75482099998044
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/yices2/native/malformed": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 7.081276000011712,
+        "median": 9.377701999997953,
+        "max": 32.437730000005104
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 1792,
+        "median": 1792,
+        "max": 1792
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/malformed": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 51.72012699999323,
+        "median": 57.50819500000216,
+        "max": 109.19360900000902
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/yices2/native/missing-response": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 6.6190739999874495,
+        "median": 8.229160000002594,
+        "max": 12.856560999993235
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 1792,
+        "median": 1792,
+        "max": 1792
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/missing-response": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 38.194117999999435,
+        "median": 47.59557800000766,
+        "max": 82.02099399999133
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/yices2/wasi/timeout": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 2999.2756670000017,
+        "median": 3000.4169919999986,
+        "max": 3001.3390160000126
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/cancel": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 44.78122499999881,
+        "median": 48.7772510000068,
+        "max": 136.2819840000011
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/busy-timeout": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 3001.1479099999997,
+        "median": 3004.551013999997,
+        "max": 3013.13446999999
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/busy-cancel": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 152.3493129999988,
+        "median": 153.27617300000566,
+        "max": 363.43480700001237
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/stale": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 49.894289999996545,
+        "median": 52.850954000001366,
+        "max": 171.72509299998637
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/yices2/wasi/hash-mismatch": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 27.9116240000003,
+        "median": 30.25609699999768,
+        "max": 57.72435499999847
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/corrupt-wasm": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 29.119825999994646,
+        "median": 30.183820999998716,
+        "max": 78.46608399999968
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/worker-crash": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 20.6182400000107,
+        "median": 21.7616909999997,
+        "max": 29.795352999994066
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/missing-termination": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 3000.3880259999933,
+        "median": 3001.586869999999,
+        "max": 3004.903633000009
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/output-limit": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 95.79809700000624,
+        "median": 99.58966499999951,
+        "max": 128.2066429999977
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/yices2/wasi/unsupported-alarm": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 41.62392800000089,
+        "median": 50.43722500000149,
+        "max": 76.91194900000119
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/z3/native/incremental-bv": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 19.692642000001797,
+        "median": 21.21054399998684,
+        "max": 53.92143499999656
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 28800,
+        "median": 28928,
+        "max": 29184
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/incremental-bv": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 223.69174300000304,
+        "median": 226.89070099999662,
+        "max": 672.4675799999968
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/z3/native/incremental-array": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 22.16318200000387,
+        "median": 23.58868300000904,
+        "max": 155.902436999997
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 30336,
+        "median": 30592,
+        "max": 30720
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/incremental-array": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 231.22710999999254,
+        "median": 245.72806400000263,
+        "max": 1106.3651610000088
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/z3/native/long-value": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 20.826046000001952,
+        "median": 23.98053099999379,
+        "max": 189.27242400000978
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 28544,
+        "median": 28672,
+        "max": 28672
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/long-value": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 268.8144959999918,
+        "median": 290.74275499998475,
+        "max": 932.3145190000068
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/z3/native/malformed": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 12.140612000002875,
+        "median": 12.221561999998812,
+        "max": 41.35340599999472
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 8192,
+        "median": 8320,
+        "max": 8448
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/malformed": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 188.4231090000103,
+        "median": 195.21914700000343,
+        "max": 661.5175989999989
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/z3/native/missing-response": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 12.859820000012405,
+        "median": 14.451332999997248,
+        "max": 60.55039299999771
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 7808,
+        "median": 7808,
+        "max": 7936
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/missing-response": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 191.00663700001314,
+        "median": 193.39419199999975,
+        "max": 449.16126700000314
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/z3/wasi/timeout": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 3003.1759960000054,
+        "median": 3009.4973770000215,
+        "max": 3014.4710350000023
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/cancel": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 215.15131499999552,
+        "median": 218.68723599999794,
+        "max": 407.5593440000084
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/busy-timeout": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 2999.779794000002,
+        "median": 3012.640854999998,
+        "max": 3013.11308000001
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/busy-cancel": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 309.0349860000133,
+        "median": 352.0439800000022,
+        "max": 543.1729360000172
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/stale": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 214.77323800000158,
+        "median": 251.5739590000012,
+        "max": 449.9341640000057
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/z3/wasi/hash-mismatch": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 97.07563900000241,
+        "median": 99.17781300000206,
+        "max": 202.19791700001224
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/corrupt-wasm": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 108.68746900002589,
+        "median": 135.64307999999437,
+        "max": 306.0058790000039
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/worker-crash": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 22.60341700000572,
+        "median": 25.520246000000043,
+        "max": 82.78915199999756
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/missing-termination": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 3000.265359000012,
+        "median": 3004.573857000003,
+        "max": 3005.819392999998
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/output-limit": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 250.12647399998968,
+        "median": 277.1701719999983,
+        "max": 412.5517460000119
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/native/unknown": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 23.163816999993287,
+        "median": 39.985564999995404,
+        "max": 48.48103500000434
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 28288,
+        "median": 28544,
+        "max": 28544
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/unknown": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 213.7183870000008,
+        "median": 227.46124999999302,
+        "max": 412.97000600001775
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/z3/native/software-fp": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 29.614331000004313,
+        "median": 37.41625100001693,
+        "max": 54.21776800000225
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 38016,
+        "median": 38272,
+        "max": 38400
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/software-fp": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 236.51535400000284,
+        "median": 253.52178500000446,
+        "max": 450.88219299999764
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    },
+    "formal/z3/native/unsupported-hwf": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 23.343819999994594,
+        "median": 29.165204999997513,
+        "max": 40.92977200000314
+      },
+      "native_max_rss_kib": {
+        "count": 5,
+        "missing": 0,
+        "min": 30592,
+        "median": 30848,
+        "max": 30976
+      },
+      "wasm_memory_bytes": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    "formal/z3/wasi/unsupported-hwf": {
+      "elapsed_ms": {
+        "count": 5,
+        "missing": 0,
+        "min": 208.03600000000733,
+        "median": 216.97177299999748,
+        "max": 360.89605300000403
+      },
+      "native_max_rss_kib": {
+        "count": 0,
+        "missing": 5,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "wasm_memory_bytes": {
+        "count": 5,
+        "missing": 0,
+        "min": 33554432,
+        "median": 33554432,
+        "max": 33554432
+      }
+    }
+  }
+}

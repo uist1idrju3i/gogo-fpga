@@ -1,0 +1,6 @@
+-- Copyright (c) 2026, 午後のFPGA
+-- SPDX-License-Identifier: GPL-2.0-or-later
+package Ghdl_Wasm_Epoch is
+   pragma Elaborate_Body;
+   Source_Date_Epoch : constant Long_Long_Integer := @SOURCE_DATE_EPOCH@;
+end Ghdl_Wasm_Epoch;

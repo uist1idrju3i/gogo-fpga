@@ -1,0 +1,207 @@
+{
+  "status": "pass",
+  "commit": "3a5c4b33e2b8181721c9a6e9e837220534f82672",
+  "pairs": 7,
+  "aaRows": 24,
+  "formalRows": 60,
+  "rows": 84,
+  "columns": 19,
+  "artifacts": 1876,
+  "csvSha256": "6a77fb68181a9d87841e58e86cac110fdf0ffa6cceedf4c278a07d6d09478740",
+  "conditions": [
+    {
+      "solver": "yices2",
+      "case": "bmc-prefix",
+      "samples": 5,
+      "native": {
+        "minMs": 198.21257100000003,
+        "medianMs": 227.038269,
+        "maxMs": 247.96294799999998
+      },
+      "pyodide": {
+        "minMs": 4328.461673,
+        "medianMs": 4361.419607,
+        "maxMs": 5819.4892709999995
+      }
+    },
+    {
+      "solver": "yices2",
+      "case": "bmc-violation",
+      "samples": 5,
+      "native": {
+        "minMs": 194.936827,
+        "medianMs": 233.82043700000008,
+        "maxMs": 257.75280499999997
+      },
+      "pyodide": {
+        "minMs": 4247.5250639999995,
+        "medianMs": 4291.594871,
+        "maxMs": 5718.591538000001
+      }
+    },
+    {
+      "solver": "yices2",
+      "case": "prove-inconclusive",
+      "samples": 5,
+      "native": {
+        "minMs": 242.336145,
+        "medianMs": 286.20720499999993,
+        "maxMs": 319.284486
+      },
+      "pyodide": {
+        "minMs": 5537.307519,
+        "medianMs": 5889.712196,
+        "maxMs": 6935.389546
+      }
+    },
+    {
+      "solver": "yices2",
+      "case": "prove-invariant",
+      "samples": 5,
+      "native": {
+        "minMs": 265.108205,
+        "medianMs": 265.9652970000002,
+        "maxMs": 314.6680430000001
+      },
+      "pyodide": {
+        "minMs": 5726.665252000001,
+        "medianMs": 5806.49309,
+        "maxMs": 6686.046662000001
+      }
+    },
+    {
+      "solver": "yices2",
+      "case": "cover-reached",
+      "samples": 5,
+      "native": {
+        "minMs": 196.38348800000017,
+        "medianMs": 210.48416799999995,
+        "maxMs": 250.2641799999999
+      },
+      "pyodide": {
+        "minMs": 4181.755921,
+        "medianMs": 4331.216329999999,
+        "maxMs": 4883.367026
+      }
+    },
+    {
+      "solver": "yices2",
+      "case": "cover-unreached",
+      "samples": 5,
+      "native": {
+        "minMs": 196.39458999999988,
+        "medianMs": 199.92121300000008,
+        "maxMs": 244.94431200000008
+      },
+      "pyodide": {
+        "minMs": 4257.239501999997,
+        "medianMs": 4325.367280000002,
+        "maxMs": 4470.819045
+      }
+    },
+    {
+      "solver": "z3",
+      "case": "bmc-prefix",
+      "samples": 5,
+      "native": {
+        "minMs": 209.0489439999999,
+        "medianMs": 212.85562300000015,
+        "maxMs": 255.9622849999996
+      },
+      "pyodide": {
+        "minMs": 4343.7310130000005,
+        "medianMs": 4515.266000999996,
+        "maxMs": 4679.846056000002
+      }
+    },
+    {
+      "solver": "z3",
+      "case": "bmc-violation",
+      "samples": 5,
+      "native": {
+        "minMs": 209.54722600000014,
+        "medianMs": 218.88103499999988,
+        "maxMs": 291.2465820000002
+      },
+      "pyodide": {
+        "minMs": 4435.603743,
+        "medianMs": 4586.485095000004,
+        "maxMs": 4644.940630999998
+      }
+    },
+    {
+      "solver": "z3",
+      "case": "prove-inconclusive",
+      "samples": 5,
+      "native": {
+        "minMs": 266.7300930000001,
+        "medianMs": 284.88984400000027,
+        "maxMs": 386.5865530000001
+      },
+      "pyodide": {
+        "minMs": 6028.563012999999,
+        "medianMs": 6152.432788999999,
+        "maxMs": 6462.075870000001
+      }
+    },
+    {
+      "solver": "z3",
+      "case": "prove-invariant",
+      "samples": 5,
+      "native": {
+        "minMs": 268.09129900000016,
+        "medianMs": 279.39766800000007,
+        "maxMs": 445.43367100000023
+      },
+      "pyodide": {
+        "minMs": 6004.242157000001,
+        "medianMs": 6061.2058990000005,
+        "maxMs": 6267.742208000003
+      }
+    },
+    {
+      "solver": "z3",
+      "case": "cover-reached",
+      "samples": 5,
+      "native": {
+        "minMs": 207.393775,
+        "medianMs": 223.85119799999984,
+        "maxMs": 375.1381200000001
+      },
+      "pyodide": {
+        "minMs": 4429.868265999998,
+        "medianMs": 4435.344741000001,
+        "maxMs": 4455.161221999995
+      }
+    },
+    {
+      "solver": "z3",
+      "case": "cover-unreached",
+      "samples": 5,
+      "native": {
+        "minMs": 206.16900299999998,
+        "medianMs": 219.32773499999985,
+        "maxMs": 395.44012599999996
+      },
+      "pyodide": {
+        "minMs": 4348.477168999998,
+        "medianMs": 4467.221072,
+        "maxMs": 4565.048397999999
+      }
+    }
+  ],
+  "canonicalSha256": {
+    "yices2-bmc-prefix": "0890fda6b401b95267817434bc5ac8ee9c9268216dad3b671c77c57f17e09bea",
+    "yices2-bmc-violation": "b2bde316c6a2b23cc56291316677402767cbe20c8cbc2868ae24c94707a79b08",
+    "yices2-prove-inconclusive": "2abda7d6e9a7dae72e5ae9eb5bd463a26160868b88d942d1da46fcd3e3ae1939",
+    "yices2-prove-invariant": "68561ba0e9dd53675873c6cc0ec633354499ff7c27b026cedc680e40d5654bf3",
+    "yices2-cover-reached": "a4b7c880379b313962f626a97464b5af723b04d2befb7907c68bda36937dfc52",
+    "yices2-cover-unreached": "087a33df1f907c7e48f39e6e08a76b3a1ba6b67b7480e7cfcd4e5325ea3da450",
+    "z3-bmc-prefix": "b55c77738c5df715abbba8dd41858cbb7a697d15dfdb8e27a62504e05bba5cce",
+    "z3-bmc-violation": "b0fa860dc76af0521fc505b1b4c40d06b2fab4d258a2269d8856734233bd5142",
+    "z3-prove-inconclusive": "c2c423ffb6d915c727d8762adae245b953b4ab29928978f6bb2cd2019e546a3d",
+    "z3-prove-invariant": "ceaa97db8e2684d81b6d6b18e8d1a1a0dd4d24a5220f0bf2f13b6124da8bcbf2",
+    "z3-cover-reached": "8076cac70aa7539be847f4810eabe7731b911fbd3d86d1b1cfd7e76decb1f615",
+    "z3-cover-unreached": "67a22d4580b231d550b152dd2bd0c5e2a71d2816cf22583354a0a9247860aa35"
+  }
+}

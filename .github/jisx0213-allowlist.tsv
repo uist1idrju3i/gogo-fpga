@@ -1,0 +1,7 @@
+# kind	path	chars	reason
+file	.github/jisx0213-allowlist.tsv	*	検査器の許可文字を含む設定
+quote	.agents/skills/jisx0213-text/SKILL.md	µ≥≤🥈✅⚠️这说载动	置き換え例として示す文字
+file	docs/experiments/S8/raw/36afaf3-nextpnr-failure.txt	*	GitHub Actions 公開ログの抜粋を ANSI 制御文字ごと保存
+file	docs/experiments/S8/raw/R7-public-log-extracts.txt	*	GitHub Actions 公開ログの抜粋を ANSI 制御文字ごと保存
+file	docs/experiments/S8/raw/R8-public-log-extracts.txt	*	GitHub Actions 公開ログの抜粋を ANSI 制御文字ごと保存
+file	licenses/iverilog-tgt-vvp-COPYING.lesser	*	上流の LGPL-2.1 本文にある改ページ制御文字を原文のまま保持

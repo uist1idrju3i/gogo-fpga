@@ -1,0 +1,53 @@
+{
+  "aaRows": 256,
+  "binaryIdentity": {
+    "bitwuzla": {
+      "nativeSha256": "c618a94953cbce37d14e94db9f53f9f408a463e94f213b9a5535e0c3ec2b8020",
+      "source": "8d1eb01093ae54d9b4586456b69c3bf31000a4c2",
+      "wasiSha256": "069d676fb4408352344bab80474fc74b5a8e39caf31747b40c2951f6cc43ead7"
+    },
+    "boolector": {
+      "nativeSha256": "19fbca1674a11dfa9caee74292203624de002fdcb43a31667ebb580129e27067",
+      "source": "393cdfba3735d334bb4e6525500b8a0280dd41e6",
+      "wasiSha256": "043b2d62ed145e59d5aa87ca0b22caa7fb69ec6bd829504b74453b0a1832dd24"
+    },
+    "yices2": {
+      "nativeSha256": "03ed31aadc9fcdb02864fa68785fddfbcfd28051cadd8c509128093403dfa3de",
+      "source": "85cf17e44eac76b5d14b297c09fc9bfecf47ef65",
+      "wasiSha256": "478fcb7fe5b3baa45420d2fb7087ae8508850cdb824a9968d871df13de66f7ad"
+    },
+    "z3": {
+      "nativeSha256": "0ceec28f441342dac24ac23787ad68d126f54775f170686b99da92828fedfc46",
+      "source": "430d19e697e2ec9bad79ff210d41b4a7a5fcfa3e",
+      "wasiSha256": "1a08dac12bab2e302bc4c1c53d4cdc0e0b8c48c6422df8f4b05c9e0de09e39b9"
+    }
+  },
+  "columns": 19,
+  "commit": "ac635596c34652af1b01a52d00ed297e496f0425",
+  "csvSha256": "4642a7c5597d404a4ab8139bcc0b59775ee27c0cb54d2e3c43077c96ef804a9f",
+  "formalRows": 640,
+  "materializedLaunchers": 66,
+  "negativeControls": {
+    "bitwuzla": 57,
+    "boolector": 57,
+    "default": 56
+  },
+  "package": {
+    "bytes": 33453906,
+    "files": 18753,
+    "manifestSha256": "429037ee1e7605d7f323846d4c1767840ef06458342f0a2bb07998a1182e3b62",
+    "objects": 2828,
+    "sha256": "f646a45d4d84245bdb941d2508e36a1b826e6df0f139f6cf07a38465b9fe48c4"
+  },
+  "packageCommit": "cdcaae6d5730bb3833245e87b17959f0092531c4",
+  "restore": {
+    "archiveSha256": "f646a45d4d84245bdb941d2508e36a1b826e6df0f139f6cf07a38465b9fe48c4",
+    "commit": "ac635596c34652af1b01a52d00ed297e496f0425",
+    "files": 18753,
+    "manifestSha256": "429037ee1e7605d7f323846d4c1767840ef06458342f0a2bb07998a1182e3b62",
+    "status": "pass"
+  },
+  "restoredNegativeAudits": "pass",
+  "rows": 896,
+  "status": "pass"
+}

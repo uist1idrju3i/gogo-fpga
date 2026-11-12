@@ -1,0 +1,11 @@
+--- a/utils/make_source_version
++++ b/utils/make_source_version
+@@ -76,2 +76,6 @@
+-now=`date +"%Y-%m-%d"`
+-rev=`git rev-parse HEAD 2>/dev/null || echo "unknown"`
++if test -n "${SOURCE_DATE_EPOCH:-}"; then
++  now=`date -u -d "@$SOURCE_DATE_EPOCH" +"%Y-%m-%d"` || exit 1
++else
++  now=`date +"%Y-%m-%d"`
++fi
++rev=`cat .gitcommit 2>/dev/null || git rev-parse HEAD 2>/dev/null || echo "unknown"`

@@ -1,0 +1,14 @@
+# Derived from GHDL, Copyright (C) 2021-2026 Tristan Gingold.
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Explicit formal output preserves upstream property gates for Yosys.
+--- ghdlsynth.adb
++++ ghdlsynth.adb
+@@ -114,6 +114,8 @@
+          Synth.Flags.Flag_Formal := False;
+       elsif Option = "--formal" then
+          Synth.Flags.Flag_Formal := True;
++      elsif Option = "--formal-verilog" then
++         Netlists.Disp_Verilog.Flag_Formal := True;
+       elsif Option = "--latches" then
+          Netlists.Inference.Flag_Latches := True;
+       elsif Option = "--no-assert-cover" then

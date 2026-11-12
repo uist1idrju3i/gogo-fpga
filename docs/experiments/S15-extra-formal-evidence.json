@@ -1,0 +1,267 @@
+{
+  "archive": {
+    "bytes": 38420503,
+    "files": 38413,
+    "manifestSha256": "24a32cfc51ef767a9f99fa0367b6943295330fa96114dc62e87aeb0bbd6f32e2",
+    "objects": 7461,
+    "sha256": "cbb86b879b089b76373cc35e2aa6b5f7773203c756ae7dfddb7c9e645b40e8e8"
+  },
+  "archiveName": "p4-extra-formal-evidence-b082702-01.zip",
+  "measurementCommit": "b082702a21d4ed2b95b0fe7a12a8534d1449ffa7",
+  "negativeControls": [
+    {
+      "afterSha256": "a6d82443eb02c3f56ec23afd104cb9c43304d3385ba5738bc2e564beb99782cc",
+      "beforeSha256": "16765ab1c03330cf16df13ea66fb8477d3f7f249da6a663a13ff7291fdc29500",
+      "condition": "bitwuzla-artifact",
+      "exitCode": 1,
+      "path": "aa-1/bitwuzla/sby/bitwuzla-bmc-violation/pyodide/result/engine_0/trace.vcd",
+      "rejection": "ValueError: artifact differs: result/engine_0/trace.vcd",
+      "status": "rejected",
+      "stderrSha256": "f35bd0a69168f0080fd88d4e8f536768b848c646e7755e52508c0581b47dce90",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "78803df813c9b88b8a5c0b314b4fff638e5b5ba90a8772a6488ca4e2e0eab2ec",
+      "beforeSha256": "069d676fb4408352344bab80474fc74b5a8e39caf31747b40c2951f6cc43ead7",
+      "condition": "bitwuzla-solver-binary",
+      "exitCode": 1,
+      "path": "aa-1/bitwuzla/controls/inputs/bitwuzla.wasm",
+      "rejection": "ValueError: solver build and binary hash",
+      "status": "rejected",
+      "stderrSha256": "39b61eee83af915a11439478e154912f97a15bc39055c5f3d7216004ed6101dd",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "2e33fee484b578259eeb9e3d6530e65131d7e3e2a3f0c30420b1be9574f2e13b",
+      "beforeSha256": "c66c12692a625d54b4c4ee999e7e9c1f4088607ba61647f933e804386801987b",
+      "condition": "bitwuzla-solver-hash",
+      "exitCode": 1,
+      "path": "aa-1/bitwuzla/controls/metadata.json",
+      "rejection": "ValueError: solver build and binary hash",
+      "status": "rejected",
+      "stderrSha256": "39b61eee83af915a11439478e154912f97a15bc39055c5f3d7216004ed6101dd",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "7f25592d7bba0ef1ea6c54ebd43862e0964b5a5886a11e6ccaa882cf5d03207f",
+      "beforeSha256": "e027e04c55fc59365cb719e17b4392b25723ec7659dfd1232bb07b3e420ccb79",
+      "condition": "bitwuzla-transport-integrity",
+      "exitCode": 1,
+      "path": "aa-1/bitwuzla/controls/bitwuzla-bounded-pass/transport.json",
+      "rejection": "ValueError: ordinary SBY termination",
+      "status": "rejected",
+      "stderrSha256": "c3450647799f0df8cdc5857661904120e8b27a9df4c0f340aa6f80ed2608a65f",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": null,
+      "beforeSha256": "16765ab1c03330cf16df13ea66fb8477d3f7f249da6a663a13ff7291fdc29500",
+      "condition": "bitwuzla-missing-artifact",
+      "exitCode": 1,
+      "path": "aa-1/bitwuzla/sby/bitwuzla-bmc-violation/pyodide/result/engine_0/trace.vcd",
+      "rejection": "ValueError: returned artifact set",
+      "status": "rejected",
+      "stderrSha256": "f055c96497d9d66dfa293fb5c58944b2a78a61d1a87849f9aa93915fd96d3a84",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "aa50cd74781105534c993a7fc78ce5dac1d3ba830662a54a9708ec62bd0f950d",
+      "beforeSha256": null,
+      "condition": "bitwuzla-extra-artifact",
+      "exitCode": 1,
+      "path": "aa-1/bitwuzla/controls/bitwuzla-bounded-pass/output/unexpected",
+      "rejection": "ValueError: complete output inventory",
+      "status": "rejected",
+      "stderrSha256": "cd23b9242d4909fdd01d567be78e527bb0d7cec18db1e279ee342b45c4dbc624",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "a6d82443eb02c3f56ec23afd104cb9c43304d3385ba5738bc2e564beb99782cc",
+      "beforeSha256": "16765ab1c03330cf16df13ea66fb8477d3f7f249da6a663a13ff7291fdc29500",
+      "condition": "boolector-artifact",
+      "exitCode": 1,
+      "path": "aa-1/boolector/sby/boolector-bmc-violation/pyodide/result/engine_0/trace.vcd",
+      "rejection": "ValueError: artifact differs: result/engine_0/trace.vcd",
+      "status": "rejected",
+      "stderrSha256": "f35bd0a69168f0080fd88d4e8f536768b848c646e7755e52508c0581b47dce90",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "286f7cf257cbef950bdfdbfec3d7d0363483e9df2d8488b7b08b19875ce2ba03",
+      "beforeSha256": "043b2d62ed145e59d5aa87ca0b22caa7fb69ec6bd829504b74453b0a1832dd24",
+      "condition": "boolector-solver-binary",
+      "exitCode": 1,
+      "path": "aa-1/boolector/controls/inputs/boolector.wasm",
+      "rejection": "ValueError: solver build and binary hash",
+      "status": "rejected",
+      "stderrSha256": "39b61eee83af915a11439478e154912f97a15bc39055c5f3d7216004ed6101dd",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "98e8a50fb77dbeb2516b2ac9a63fbac59fe440f4e5c9a1e695798df0c975e0da",
+      "beforeSha256": "fb5b0d55b246725c2c81e550bbba5fd76aea4048b79b7f43aa5b711a0fa1e683",
+      "condition": "boolector-solver-hash",
+      "exitCode": 1,
+      "path": "aa-1/boolector/controls/metadata.json",
+      "rejection": "ValueError: solver build and binary hash",
+      "status": "rejected",
+      "stderrSha256": "39b61eee83af915a11439478e154912f97a15bc39055c5f3d7216004ed6101dd",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "bfed080e97437779949ee5d11f537ad8c99d10372d60894704cfa4432766567a",
+      "beforeSha256": "12696811b4d7ad10c8c6153698cf56e41c57d583e2d47db412f99d6df5da805e",
+      "condition": "boolector-transport-integrity",
+      "exitCode": 1,
+      "path": "aa-1/boolector/controls/boolector-bounded-pass/transport.json",
+      "rejection": "ValueError: ordinary SBY termination",
+      "status": "rejected",
+      "stderrSha256": "c3450647799f0df8cdc5857661904120e8b27a9df4c0f340aa6f80ed2608a65f",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": null,
+      "beforeSha256": "16765ab1c03330cf16df13ea66fb8477d3f7f249da6a663a13ff7291fdc29500",
+      "condition": "boolector-missing-artifact",
+      "exitCode": 1,
+      "path": "aa-1/boolector/sby/boolector-bmc-violation/pyodide/result/engine_0/trace.vcd",
+      "rejection": "ValueError: returned artifact set",
+      "status": "rejected",
+      "stderrSha256": "f055c96497d9d66dfa293fb5c58944b2a78a61d1a87849f9aa93915fd96d3a84",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "aa50cd74781105534c993a7fc78ce5dac1d3ba830662a54a9708ec62bd0f950d",
+      "beforeSha256": null,
+      "condition": "boolector-extra-artifact",
+      "exitCode": 1,
+      "path": "aa-1/boolector/controls/boolector-bounded-pass/output/unexpected",
+      "rejection": "ValueError: complete output inventory",
+      "status": "rejected",
+      "stderrSha256": "cd23b9242d4909fdd01d567be78e527bb0d7cec18db1e279ee342b45c4dbc624",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "a9bd7d20c51e31c4448bf3f9adc4c20e4888412646c87bc7da3a91fda2e53fbc",
+      "beforeSha256": "7cbd46dc3ed59d39a7694f14d8936be21cc0ec1bcb25e2e26b81ce763acca7c8",
+      "condition": "smtbmc-csv-status",
+      "exitCode": 1,
+      "path": "smtbmc.csv",
+      "rejection": "ValueError: all campaign CSV cells",
+      "status": "rejected",
+      "stderrSha256": "db301a848ac26a77fb681fe91423a5c1bc25003ffc14671f4348072ea43d4488",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "c859246ddf6f3fc111f4990270278562a2e09786e11ff6f3b33f8b8d7e248fb3",
+      "beforeSha256": "7cbd46dc3ed59d39a7694f14d8936be21cc0ec1bcb25e2e26b81ce763acca7c8",
+      "condition": "smtbmc-csv-error",
+      "exitCode": 1,
+      "path": "smtbmc.csv",
+      "rejection": "ValueError: all campaign CSV cells",
+      "status": "rejected",
+      "stderrSha256": "db301a848ac26a77fb681fe91423a5c1bc25003ffc14671f4348072ea43d4488",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "544d31dfcba34076e206946c1a0c4078e95a38f282588f15edc4debc44d6295c",
+      "beforeSha256": "06d100ef6c6660d689e1851ce16cf3f8fba07980e2b666e46cac023038b73f22",
+      "condition": "sby-csv-status",
+      "exitCode": 1,
+      "path": "sby.csv",
+      "rejection": "ValueError: all campaign CSV cells",
+      "status": "rejected",
+      "stderrSha256": "db301a848ac26a77fb681fe91423a5c1bc25003ffc14671f4348072ea43d4488",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "96be76186f3cb5b7ff2478d69a88c3fd90ede708e3ffe0e0157a43eb7704da28",
+      "beforeSha256": "06d100ef6c6660d689e1851ce16cf3f8fba07980e2b666e46cac023038b73f22",
+      "condition": "sby-csv-error",
+      "exitCode": 1,
+      "path": "sby.csv",
+      "rejection": "ValueError: all campaign CSV cells",
+      "status": "rejected",
+      "stderrSha256": "db301a848ac26a77fb681fe91423a5c1bc25003ffc14671f4348072ea43d4488",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "265424b4cf4eb7e112ce2c4244e345549f7052316901a2e8c2b8fae3e01bfa90",
+      "beforeSha256": "31d4ca0b48bca9cb9e8b1fd3d571788be7d2b02937aab6adcae31af750b9abcf",
+      "condition": "controls-csv-status",
+      "exitCode": 1,
+      "path": "controls.csv",
+      "rejection": "ValueError: all campaign CSV cells",
+      "status": "rejected",
+      "stderrSha256": "db301a848ac26a77fb681fe91423a5c1bc25003ffc14671f4348072ea43d4488",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "8289f9c73f0ae06303a15ab0e6cb38741a91f505e2744ddb59c385792a43595a",
+      "beforeSha256": "31d4ca0b48bca9cb9e8b1fd3d571788be7d2b02937aab6adcae31af750b9abcf",
+      "condition": "controls-csv-error",
+      "exitCode": 1,
+      "path": "controls.csv",
+      "rejection": "ValueError: all campaign CSV cells",
+      "status": "rejected",
+      "stderrSha256": "db301a848ac26a77fb681fe91423a5c1bc25003ffc14671f4348072ea43d4488",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "6a817a2c40803cdbc02d90f81131d5970a40f05aa57303f129fc3f21570144ec",
+      "beforeSha256": "c6a206f45cfe7b0c263c95a34b20fe2950e6faf530cebe5ea357176ee1a2c1f6",
+      "condition": "captured-auditor",
+      "exitCode": 1,
+      "path": "snapshots/scripts/formal-solver-audit.py",
+      "rejection": "ValueError: captured and running auditor identity",
+      "status": "rejected",
+      "stderrSha256": "408dbda9e09248f96686f6e3344c63c0fc8a9885e1383419482d5c3ecc94f1dd",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "afterSha256": "ee9d059aa8747b3c97d6170acd1cec89c9869c1f5148ea324574223665e1ead5",
+      "beforeSha256": "3fbeeae7ab2eca9196e6163ac40761d73747b32934ac4dbc3a86b7f68c6f1aeb",
+      "condition": "saved-summary",
+      "exitCode": 1,
+      "path": "summary.json",
+      "rejection": "ValueError: saved summary",
+      "status": "rejected",
+      "stderrSha256": "14093fbc48c74fb76561200299a0c05f97e8abbf4bd12ad2784ee010cfc1377c",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "negativeSummarySha256": "9521be45657654cf3ff4254bc0351293555a74d2c422a0f6b7443e9776bccc9a",
+  "packageCommit": "b082702a21d4ed2b95b0fe7a12a8534d1449ffa7",
+  "pairs": 14,
+  "restore": {
+    "archiveSha256": "cbb86b879b089b76373cc35e2aa6b5f7773203c756ae7dfddb7c9e645b40e8e8",
+    "commit": "b082702a21d4ed2b95b0fe7a12a8534d1449ffa7",
+    "files": 38413,
+    "manifestSha256": "24a32cfc51ef767a9f99fa0367b6943295330fa96114dc62e87aeb0bbd6f32e2",
+    "status": "pass"
+  },
+  "status": "pass",
+  "tables": {
+    "controls": {
+      "aaRows": 64,
+      "columns": 14,
+      "csvSha256": "31d4ca0b48bca9cb9e8b1fd3d571788be7d2b02937aab6adcae31af750b9abcf",
+      "formalRows": 160,
+      "rows": 224
+    },
+    "sby": {
+      "aaRows": 24,
+      "columns": 19,
+      "csvSha256": "06d100ef6c6660d689e1851ce16cf3f8fba07980e2b666e46cac023038b73f22",
+      "formalRows": 60,
+      "rows": 84
+    },
+    "smtbmc": {
+      "aaRows": 32,
+      "columns": 15,
+      "csvSha256": "7cbd46dc3ed59d39a7694f14d8936be21cc0ec1bcb25e2e26b81ce763acca7c8",
+      "formalRows": 80,
+      "rows": 112
+    }
+  }
+}

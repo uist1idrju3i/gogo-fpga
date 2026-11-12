@@ -1,0 +1,6 @@
+# path	token	reason
+tests/check-document-paths/test_checker.py	docs/evidence.json	文書パス検査の合成fixture。実在する文書への参照ではない。
+tests/check-document-paths/test_checker.py	docs/evidence.json:1	文書パス検査の行番号付き診断を確かめる合成fixture。
+tests/check-document-paths/test_checker.py	docs/guide.md	文書パス検査の合成fixture。実在する文書への参照ではない。
+tests/check-document-paths/test_checker.py	docs/guide.md:1	文書パス検査の行番号付き診断を確かめる合成fixture。
+tests/check-document-paths/test_checker.py	docs/evidence.md	JSON以外の例外を拒否する負の対照の合成fixture。

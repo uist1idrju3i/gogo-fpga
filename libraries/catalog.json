@@ -1,0 +1,1076 @@
+{
+  "formatVersion": 1,
+  "entries": [
+    {
+      "id": "colibri",
+      "label": "Colibri",
+      "kind": "library",
+      "language": "vhdl",
+      "submodule": "third_party/colibri",
+      "license": {
+        "expression": "CERN-OHL-W-2.0",
+        "files": [
+          "LICENSES/CERN-OHL-W-2.0.txt",
+          "LICENSES/Apache-2.0.txt",
+          "LICENSES/CC-BY-SA-4.0.txt"
+        ],
+        "note": "RTL、文書、メタデータはファイルごとに条件が異なります。選択したファイルの SPDX 表記も保持します。"
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "counter",
+          "label": "剰余カウンター",
+          "parameters": {
+            "g_MODULO": "10",
+            "g_COUNTER_WIDTH": "4"
+          },
+          "sources": [
+            {
+              "path": "src/common/utils.vhdl",
+              "language": "vhdl",
+              "library": "colibri"
+            },
+            {
+              "path": "src/common/counter.vhdl",
+              "language": "vhdl",
+              "library": "colibri"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "open-logic",
+      "label": "Open Logic",
+      "kind": "library",
+      "language": "vhdl",
+      "submodule": "third_party/open-logic",
+      "license": {
+        "expression": "LicenseRef-PSI-HDL-1.0",
+        "files": [
+          "License.txt"
+        ],
+        "note": "PSI HDL Library License 1.0。GNU Library GPL v2 以降を基に、FPGA 等の生成物への例外を含みます。"
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "gray",
+          "label": "Gray 符号と論理関数",
+          "sources": [
+            {
+              "path": "src/base/vhdl/olo_base_pkg_array.vhd",
+              "language": "vhdl",
+              "library": "olo"
+            },
+            {
+              "path": "src/base/vhdl/olo_base_pkg_math.vhd",
+              "language": "vhdl",
+              "library": "olo"
+            },
+            {
+              "path": "src/base/vhdl/olo_base_pkg_logic.vhd",
+              "language": "vhdl",
+              "library": "olo"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hdl-modules",
+      "label": "hdl-modules",
+      "kind": "library",
+      "language": "vhdl",
+      "submodule": "third_party/hdl-modules",
+      "license": {
+        "expression": "BSD-3-Clause",
+        "files": [
+          "license.txt"
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "handshake-pipeline",
+          "label": "ハンドシェイク・パイプライン",
+          "parameters": {
+            "data_width": "8",
+            "full_throughput": "true",
+            "pipeline_control_signals": "true",
+            "pipeline_data_signals": "true"
+          },
+          "sources": [
+            {
+              "path": "modules/common/src/handshake_pipeline.vhd",
+              "language": "vhdl",
+              "library": "common"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "verilog-axis",
+      "label": "verilog-axis",
+      "kind": "library",
+      "language": "verilog",
+      "submodule": "third_party/verilog-axis",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          "COPYING"
+        ]
+      },
+      "deprecated": true,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "register",
+          "label": "AXI Stream レジスター",
+          "sources": [
+            {
+              "path": "rtl/axis_register.v",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "parameters": {
+            "DATA_WIDTH": "8",
+            "REG_TYPE": "2"
+          },
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "verilog-uart",
+      "label": "verilog-uart",
+      "kind": "library",
+      "language": "verilog",
+      "submodule": "third_party/verilog-uart",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          "COPYING"
+        ]
+      },
+      "deprecated": true,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "uart",
+          "label": "UART 送受信",
+          "sources": [
+            {
+              "path": "rtl/uart_tx.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/uart_rx.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/uart.v",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "parameters": {
+            "DATA_WIDTH": "8"
+          },
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "libfpga",
+      "label": "libfpga",
+      "kind": "library",
+      "language": "verilog",
+      "submodule": "third_party/libfpga",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          "LICENSE"
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "gray",
+          "label": "2進数と Gray 符号の変換",
+          "sources": [
+            {
+              "path": "rtl/math/lfpga_gray.v",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "serv",
+      "label": "SERV",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/serv",
+      "license": {
+        "expression": "ISC",
+        "files": [
+          "LICENSE"
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "rv32i",
+          "label": "RV32I・CSR なし",
+          "parameters": {
+            "WITH_CSR": "0",
+            "COMPRESSED": "0",
+            "ALIGN": "0",
+            "MDU": "0",
+            "W": "1",
+            "RESET_PC": "0"
+          },
+          "sources": [
+            {
+              "path": "rtl/serv_bufreg.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_bufreg2.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_alu.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_csr.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_ctrl.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_decode.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_immdec.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_mem_if.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_rf_if.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_rf_ram_if.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_rf_ram.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_state.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_debug.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_top.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_rf_top.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_aligner.v",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/serv_compdec.v",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "picorv32",
+      "label": "PicoRV32",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/picorv32",
+      "license": {
+        "expression": "ISC",
+        "files": [
+          "COPYING"
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "rv32e",
+          "label": "RV32E・単一ポートのレジスター",
+          "parameters": {
+            "ENABLE_COUNTERS": "0",
+            "ENABLE_COUNTERS64": "0",
+            "ENABLE_REGS_16_31": "0",
+            "ENABLE_REGS_DUALPORT": "0",
+            "PROGADDR_RESET": "0",
+            "ENABLE_PCPI": "0",
+            "ENABLE_MUL": "0",
+            "ENABLE_FAST_MUL": "0",
+            "ENABLE_DIV": "0",
+            "ENABLE_IRQ": "0",
+            "ENABLE_TRACE": "0"
+          },
+          "sources": [
+            {
+              "path": "picorv32.v",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "neorv32",
+      "label": "NEORV32",
+      "kind": "cpu",
+      "language": "vhdl",
+      "submodule": "third_party/neorv32",
+      "license": {
+        "expression": "BSD-3-Clause",
+        "files": [
+          "LICENSE"
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "rv32e",
+          "label": "RV32E・CPU 単体",
+          "sources": [
+            {
+              "path": "rtl/core/neorv32_package.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_prim.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_bitmanip.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_cfu.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_cond.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_crypto.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_fpu.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_muldiv.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_shifter.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_control.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_counters.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_decompressor.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_frontend.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_hwtrig.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_lsu.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_pmp.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_regfile.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_trace.vhd",
+              "language": "vhdl",
+              "library": "neorv32"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "parameters": {
+            "BOOT_ADDR": "0",
+            "RISCV_ISA_E": "true",
+            "RISCV_ISA_C": "false",
+            "RISCV_ISA_M": "false",
+            "TRACE_PORT_EN": "false",
+            "TRACE_SIMLOG_EN": "false"
+          },
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hazard3",
+      "label": "Hazard3",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/hazard3",
+      "license": {
+        "expression": "Apache-2.0",
+        "files": [
+          "LICENSE"
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "rv32e",
+          "label": "RV32E・AHB5 単一ポート",
+          "sources": [
+            {
+              "path": "hdl/hazard3_core.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_cpu_1port.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/arith/hazard3_alu.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/arith/hazard3_branchcmp.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/arith/hazard3_mul_fast.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/arith/hazard3_muldiv_seq.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/arith/hazard3_onehot_encode.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/arith/hazard3_onehot_priority.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/arith/hazard3_onehot_priority_dynamic.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/arith/hazard3_priority_encode.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/arith/hazard3_shift_barrel.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_csr.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_decode.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_frontend.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_instr_decompress.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_irq_ctrl.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_pmp.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_power_ctrl.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_regfile_1w2r.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_triggers.v",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_config.vh",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_config_inst.vh",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_csr_addr.vh",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_ops.vh",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/hazard3_width_const.vh",
+              "language": "verilog"
+            },
+            {
+              "path": "hdl/rv_opcodes.vh",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [
+            "hdl"
+          ],
+          "parameters": {
+            "RESET_VECTOR": "0",
+            "MTVEC_INIT": "0",
+            "EXTENSION_A": "0",
+            "EXTENSION_C": "0",
+            "EXTENSION_E": "1",
+            "EXTENSION_M": "0",
+            "DEBUG_SUPPORT": "0",
+            "NUM_IRQS": "1"
+          },
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "vexriscv",
+      "label": "VexRiscv",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/vexriscv",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          "LICENSE",
+          "pythondata_cpu_vexriscv/verilog/ext/VexRiscv/LICENSE"
+        ],
+        "note": "生成済み RTL 配布元の原文と、同配布元が固定する生成元サブモジュールの原文を保持します。生成済み RTL の再生成は検証の範囲外です。"
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "min",
+          "label": "Min・生成済み RTL",
+          "sources": [
+            {
+              "path": "pythondata_cpu_vexriscv/verilog/VexRiscv_Min.v",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "parameters": {},
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "verilog-axi",
+      "label": "verilog-axi",
+      "kind": "library",
+      "language": "verilog",
+      "submodule": "third_party/verilog-axi",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          "COPYING"
+        ]
+      },
+      "deprecated": true,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "read-register",
+          "label": "AXI Lite 読み出しレジスター",
+          "sources": [
+            {
+              "path": "rtl/axil_register_rd.v",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "parameters": {
+            "DATA_WIDTH": "8",
+            "ADDR_WIDTH": "8",
+            "AR_REG_TYPE": "2",
+            "R_REG_TYPE": "2"
+          },
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "verilog-ethernet",
+      "label": "verilog-ethernet",
+      "kind": "library",
+      "language": "verilog",
+      "submodule": "third_party/verilog-ethernet",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          "COPYING"
+        ]
+      },
+      "deprecated": true,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "crc",
+          "label": "CRC-16 計算",
+          "sources": [
+            {
+              "path": "rtl/lfsr.v",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "parameters": {
+            "LFSR_WIDTH": "16",
+            "LFSR_POLY": "16'h1021",
+            "LFSR_CONFIG": "GALOIS",
+            "DATA_WIDTH": "8",
+            "STYLE": "LOOP"
+          },
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "darkriscv",
+      "label": "DarkRISCV",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/darkriscv",
+      "license": {
+        "expression": "BSD-3-Clause",
+        "files": [
+          "LICENSE"
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "rv32i",
+          "label": "RV32I・3 段パイプライン",
+          "sources": [
+            {
+              "path": "rtl/config.vh",
+              "language": "verilog"
+            },
+            {
+              "path": "rtl/darkriscv.v",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [
+            "rtl"
+          ],
+          "parameters": {
+            "CPTR": "0"
+          },
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "femtorv",
+      "label": "FemtoRV",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/femtorv",
+      "license": {
+        "expression": "BSD-3-Clause",
+        "files": [
+          "LICENSE"
+        ]
+      },
+      "deprecated": false,
+      "status": "frontend-unsupported",
+      "reason": "固定版のQuarkはIcarus 13.0で宣言前のinstr参照を解決できません。nativeとWASMで同じ解析エラーを確認しました。",
+      "components": [
+        {
+          "id": "quark",
+          "label": "Quark・RV32I",
+          "parameters": {
+            "RESET_ADDR": "0",
+            "ADDR_WIDTH": "12"
+          },
+          "sources": [
+            {
+              "path": "FemtoRV/RTL/PROCESSOR/femtorv32_quark.v",
+              "language": "verilog"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {
+            "NRV_COUNTER_WIDTH": "8"
+          },
+          "boards": {
+            "tangnano1k": "frontend-unsupported",
+            "tangnano4k": "frontend-unsupported",
+            "tangnano9k": "frontend-unsupported",
+            "tangnano20k": "frontend-unsupported"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ibex",
+      "label": "Ibex",
+      "kind": "cpu",
+      "language": "systemverilog",
+      "submodule": "third_party/ibex",
+      "license": {
+        "expression": "Apache-2.0",
+        "files": [
+          "LICENSE",
+          "NOTICE"
+        ]
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "SystemVerilog は現段階の対象外です。",
+      "components": []
+    },
+    {
+      "id": "cv32e40p",
+      "label": "CV32E40P",
+      "kind": "cpu",
+      "language": "systemverilog",
+      "submodule": "third_party/cv32e40p",
+      "license": {
+        "expression": "SHL-0.51 OR Apache-2.0",
+        "files": [
+          "LICENSE"
+        ]
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "SystemVerilog は現段階の対象外です。",
+      "components": []
+    },
+    {
+      "id": "vexiiriscv",
+      "label": "VexiiRiscv",
+      "kind": "cpu",
+      "language": "scala",
+      "submodule": "third_party/vexiiriscv",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          "LICENSE"
+        ]
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "Scala からの生成が必要です。固定した生成済み RTL は未提供です。",
+      "components": []
+    },
+    {
+      "id": "osvvm",
+      "label": "OSVVM",
+      "kind": "verification",
+      "language": "vhdl",
+      "submodule": "third_party/osvvm",
+      "license": {
+        "expression": "Apache-2.0",
+        "files": [
+          "LICENSE.md"
+        ]
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "VHDL の検証用です。VHDL シミュレーションは未提供です。",
+      "components": []
+    },
+    {
+      "id": "uvvm",
+      "label": "UVVM",
+      "kind": "verification",
+      "language": "vhdl",
+      "submodule": "third_party/uvvm",
+      "license": {
+        "expression": "Apache-2.0",
+        "files": [
+          "LICENSE"
+        ]
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "VHDL の検証用です。VHDL シミュレーションは未提供です。",
+      "components": []
+    },
+    {
+      "id": "vunit",
+      "label": "VUnit",
+      "kind": "verification",
+      "language": "vhdl",
+      "submodule": "third_party/vunit",
+      "license": {
+        "expression": "MPL-2.0",
+        "files": [
+          "LICENSE.rst"
+        ],
+        "note": "HDL と Python 等は MPL-2.0 です。図版のフォントは別の条件です。"
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "VHDL の検証用です。VHDL シミュレーションは未提供です。",
+      "components": []
+    },
+    {
+      "id": "taxi",
+      "label": "Taxi",
+      "kind": "library",
+      "language": "systemverilog",
+      "submodule": "third_party/taxi",
+      "license": {
+        "expression": "CERN-OHL-S-2.0",
+        "files": [
+          "LICENSE"
+        ],
+        "note": "有償ライセンスもありますが、別途契約が必要です。自動で有償ライセンスを適用しません。"
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "SystemVerilog は現段階の対象外です。",
+      "components": []
+    }
+  ]
+}

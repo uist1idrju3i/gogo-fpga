@@ -1,0 +1,861 @@
+"board","component","frontend_failure.diagnostic","frontend_failure.native.status","frontend_failure.native.stderr","frontend_failure.native.stdout","frontend_failure.tool","frontend_failure.wasm.status","frontend_failure.wasm.stderr","frontend_failure.wasm.stdout","fs_bytes","ghdl_memory_bytes","hashes.fs","hashes.pnr_native","hashes.pnr_wasi","hashes.project_zip","hashes.yosys_native","hashes.yosys_wasi","id","lowered_execution.led_stuck","lowered_execution.netlistHash","lowered_execution.positive","mapped_cpu_structure.cpu_cells","mapped_cpu_structure.cpu_logic_cells","mapped_cpu_structure.cpu_state_cells","mapped_cpu_structure.led_bits.0","mapped_cpu_structure.ram_state_cells","pack_memory_bytes","peak_rss_so_far_kib","pnr_errors.native","pnr_errors.native_signal","pnr_errors.wasi","pnr_errors.wasi.message","pnr_errors.wasi.name","pnr_exit_status.native","pnr_exit_status.wasi","pnr_memory_bytes","resources.ALU.total","resources.ALU.used","resources.ALU54D.total","resources.ALU54D.used","resources.BANDGAP.total","resources.BANDGAP.used","resources.BSRAM.total","resources.BSRAM.used","resources.BUFG.total","resources.BUFG.used","resources.CLKDIV.total","resources.CLKDIV.used","resources.CLKDIV2.total","resources.CLKDIV2.used","resources.DCS.total","resources.DCS.used","resources.DFF.total","resources.DFF.used","resources.DHCEN.total","resources.DHCEN.used","resources.DLLDLY.total","resources.DLLDLY.used","resources.DQCE.total","resources.DQCE.used","resources.EMCU.total","resources.EMCU.used","resources.FLASH256K.total","resources.FLASH256K.used","resources.FLASH608K.total","resources.FLASH608K.used","resources.FLASH64KZ.total","resources.FLASH64KZ.used","resources.GND.total","resources.GND.used","resources.GSR.total","resources.GSR.used","resources.IDES16.total","resources.IDES16.used","resources.IOB.total","resources.IOB.used","resources.IOLOGICI.total","resources.IOLOGICI.used","resources.IOLOGICO.total","resources.IOLOGICO.used","resources.LUT4.total","resources.LUT4.used","resources.MIPI_IBUF.total","resources.MIPI_IBUF.used","resources.MIPI_OBUF.total","resources.MIPI_OBUF.used","resources.MULT18X18.total","resources.MULT18X18.used","resources.MULT36X36.total","resources.MULT36X36.used","resources.MULT9X9.total","resources.MULT9X9.used","resources.MULTADDALU18X18.total","resources.MULTADDALU18X18.used","resources.MULTALU18X18.total","resources.MULTALU18X18.used","resources.MULTALU36X18.total","resources.MULTALU36X18.used","resources.MUX2_LUT5.total","resources.MUX2_LUT5.used","resources.MUX2_LUT6.total","resources.MUX2_LUT6.used","resources.MUX2_LUT7.total","resources.MUX2_LUT7.used","resources.MUX2_LUT8.total","resources.MUX2_LUT8.used","resources.OSC.total","resources.OSC.used","resources.OSCZ.total","resources.OSCZ.used","resources.OSER16.total","resources.OSER16.used","resources.PADD18.total","resources.PADD18.used","resources.PADD9.total","resources.PADD9.used","resources.PLLVR.total","resources.PLLVR.used","resources.RAM16SDP4.total","resources.RAM16SDP4.used","resources.VCC.total","resources.VCC.used","resources.rPLL.total","resources.rPLL.used","selection.catalog_state","selection.normal_selection_rejected","selection.require_confirmed","status","timings.frontend_check_ms","timings.ghdl_wasm_ms","timings.pack_native_ms","timings.pack_pyodide_ms","timings.pnr_native_ms","timings.pnr_wasi_ms","timings.yosys_lowering_ms","timings.yosys_native_ms","timings.yosys_wasi_ms","yosys_memory_bytes"
+"tangnano1k","rv32i","","","","","","","","","","","","","","5b09f7dead56f3408d94a09d8a9ccc5cadfa6bbada80bbaf2de6c5c9bb865543","e1414bd476bac68f8b6cea26e2c05f1c80abfdbab62ae12615c6020bb6e48b2b","fb3130cc993ea5899f184d9ece04e23fbe521cc3c19b1e096f0cf6d6370e1b60","serv","rejected","427c654e8e2607ee2e671bd0a15dc3d787807d071ad410a0b105ec04c546e367","passed","1384","743","189","3","35","","","","","","[object WebAssembly.Exception]","WebAssembly.Exception","125","1","27000832","864","158","","","1","1","4","0","18","0","4","0","8","0","4","0","864","469","12","0","4","0","12","0","","","","","","","1","0","1","1","1","1","","","48","2","38","0","38","0","1152","1322","","","","","","","","","","","","","","","","","576","285","288","108","144","48","144","22","","","1","0","","","","","","","","","72","40","1","1","1","0","capacity-exceeded","true","false","capacity-exceeded","","","","","826.8021090000002","1826.1248559999985","1402.5050609999998","1763.1049590000002","2246.4340820000007","63438848"
+"tangnano4k","rv32i","","","","","","","","","1771710","","cce2110762efaa4e93eca18ee2d6563fdaac0dcb2c966be667d0d485f6d2331d","efdc2d4ae13540d2a82a33f69aadcb953409da25429f7ea2e934f79b56882281","efdc2d4ae13540d2a82a33f69aadcb953409da25429f7ea2e934f79b56882281","3a9141fa8f0c1994387baa45598faac1c3edd31ca3db6fde8dda480f599b1e6d","88ccfa281a24405091c1403c0c3430c0a7d970f0b7dba244f579c01095b8dd58","592983671cdeecff3bdaa55276d1d50c32aa62b85143c668d17cf5e1e0e4d547","serv","rejected","427c654e8e2607ee2e671bd0a15dc3d787807d071ad410a0b105ec04c546e367","passed","1306","682","190","3","58","113115136","685472","","","","","","0","0","36831232","3456","158","8","0","","","10","2","17","1","6","0","12","0","4","0","3456","260","18","0","","","12","0","1","0","1","0","","","","","1","1","1","1","46","0","124","2","124","0","124","0","4608","931","16","0","8","0","16","0","4","0","32","0","8","0","8","0","8","0","2304","287","1152","109","576","47","576","22","","","1","0","46","0","16","0","32","0","2","0","","","1","1","","","confirmed","false","true","passed","","","587.4176139999981","2349.8362350000025","4107.195998999996","7107.623542999998","839.504062","1726.4387819999974","2515.6181620000025","60489728"
+"tangnano9k","rv32i","","","","","","","","","2069320","","cad4b79e95f6b8c8bf780568ddbebbdb3e0376c2d5eb3d403129106c3b508d5a","c9a62f1973a7134286dfd623fea5bd2c21c98aa2611d80c56818ef6b4c0d92c1","c9a62f1973a7134286dfd623fea5bd2c21c98aa2611d80c56818ef6b4c0d92c1","b024f77a5646a727cc1876b59f2f2614515180334849bf07914339a2874f2cb4","e1414bd476bac68f8b6cea26e2c05f1c80abfdbab62ae12615c6020bb6e48b2b","fb3130cc993ea5899f184d9ece04e23fbe521cc3c19b1e096f0cf6d6370e1b60","serv","rejected","427c654e8e2607ee2e671bd0a15dc3d787807d071ad410a0b105ec04c546e367","passed","1384","743","189","3","35","135790592","692584","","","","","","0","0","45416448","6480","158","10","0","","","26","0","22","0","8","0","16","0","8","0","6480","469","24","0","","","24","0","","","","","1","0","","","1","1","1","1","80","0","276","2","276","0","276","0","8640","1322","22","0","20","0","20","0","5","0","40","0","10","0","10","0","10","0","4320","285","2160","108","1080","48","1080","22","1","0","","","80","0","20","0","40","0","","","270","40","1","1","2","0","confirmed","false","true","passed","","","1035.345340999993","687.4709399999992","7636.013189999998","12841.292546000004","761.1800729999959","1597.2202479999978","1860.1599979999955","63438848"
+"tangnano20k","rv32i","","","","","","","","","4618782","","82e5ee417f8f96d8a11142996ab65257c8777d18a38c5b29883c552f717fed60","78f10186560ef8de60316379457f05cfbf078c50a775d8b34d7cebaeb4a17018","78f10186560ef8de60316379457f05cfbf078c50a775d8b34d7cebaeb4a17018","49166ff37f982bb924f634456e866223b86e90d9e60d43c2a6e759d4b75d04f8","e1414bd476bac68f8b6cea26e2c05f1c80abfdbab62ae12615c6020bb6e48b2b","fb3130cc993ea5899f184d9ece04e23fbe521cc3c19b1e096f0cf6d6370e1b60","serv","rejected","427c654e8e2607ee2e671bd0a15dc3d787807d071ad410a0b105ec04c546e367","passed","1384","743","189","3","35","162988032","736080","","","","","","0","0","53477376","15552","158","24","0","","","46","0","24","1","8","0","16","0","8","0","15552","469","24","0","","","24","0","","","","","","","","","1","1","1","1","","","384","2","384","0","384","0","20736","1322","","","","","48","0","12","0","96","0","24","0","24","0","24","0","10368","285","5184","108","2592","48","2592","22","1","0","","","","","48","0","96","0","","","648","40","1","1","2","0","confirmed","false","true","passed","","","1299.271378000005","995.2639990000025","5495.437479999993","10307.688045999996","779.7197249999881","1414.953812000007","1968.1099600000016","63438848"
+"tangnano1k","rv32e","","","","","","","","","","","","","","f0d007ff865835e2d04b6845467d2ff0b09b292da9b22350c961a1698d5816e3","b0fda85ad20e63414605797057a6a5e31006dbc2b86efecf8e95395a9cae470c","1ebc190403e4a73122e150930c36f682adcb628bf234a25d125e18dd9006dfe9","picorv32","rejected","9007fc36e07d5473d3597190cfdf46c7a7d0f72cf16192fffef1f89eb1906d62","passed","3526","2123","402","3","34","","","","","","[object WebAssembly.Exception]","WebAssembly.Exception","125","1","42270720","864","348","","","1","1","4","0","18","0","4","0","8","0","4","0","864","567","12","0","4","0","12","0","","","","","","","1","0","1","1","1","1","","","48","2","38","0","38","0","1152","2786","","","","","","","","","","","","","","","","","576","814","288","282","144","125","144","43","","","1","0","","","","","","","","","72","16","1","1","1","0","capacity-exceeded","true","false","capacity-exceeded","","","","","3077.899537999998","6298.726278999995","711.755668999991","3142.2546370000055","4139.523992000002","81985536"
+"tangnano4k","rv32e","","","","","","","","","1771710","","1f32a5e6d23f69c89d40748be3476d89c96bb93c81129ffc97f752edf79c349c","d8254b3368a94c56e9ae1e3838467377ffdc6e6872eae80faecb6694cddb247a","d8254b3368a94c56e9ae1e3838467377ffdc6e6872eae80faecb6694cddb247a","bac31cf00c24a9b417988554d708b473e9103b968b5e48e0c35d4fd9bb1f0445","20f5905e954fbe8d9d4781610af808c5bbceb3720c2ca88634b7649da3ebc105","fbbebff1c11e7bf2e137efb6e2823410e5af83fae478785d68edcdaba51912c1","picorv32","rejected","9007fc36e07d5473d3597190cfdf46c7a7d0f72cf16192fffef1f89eb1906d62","passed","3277","1967","883","3","59","162988032","880516","","","","","","0","0","71499776","3456","350","8","0","","","10","1","17","1","6","0","12","0","4","0","3456","984","18","0","","","12","0","1","0","1","0","","","","","1","1","1","1","46","0","124","2","124","0","124","0","4608","2335","16","0","8","0","16","0","4","0","32","0","8","0","8","0","8","0","2304","449","1152","58","576","20","576","7","","","1","0","46","0","16","0","32","0","2","0","","","1","1","","","confirmed","false","true","passed","","","782.6042190000007","533.1922889999987","47399.50082700001","61764.486797000005","928.4432240000024","4283.870524999991","4670.668588","69533696"
+"tangnano9k","rv32e","","","","","","","","","2069320","","669a967bb4d84056ee426cd58b5d197358e67de6ed73afd4ecd53b4f1b41c2c7","108aed2a487dfb91601f71f4f88451c5e70de73240507556a251b7ac6ef24da3","108aed2a487dfb91601f71f4f88451c5e70de73240507556a251b7ac6ef24da3","445f603ee5d5a56b937af56cc40ca84c30919db4d4859e46d8d8f4a897affb6c","b0fda85ad20e63414605797057a6a5e31006dbc2b86efecf8e95395a9cae470c","1ebc190403e4a73122e150930c36f682adcb628bf234a25d125e18dd9006dfe9","picorv32","rejected","9007fc36e07d5473d3597190cfdf46c7a7d0f72cf16192fffef1f89eb1906d62","passed","3526","2123","402","3","34","162988032","880516","","","","","","0","0","71106560","6480","348","10","0","","","26","0","22","0","8","0","16","0","8","0","6480","567","24","0","","","24","0","","","","","1","0","","","1","1","1","1","80","0","276","2","276","0","276","0","8640","2786","22","0","20","0","20","0","5","0","40","0","10","0","10","0","10","0","4320","814","2160","282","1080","125","1080","43","1","0","","","80","0","20","0","40","0","","","270","16","1","1","2","0","confirmed","false","true","passed","","","1915.227554000041","1361.7417959999875","34641.041140999994","62623.767483","674.0522469999851","2357.3531070000026","3491.6725159999914","81985536"
+"tangnano20k","rv32e","","","","","","","","","4618782","","2eb6b85083c5391fc0b5b4f4f28bc10ae24e723d8bb9cfc988b3d0a083d8be32","767a4be1fdd706504c7528ec84b10850de934dc9252039ab62b1e3bedf9fe608","767a4be1fdd706504c7528ec84b10850de934dc9252039ab62b1e3bedf9fe608","f0234f11c3771a602f8df2f38f1de63a5c4d611a696bcca958983c0ee85ba31c","b0fda85ad20e63414605797057a6a5e31006dbc2b86efecf8e95395a9cae470c","1ebc190403e4a73122e150930c36f682adcb628bf234a25d125e18dd9006dfe9","picorv32","rejected","9007fc36e07d5473d3597190cfdf46c7a7d0f72cf16192fffef1f89eb1906d62","passed","3526","2123","402","3","34","195624960","880516","","","","","","0","0","81920000","15552","348","24","0","","","46","0","24","1","8","0","16","0","8","0","15552","567","24","0","","","24","0","","","","","","","","","1","1","1","1","","","384","2","384","0","384","0","20736","2786","","","","","48","0","12","0","96","0","24","0","24","0","24","0","10368","814","5184","282","2592","125","2592","43","1","0","","","","","48","0","96","0","","","648","16","1","1","2","0","confirmed","false","true","passed","","","1496.8647389999824","1255.3584120000014","40828.23623500002","86191.66256700002","1535.526642999961","4275.601209999993","7332.946931999992","81985536"
+"tangnano1k","rv32e","","","","","","","","","","75890688","","","","3ad2de93d4be50b6bf93f0ef32b94459f500341dac0d6d98d00e511c1913ff71","4ebf1cab8c9120d799d517c4430fc18a86b2a179e1596fc21246eb390b32c4d7","7e618358ff33daa1b3e8cd968a06762e5adfa508b43659014102ef52afa745d4","neorv32","rejected","056fb5c480b5adfdf3f917ec2152f42c4e50865db467cb03fb6a0811c5aa7064","passed","3838","2243","650","3","79","","","","","","[object WebAssembly.Exception]","WebAssembly.Exception","125","1","49217536","864","322","","","1","1","4","0","18","0","4","0","8","0","4","0","864","933","12","0","4","0","12","0","","","","","","","1","0","1","1","1","1","","","48","2","38","0","38","0","1152","2789","","","","","","","","","","","","","","","","","576","641","288","181","144","76","144","35","","","1","0","","","","","","","","","72","33","1","1","1","0","capacity-exceeded","true","false","capacity-exceeded","","961.0703689999646","","","2590.100218000007","5125.382992999977","1191.947044999979","3678.2316690000007","3962.9218569999794","75104256"
+"tangnano4k","rv32e","","","","","","","","","1771710","75890688","986cbe301e1d3b7daabf9abbb782456c74b65fb23d7d0cc8cf72d4a27f46c90f","2f65f4d93f3f7303ae7f1ab488a0a26d5f05dd29036ca7f9f9895d8b383e4160","2f65f4d93f3f7303ae7f1ab488a0a26d5f05dd29036ca7f9f9895d8b383e4160","80cfb6efdbff7202b191d961fcb5751bd43b67b60614ff609290996db1f4575a","5fd06e8247097f2d464fa91ddabeee12fde23d1ea6c8fc9f5c77af02a8a71045","94226a9ecb1f3cf887b38111ec1f763d82a1bfa6c0126d88c5d8c0e63e4f5646","neorv32","rejected","056fb5c480b5adfdf3f917ec2152f42c4e50865db467cb03fb6a0811c5aa7064","passed","3858","2383","728","3","286","195624960","1004724","","","","","","0","0","75366400","3456","322","8","0","","","10","2","17","1","6","0","12","0","4","0","3456","1028","18","0","","","12","0","1","0","1","0","","","","","1","1","1","1","46","0","124","2","124","0","124","0","4608","2538","16","0","8","0","16","0","4","0","32","0","8","0","8","0","8","0","2304","571","1152","122","576","47","576","7","","","1","0","46","0","16","0","32","0","2","0","","","1","1","","","confirmed","false","true","passed","","607.1511879999889","1358.5036619999446","865.7015690000262","28470.526002999977","65074.23862000002","1012.2015530000208","4045.236397999979","5358.733723999991","78643200"
+"tangnano9k","rv32e","","","","","","","","","2069320","75890688","c2c924f3e4debee5fcb5aa92eecee592064c2f06585cde5133bfacb5deb0836e","b9bf98c7ec8f53efbe9d0f79dbad19771963a096249fb4d2e3dd2644df04259a","b9bf98c7ec8f53efbe9d0f79dbad19771963a096249fb4d2e3dd2644df04259a","3ed0c507f6d531075c28f7540d35c135682628c5db216d865a661adcf7932aae","4ebf1cab8c9120d799d517c4430fc18a86b2a179e1596fc21246eb390b32c4d7","7e618358ff33daa1b3e8cd968a06762e5adfa508b43659014102ef52afa745d4","neorv32","rejected","056fb5c480b5adfdf3f917ec2152f42c4e50865db467cb03fb6a0811c5aa7064","passed","3838","2243","650","3","79","195624960","1004724","","","","","","0","0","77004800","6480","322","10","0","","","26","0","22","0","8","0","16","0","8","0","6480","933","24","0","","","24","0","","","","","1","0","","","1","1","1","1","80","0","276","2","276","0","276","0","8640","2789","22","0","20","0","20","0","5","0","40","0","10","0","10","0","10","0","4320","641","2160","181","1080","76","1080","35","1","0","","","80","0","20","0","40","0","","","270","33","1","1","2","0","confirmed","false","true","passed","","1103.2063370000105","1088.8820409999462","634.2945029999828","38963.37064900005","95865.5164379999","1503.1244510000106","8013.846405999968","7211.87419100001","75104256"
+"tangnano20k","rv32e","","","","","","","","","4618782","75890688","d78087c137a14260dea4b83d4912fbee0c731acd621947ec5cd091ffaa3918e6","31e55751a7f87a88fbbcd8d2aa99fcb14d03039614dd25ddc06c0cc88a767068","31e55751a7f87a88fbbcd8d2aa99fcb14d03039614dd25ddc06c0cc88a767068","c7a832ad750165c475adb94434f20f4fd7c498bac3ff4b35b5d5a1e2d0d363b2","4ebf1cab8c9120d799d517c4430fc18a86b2a179e1596fc21246eb390b32c4d7","7e618358ff33daa1b3e8cd968a06762e5adfa508b43659014102ef52afa745d4","neorv32","rejected","056fb5c480b5adfdf3f917ec2152f42c4e50865db467cb03fb6a0811c5aa7064","passed","3838","2243","650","3","79","195624960","1004724","","","","","","0","0","83820544","15552","322","24","0","","","46","0","24","1","8","0","16","0","8","0","15552","933","24","0","","","24","0","","","","","","","","","1","1","1","1","","","384","2","384","0","384","0","20736","2789","","","","","48","0","12","0","96","0","24","0","24","0","24","0","10368","641","5184","181","2592","76","2592","35","1","0","","","","","48","0","96","0","","","648","33","1","1","2","0","confirmed","false","true","passed","","584.293168000062","1699.578444999992","1355.1687819999643","37130.87696999998","75249.59825699998","983.9273530000355","3852.3314119999995","5072.907562999986","75104256"
+"tangnano1k","rv32e","","","","","","","","","","","","","","3b3f3232702aa9cf2f914e0fc727e8dd534f829109bd1cc000a6a76f8195db04","f1411129fa55504bf2ce032a149ef672d797d77c513e412cc9460ff520bc5447","da64a386b5f8d0611788572fad3622097577793235b22b42b586d64ceaa7526e","hazard3","rejected","782157d4a3885097bbfed669c122e2836bf4d8ca04bbb48c7ba37aed565dc515","passed","2381","1681","298","3","114","","","","","","[object WebAssembly.Exception]","WebAssembly.Exception","125","1","38600704","864","316","","","1","1","4","0","18","0","4","0","8","0","4","0","864","639","12","0","4","0","12","0","","","","","","","1","0","1","1","1","1","","","48","2","38","0","38","0","1152","2604","","","","","","","","","","","","","","","","","576","452","288","71","144","33","144","11","","","1","0","","","","","","","","","72","24","1","1","1","0","capacity-exceeded","true","false","capacity-exceeded","","","","","184.15906299999915","159.94607300008647","23216.356261000037","21706.617467999924","28727.493183000013","93126656"
+"tangnano4k","rv32e","","","","","","","","","1771710","","f0cd6a379a4bdfebe4ba79182edf70f8d5ba1ca7c8a0a96a1e82f065f1c61a11","ffa678bc70a1f56e3cbcb17a974396bac9bf5289fa9a9971ddbb728e032c3b45","ffa678bc70a1f56e3cbcb17a974396bac9bf5289fa9a9971ddbb728e032c3b45","7cd5f7fcdd5751285e23af054cf17b27e580aa01930767b9d1f953cc917bb6d8","4f7e82962b31a96267dbc0309ff31f0c58001daa2007163287c37b56242afd46","7214f2b70f358e9bc3a962a9fad73a23e55f1c97c5c6db4c29ab48e2a6f2de9e","hazard3","rejected","782157d4a3885097bbfed669c122e2836bf4d8ca04bbb48c7ba37aed565dc515","passed","3073","2109","392","3","258","195624960","1011308","","","","","","0","0","74645504","3456","342","8","0","","","10","2","17","1","6","0","12","0","4","0","3456","758","18","0","","","12","0","1","0","1","0","","","","","1","1","1","1","46","0","124","2","124","0","124","0","4608","2707","16","0","8","0","16","0","4","0","32","0","8","0","8","0","8","0","2304","536","1152","59","576","24","576","7","","","1","0","46","0","16","0","32","0","2","0","","","1","1","","","confirmed","false","true","passed","","","741.387024999829","555.6105919999536","27606.41975999996","47763.23068400007","24818.84649799997","29727.28182500007","29771.58201900008","93126656"
+"tangnano9k","rv32e","","","","","","","","","2069320","","9713e4cc6138a2cb9e0ed774b0a3b524e4a2f40c1a20a509d2db99b2f0f5f156","f0e9a5b03ee78357d969097670570da016e61c9172a4da09bee18f0cf0e9e007","f0e9a5b03ee78357d969097670570da016e61c9172a4da09bee18f0cf0e9e007","d6664153f4249852bf015be108384acdc625ebe813fa9f57e543bf21317099a5","f1411129fa55504bf2ce032a149ef672d797d77c513e412cc9460ff520bc5447","da64a386b5f8d0611788572fad3622097577793235b22b42b586d64ceaa7526e","hazard3","rejected","782157d4a3885097bbfed669c122e2836bf4d8ca04bbb48c7ba37aed565dc515","passed","2381","1681","298","3","114","195624960","1011308","","","","","","0","0","66715648","6480","316","10","0","","","26","0","22","0","8","0","16","0","8","0","6480","639","24","0","","","24","0","","","","","1","0","","","1","1","1","1","80","0","276","2","276","0","276","0","8640","2604","22","0","20","0","20","0","5","0","40","0","10","0","10","0","10","0","4320","452","2160","71","1080","33","1080","11","1","0","","","80","0","20","0","40","0","","","270","24","1","1","2","0","confirmed","false","true","passed","","","799.6959670002107","521.5046579998452","19522.725346000167","33960.62526499992","19256.75461599999","20795.123975999886","24886.413965000072","93126656"
+"tangnano20k","rv32e","","","","","","","","","4618782","","b22ba0ffe4b9d6737a3b8b518e6d4bdf40bee34c0e88c44532e5faabe068310c","74600c4e3c7aaf8be376cd213c10809e090f2fa5620f973bba3f50d9afacf23c","74600c4e3c7aaf8be376cd213c10809e090f2fa5620f973bba3f50d9afacf23c","b3e95ae5950393caa07eaa947488d0746940a89042fe03f4eb6f0890262f16fa","f1411129fa55504bf2ce032a149ef672d797d77c513e412cc9460ff520bc5447","da64a386b5f8d0611788572fad3622097577793235b22b42b586d64ceaa7526e","hazard3","rejected","782157d4a3885097bbfed669c122e2836bf4d8ca04bbb48c7ba37aed565dc515","passed","2381","1681","298","3","114","195624960","1011308","","","","","","0","0","69599232","15552","316","24","0","","","46","0","24","1","8","0","16","0","8","0","15552","639","24","0","","","24","0","","","","","","","","","1","1","1","1","","","384","2","384","0","384","0","20736","2604","","","","","48","0","12","0","96","0","24","0","24","0","24","0","10368","452","5184","71","2592","33","2592","11","1","0","","","","","48","0","96","0","","","648","24","1","1","2","0","confirmed","false","true","passed","","","1300.2589969998226","1064.1584350001067","20665.188094999874","39003.58513400005","19390.98690899997","19824.012520000106","25406.08203499997","93126656"
+"tangnano1k","min","","","","","","","","","","","","","","c52e178d17e2fbf4c88017c7b061e65ee61c413c01f7b853b741102de60b08ad","c1d7a0abffd882442da01b7fd58eb012cd956b9bf151d569b8cb3ffb671bb446","fe9b23b34cdb35cb95c5582bccdbf10c9d2439b7ebce1c96c72a4840e11d934b","vexriscv","rejected","d752df87c6ee3c780801a9b29d333a283115c73d317d65b67fac5d61ad540be1","passed","2627","1513","778","3","35","","","","","","[object WebAssembly.Exception]","WebAssembly.Exception","125","1","33292288","864","228","","","1","1","4","2","18","0","4","0","8","0","4","0","864","866","12","0","4","0","12","0","","","","","","","1","0","1","1","1","1","","","48","2","38","0","38","0","1152","1750","","","","","","","","","","","","","","","","","576","318","288","23","144","8","144","2","","","1","0","","","","","","","","","72","8","1","1","1","0","capacity-exceeded","true","false","capacity-exceeded","","","","","1212.6178500000387","1868.6302920000162","759.3286630001385","2480.8933109999634","2725.245021000039","65732608"
+"tangnano4k","min","","","","","","","","","1771710","","4a48e875447cc87749a0d263e9543f06a9555796565a7df746d40890205160a6","9bb2ab0dd5f4b7f56c267618147e76de3f755b3ec1f17e3f082ad272e46289e8","9bb2ab0dd5f4b7f56c267618147e76de3f755b3ec1f17e3f082ad272e46289e8","e68e9d9831633125a20b2b449e178fab5c1da28d79c573cf133b0b50de945a90","3991dc536f3ce9ad29edbe6f1d4ea368abb83c04b8a95c0707570d99be4b93f0","94d845d531207892aed27da4b3d9ec6db9608036dc6ee5ec08fd27c617bca013","vexriscv","rejected","d752df87c6ee3c780801a9b29d333a283115c73d317d65b67fac5d61ad540be1","passed","2713","1559","780","3","59","195624960","1042188","","","","","","0","0","53673984","3456","228","8","0","","","10","3","17","1","6","0","12","0","4","0","3456","851","18","0","","","12","0","1","0","1","0","","","","","1","1","1","1","46","0","124","2","124","0","124","0","4608","1735","16","0","8","0","16","0","4","0","32","0","8","0","8","0","8","0","2304","340","1152","33","576","10","576","3","","","1","0","46","0","16","0","32","0","2","0","","","1","1","","","confirmed","false","true","passed","","","782.4360549999401","546.7739969999529","11350.050224000122","19078.80525700003","765.2535129999742","2382.55083000008","2663.684802000178","66977792"
+"tangnano9k","min","","","","","","","","","3556680","","5a243235cc76a90b4330a28abc60f404626c127583be01a2e3bf0598475fba0f","6a81d2d43d34e0bc9047459072f54e8331f6c01436659aa3fd768cbde2b23fa8","6a81d2d43d34e0bc9047459072f54e8331f6c01436659aa3fd768cbde2b23fa8","8d26a6f1292b56fabe34fe890677738c82b6ca761a76a6d0bff8f60d670d40e0","c1d7a0abffd882442da01b7fd58eb012cd956b9bf151d569b8cb3ffb671bb446","fe9b23b34cdb35cb95c5582bccdbf10c9d2439b7ebce1c96c72a4840e11d934b","vexriscv","rejected","d752df87c6ee3c780801a9b29d333a283115c73d317d65b67fac5d61ad540be1","passed","2627","1513","778","3","35","195624960","1042188","","","","","","0","0","57868288","6480","228","10","0","","","26","2","22","0","8","0","16","0","8","0","6480","866","24","0","","","24","0","","","","","1","0","","","1","1","1","1","80","0","276","2","276","0","276","0","8640","1750","22","0","20","0","20","0","5","0","40","0","10","0","10","0","10","0","4320","318","2160","23","1080","8","1080","2","1","0","","","80","0","20","0","40","0","","","270","8","1","1","2","0","confirmed","false","true","passed","","","916.6546249999665","627.6861769999377","16184.967909000115","27165.740401000017","787.6970079999883","3106.4283950000536","3282.274965999881","65732608"
+"tangnano20k","min","","","","","","","","","7261470","","e08155c7fe61c8078af2043df3f108c88fd9b9858901fd5a56c08516f8d4caea","92775a7c9ccaf1ffaf81cd89965e9d0c68a905e5a514add040a06ec627d8cd59","92775a7c9ccaf1ffaf81cd89965e9d0c68a905e5a514add040a06ec627d8cd59","cb5f360b5c05b538ba31d7c0d9c5c2cb3cc6958f1cdde802d3074ec5c5267826","c1d7a0abffd882442da01b7fd58eb012cd956b9bf151d569b8cb3ffb671bb446","fe9b23b34cdb35cb95c5582bccdbf10c9d2439b7ebce1c96c72a4840e11d934b","vexriscv","rejected","d752df87c6ee3c780801a9b29d333a283115c73d317d65b67fac5d61ad540be1","passed","2627","1513","778","3","35","195624960","1042188","","","","","","0","0","65404928","15552","228","24","0","","","46","2","24","1","8","0","16","0","8","0","15552","866","24","0","","","24","0","","","","","","","","","1","1","1","1","","","384","2","384","0","384","0","20736","1750","","","","","48","0","12","0","96","0","24","0","24","0","24","0","10368","318","5184","23","2592","8","2592","2","1","0","","","","","48","0","96","0","","","648","8","1","1","2","0","confirmed","false","true","passed","","","1498.73179599992","1113.6647439999506","18922.526310000103","38598.15764899994","1027.9561550000217","2434.551962000085","3782.0422390000895","65732608"
+"tangnano1k","rv32i","","","","","","","","","","","","","","c4e88d5515ee970051dda44713121d8e768c39b2c69769e1dbc6107d63bceafd","093a94eafaebcad16b5b8e86f057c6bcf4936d0f846da783dcca257d9046e2f1","30ae8deec9f1d324a9582951c81ef2465ca9aed3fa808e19bd0645b42b33a2cb","darkriscv","rejected","21940cd63bfe9150edeee2b058861aedccbc5d9a26ab5fc423f03260ee73540e","passed","4190","2596","655","3","8","","","","","","[object WebAssembly.Exception]","WebAssembly.Exception","125","1","43778048","864","478","","","1","1","4","0","18","0","4","0","8","0","4","0","864","908","12","0","4","0","12","0","","","","","","","1","0","1","1","1","1","","","48","2","38","0","38","0","1152","3453","","","","","","","","","","","","","","","","","576","721","288","215","144","87","144","37","","","1","0","","","","","","","","","72","40","1","1","1","0","capacity-exceeded","true","false","capacity-exceeded","","","","","233.32281599985436","205.32707599992864","386.9343499999959","4252.289875000017","5067.153813999845","103743488"
+"tangnano4k","rv32i","","","","","","","","","1771710","","d5e86699dd9cdca29f98b8077464082a7db7be82ae99cad965f39d82f379535a","034c9f3d5c5100496511aa79f412cb2ce178d686592de7e76660aa280d15e3c9","034c9f3d5c5100496511aa79f412cb2ce178d686592de7e76660aa280d15e3c9","e84602b4bbaa619f0d259474896db4191c75e6e8a94983a66b5fe106a0f0a36f","0c15ace88e19ed50d13268d6b772b400231d1a88fe231e5d852c0d581936b1cf","e87cf5900b8c5c53c5a5f2c97992655b8dadb53631bae6e91bc77abd89213f22","darkriscv","rejected","21940cd63bfe9150edeee2b058861aedccbc5d9a26ab5fc423f03260ee73540e","passed","4615","2998","680","3","256","195624960","1051792","","","","","","0","0","79691776","3456","478","8","0","","","10","2","17","1","6","0","12","0","4","0","3456","949","18","0","","","12","0","1","0","1","0","","","","","1","1","1","1","46","0","124","2","124","0","124","0","4608","3265","16","0","8","0","16","0","4","0","32","0","8","0","8","0","8","0","2304","697","1152","193","576","62","576","27","","","1","0","46","0","16","0","32","0","2","0","","","1","1","","","confirmed","false","true","passed","","","765.124870999949","566.1366570000537","40420.978649999946","73511.59646899998","363.7478770001326","4192.987238999922","7001.087791000027","105381888"
+"tangnano9k","rv32i","","","","","","","","","2069320","","2088f5c944777903830a43f5f1eb10aa2b11605e3ef5c4350e8a63591d0dff57","348312aa8f8b7afa2b1ce2e3c0a605f123d07795e69e5d0993af48e52bf3a1b7","348312aa8f8b7afa2b1ce2e3c0a605f123d07795e69e5d0993af48e52bf3a1b7","e6b01ffc0d5f8d1099575793c08db85c84432fea77dac3d26fbdbde9c598ab49","093a94eafaebcad16b5b8e86f057c6bcf4936d0f846da783dcca257d9046e2f1","30ae8deec9f1d324a9582951c81ef2465ca9aed3fa808e19bd0645b42b33a2cb","darkriscv","rejected","21940cd63bfe9150edeee2b058861aedccbc5d9a26ab5fc423f03260ee73540e","passed","4190","2596","655","3","8","195624960","1051792","","","","","","0","0","78249984","6480","478","10","0","","","26","0","22","0","8","0","16","0","8","0","6480","908","24","0","","","24","0","","","","","1","0","","","1","1","1","1","80","0","276","2","276","0","276","0","8640","3453","22","0","20","0","20","0","5","0","40","0","10","0","10","0","10","0","4320","721","2160","215","1080","87","1080","37","1","0","","","80","0","20","0","40","0","","","270","40","1","1","2","0","confirmed","false","true","passed","","","830.5480070000049","576.7876699999906","33296.088571000146","69572.5790779998","328.6903220000677","4077.2458329999354","5136.313070000149","103743488"
+"tangnano20k","rv32i","","","","","","","","","4618782","","e6d6d185bf8194f06c0174b20a532c1c058a364148bcabe728c7be0703cf4965","af4a10e9ecf2e59d53c334018b7ea0d38579c9c96b41ff536a002ae4b045c694","af4a10e9ecf2e59d53c334018b7ea0d38579c9c96b41ff536a002ae4b045c694","4eda3906f62140ff512a3f03411bbbf5aad47f1a40668bf013808336c291226f","093a94eafaebcad16b5b8e86f057c6bcf4936d0f846da783dcca257d9046e2f1","30ae8deec9f1d324a9582951c81ef2465ca9aed3fa808e19bd0645b42b33a2cb","darkriscv","rejected","21940cd63bfe9150edeee2b058861aedccbc5d9a26ab5fc423f03260ee73540e","passed","4190","2596","655","3","8","195624960","1051792","","","","","","0","0","84934656","15552","478","24","0","","","46","0","24","1","8","0","16","0","8","0","15552","908","24","0","","","24","0","","","","","","","","","1","1","1","1","","","384","2","384","0","384","0","20736","3453","","","","","48","0","12","0","96","0","24","0","24","0","24","0","10368","721","5184","215","2592","87","2592","37","1","0","","","","","48","0","96","0","","","648","40","1","1","2","0","confirmed","false","true","passed","","","1470.9919090000913","1094.6152979999315","27203.75109000015","53466.00074800011","330.3224259999115","4128.542187999934","5357.387019000016","103743488"
+"tangnano1k","quark","Unable to bind wire/reg/memory `instr[","64","work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to elaborate r-value: instr['sd11:'sd7]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to bind wire/reg/memory `instr['sd14:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to elaborate r-value: (8'd1)<<(instr['sd14:'sd12])
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd30:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd30:'sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd20]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd25], instr['sd11:'sd7]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd11:'sd8]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd19:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd30:'sd21]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd0)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd4)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd8)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd12)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd28)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to bind wire/reg/memory `instr['sd3]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to elaborate r-value: instr['sd3]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd25)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd13)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd5)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd24)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd5]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:150: error: Unable to bind wire/reg/memory `funct3IsShift' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:152:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:143: error: Unable to elaborate r-value: (((((((funct3Is['sd0])?(((instr['sd30])&(instr['sd5]))?(aluMinus['sd31:'sd0]):(aluPlus)):(32'b00000000000000000000000000000000))|((funct3Is['sd2])?({31'd0, LT}):(32'b00000000000000000000000000000000)))|((funct3Is['sd3])?({31'd0, LTU}):(32'b00000000000000000000000000000000)))|((funct3Is['sd4])?((aluIn1)^(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd6])?((aluIn1)|(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd7])?((aluIn1)&(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3IsShift)?(aluReg):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[WAIT_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[FETCH_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to elaborate r-value: ((state[WAIT_INSTR_bit])|(state[FETCH_INSTR_bit]))?(PC):(loadstore_addr)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:227: error: Unable to bind wire/reg/memory `cycles' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:377:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:232: error: Unable to bind wire/reg/memory `LOAD_data' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:256:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:226: error: Unable to elaborate r-value: ((((((isSYSTEM)?(cycles):(32'b00000000000000000000000000000000))|((isLUI)?(Uimm):(32'b00000000000000000000000000000000)))|((isALU)?(aluOut):(32'b00000000000000000000000000000000)))|((isAUIPC)?(PCplusImm):(32'b00000000000000000000000000000000)))|(((isJALR)|(isJAL))?(PCplus4):(32'b00000000000000000000000000000000)))|((isLoad)?(LOAD_data):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:254: error: Unable to bind wire/reg/memory `LOAD_byte['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:253: error: Unable to elaborate r-value: (!(instr['sd14]))&((mem_byteAccess)?(LOAD_byte['sd7]):(LOAD_halfword['sd15]))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:257: error: Unable to bind wire/reg/memory `LOAD_byte' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:258: error: Unable to bind wire/reg/memory `LOAD_halfword' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:261:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to bind wire/reg/memory `writeBack' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:314:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to elaborate condition expression.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:177: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+64 error(s) during elaboration.
+","","iverilog","64","work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to elaborate r-value: instr['sd11:'sd7]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to bind wire/reg/memory `instr['sd14:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to elaborate r-value: (8'd1)<<(instr['sd14:'sd12])
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd30:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd30:'sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd20]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd25], instr['sd11:'sd7]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd11:'sd8]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd19:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd30:'sd21]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd0)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd4)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd8)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd12)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd28)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to bind wire/reg/memory `instr['sd3]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to elaborate r-value: instr['sd3]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd25)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd13)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd5)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd24)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd5]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:150: error: Unable to bind wire/reg/memory `funct3IsShift' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:152:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:143: error: Unable to elaborate r-value: (((((((funct3Is['sd0])?(((instr['sd30])&(instr['sd5]))?(aluMinus['sd31:'sd0]):(aluPlus)):(32'b00000000000000000000000000000000))|((funct3Is['sd2])?({31'd0, LT}):(32'b00000000000000000000000000000000)))|((funct3Is['sd3])?({31'd0, LTU}):(32'b00000000000000000000000000000000)))|((funct3Is['sd4])?((aluIn1)^(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd6])?((aluIn1)|(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd7])?((aluIn1)&(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3IsShift)?(aluReg):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[WAIT_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[FETCH_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to elaborate r-value: ((state[WAIT_INSTR_bit])|(state[FETCH_INSTR_bit]))?(PC):(loadstore_addr)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:227: error: Unable to bind wire/reg/memory `cycles' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:377:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:232: error: Unable to bind wire/reg/memory `LOAD_data' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:256:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:226: error: Unable to elaborate r-value: ((((((isSYSTEM)?(cycles):(32'b00000000000000000000000000000000))|((isLUI)?(Uimm):(32'b00000000000000000000000000000000)))|((isALU)?(aluOut):(32'b00000000000000000000000000000000)))|((isAUIPC)?(PCplusImm):(32'b00000000000000000000000000000000)))|(((isJALR)|(isJAL))?(PCplus4):(32'b00000000000000000000000000000000)))|((isLoad)?(LOAD_data):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:254: error: Unable to bind wire/reg/memory `LOAD_byte['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:253: error: Unable to elaborate r-value: (!(instr['sd14]))&((mem_byteAccess)?(LOAD_byte['sd7]):(LOAD_halfword['sd15]))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:257: error: Unable to bind wire/reg/memory `LOAD_byte' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:258: error: Unable to bind wire/reg/memory `LOAD_halfword' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:261:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to bind wire/reg/memory `writeBack' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:314:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to elaborate condition expression.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:177: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+64 error(s) during elaboration.
+","","","","","","","363aa603f4b8bfb7034a5399cf2706825ba2dbe91101cb00083d037929caf6db","","","femtorv","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","frontend-unsupported","true","false","frontend-unsupported","110.26195099996403","","","","","","","","",""
+"tangnano4k","quark","Unable to bind wire/reg/memory `instr[","64","work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to elaborate r-value: instr['sd11:'sd7]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to bind wire/reg/memory `instr['sd14:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to elaborate r-value: (8'd1)<<(instr['sd14:'sd12])
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd30:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd30:'sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd20]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd25], instr['sd11:'sd7]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd11:'sd8]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd19:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd30:'sd21]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd0)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd4)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd8)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd12)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd28)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to bind wire/reg/memory `instr['sd3]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to elaborate r-value: instr['sd3]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd25)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd13)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd5)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd24)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd5]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:150: error: Unable to bind wire/reg/memory `funct3IsShift' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:152:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:143: error: Unable to elaborate r-value: (((((((funct3Is['sd0])?(((instr['sd30])&(instr['sd5]))?(aluMinus['sd31:'sd0]):(aluPlus)):(32'b00000000000000000000000000000000))|((funct3Is['sd2])?({31'd0, LT}):(32'b00000000000000000000000000000000)))|((funct3Is['sd3])?({31'd0, LTU}):(32'b00000000000000000000000000000000)))|((funct3Is['sd4])?((aluIn1)^(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd6])?((aluIn1)|(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd7])?((aluIn1)&(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3IsShift)?(aluReg):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[WAIT_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[FETCH_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to elaborate r-value: ((state[WAIT_INSTR_bit])|(state[FETCH_INSTR_bit]))?(PC):(loadstore_addr)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:227: error: Unable to bind wire/reg/memory `cycles' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:377:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:232: error: Unable to bind wire/reg/memory `LOAD_data' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:256:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:226: error: Unable to elaborate r-value: ((((((isSYSTEM)?(cycles):(32'b00000000000000000000000000000000))|((isLUI)?(Uimm):(32'b00000000000000000000000000000000)))|((isALU)?(aluOut):(32'b00000000000000000000000000000000)))|((isAUIPC)?(PCplusImm):(32'b00000000000000000000000000000000)))|(((isJALR)|(isJAL))?(PCplus4):(32'b00000000000000000000000000000000)))|((isLoad)?(LOAD_data):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:254: error: Unable to bind wire/reg/memory `LOAD_byte['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:253: error: Unable to elaborate r-value: (!(instr['sd14]))&((mem_byteAccess)?(LOAD_byte['sd7]):(LOAD_halfword['sd15]))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:257: error: Unable to bind wire/reg/memory `LOAD_byte' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:258: error: Unable to bind wire/reg/memory `LOAD_halfword' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:261:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to bind wire/reg/memory `writeBack' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:314:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to elaborate condition expression.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:177: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+64 error(s) during elaboration.
+","","iverilog","64","work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to elaborate r-value: instr['sd11:'sd7]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to bind wire/reg/memory `instr['sd14:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to elaborate r-value: (8'd1)<<(instr['sd14:'sd12])
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd30:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd30:'sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd20]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd25], instr['sd11:'sd7]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd11:'sd8]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd19:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd30:'sd21]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd0)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd4)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd8)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd12)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd28)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to bind wire/reg/memory `instr['sd3]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to elaborate r-value: instr['sd3]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd25)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd13)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd5)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd24)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd5]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:150: error: Unable to bind wire/reg/memory `funct3IsShift' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:152:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:143: error: Unable to elaborate r-value: (((((((funct3Is['sd0])?(((instr['sd30])&(instr['sd5]))?(aluMinus['sd31:'sd0]):(aluPlus)):(32'b00000000000000000000000000000000))|((funct3Is['sd2])?({31'd0, LT}):(32'b00000000000000000000000000000000)))|((funct3Is['sd3])?({31'd0, LTU}):(32'b00000000000000000000000000000000)))|((funct3Is['sd4])?((aluIn1)^(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd6])?((aluIn1)|(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd7])?((aluIn1)&(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3IsShift)?(aluReg):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[WAIT_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[FETCH_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to elaborate r-value: ((state[WAIT_INSTR_bit])|(state[FETCH_INSTR_bit]))?(PC):(loadstore_addr)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:227: error: Unable to bind wire/reg/memory `cycles' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:377:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:232: error: Unable to bind wire/reg/memory `LOAD_data' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:256:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:226: error: Unable to elaborate r-value: ((((((isSYSTEM)?(cycles):(32'b00000000000000000000000000000000))|((isLUI)?(Uimm):(32'b00000000000000000000000000000000)))|((isALU)?(aluOut):(32'b00000000000000000000000000000000)))|((isAUIPC)?(PCplusImm):(32'b00000000000000000000000000000000)))|(((isJALR)|(isJAL))?(PCplus4):(32'b00000000000000000000000000000000)))|((isLoad)?(LOAD_data):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:254: error: Unable to bind wire/reg/memory `LOAD_byte['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:253: error: Unable to elaborate r-value: (!(instr['sd14]))&((mem_byteAccess)?(LOAD_byte['sd7]):(LOAD_halfword['sd15]))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:257: error: Unable to bind wire/reg/memory `LOAD_byte' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:258: error: Unable to bind wire/reg/memory `LOAD_halfword' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:261:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to bind wire/reg/memory `writeBack' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:314:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to elaborate condition expression.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:177: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+64 error(s) during elaboration.
+","","","","","","","5087498b50052c616d5bfe0b26af2f37cc25b1d3d569db665c9141fe1467ef4f","","","femtorv","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","frontend-unsupported","true","false","frontend-unsupported","89.71871599997394","","","","","","","","",""
+"tangnano9k","quark","Unable to bind wire/reg/memory `instr[","64","work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to elaborate r-value: instr['sd11:'sd7]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to bind wire/reg/memory `instr['sd14:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to elaborate r-value: (8'd1)<<(instr['sd14:'sd12])
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd30:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd30:'sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd20]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd25], instr['sd11:'sd7]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd11:'sd8]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd19:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd30:'sd21]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd0)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd4)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd8)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd12)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd28)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to bind wire/reg/memory `instr['sd3]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to elaborate r-value: instr['sd3]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd25)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd13)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd5)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd24)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd5]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:150: error: Unable to bind wire/reg/memory `funct3IsShift' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:152:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:143: error: Unable to elaborate r-value: (((((((funct3Is['sd0])?(((instr['sd30])&(instr['sd5]))?(aluMinus['sd31:'sd0]):(aluPlus)):(32'b00000000000000000000000000000000))|((funct3Is['sd2])?({31'd0, LT}):(32'b00000000000000000000000000000000)))|((funct3Is['sd3])?({31'd0, LTU}):(32'b00000000000000000000000000000000)))|((funct3Is['sd4])?((aluIn1)^(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd6])?((aluIn1)|(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd7])?((aluIn1)&(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3IsShift)?(aluReg):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[WAIT_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[FETCH_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to elaborate r-value: ((state[WAIT_INSTR_bit])|(state[FETCH_INSTR_bit]))?(PC):(loadstore_addr)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:227: error: Unable to bind wire/reg/memory `cycles' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:377:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:232: error: Unable to bind wire/reg/memory `LOAD_data' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:256:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:226: error: Unable to elaborate r-value: ((((((isSYSTEM)?(cycles):(32'b00000000000000000000000000000000))|((isLUI)?(Uimm):(32'b00000000000000000000000000000000)))|((isALU)?(aluOut):(32'b00000000000000000000000000000000)))|((isAUIPC)?(PCplusImm):(32'b00000000000000000000000000000000)))|(((isJALR)|(isJAL))?(PCplus4):(32'b00000000000000000000000000000000)))|((isLoad)?(LOAD_data):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:254: error: Unable to bind wire/reg/memory `LOAD_byte['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:253: error: Unable to elaborate r-value: (!(instr['sd14]))&((mem_byteAccess)?(LOAD_byte['sd7]):(LOAD_halfword['sd15]))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:257: error: Unable to bind wire/reg/memory `LOAD_byte' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:258: error: Unable to bind wire/reg/memory `LOAD_halfword' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:261:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to bind wire/reg/memory `writeBack' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:314:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to elaborate condition expression.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:177: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+64 error(s) during elaboration.
+","","iverilog","64","work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to elaborate r-value: instr['sd11:'sd7]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to bind wire/reg/memory `instr['sd14:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to elaborate r-value: (8'd1)<<(instr['sd14:'sd12])
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd30:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd30:'sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd20]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd25], instr['sd11:'sd7]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd11:'sd8]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd19:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd30:'sd21]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd0)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd4)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd8)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd12)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd28)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to bind wire/reg/memory `instr['sd3]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to elaborate r-value: instr['sd3]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd25)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd13)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd5)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd24)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd5]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:150: error: Unable to bind wire/reg/memory `funct3IsShift' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:152:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:143: error: Unable to elaborate r-value: (((((((funct3Is['sd0])?(((instr['sd30])&(instr['sd5]))?(aluMinus['sd31:'sd0]):(aluPlus)):(32'b00000000000000000000000000000000))|((funct3Is['sd2])?({31'd0, LT}):(32'b00000000000000000000000000000000)))|((funct3Is['sd3])?({31'd0, LTU}):(32'b00000000000000000000000000000000)))|((funct3Is['sd4])?((aluIn1)^(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd6])?((aluIn1)|(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd7])?((aluIn1)&(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3IsShift)?(aluReg):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[WAIT_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[FETCH_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to elaborate r-value: ((state[WAIT_INSTR_bit])|(state[FETCH_INSTR_bit]))?(PC):(loadstore_addr)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:227: error: Unable to bind wire/reg/memory `cycles' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:377:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:232: error: Unable to bind wire/reg/memory `LOAD_data' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:256:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:226: error: Unable to elaborate r-value: ((((((isSYSTEM)?(cycles):(32'b00000000000000000000000000000000))|((isLUI)?(Uimm):(32'b00000000000000000000000000000000)))|((isALU)?(aluOut):(32'b00000000000000000000000000000000)))|((isAUIPC)?(PCplusImm):(32'b00000000000000000000000000000000)))|(((isJALR)|(isJAL))?(PCplus4):(32'b00000000000000000000000000000000)))|((isLoad)?(LOAD_data):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:254: error: Unable to bind wire/reg/memory `LOAD_byte['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:253: error: Unable to elaborate r-value: (!(instr['sd14]))&((mem_byteAccess)?(LOAD_byte['sd7]):(LOAD_halfword['sd15]))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:257: error: Unable to bind wire/reg/memory `LOAD_byte' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:258: error: Unable to bind wire/reg/memory `LOAD_halfword' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:261:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to bind wire/reg/memory `writeBack' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:314:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to elaborate condition expression.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:177: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+64 error(s) during elaboration.
+","","","","","","","2f72a71b15343ef887f71207e6343b87a3e476cc447399f5230d4a5347e512bf","","","femtorv","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","frontend-unsupported","true","false","frontend-unsupported","56.64621299994178","","","","","","","","",""
+"tangnano20k","quark","Unable to bind wire/reg/memory `instr[","64","work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to elaborate r-value: instr['sd11:'sd7]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to bind wire/reg/memory `instr['sd14:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to elaborate r-value: (8'd1)<<(instr['sd14:'sd12])
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd30:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd30:'sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd20]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd25], instr['sd11:'sd7]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd11:'sd8]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd19:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd30:'sd21]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd0)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd4)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd8)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd12)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd28)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to bind wire/reg/memory `instr['sd3]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to elaborate r-value: instr['sd3]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd25)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd13)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd5)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd24)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd5]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:150: error: Unable to bind wire/reg/memory `funct3IsShift' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:152:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:143: error: Unable to elaborate r-value: (((((((funct3Is['sd0])?(((instr['sd30])&(instr['sd5]))?(aluMinus['sd31:'sd0]):(aluPlus)):(32'b00000000000000000000000000000000))|((funct3Is['sd2])?({31'd0, LT}):(32'b00000000000000000000000000000000)))|((funct3Is['sd3])?({31'd0, LTU}):(32'b00000000000000000000000000000000)))|((funct3Is['sd4])?((aluIn1)^(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd6])?((aluIn1)|(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd7])?((aluIn1)&(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3IsShift)?(aluReg):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[WAIT_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[FETCH_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to elaborate r-value: ((state[WAIT_INSTR_bit])|(state[FETCH_INSTR_bit]))?(PC):(loadstore_addr)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:227: error: Unable to bind wire/reg/memory `cycles' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:377:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:232: error: Unable to bind wire/reg/memory `LOAD_data' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:256:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:226: error: Unable to elaborate r-value: ((((((isSYSTEM)?(cycles):(32'b00000000000000000000000000000000))|((isLUI)?(Uimm):(32'b00000000000000000000000000000000)))|((isALU)?(aluOut):(32'b00000000000000000000000000000000)))|((isAUIPC)?(PCplusImm):(32'b00000000000000000000000000000000)))|(((isJALR)|(isJAL))?(PCplus4):(32'b00000000000000000000000000000000)))|((isLoad)?(LOAD_data):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:254: error: Unable to bind wire/reg/memory `LOAD_byte['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:253: error: Unable to elaborate r-value: (!(instr['sd14]))&((mem_byteAccess)?(LOAD_byte['sd7]):(LOAD_halfword['sd15]))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:257: error: Unable to bind wire/reg/memory `LOAD_byte' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:258: error: Unable to bind wire/reg/memory `LOAD_halfword' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:261:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to bind wire/reg/memory `writeBack' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:314:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to elaborate condition expression.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:177: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+64 error(s) during elaboration.
+","","iverilog","64","work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:63: error: Unable to elaborate r-value: instr['sd11:'sd7]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to bind wire/reg/memory `instr['sd14:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:68: error: Unable to elaborate r-value: (8'd1)<<(instr['sd14:'sd12])
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:71: error: Unable to bind wire/reg/memory `instr['sd30:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to bind wire/reg/memory `instr['sd30:'sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:72: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd20]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to bind wire/reg/memory `instr['sd11:'sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:74: error: Unable to elaborate r-value: {{'sd21{instr['sd31]}}, instr['sd30:'sd25], instr['sd11:'sd7]}
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd30:'sd25]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:75: error: Unable to bind wire/reg/memory `instr['sd11:'sd8]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd31]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Concatenation/replication may not have zero width in this context.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd19:'sd12]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd20]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:76: error: Unable to bind wire/reg/memory `instr['sd30:'sd21]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:80: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd0)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:81: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd4)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:82: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd8)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:83: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd12)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:84: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd28)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to bind wire/reg/memory `instr['sd3]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:85: error: Unable to elaborate r-value: instr['sd3]
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:86: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd25)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:87: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd13)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:88: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd5)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to bind wire/reg/memory `instr['sd6:'sd2]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:89: error: Unable to elaborate r-value: (instr['sd6:'sd2])==(5'd24)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:144: error: Unable to bind wire/reg/memory `instr['sd5]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:150: error: Unable to bind wire/reg/memory `funct3IsShift' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:152:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:143: error: Unable to elaborate r-value: (((((((funct3Is['sd0])?(((instr['sd30])&(instr['sd5]))?(aluMinus['sd31:'sd0]):(aluPlus)):(32'b00000000000000000000000000000000))|((funct3Is['sd2])?({31'd0, LT}):(32'b00000000000000000000000000000000)))|((funct3Is['sd3])?({31'd0, LTU}):(32'b00000000000000000000000000000000)))|((funct3Is['sd4])?((aluIn1)^(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd6])?((aluIn1)|(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3Is['sd7])?((aluIn1)&(aluIn2)):(32'b00000000000000000000000000000000)))|((funct3IsShift)?(aluReg):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[WAIT_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to bind wire/reg/memory `state[FETCH_INSTR_bit]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:308:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:219: error: Unable to elaborate r-value: ((state[WAIT_INSTR_bit])|(state[FETCH_INSTR_bit]))?(PC):(loadstore_addr)
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:227: error: Unable to bind wire/reg/memory `cycles' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:377:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:232: error: Unable to bind wire/reg/memory `LOAD_data' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:256:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:226: error: Unable to elaborate r-value: ((((((isSYSTEM)?(cycles):(32'b00000000000000000000000000000000))|((isLUI)?(Uimm):(32'b00000000000000000000000000000000)))|((isALU)?(aluOut):(32'b00000000000000000000000000000000)))|((isAUIPC)?(PCplusImm):(32'b00000000000000000000000000000000)))|(((isJALR)|(isJAL))?(PCplus4):(32'b00000000000000000000000000000000)))|((isLoad)?(LOAD_data):(32'b00000000000000000000000000000000))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:254: error: Unable to bind wire/reg/memory `LOAD_byte['sd7]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:253: error: Unable to elaborate r-value: (!(instr['sd14]))&((mem_byteAccess)?(LOAD_byte['sd7]):(LOAD_halfword['sd15]))
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:257: error: Unable to bind wire/reg/memory `LOAD_byte' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:264:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:258: error: Unable to bind wire/reg/memory `LOAD_halfword' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:261:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to bind wire/reg/memory `writeBack' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:314:      : A symbol with that name was declared here. Check for declaration after use.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:104: error: Unable to elaborate condition expression.
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:177: error: Unable to bind wire/reg/memory `instr['sd30]' in `tb.dut.cpu'
+work/libraries/femtorv/sources/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v:198:      : A symbol with that name was declared here. Check for declaration after use.
+64 error(s) during elaboration.
+","","","","","","","cfe9bd29238c07aa777ec3b1ebafac61304b68b9dc4e04159a9b6c9226801d85","","","femtorv","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","frontend-unsupported","true","false","frontend-unsupported","38.371862000087276","","","","","","","","",""

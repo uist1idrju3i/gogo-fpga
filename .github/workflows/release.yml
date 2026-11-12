@@ -1,0 +1,301 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+env:
+  VERSION: ${{ github.ref_name }}
+
+permissions: {}
+
+jobs:
+  build:
+    name: Build release
+    runs-on: ubuntu-26.04
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    steps:
+      - name: Release tag を検証
+        run: |
+          if [[ ! "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            printf 'Invalid release tag: %s\n' "$VERSION" >&2
+            exit 1
+          fi
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: false
+
+      - name: 必要な submodule を取得
+        run: |
+          git submodule update --init --depth 1 -- \
+            vendor/emsdk vendor/libftdi vendor/libusb vendor/openFPGALoader \
+            vendor/yomiyasu vendor/zlib vendor/yosys vendor/nextpnr \
+            vendor/zstd vendor/xz-embedded vendor/ghdl \
+            vendor/sby vendor/yices2 vendor/z3 \
+            vendor/boolector vendor/bitwuzla vendor/click
+          git submodule update --init --depth 1 -- third_party/
+          git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv
+          git -C vendor/yosys submodule update --init --depth 1 -- \
+            abc libs/cxxopts libs/fmt libs/tomlplusplus libs/boost_regex libs/symfpu
+
+      - name: Autotools をインストール
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y autoconf automake bison flex libtool python3-venv
+          if ! command -v gnatmake >/dev/null 2>&1; then
+            sudo apt-get install -y gnat
+          fi
+          autoconf --version | head -n 1
+          automake --version | head -n 1
+          libtoolize --version | head -n 1
+          gnatmake --version | head -n 1
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: npm 依存を取得
+        run: npm ci
+
+      - name: emsdk のタグを取得
+        run: git -C vendor/emsdk fetch --depth=1 --tags origin
+
+      - name: WASM をビルド
+        run: scripts/build-wasm.sh
+
+      - name: Yosys WASI と native をビルド
+        run: |
+          scripts/build-synth-wasm.sh
+          scripts/build-synth-wasm.sh --native
+
+      - name: nextpnr WASI と native をビルド
+        run: |
+          scripts/build-pnr-wasm.sh
+          scripts/build-pnr-wasm.sh --native
+
+      - name: GHDL WASM と native をビルド
+        run: scripts/build-ghdl-wasm.sh
+
+      - name: WASI decoder をビルド
+        run: scripts/build-decoders.sh
+
+      - name: Native Apicula と Pyodide 資材を準備
+        run: |
+          python3 -m venv build/deps/apycula-venv
+          build/deps/apycula-venv/bin/pip install --require-hashes -r requirements-nextpnr.txt
+          scripts/build-pack-assets.sh
+
+      - name: WASI 合成・配置配線・pack テスト
+        run: node --test tests/synth/*.test.mjs
+
+      - name: Web アプリを組み立て
+        run: scripts/build-web.sh
+
+      - name: テスト用ビットストリームを生成
+        run: tests/fixtures/build-fs.sh
+
+      - name: Web 単体テスト
+        run: node --test tests/web/*.test.mjs
+
+      - name: Release をパッケージ
+        run: scripts/package-release.sh "$VERSION"
+
+      - name: Release ファイルを保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-${{ github.run_id }}
+          path: release/
+          retention-days: 1
+
+      - name: テスト成果物を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-build-${{ github.run_id }}
+          path: |
+            build/jspi-pthread/
+            build/fixtures/*.fs
+            build/wasi/yosys/
+            build/wasi/nextpnr/
+            build/wasi/decoders/
+            build/ghdl-wasm/
+            build/ghdl-native/
+            build/native/
+            build/pack/
+          retention-days: 1
+
+  test:
+    name: Release tests
+    needs: build
+    runs-on: ubuntu-26.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: false
+
+      - name: zstd の submodule を取得
+        run: git submodule update --init --depth 1 -- vendor/zstd
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: npm 依存を取得
+        run: npm ci
+
+      - name: Chromium をインストール
+        run: npx playwright install --with-deps chromium
+
+      - name: ビルド成果物を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-build-${{ github.run_id }}
+          path: build
+
+      - name: Native Apicula venv を準備
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-venv
+          python3 -m venv build/deps/apycula-venv
+          build/deps/apycula-venv/bin/pip install --require-hashes -r requirements-nextpnr.txt
+
+      - name: 仮想 USB シミュレーション
+        env:
+          WASM_BUILD_ROOT: build
+        run: |
+          node --test --test-concurrency=1 --test-reporter=tap tests/sim/*.test.mjs | tee "$RUNNER_TEMP/sim.tap"
+          grep -Fx '# tests 43' "$RUNNER_TEMP/sim.tap"
+          grep -Fx '# pass 43' "$RUNNER_TEMP/sim.tap"
+          grep -Fx '# fail 0' "$RUNNER_TEMP/sim.tap"
+
+      - name: Playwright E2E
+        env:
+          BUILD_ROOT: build
+          BUILD_INFO_CHECK: artifacts
+        run: |
+          npx playwright test | tee "$RUNNER_TEMP/playwright.log"
+          grep -Eq '48 passed' "$RUNNER_TEMP/playwright.log"
+
+  source-rebuild:
+    name: Rebuild from source archive
+    needs: build
+    runs-on: ubuntu-26.04
+    timeout-minutes: 120
+    steps:
+      - name: Autotools をインストール
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y autoconf automake bison flex libtool python3-venv
+          autoconf --version | head -n 1
+          automake --version | head -n 1
+          libtoolize --version | head -n 1
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: Release ファイルを取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-${{ github.run_id }}
+          path: release
+
+      - name: SHA256SUMS を検証してソースを展開
+        run: |
+          cd release
+          sha256sum -c SHA256SUMS
+          mkdir -p "$RUNNER_TEMP/toolchain-source"
+          tar -xzf "toolchain-source-${VERSION}.tar.gz" \
+            -C "$RUNNER_TEMP/toolchain-source" --strip-components=1
+
+      - name: npm 依存を取得
+        working-directory: ${{ runner.temp }}/toolchain-source
+        run: npm ci
+
+      - name: ソース tarball からビルド
+        working-directory: ${{ runner.temp }}/toolchain-source
+        run: |
+          scripts/build-wasm.sh
+          scripts/build-synth-wasm.sh
+          scripts/build-synth-wasm.sh --native
+          scripts/build-pnr-wasm.sh
+          scripts/build-pnr-wasm.sh --native
+          scripts/build-decoders.sh
+          python3 -m venv build/deps/apycula-venv
+          build/deps/apycula-venv/bin/pip install --require-hashes -r requirements-nextpnr.txt
+          scripts/build-pack-assets.sh
+          node --test tests/synth/*.test.mjs
+          scripts/build-web.sh
+
+      - name: Release zip と再ビルドの hash を比較
+        run: |
+          python3 - "$VERSION" "$RUNNER_TEMP/toolchain-source/dist/build-info.json" \
+            "$RUNNER_TEMP/toolchain-source/build/jspi-pthread/build-info.json" <<'PY'
+          import json
+          import sys
+          import zipfile
+
+          version, rebuilt_path, rebuilt_artifact_path = sys.argv[1:]
+          with zipfile.ZipFile(f"release/toolchain-web-{version}.zip") as archive:
+              packaged = json.loads(
+                  archive.read(f"toolchain-web-{version}/build-info.json")
+              )
+          rebuilt = json.load(open(rebuilt_path, encoding="utf-8"))
+          rebuilt_artifact = json.load(open(rebuilt_artifact_path, encoding="utf-8"))
+          for name in ("openFPGALoader.wasm", "openFPGALoader.mjs"):
+              expected = packaged["artifacts"][name]
+              actual = rebuilt["artifacts"][name]
+              if actual != expected or rebuilt_artifact["artifacts"][name] != expected:
+                  raise SystemExit(
+                      f"{name} hash mismatch: package={expected}, dist={actual}, "
+                      f"build={rebuilt_artifact['artifacts'][name]}"
+                  )
+              print(f"{name} SHA-256 matches: {actual}")
+          PY
+
+  publish:
+    name: Publish GitHub release
+    needs: [build, test, source-rebuild]
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Release ファイルを取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-${{ github.run_id }}
+          path: release
+
+      - name: GitHub Release を作成
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          args=(
+            --verify-tag
+            --title "$VERSION"
+            --notes-file release/notes.md
+            --repo "$GITHUB_REPOSITORY"
+            "release/toolchain-web-${VERSION}.zip"
+            "release/toolchain-source-${VERSION}.tar.gz"
+            release/SHA256SUMS
+          )
+          if [[ "$VERSION" == *-* ]]; then
+            args+=(--prerelease)
+          fi
+          gh release create "$VERSION" "${args[@]}"

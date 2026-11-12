@@ -1,0 +1,5 @@
+board,baseline,simulation_timescale,fs_bytes,fs_sha256,before_after_match,pyodide_repeats,pyodide_matches_native
+tangnano1k,no-timescale,1ns/1ps,351954,6f83a9e8e96aa5f39b0da9a4176859098b2d5fba4bfb2cf0e5bd3c9aea5d29d3,true,5,5
+tangnano4k,no-timescale,1ns/1ps,1167294,e000267362b5044fd8e12bdf911a695ab9c625cfdaa42d7b90988585a5eb2c74,true,5,5
+tangnano9k,no-timescale,1ns/1ps,2069320,56fe6619edff9bf038f5fa6bbcbecc34016a212b474a5142651bdaf05dffe888,true,5,5
+tangnano20k,no-timescale,1ns/1ps,4618782,2df071b6782bde9ba76d0c8567b50f0cdb68a2d2263234d8ac798a7be45699f1,true,5,5

@@ -1,0 +1,21 @@
+category,run,fixture,source,reference,result,bytes,sha256,log_path,notes
+artifact,initial,ghdl-synth.wasm,GHDL 6.0.0,initial build,byte-identical across fresh roots,1999655,8c919800d9c23c381920f8782b6ca33cb214a8a34018b6ed8d3ee767c95acd7d,build/ghdl-wasm/build.log,"Same hash in main, aa1, aa2, and final build roots"
+artifact,final,ghdl-synth.wasm,GHDL 6.0.0,adapter checks enabled,final artifact,1999778,a0eff3c41ccf92b104143174ce6ed735118fb787b0c0200e7b416f4d7feaa273,build/ghdl-review-aa1/ghdl-wasm/build.log,"Direct full build; same hash in fresh root aa2"
+artifact,initial,main libraries.tar.gz,GHDL 6.0.0,initial tar recipe,A/A mismatch,456393,163154f1830b033d1af2950dd2e41337b83c6f94f7052e0b8cc491846fd2215f,build/ghdl-wasm/build.log,"Before catalog timestamp normalization"
+artifact,initial,aa1 libraries.tar.gz,GHDL 6.0.0,initial tar recipe,A/A mismatch,456454,e20bba6f9398a73088de2efea35141ff210ba10a1bdcef1347ab48cfa4fc4a8e,build/ghdl-wasm-aa1/ghdl-wasm/build.log,"Before catalog timestamp normalization"
+artifact,initial,aa2 libraries.tar.gz,GHDL 6.0.0,initial tar recipe,A/A mismatch,456375,4cde6d255e621f024aac2fb90498b887642b76f3741182c15a65be26b67e4952,build/ghdl-wasm-aa2/ghdl-wasm/build.log,"Before catalog timestamp normalization"
+artifact,final,ghdl-review-aa1 libraries.tar.gz,GHDL 6.0.0,full build script,byte-identical across fresh roots,455929,32c3586a64b5adc62d55a45aab127b18aeb2f45a8205da089d5618c6c9e10513,build/ghdl-review-aa1/ghdl-wasm/build.log,"Full build; no repacking"
+artifact,final,ghdl-review-aa2 libraries.tar.gz,GHDL 6.0.0,full build script,byte-identical across fresh roots,455929,32c3586a64b5adc62d55a45aab127b18aeb2f45a8205da089d5618c6c9e10513,build/ghdl-review-aa2/ghdl-wasm/build.log,"Full build; no repacking"
+runtime checks,final,synth_api.adb adapter,enabled,source and build log,full build and 8 fixtures pass,,,build/ghdl-review-aa1/ghdl-wasm/build.log,"Adapter-wide Suppress removed; GHDL compile uses -gnata and not -gnatp"
+fixture,smoke,combinational logic,WASM GHDL,native GHDL,byte-identical,,,build/ghdl-wasm/fixture-tests.log,
+fixture,smoke,numeric_std counter,WASM GHDL,native GHDL,byte-identical,,,build/ghdl-wasm/fixture-tests.log,
+fixture,smoke,generic entity,WASM GHDL,native GHDL,byte-identical,,,build/ghdl-wasm/fixture-tests.log,
+fixture,smoke,FSM,WASM GHDL,native GHDL,byte-identical,,,build/ghdl-wasm/fixture-tests.log,
+fixture,smoke,package and dependent entity,WASM GHDL,native GHDL,byte-identical,,,build/ghdl-wasm/fixture-tests.log,
+fixture,smoke,Tang Nano 20K LED blink,WASM GHDL,native GHDL,byte-identical,,,build/ghdl-wasm/fixture-tests.log,
+negative fixture,smoke,syntax error,WASM GHDL,file and line diagnostic,passed,,,build/ghdl-wasm/fixture-tests.log,"Nonzero synthesis status; source filename and line asserted"
+negative fixture,smoke,semantic error,WASM GHDL,file and line diagnostic,passed,,,build/ghdl-wasm/fixture-tests.log,"Nonzero synthesis status; source filename and line asserted"
+bitstream,smoke,wasm-ghdl/native,WASM GHDL plus native Yosys and nextpnr plus native gowin_pack,reference routes,byte-identical,4618782,16f96233dbbc90af33256cae3bdc9a12e245e9afbc480e756af47941abf72e3c,build/ghdl-wasm/smoke/pipeline.log,
+bitstream,smoke,wasm-ghdl/wasi,WASM GHDL plus WASI Yosys and nextpnr plus Pyodide pack,reference routes,byte-identical,4618782,16f96233dbbc90af33256cae3bdc9a12e245e9afbc480e756af47941abf72e3c,build/ghdl-wasm/smoke/pipeline.log,
+bitstream,smoke,native-ghdl/native,native GHDL plus native Yosys and nextpnr plus native gowin_pack,reference routes,byte-identical,4618782,16f96233dbbc90af33256cae3bdc9a12e245e9afbc480e756af47941abf72e3c,build/ghdl-wasm/smoke/pipeline.log,
+bitstream,smoke,native-ghdl/wasi,native GHDL plus WASI Yosys and nextpnr plus Pyodide pack,reference routes,byte-identical,4618782,16f96233dbbc90af33256cae3bdc9a12e245e9afbc480e756af47941abf72e3c,build/ghdl-wasm/smoke/pipeline.log,

@@ -1,0 +1,196 @@
+run_id,variant,repeat,metric,value,unit,valid,note
+S9B-B0-1,B0,1,combinational logic,70.380677,ms,true,fixture_order=1; node_record_only
+S9B-B0-1,B0,1,numeric_std counter,58.271668,ms,true,fixture_order=2; node_record_only
+S9B-B0-1,B0,1,generic entity,26.816253,ms,true,fixture_order=3; node_record_only
+S9B-B0-1,B0,1,FSM,46.048023,ms,true,fixture_order=4; node_record_only
+S9B-B0-1,B0,1,package dependency and entity instantiation,35.054295,ms,true,fixture_order=5; node_record_only
+S9B-B0-1,B0,1,Tang Nano 20K LED blink,45.861966,ms,true,fixture_order=6; node_record_only
+S9B-B0-1,B0,1,six_fixture_total,282.432882,ms,true,sum of six Node synthesis samples; record-only
+S9B-B0-2,B0,2,combinational logic,64.844242,ms,true,fixture_order=1; node_record_only
+S9B-B0-2,B0,2,numeric_std counter,56.895508,ms,true,fixture_order=2; node_record_only
+S9B-B0-2,B0,2,generic entity,28.402874,ms,true,fixture_order=3; node_record_only
+S9B-B0-2,B0,2,FSM,50.183067,ms,true,fixture_order=4; node_record_only
+S9B-B0-2,B0,2,package dependency and entity instantiation,39.692347,ms,true,fixture_order=5; node_record_only
+S9B-B0-2,B0,2,Tang Nano 20K LED blink,58.646174,ms,true,fixture_order=6; node_record_only
+S9B-B0-2,B0,2,six_fixture_total,298.664212,ms,true,sum of six Node synthesis samples; record-only
+S9B-B0-3,B0,3,combinational logic,66.249926,ms,true,fixture_order=1; node_record_only
+S9B-B0-3,B0,3,numeric_std counter,71.706919,ms,true,fixture_order=2; node_record_only
+S9B-B0-3,B0,3,generic entity,31.223930,ms,true,fixture_order=3; node_record_only
+S9B-B0-3,B0,3,FSM,51.599986,ms,true,fixture_order=4; node_record_only
+S9B-B0-3,B0,3,package dependency and entity instantiation,35.194859,ms,true,fixture_order=5; node_record_only
+S9B-B0-3,B0,3,Tang Nano 20K LED blink,50.511433,ms,true,fixture_order=6; node_record_only
+S9B-B0-3,B0,3,six_fixture_total,306.487053,ms,true,sum of six Node synthesis samples; record-only
+S9B-B0-4,B0,4,combinational logic,70.101415,ms,true,fixture_order=1; node_record_only
+S9B-B0-4,B0,4,numeric_std counter,62.562431,ms,true,fixture_order=2; node_record_only
+S9B-B0-4,B0,4,generic entity,33.299865,ms,true,fixture_order=3; node_record_only
+S9B-B0-4,B0,4,FSM,51.014279,ms,true,fixture_order=4; node_record_only
+S9B-B0-4,B0,4,package dependency and entity instantiation,26.436859,ms,true,fixture_order=5; node_record_only
+S9B-B0-4,B0,4,Tang Nano 20K LED blink,52.007863,ms,true,fixture_order=6; node_record_only
+S9B-B0-4,B0,4,six_fixture_total,295.422712,ms,true,sum of six Node synthesis samples; record-only
+S9B-B0-5,B0,5,combinational logic,68.586797,ms,true,fixture_order=1; node_record_only
+S9B-B0-5,B0,5,numeric_std counter,62.743606,ms,true,fixture_order=2; node_record_only
+S9B-B0-5,B0,5,generic entity,37.108963,ms,true,fixture_order=3; node_record_only
+S9B-B0-5,B0,5,FSM,54.555907,ms,true,fixture_order=4; node_record_only
+S9B-B0-5,B0,5,package dependency and entity instantiation,35.652193,ms,true,fixture_order=5; node_record_only
+S9B-B0-5,B0,5,Tang Nano 20K LED blink,54.265452,ms,true,fixture_order=6; node_record_only
+S9B-B0-5,B0,5,six_fixture_total,312.912918,ms,true,sum of six Node synthesis samples; record-only
+S9B-B0-size,B0,1,wasm_raw,2066717,bytes,true,artifact size
+S9B-B0-size,B0,1,wasm_gzip_9,638186,bytes,true,artifact size
+S9B-B0-size,B0,1,wasm_zstd_19,533797,bytes,true,artifact size
+S9B-B0-size,B0,1,libraries_tar_gz,455929,bytes,true,artifact size
+S9B-O1-1,O1,1,combinational logic,71.281912,ms,true,fixture_order=1; node_record_only
+S9B-O1-1,O1,1,numeric_std counter,61.973022,ms,true,fixture_order=2; node_record_only
+S9B-O1-1,O1,1,generic entity,33.905746,ms,true,fixture_order=3; node_record_only
+S9B-O1-1,O1,1,FSM,54.740028,ms,true,fixture_order=4; node_record_only
+S9B-O1-1,O1,1,package dependency and entity instantiation,39.838867,ms,true,fixture_order=5; node_record_only
+S9B-O1-1,O1,1,Tang Nano 20K LED blink,49.527635,ms,true,fixture_order=6; node_record_only
+S9B-O1-1,O1,1,six_fixture_total,311.267210,ms,true,sum of six Node synthesis samples; record-only
+S9B-O1-2,O1,2,combinational logic,70.158343,ms,true,fixture_order=1; node_record_only
+S9B-O1-2,O1,2,numeric_std counter,61.591753,ms,true,fixture_order=2; node_record_only
+S9B-O1-2,O1,2,generic entity,36.551303,ms,true,fixture_order=3; node_record_only
+S9B-O1-2,O1,2,FSM,57.105595,ms,true,fixture_order=4; node_record_only
+S9B-O1-2,O1,2,package dependency and entity instantiation,43.675019,ms,true,fixture_order=5; node_record_only
+S9B-O1-2,O1,2,Tang Nano 20K LED blink,58.124955,ms,true,fixture_order=6; node_record_only
+S9B-O1-2,O1,2,six_fixture_total,327.206968,ms,true,sum of six Node synthesis samples; record-only
+S9B-O1-3,O1,3,combinational logic,69.514115,ms,true,fixture_order=1; node_record_only
+S9B-O1-3,O1,3,numeric_std counter,62.069171,ms,true,fixture_order=2; node_record_only
+S9B-O1-3,O1,3,generic entity,35.277462,ms,true,fixture_order=3; node_record_only
+S9B-O1-3,O1,3,FSM,52.864604,ms,true,fixture_order=4; node_record_only
+S9B-O1-3,O1,3,package dependency and entity instantiation,30.204458,ms,true,fixture_order=5; node_record_only
+S9B-O1-3,O1,3,Tang Nano 20K LED blink,47.586453,ms,true,fixture_order=6; node_record_only
+S9B-O1-3,O1,3,six_fixture_total,297.516263,ms,true,sum of six Node synthesis samples; record-only
+S9B-O1-4,O1,4,combinational logic,67.654317,ms,true,fixture_order=1; node_record_only
+S9B-O1-4,O1,4,numeric_std counter,60.903641,ms,true,fixture_order=2; node_record_only
+S9B-O1-4,O1,4,generic entity,28.380286,ms,true,fixture_order=3; node_record_only
+S9B-O1-4,O1,4,FSM,52.557784,ms,true,fixture_order=4; node_record_only
+S9B-O1-4,O1,4,package dependency and entity instantiation,33.480522,ms,true,fixture_order=5; node_record_only
+S9B-O1-4,O1,4,Tang Nano 20K LED blink,58.442331,ms,true,fixture_order=6; node_record_only
+S9B-O1-4,O1,4,six_fixture_total,301.418881,ms,true,sum of six Node synthesis samples; record-only
+S9B-O1-5,O1,5,combinational logic,71.480686,ms,true,fixture_order=1; node_record_only
+S9B-O1-5,O1,5,numeric_std counter,62.205798,ms,true,fixture_order=2; node_record_only
+S9B-O1-5,O1,5,generic entity,40.900144,ms,true,fixture_order=3; node_record_only
+S9B-O1-5,O1,5,FSM,54.134591,ms,true,fixture_order=4; node_record_only
+S9B-O1-5,O1,5,package dependency and entity instantiation,34.867398,ms,true,fixture_order=5; node_record_only
+S9B-O1-5,O1,5,Tang Nano 20K LED blink,50.377180,ms,true,fixture_order=6; node_record_only
+S9B-O1-5,O1,5,six_fixture_total,313.965797,ms,true,sum of six Node synthesis samples; record-only
+S9B-O1-size,O1,1,wasm_raw,2066768,bytes,true,artifact size
+S9B-O1-size,O1,1,wasm_gzip_9,638217,bytes,true,artifact size
+S9B-O1-size,O1,1,wasm_zstd_19,534029,bytes,true,artifact size
+S9B-O1-size,O1,1,libraries_tar_gz,455929,bytes,true,artifact size
+S9B-O2-1,O2,1,combinational logic,71.283551,ms,true,fixture_order=1; node_record_only
+S9B-O2-1,O2,1,numeric_std counter,59.011958,ms,true,fixture_order=2; node_record_only
+S9B-O2-1,O2,1,generic entity,36.183983,ms,true,fixture_order=3; node_record_only
+S9B-O2-1,O2,1,FSM,53.716243,ms,true,fixture_order=4; node_record_only
+S9B-O2-1,O2,1,package dependency and entity instantiation,39.648103,ms,true,fixture_order=5; node_record_only
+S9B-O2-1,O2,1,Tang Nano 20K LED blink,55.989496,ms,true,fixture_order=6; node_record_only
+S9B-O2-1,O2,1,six_fixture_total,315.833334,ms,true,sum of six Node synthesis samples; record-only
+S9B-O2-2,O2,2,combinational logic,71.201866,ms,true,fixture_order=1; node_record_only
+S9B-O2-2,O2,2,numeric_std counter,57.705710,ms,true,fixture_order=2; node_record_only
+S9B-O2-2,O2,2,generic entity,39.540053,ms,true,fixture_order=3; node_record_only
+S9B-O2-2,O2,2,FSM,53.390540,ms,true,fixture_order=4; node_record_only
+S9B-O2-2,O2,2,package dependency and entity instantiation,42.825928,ms,true,fixture_order=5; node_record_only
+S9B-O2-2,O2,2,Tang Nano 20K LED blink,47.318754,ms,true,fixture_order=6; node_record_only
+S9B-O2-2,O2,2,six_fixture_total,311.982851,ms,true,sum of six Node synthesis samples; record-only
+S9B-O2-3,O2,3,combinational logic,69.411466,ms,true,fixture_order=1; node_record_only
+S9B-O2-3,O2,3,numeric_std counter,62.474113,ms,true,fixture_order=2; node_record_only
+S9B-O2-3,O2,3,generic entity,37.263113,ms,true,fixture_order=3; node_record_only
+S9B-O2-3,O2,3,FSM,54.917430,ms,true,fixture_order=4; node_record_only
+S9B-O2-3,O2,3,package dependency and entity instantiation,41.526268,ms,true,fixture_order=5; node_record_only
+S9B-O2-3,O2,3,Tang Nano 20K LED blink,53.850242,ms,true,fixture_order=6; node_record_only
+S9B-O2-3,O2,3,six_fixture_total,319.442632,ms,true,sum of six Node synthesis samples; record-only
+S9B-O2-4,O2,4,combinational logic,69.601464,ms,true,fixture_order=1; node_record_only
+S9B-O2-4,O2,4,numeric_std counter,62.332056,ms,true,fixture_order=2; node_record_only
+S9B-O2-4,O2,4,generic entity,40.870273,ms,true,fixture_order=3; node_record_only
+S9B-O2-4,O2,4,FSM,66.669840,ms,true,fixture_order=4; node_record_only
+S9B-O2-4,O2,4,package dependency and entity instantiation,36.391635,ms,true,fixture_order=5; node_record_only
+S9B-O2-4,O2,4,Tang Nano 20K LED blink,54.149678,ms,true,fixture_order=6; node_record_only
+S9B-O2-4,O2,4,six_fixture_total,330.014946,ms,true,sum of six Node synthesis samples; record-only
+S9B-O2-5,O2,5,combinational logic,69.776377,ms,true,fixture_order=1; node_record_only
+S9B-O2-5,O2,5,numeric_std counter,60.002390,ms,true,fixture_order=2; node_record_only
+S9B-O2-5,O2,5,generic entity,35.719553,ms,true,fixture_order=3; node_record_only
+S9B-O2-5,O2,5,FSM,58.793480,ms,true,fixture_order=4; node_record_only
+S9B-O2-5,O2,5,package dependency and entity instantiation,41.139974,ms,true,fixture_order=5; node_record_only
+S9B-O2-5,O2,5,Tang Nano 20K LED blink,56.316048,ms,true,fixture_order=6; node_record_only
+S9B-O2-5,O2,5,six_fixture_total,321.747822,ms,true,sum of six Node synthesis samples; record-only
+S9B-O2-size,O2,1,wasm_raw,2001285,bytes,true,artifact size
+S9B-O2-size,O2,1,wasm_gzip_9,611812,bytes,true,artifact size
+S9B-O2-size,O2,1,wasm_zstd_19,510680,bytes,true,artifact size
+S9B-O2-size,O2,1,libraries_tar_gz,455929,bytes,true,artifact size
+S9B-O3-1,O3,1,combinational logic,69.916879,ms,true,fixture_order=1; node_record_only
+S9B-O3-1,O3,1,numeric_std counter,61.266189,ms,true,fixture_order=2; node_record_only
+S9B-O3-1,O3,1,generic entity,34.530111,ms,true,fixture_order=3; node_record_only
+S9B-O3-1,O3,1,FSM,51.447504,ms,true,fixture_order=4; node_record_only
+S9B-O3-1,O3,1,package dependency and entity instantiation,33.570272,ms,true,fixture_order=5; node_record_only
+S9B-O3-1,O3,1,Tang Nano 20K LED blink,58.572647,ms,true,fixture_order=6; node_record_only
+S9B-O3-1,O3,1,six_fixture_total,309.303602,ms,true,sum of six Node synthesis samples; record-only
+S9B-O3-2,O3,2,combinational logic,72.943859,ms,true,fixture_order=1; node_record_only
+S9B-O3-2,O3,2,numeric_std counter,60.583072,ms,true,fixture_order=2; node_record_only
+S9B-O3-2,O3,2,generic entity,30.659353,ms,true,fixture_order=3; node_record_only
+S9B-O3-2,O3,2,FSM,50.285942,ms,true,fixture_order=4; node_record_only
+S9B-O3-2,O3,2,package dependency and entity instantiation,32.642256,ms,true,fixture_order=5; node_record_only
+S9B-O3-2,O3,2,Tang Nano 20K LED blink,49.064577,ms,true,fixture_order=6; node_record_only
+S9B-O3-2,O3,2,six_fixture_total,296.179059,ms,true,sum of six Node synthesis samples; record-only
+S9B-O3-3,O3,3,combinational logic,73.565115,ms,true,fixture_order=1; node_record_only
+S9B-O3-3,O3,3,numeric_std counter,60.578027,ms,true,fixture_order=2; node_record_only
+S9B-O3-3,O3,3,generic entity,38.978699,ms,true,fixture_order=3; node_record_only
+S9B-O3-3,O3,3,FSM,53.133587,ms,true,fixture_order=4; node_record_only
+S9B-O3-3,O3,3,package dependency and entity instantiation,36.981590,ms,true,fixture_order=5; node_record_only
+S9B-O3-3,O3,3,Tang Nano 20K LED blink,53.446309,ms,true,fixture_order=6; node_record_only
+S9B-O3-3,O3,3,six_fixture_total,316.683327,ms,true,sum of six Node synthesis samples; record-only
+S9B-O3-4,O3,4,combinational logic,72.674772,ms,true,fixture_order=1; node_record_only
+S9B-O3-4,O3,4,numeric_std counter,61.091812,ms,true,fixture_order=2; node_record_only
+S9B-O3-4,O3,4,generic entity,34.462030,ms,true,fixture_order=3; node_record_only
+S9B-O3-4,O3,4,FSM,50.025478,ms,true,fixture_order=4; node_record_only
+S9B-O3-4,O3,4,package dependency and entity instantiation,33.793988,ms,true,fixture_order=5; node_record_only
+S9B-O3-4,O3,4,Tang Nano 20K LED blink,52.606256,ms,true,fixture_order=6; node_record_only
+S9B-O3-4,O3,4,six_fixture_total,304.654336,ms,true,sum of six Node synthesis samples; record-only
+S9B-O3-5,O3,5,combinational logic,69.518946,ms,true,fixture_order=1; node_record_only
+S9B-O3-5,O3,5,numeric_std counter,62.168227,ms,true,fixture_order=2; node_record_only
+S9B-O3-5,O3,5,generic entity,39.968775,ms,true,fixture_order=3; node_record_only
+S9B-O3-5,O3,5,FSM,53.582824,ms,true,fixture_order=4; node_record_only
+S9B-O3-5,O3,5,package dependency and entity instantiation,36.501052,ms,true,fixture_order=5; node_record_only
+S9B-O3-5,O3,5,Tang Nano 20K LED blink,49.758024,ms,true,fixture_order=6; node_record_only
+S9B-O3-5,O3,5,six_fixture_total,311.497848,ms,true,sum of six Node synthesis samples; record-only
+S9B-O3-size,O3,1,wasm_raw,2046317,bytes,true,artifact size
+S9B-O3-size,O3,1,wasm_gzip_9,620301,bytes,true,artifact size
+S9B-O3-size,O3,1,wasm_zstd_19,517192,bytes,true,artifact size
+S9B-O3-size,O3,1,libraries_tar_gz,455929,bytes,true,artifact size
+S9B-Os-1,Os,1,combinational logic,65.187774,ms,true,fixture_order=1; node_record_only
+S9B-Os-1,Os,1,numeric_std counter,52.318492,ms,true,fixture_order=2; node_record_only
+S9B-Os-1,Os,1,generic entity,31.906816,ms,true,fixture_order=3; node_record_only
+S9B-Os-1,Os,1,FSM,47.757708,ms,true,fixture_order=4; node_record_only
+S9B-Os-1,Os,1,package dependency and entity instantiation,31.222353,ms,true,fixture_order=5; node_record_only
+S9B-Os-1,Os,1,Tang Nano 20K LED blink,56.132324,ms,true,fixture_order=6; node_record_only
+S9B-Os-1,Os,1,six_fixture_total,284.525467,ms,true,sum of six Node synthesis samples; record-only
+S9B-Os-2,Os,2,combinational logic,69.715791,ms,true,fixture_order=1; node_record_only
+S9B-Os-2,Os,2,numeric_std counter,60.511639,ms,true,fixture_order=2; node_record_only
+S9B-Os-2,Os,2,generic entity,35.288003,ms,true,fixture_order=3; node_record_only
+S9B-Os-2,Os,2,FSM,52.635756,ms,true,fixture_order=4; node_record_only
+S9B-Os-2,Os,2,package dependency and entity instantiation,32.523755,ms,true,fixture_order=5; node_record_only
+S9B-Os-2,Os,2,Tang Nano 20K LED blink,45.340257,ms,true,fixture_order=6; node_record_only
+S9B-Os-2,Os,2,six_fixture_total,296.015201,ms,true,sum of six Node synthesis samples; record-only
+S9B-Os-3,Os,3,combinational logic,70.062508,ms,true,fixture_order=1; node_record_only
+S9B-Os-3,Os,3,numeric_std counter,62.678585,ms,true,fixture_order=2; node_record_only
+S9B-Os-3,Os,3,generic entity,32.963398,ms,true,fixture_order=3; node_record_only
+S9B-Os-3,Os,3,FSM,58.783396,ms,true,fixture_order=4; node_record_only
+S9B-Os-3,Os,3,package dependency and entity instantiation,36.746486,ms,true,fixture_order=5; node_record_only
+S9B-Os-3,Os,3,Tang Nano 20K LED blink,49.577778,ms,true,fixture_order=6; node_record_only
+S9B-Os-3,Os,3,six_fixture_total,310.812151,ms,true,sum of six Node synthesis samples; record-only
+S9B-Os-4,Os,4,combinational logic,70.781715,ms,true,fixture_order=1; node_record_only
+S9B-Os-4,Os,4,numeric_std counter,59.890119,ms,true,fixture_order=2; node_record_only
+S9B-Os-4,Os,4,generic entity,36.942370,ms,true,fixture_order=3; node_record_only
+S9B-Os-4,Os,4,FSM,50.992547,ms,true,fixture_order=4; node_record_only
+S9B-Os-4,Os,4,package dependency and entity instantiation,34.450794,ms,true,fixture_order=5; node_record_only
+S9B-Os-4,Os,4,Tang Nano 20K LED blink,46.061626,ms,true,fixture_order=6; node_record_only
+S9B-Os-4,Os,4,six_fixture_total,299.119171,ms,true,sum of six Node synthesis samples; record-only
+S9B-Os-5,Os,5,combinational logic,70.377033,ms,true,fixture_order=1; node_record_only
+S9B-Os-5,Os,5,numeric_std counter,60.360178,ms,true,fixture_order=2; node_record_only
+S9B-Os-5,Os,5,generic entity,34.339883,ms,true,fixture_order=3; node_record_only
+S9B-Os-5,Os,5,FSM,50.028124,ms,true,fixture_order=4; node_record_only
+S9B-Os-5,Os,5,package dependency and entity instantiation,27.318537,ms,true,fixture_order=5; node_record_only
+S9B-Os-5,Os,5,Tang Nano 20K LED blink,44.301555,ms,true,fixture_order=6; node_record_only
+S9B-Os-5,Os,5,six_fixture_total,286.725310,ms,true,sum of six Node synthesis samples; record-only
+S9B-Os-size,Os,1,wasm_raw,2001285,bytes,true,artifact size
+S9B-Os-size,Os,1,wasm_gzip_9,611812,bytes,true,artifact size
+S9B-Os-size,Os,1,wasm_zstd_19,510680,bytes,true,artifact size
+S9B-Os-size,Os,1,libraries_tar_gz,455929,bytes,true,artifact size

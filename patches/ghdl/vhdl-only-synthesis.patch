@@ -1,0 +1,12 @@
+# Adapted from synth-explorer/tools/ghdl-wasm/build-in-container.sh.
+# Copyright 2025 synth-explorer contributors.
+# Licensed under the Apache License, Version 2.0.
+# https://www.apache.org/licenses/LICENSE-2.0
+# SPDX-License-Identifier: Apache-2.0
+#
+--- synthesis.adb
++++ synthesis.adb
+@@ -32,1 +31,0 @@
+-with Synth.Verilog_Insts;
+@@ -89,1 +87,0 @@
+-      Synth.Verilog_Insts.Synth_All_Instances;

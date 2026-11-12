@@ -1,0 +1,15 @@
+--- a/src/util/resources.cpp
++++ b/src/util/resources.cpp
+@@ -68,3 +68,9 @@
+-#else
+-
+-#include <unistd.h>
++#elif defined(__wasi__)
++
++namespace {
++uint64_t memory_usage(bool) { return 0; }
++}  // namespace
++
++#else
++
++#include <unistd.h>

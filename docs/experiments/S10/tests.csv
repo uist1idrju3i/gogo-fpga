@@ -1,0 +1,6 @@
+run,passed,failed,duration_ms,node,wasm_build
+1,5,0,1005.549914,v24.22.1,wasi-eh-build18
+2,5,0,1022.194537,v24.22.1,wasi-eh-build18
+3,5,0,972.691133,v24.22.1,wasi-eh-build18
+4,5,0,937.164324,v24.22.1,wasi-eh-build18
+5,5,0,910.081676,v24.22.1,wasi-eh-build18

@@ -1,0 +1,32 @@
+run_id,variant,repeat,metric,value,unit,valid,note
+S3A,pyodide,1,setup-time,4627.9,ms,true,Pyodide 314.0.7 runtime load and package installation
+S3A,pyodide,1,asset-size,21021184,bytes,true,build/pack total
+S3A,pyodide,1,nextpnr-wasm-size,34172028,bytes,true,build/wasi/nextpnr/nextpnr-himbaechel-gowin.wasm
+S3A,native,1,pack-time,506.5,ms,true,tangnano1k
+S3A,pyodide,1,pack-time,2233.0,ms,true,tangnano1k
+S3A,pyodide,2,pack-time,243.7,ms,true,tangnano1k
+S3A,pyodide,3,pack-time,240.8,ms,true,tangnano1k
+S3A,pyodide,4,pack-time,252.5,ms,true,tangnano1k
+S3A,pyodide,5,pack-time,236.1,ms,true,tangnano1k
+S3A,native,1,fs-size,351954,bytes,true,tangnano1k
+S3A,native,1,pack-time,597.6,ms,true,tangnano4k
+S3A,pyodide,1,pack-time,454.6,ms,true,tangnano4k
+S3A,pyodide,2,pack-time,440.6,ms,true,tangnano4k
+S3A,pyodide,3,pack-time,460.9,ms,true,tangnano4k
+S3A,pyodide,4,pack-time,449.5,ms,true,tangnano4k
+S3A,pyodide,5,pack-time,453.4,ms,true,tangnano4k
+S3A,native,1,fs-size,1167294,bytes,true,tangnano4k
+S3A,native,1,pack-time,720.1,ms,true,tangnano9k
+S3A,pyodide,1,pack-time,727.3,ms,true,tangnano9k
+S3A,pyodide,2,pack-time,717.1,ms,true,tangnano9k
+S3A,pyodide,3,pack-time,717.6,ms,true,tangnano9k
+S3A,pyodide,4,pack-time,710.3,ms,true,tangnano9k
+S3A,pyodide,5,pack-time,703.6,ms,true,tangnano9k
+S3A,native,1,fs-size,2069320,bytes,true,tangnano9k
+S3A,native,1,pack-time,987.5,ms,true,tangnano20k
+S3A,pyodide,1,pack-time,1284.4,ms,true,tangnano20k
+S3A,pyodide,2,pack-time,1240.3,ms,true,tangnano20k
+S3A,pyodide,3,pack-time,1245.9,ms,true,tangnano20k
+S3A,pyodide,4,pack-time,1241.8,ms,true,tangnano20k
+S3A,pyodide,5,pack-time,1234.1,ms,true,tangnano20k
+S3A,native,1,fs-size,4618782,bytes,true,tangnano20k

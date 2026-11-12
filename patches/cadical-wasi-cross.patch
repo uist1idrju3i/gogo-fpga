@@ -1,0 +1,55 @@
+--- a/configure
++++ b/configure
+@@ -25,6 +25,7 @@
+ options=""
+ quiet=no
+ m32=no
++cross=no
+ 
+ #--------------------------------------------------------------------------#
+ 
+@@ -86,6 +87,7 @@
+ 
+ --coverage         compile with '-ftest-coverage -fprofile-arcs' for 'gcov'
+ --profile          compile with '-pg' to profile with 'gprof'
++--cross            link compiler probes without executing target programs
+ 
+ -f...              pass '-f<option>[=<val>]' options to the makefile
+ -m32               pass '-m32' to the compiler (compile for 32 bit)
+@@ -139,6 +141,7 @@
+     --profile) profile=yes;;
+ 
+     --no-unlocked) unlocked=no;;
++    --cross) cross=yes; unlocked=no;;
+ 
+     -j*) MAKEFLAGS="$1";;
+ 
+@@ -281,4 +284,4 @@
+-if $CXX $CXXFLAGS $WERROR -o $feature.exe $feature.cpp 2>>configure.log
++if $CXX $CXXFLAGS $WERROR $LDFLAGS -o $feature.exe $feature.cpp 2>>configure.log
+ then
+-  if [ ! "`$feature.exe 2>>configure.log`" = "hello world" ]
++  if [ "$cross" != yes ] && [ ! "`$feature.exe 2>>configure.log`" = "hello world" ]
+   then
+@@ -324,4 +327,4 @@
+-if $CXX $CXXFLAGS $WERROR -o $feature.exe $feature.cpp 2>>configure.log
++if $CXX $CXXFLAGS $WERROR $LDFLAGS -o $feature.exe $feature.cpp 2>>configure.log
+ then
+-  if [ "`$feature.exe 2>>configure.log`" = 42 ]
++  if [ "$cross" = yes ] || [ "`$feature.exe 2>>configure.log`" = 42 ]
+   then
+@@ -334,4 +337,4 @@
+-  if $CXX $CXXFLAGS -o $feature.exe $feature.cpp 2>>configure.log
++  if $CXX $CXXFLAGS $LDFLAGS -o $feature.exe $feature.cpp 2>>configure.log
+   then
+-    if [ "`$feature.exe 2>>configure.log`" = 42 ]
++    if [ "$cross" = yes ] || [ "`$feature.exe 2>>configure.log`" = 42 ]
+     then
+@@ -369,1 +372,1 @@
+-  if $CXX $CXXFLAGS -o $feature.exe $feature.cpp 2>>configure.log
++  if $CXX $CXXFLAGS $LDFLAGS -o $feature.exe $feature.cpp 2>>configure.log
+--- a/makefile.in
++++ b/makefile.in
+@@ -57,1 +57,1 @@
+-	ar rc $@ $(OBJ)
++	$(AR) rc $@ $(OBJ)

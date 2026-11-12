@@ -1,0 +1,5 @@
+board,unique_request_paths,synth_paths,pack_paths,other_paths,synth_bytes,pack_bytes,other_bytes,total_bytes
+tangnano1k,43,5,10,28,16016710,14219198,3172252,33408160
+tangnano4k,43,5,10,28,16168484,14219198,3172252,33559934
+tangnano9k,43,5,10,28,16178057,14219198,3172252,33569507
+tangnano20k,43,5,10,28,16270347,14219198,3172252,33661797

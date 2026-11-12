@@ -1,0 +1,10 @@
+--- a/src/util/gmp_utils.cpp
++++ b/src/util/gmp_utils.cpp
+@@ -123,1 +123,1 @@
+-      uint64_t hi = (limb >> 32);
++      uint64_t hi = (static_cast<uint64_t>(limb) >> 32);
+--- a/src/solver/fp/floating_point.cpp
++++ b/src/solver/fp/floating_point.cpp
+@@ -450,1 +450,1 @@
+-      uint64_t hi = (limb >> 32);
++      uint64_t hi = (static_cast<uint64_t>(limb) >> 32);

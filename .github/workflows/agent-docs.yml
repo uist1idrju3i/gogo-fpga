@@ -1,0 +1,80 @@
+name: agent-docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: true
+          persist-credentials: false
+
+      - name: AGENTS.md が存在する
+        run: test -f AGENTS.md
+
+      - name: スキルのシンボリックリンクが SKILL.md に解決される
+        run: |
+          for link in .agents/skills/* .claude/skills/*; do
+            if [ -L "$link" ]; then
+              echo "check: $link"
+              test -f "$link/SKILL.md" || {
+                echo "::error::$link が SKILL.md を指していません。submodule の取得とリンク先を確認してください。"
+                exit 1
+              }
+            fi
+          done
+
+      - name: 実験記録が一覧から参照されている
+        run: |
+          status=0
+          for record in docs/experiments/*.md; do
+            [ -e "$record" ] || continue
+            name="${record##*/}"
+            [ "$name" = README.md ] && continue
+            if ! grep -Fq "($name)" docs/experiments/README.md; then
+              echo "::error file=$record::$name が docs/experiments/README.md の一覧にありません。"
+              status=1
+            fi
+          done
+          exit "$status"
+
+      - name: 文書に個人環境のパスがない
+        run: python3 .github/scripts/check-document-paths.py
+
+      - name: 文書パス検査のテスト
+        run: python3 -m unittest discover -s tests/check-document-paths
+
+      - name: 追跡しているテキストの文字が JIS X 0213 の範囲内にある
+        run: python3 .github/scripts/check-jisx0213.py
+
+      - name: JIS X 0213 検査のテスト
+        run: sh tests/check-jisx0213/run.sh
+
+      - name: 文書リンクと古いパスを検査する
+        run: python3 .github/scripts/check-links.py
+
+      - name: 文書リンク検査のテスト
+        run: sh tests/check-links/run.sh
+
+      - name: 文書の大きさと分割の例外を検査する
+        run: python3 .github/scripts/check-document-size.py
+
+      - name: 文書の大きさ検査のテスト
+        run: sh tests/check-document-size/run.sh
+
+      - name: 能力一覧の検査に使う Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: ソルバー応答の監査器と能力一覧の単体テスト
+        run: python3 -m unittest discover -s tests/check-solver-protocol

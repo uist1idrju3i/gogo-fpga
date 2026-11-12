@@ -1,0 +1,665 @@
+8fb617d74	Update NEWS.md
+91725e47f	gha: fixed GHDL's pacman version.
+87281a786	version: back to 6.0.0-dev
+112a7ea98	Fix nightly pattern. Disable pre-release release page state for real releases.
+1c57da39f	Merge pull request #3022 from Paebbels/paebbels/fix-nightly-pattern
+28cd628ad	gha: Extract Pacman package release version from PKGBUILD file.
+0f598014d	gha: Removed leftover from local merge conflict.
+342f43332	gha: Expose 'pacghdl_release' as output parameter.
+f15c7d700	gha: Changed echo to printf.
+2ec50f465	Merge pull request #3023 from Paebbels/paebbels/extract-pacman-package-release
+949b2b9d8	vhdl-sem_assocs: fix a crash on missing type association
+282f20413	testsuite/gna: add a test for #3021
+a70a8563b	vhdl: initial support of subprogram instantiations
+f0a9dce73	testsuite/gna: add a test for #3020
+844220942	vhdl: improve support of generic subprograms
+870738a4d	vhdl-prints: improve layout of subprogram generics
+6dd21a1ad	netlists-disp_verilog: adjust has_single_user_driver
+4404a7e49	testsuite/synth: add a test for #3027
+d224ea9ab	synth-vhdl_eval: handle pow int x real
+d53aa1ba4	testsuite/gna: add a test for #3028
+ce87bc5bf	.gdbinit: use psl_ prefix for psl commands
+c16ade393	sem_boolean: check result is a boolean
+1ae6e987e	testsuite/gna: add a test for #3029
+22505069b	trans-chap8: handle unbounded names in signal target aggregate
+32d7ef253	testsuite/gna: add a test for #3030
+58a8c75c9	vhdl-sem_specs: rework sem_attribute_specification
+aba5633df	disp_instance: print marker for self instance
+bd0f8b7fe	synth-vhdl_decls: handle attributes on ports.
+bd7a59a5b	vhdl-sem_specs: attach attributes to specification scope
+a0680c2ef	testsuite/synth: add a test for #3032
+2051a5c9d	Translate_Record_Aggregate_Bounds: replace assertion
+69b0c75d7	testsuite/gna: add a test for #3034
+560a822c2	Add support for llvm21
+eb1f087ff	Merge pull request #3040 from tstellar/llvm21
+6ee7e4c97	synth-vhdl_decls: handle attribute on entities
+44b5a8e52	testsuite/synth: add a test for #3035
+6ef9b7289	netlists-dump: also dump port attributes
+f63e2d9a9	netlists-disp_vhdl: display entity and port attributes
+b4f5a1e93	testsuite/synth: add more tests for #3035 and #3032
+332f1aa0d	update for GCC 15
+68548a981	Merge pull request #3036 from sharkcz/gcc15
+9887a136d	vhdl-ieee-numeric.adb: recognize more numeric_bit operators
+fa869b20d	vhdl-parse.adb: adjust location of operator name
+4e6091f29	gcc/Makefile: link without pie
+29517f7c0	vhdl: recognize and handle more operations from numeric_bit
+0c885514d	testsuite/gna: add a test for #3044
+661150c10	gha: disable pyGHDL test
+d1df5561a	convert_node_to_typ: handle floating_subtype
+afca2e339	testsuite/gna: add a test for #3045
+838114220	vhdl: support more numeric_bit operations
+95c22113b	vhdl: handle more shift operations for numeric_bit
+ebcabd379	synth-vhdl_eval: factorize a declaration
+764c6def3	vhdl: handle more numeric_bit operations (comparaisons)
+5cb80c048	Fixed raising warnings.
+953e8618b	Reactivated pyGHDL tests.
+d66da78a1	exec_name_subtype: improve handling of aggregates
+e59652059	elab-vhdl_objtypes: add get_array_element_multidim
+7cb296fdc	elab-vhdl_insts: add elab_individual_subtype
+898f8e06f	testsuite/gna: add tests for #3046
+87ffbfe99	synth/elab-vhdl_expr: simplify previous patch
+351323b64	testsuite/gna: add more tests for #3046
+8c69dbd51	Merge pull request #3047 from Paebbels/paebbels/pyGHDL-warning-fix
+4b152d09c	elab-vhdl_insts: improve support of individual assocs
+62b2ef14e	testsuite/gna: add tests to #3046
+cd473bf52	elab_generics_association: do not re-elaboration subtypes
+5e0cf99b0	testsuite/gna: add a test for #3050
+53dc39db8	grt-images: use non-0 first unit (to handle time-resolution)
+3758c707c	testsuite/gna: add a test for #3052
+798d5da4a	synth: factorize code, display string parameters as a string
+e9cfc54c8	testsuite/synth: add a vhdl test for #2755
+253d13737	scripts/vendors/README.md: be vendor neutral
+0e075162c	testsuite/synth: add tests in oper02 for min/max
+1ed644583	netlists-disp_verilog: fix template for smin/smax
+07f12af71	testsuite/gna: add a test for #3055
+a99c9b638	synth_attribute_specification: unshare type
+aee01da8b	testsuite/gna: add a test for #3057
+2eb2d88a2	build.rs: add all ada source files as dependencies
+66a267c01	vhdl-evaluation: fix prefix type for slices and index eval
+44c4af1cd	testsuite/gna: add a test for #3056
+cad4fe21e	Fixed typo.
+dd2a7ee34	Bumped dependencies.
+a0b27338c	Bumped GitHub Action windows image version from 2022 to 2025.
+d5a0a79aa	Activated Python 3.14.0rc3.
+13f8611b9	Reactivate all tests.
+d71b6bc69	Deactivated Python 3.14 asset uploads, because artifact gets the complicated name 3.14.0-rc.3. Waiting for 07.10.2025 until 3.14 will be officially released.
+e57da8d3e	testsuite/synth/dff01: add a test with inout port
+f06310b95	synth: defere inference, after cleanup
+822d483f9	testsuite/synth: add reproducers for #3063
+87082dc58	Merge pull request #3062 from Paebbels/paebbels/general-updates
+6a163ef65	synth/netlists: set port order
+c5558497d	testsuite/synth: add tests for #3061
+e196d8a4a	Put_Name_Inner: improve output of field names
+a70cc3ed0	testsuite/synth/issue3061: adjust baseline
+5a1a1d7cd	synth: avoid use of strip_const
+6b91a874b	synth: set and propagate attributes on constant
+803c1a7bc	testsuite/synth: add a test for #3065
+83cd1710a	testsuite/synth: add clean at end of test 1460
+b6184b177	[performance] Improves the performance of loading big ghw files (especially targeted to gtkwave) by creating a cache of non null signal indices
+608287f06	[libghw/performance-fix] adds initialization of the non null signal cache when opening the file
+ffb1b7c5b	[libghw/performance] fix invalid marker on printf
+22fc830f0	[libghw/performance] Improves code readability
+03e6aeb81	[libghw/performance] removed non useful print statement
+169100210	synth-vhdl_decls: keep attribute name case.
+f26b85a74	testsuite/synth: add a test for #3067
+27af094ca	[libghw/performance] removed unused memset
+9acf6920f	Merge pull request #3066 from simonebri/feature/libghw-loading-performance-improvement
+8357550c3	gna/issue3072: add a test
+db777f89f	vhdl-nodes.ads: add a comment
+1ba5a6829	vhdl: use subtype_indication for subtype declaration
+c897a7121	testsuite/gna: add a test for #3077
+8d5d3880b	eval_concatenation: renaming, check bounds of elements
+c01020b2d	testsuite/gna: add a test for #3075
+9d45fa04c	trans-chap8: handle locally static aggregate actual...
+0a87f4269	testsuite/gna: add a test for #3079
+d14102bc0	synth-environment: avoid a crash after multiple assignment error
+fcbf71ad8	testsuite/synth: add a test for previous commit
+b3fed7c10	netlists-disp_verilog: display attributes
+8fb951218	testsuite/synth: add a test for #3083
+1c872e45b	testsuite/synth: add a test for #3084
+0bc01eaa4	vhdl-sem_scopes.adb: avoid a crash on alias with --force-analysis
+9f93ffdc8	testsuite/gna: add a test for previous commit
+c50cf56ee	vhdl-sem_decls.adb: minor fix in crash message
+e40930d82	synth-vhdl_expr: fix handling of nand/nor for non short-circuit case
+e305f1f54	testsuite/gna: add a test for #3086
+3ffa1ab0c	synth-vhdl_insts: add architecture name in module name
+581f6b82e	testsuite/synth: add a test for ghdl-yosys-plugin#218
+25f4f542c	vhdl-sem_psl.adb: fail if architecture of a vunit cannot be found
+583b5512f	testsuite/synth: adjust baseline of #2717
+da855b111	testsuite/synth: add a test for #3087
+f537bc317	Updated pipeline code.
+1f2df548a	Bumped GitHub Action dependencies.
+0572d6a13	elab-vhdl_expr(value_attribute): deal with empty strings
+ffb2c1589	testsuite/gna: add a test for previous commit
+ed0da3cfa	testsuite/gna: add a test for #3091
+5672daff4	Bumped Python dependencies.
+4bf56c0ec	Merge pull request #3092 from Paebbels/paebbels/Pipeline-enhancements
+36219e3c6	Handle while loop and next statements.
+d9ecb68e2	Handle BitStringLiterals.
+120c62523	Simplified dependencies in pipeline.
+d52140891	netlists-inference(get_prev_val_name): skip id_extract
+1cae36a19	testsuite/synth: add a test for #3096
+d15fd0617	synth-vhdl_stmts(info_to_valtyp): adjust condition
+0fa6d3433	testsuite/synth: add a test for #3095
+6c5c98c10	synth: add library name in the module name
+b4e61f809	testsuite/synth: add a test for #3094
+dc88e02ca	netlists-rename: rename 'do' for systemverilog
+78ec7791e	testsuite/synth: add a test for name 'do' in verilog output
+518bf3fab	elab_generics_association: handle subtype attribute
+495e9d1ff	testsuite/gna: add a test for #3098
+bafbdd612	Set release branch to 'master', so merged to 'master' get detected as feature merges.
+22481cbc0	Bumped dependencies.
+42e48e5a5	vhdl: improve support of generic subprograms
+79283b352	testsuite/gna: add tests for #3090
+b475367a1	Merge pull request #3101 from Paebbels/paebbels/fix-pipeline
+e8802fcf5	Merge pull request #3093 from Paebbels/paebbels/DOM-enhancements
+67160a29c	trans-chap2: handle component scopes for info instantiation
+5ea4f51da	testsuite/gna: add a test for #3102
+73cffe129	Reassoc_Association_Chain: handle individual associations
+0e50541b6	testsuite/gna: add tests for #3103
+ad3cafec3	uninstall fixes
+d35a7fdd5	Merge pull request #3108 from tpsara/master
+383b9fea3	dyn_maps: renaming
+2b75c4b8c	elab-vhdl_insts.adb: adjust formals of association after instantiation
+8ca418182	testsuite/gna: add a test for #3103
+0a35f2fda	are_tree_equals: handle all nested generics.
+30c1e0407	vhdl: translate generics of subprogram instantiations
+45ca45699	testsuite/gna: add a test for #3110
+91c4ef24b	sem_subprogram_instantiation_declaration: handle subprg in packages
+255658ef2	testsuite/gna: add reproducer for #3110
+8dd8d0ff8	vhdl-canon: fix assert on partial open association
+68cf5ef49	testsuite/gna: add a test for #3109
+568bdce8a	testsuite/gna: add a test for #3104
+04c89f90b	elab-vhdl_expr: fix context for expression within pathnames
+ceff90a37	elab-vhdl_expr: handle relative pathname within for-generate
+3b69efeb2	testsuite/synth: add a test for #3111
+846785e03	elab-vhdl_expr: fix pathname in sensitized processes
+dc8b5dd0a	testsuite/synth: add a test for #3114
+bc20bb6ab	synth-vhdl_decls: handle port attribute with keep-hierarchy=no
+043bb870e	testsuite/synth: add a test for #3115
+96af1c270	synth: factorize code, remove concat_array
+3d26ccc60	synth-vhdl_aggr: add a location to the concat gate
+d4ab3da94	testsuite/gna: add a test for #3116
+2d3c3e642	netlists-concats.adb: add a location parameter
+27abb348b	testsuite/synth: add a test for #3116
+05bf911a3	synth-environment: set location on concatn
+28b69350e	synth: set location on concat2
+f9b021065	synth: set location on extract
+18f19fbad	Makefile.in: fix coverage build of ghwdump
+b3fb592f9	netlists-utils: remove Get_Net_Int64 (unused)
+117d44a7a	netlists-utils: remove Get_Net_Element (unused)
+0595e4134	sem_check_missing_generic_association: fix crash after error
+42536779a	testsuite/gna: add a test for #3117
+1aebbd62b	testsuite/synth: add a test for dump output
+abf3eb6d1	testsuite/synth: add err01 test
+662cc9626	testsuite/synth: add a test in func03
+5c56ce4b9	testsuite/synth: add more tests to err01
+ff7ee7ba1	testsuite/synth: add tests for case02
+2e88dbcac	synth-vhdl_stmts: remove unused code
+f5c6c471a	elab-vhdl_annotations: remove unused disp procedures
+f4ba95fce	synth-vhdl_eval: fix crash on to_slv
+5736bcb4a	synth-vhdl_eval: handle cbrt, asinh...
+eaeefd9a6	testsuite/synth: add tests to err01
+301794607	testsuite/synth: add execution test for comparaison
+b0696c9b8	synth-vhdl_eval.adb: handle sla, sra
+542985d7d	testsuite/synth: add execution test for sla
+a23442108	testsuite/synth: add a test for elaboration time warning
+7e602293c	synth-vhdl_eval.adb: gather lines for internal_error
+ad0eb4f09	vhdl-configuration: use default value from component
+509045f3d	testsuite/synth: add a test for #3127
+1b6c777f5	testsuite/synth: add more tests to warn01
+45cbb94cf	testsuite/synth: add sns02
+b59d72091	testsuite/synth: add img01 tests
+0c3d02e47	synth-vhdl_eval: remove unused code
+bdc52a225	testsuite/synth: add a test for numeric_bit
+16763d2c1	testsuite/synth: add oper03 tests
+01d333c95	testsuite/synth: add more tests to sns02
+a65232627	testsuite/synth: add a test to oper03
+91bdf05f2	synth-vhdl_eval: add markers for defensive code
+adbdc283f	synth-vhdl_eval: fix a crash after error
+d98b568c5	testsuite/synth: add a test for previous commit
+0201e6954	synth-vhdl_eval.adb: fix memory sharing got conv_integer
+4a15e5112	testsuite/synth: add tests for sns02
+9750d6561	testsuite/synth: add a test for std_logic_arith
+175264a98	testsuite/synth: add to_x01 tests
+e387d6b6b	testsuite/synth: add tests to img01
+07f66fd14	synth-vhdl_eval: fix handling of std_logic_arith shift
+63edf45b5	testsuite/synth: add shift and reduce tests for sns02
+46e1e98d2	synth-vhdl_expr: reformating for raise internal_error
+276f1ccac	testsuite/synth: add a test for shifts
+ea853604e	testsuite/synth: add tests for index resize
+cd12f1bc8	testsuite/synth: add a test in attr01
+0a53ddf5b	synth-vhdl_expr: remove unreachable code
+5e1675d90	testsuite/synth: add tests for left/right attributes in attr02
+8fdc35c80	synth-vhdl_stmts.adb: fix a crash on incorrect external name
+c71860b23	testsuite/synth: add a test for #3121
+4b10f0001	elab-vhdl_expr: improve error messages for external names
+c59c9b5b2	testsuite/synth: add a test for #3121
+f288eed69	synth-vhdl_static_proc: add exclusion lines
+58b515cc6	synth-vhdl_expr: avoid a crash on invalid selected element
+ef3b88c77	testsuite/synth: add a test for #3121
+68638e8b5	testsuite/synth: add error tests for attr02
+a19237d11	synth-vhdl_expr: fix crash on elaboration error
+44bd59c4b	testsuite/synth: add a test in err01
+da7fdec40	synth-vhdl_expr: factorize code
+a66526d59	testsuite/synth: add an elaboration test in err01
+7519625a3	synth: refactoring of names as expression
+bd352b35e	synth-vhdl_expr: refactor synth_expression_with_type
+9ac292da6	testsuite/synth: add short-circuit tests in oper02
+7a91dd3a1	synth-vhdl_expr: use prefix for leftof/rightof
+325bb0a2a	testsuite/synth: add a test for previous commit
+568d2936a	testsuite/synth: add more tests for attr02
+148d2f50a	testsuite/synth: add tests for subtype conversion
+9f772b6b6	synth-vhdl_expr: add markers
+259176ec7	Makefile.in: disable -gnatn for coverage
+b77d50e2c	elab-vhdl_types: handle unbounded arrays of unbounded types
+042586302	synth-vhdl_expr: remove unused code
+ff93ed430	testsuite/synth: add a test to conv01
+8b130643e	testsuite/synth: add tests in err01
+dd9fd7d42	testsuite/synth: add a test for downto memory
+3c356ea14	synth-vhdl_expr: fix a crash after error
+8e601ba88	testsuite/synth: add a test for previous commit
+40cfeb011	testsuite/synth: add tests to slice02
+951c95ab1	testsuite/synth: add tests to slice01
+1145e40c2	synth-vhdl_expr: fix a crash after clock error
+4b383ee64	testsuite/synth: add tests to dff01
+cfb429d65	synth-vhdl_expr: improve handling of type conversion
+3f7fea5f3	testsuite/synth: add test for previous commit
+e24ceca8a	synth-vhdl_expr: remove unused code
+af40b9d5a	testsuite/synth: add a test for psl01
+372f8cf66	testsuite/synth: add a test in conv01
+a3710cb65	synth: improve support of function instantiation
+ff3365d04	synth-vhdl_expr: remove unused code (and add markers)
+4503d3260	testsuite/synth: add a test for interface function
+0ef6f478f	synth-vhdl_expr: remove code for unsupported clock parameter in psl
+546f74fce	testsuite/synth: add more tests in dff01
+1cbcdf607	elab-vhdl_decls: remove unused code
+e6d3018e5	synth-vhdl_stmts: reindent (for raise Internal_Error)
+44c2b744b	trans: elaborate generics of subprogram instantiations
+040c44f34	testsuite/gna: always run #3110
+1c18f0ce3	synth: renaming (synth_assignment_prefix -> synth_object_name)
+f1c664e8b	testsuite/synth: add a test for unsupported nested memory
+22fafa602	testsuite/synth: add a test for NULL dereference
+62ac49a4f	testsuite/synth: add a test to issue1277 (aggregate bounds)
+a19080fde	testsuite/synth: add a test to aggr02
+dd94c5942	testsuite/synth: add a test in asgn01 for unaffected
+f6488ee4a	synth-vhdl_stmts: remove unused code
+f6dc22f94	simul-vhdl_compile: elaborate generic map of subprg instantiations
+2c51f83ff	synth-vhdl_expr: check literal in range
+601d23496	testsuite/synth: add a test for literal out of range
+868f7bfd3	CI: Updated action/checkout to v6.
+05d632c39	CI: Deactivated macOS-13 images, because discontinued by GitHub on 04.12.2025.
+d3ea86f11	CI: Removed macOS-13 from release notes (asset uploads) and ghdl-setup testing.
+3001cab0b	ghdlrun: handle --fst with --interp
+3f5e1b86b	synth: reformatting, remove unused code
+68ffdd7c5	synth-vhdl_expr: handle interface subprograms
+a513db64b	synth: factorize code (check_matching_bounds)
+c95ad0588	synth: handle subtype attribute in exec_name_subtype
+3649439fd	simul: factorize code for interface_type
+19414b95c	synth-vhdl_stmts: handle external signal names as target
+fdf345076	synth-vhdl_expr: handle external constant name
+139ed1ece	simul-vhdl_simul: handle selected waveform signal assignments
+3a2070597	synth: refactoring to support matching cases during elab
+ae39eefe4	synth-vhdl_stmts: check bounds for selected formal in association
+adb6673a4	testsuite/gna: check vcd feature for #2706
+b60dcb6aa	testsuite/gna: adjust test for #922
+f85573fae	testsuite/gna: disable perf02-long for --interp
+a2943fcfc	testsuite/gna: add a test for #3138
+4db50e310	synth: fix handling of entity attributes
+8fcc0ccb6	simul: handle PSL assume directives
+ab6a64144	testsuite/gna: check vcd feature for #2781
+d4c5cc38d	simul-vhdl_simul: handle procedure instantiation
+87c2787b6	synth-vhdl_expr: handle function instantiation
+2e4699278	vhdl-std_package: make time resolution unit the new primary unit
+520aa1472	simul-vhdl_simul: handle instantiated subprograms
+228190fe8	simul-vhdl_simul: handle force release
+f085474e7	testsuite/gna: disable some tests for interpretation
+387e654f6	testsuite/synth: add tests for invalid concat in err01
+d2cccdd09	synth: indentation and adjust markers
+b0354fdd7	grt-options: support min and hr for stop-time
+d74203286	testsuite/gna: add a test for #3123
+9b7bda00c	elab-vhdl_expr: fix a crash on external name
+e35c38451	testsuite/synth: add a test for previous commit
+4159af6fe	synth-vhdl_oper: remove unused code
+b1272deb5	testsuite/synth: add a test to match01
+fb601ac8e	synth-disp_vhdl: handle null ports
+13bd0b490	testsuite/synth: add a test in issue1460
+849526914	testsuite/synth: add a test in oper02 for incorrect rotations
+5c012f92b	testsuite/synth: add a test for dynamic width conversion
+fe05c593a	synth-vhdl_oper: remove unused code, reformatting
+fc9e00fcd	testsuite/synth: add vector tests to oper01
+1a71339cf	testsuite/synth: add a test for error on monadic op
+5abc67e5d	testsuite/synth: add more std_match tests for oper01
+f0e971bfa	testsuite/synth: add min/max tests for oper02
+4a5a4efa6	testsuite/synth: add resize error tests to err01
+ba1488424	synth-vhdl_oper: adjust markers
+06a1368fe	elab-vhdl_files: raise exception on endfile error
+1c34f8d92	testsuite/synth: add a test for files
+ffc864580	testsuite/synth: add more error tests to err01
+5f7aedbcb	testsuite/synth: add more tests to match01
+7230be28e	elab-vhdl_objtypes: fix is_matching_bounds for arrays of array
+e33d5f74b	synth-vhdl_oper: adjust markers
+cae65d03d	testsuite/synth: add a test for multi-dim array comparaison
+e50706e80	testsuite/synth: add a test in oper01
+b6fb40870	testsuite/synth: adjust a test in if02
+050579a89	synth: refactoring, adjust markers
+0886ac4fc	testsuite/synth: add psl tests
+c6c94ea37	testsuite/synth: add tests for incorrect processes
+ec7750389	testsuite/synth: add error tests to err01
+757611e0c	synth-vhdl_stmts: adjust markers, remove unused code
+faccd058a	testsuite/synth: add loop01
+60adb5dde	synth-vhdl_stmts: fix a crash after error on condition
+f28d2ba96	testsuite/synth: add tests to loop01
+a713fe88e	testsuite/synth: add a reproducer for #3121
+e098468f8	testsuite/synth: add a test for foreign to err01
+432a3b108	synth-vhdl_stmts.adb: fix a crash on error in assignments
+3ffd8a605	synth-vhdl_stmts.adb: adjust markers
+4bc2e8858	testsuite/synth: add tests to err01
+e20605ca6	testsuite/synth: add a test for impure procedures
+d44febf77	testsuite/synth: add a test for error in assertion
+f1f51f459	testsuite/synth: add a test for foreign functions to err01
+e008b39f9	synth-vhdl_oper: fix value returned on error for match
+7726aed59	synth-vhdl_context: minor reformating
+c80aae17a	synth-vhdl_oper: handle not for bit_vector
+8d1c0661b	synth-vhdl_stmts: handle unbounded individual array assoc
+a3eb4ede9	testsuite/synth: add tests for individual assocs to func03
+33eedef8d	synth-vhdl_stmts: minor refactoring
+a313f8bdc	testsuite/synth: add a test for command line
+ad6478eb0	testsuite/synth: add error tests to blackbox01
+d3a6e4dfd	synth-vhdl_insts: refactoring, remove unused code, add markers
+720b761bf	testsuite/gna: add a disabled tests to buf077
+f93e5408f	testsuite/synth: add a disabled tests for func03
+39b3828f5	testsuite/synth: add a test for generated names
+f1d1c2421	synth-vhdl_aggr: reformating
+a58089586	testsuite/synth: add more tests for #1428
+e0b787554	synth-vhdl_environment: refactoring, remove unused code
+3c631383c	synth-vhdl_environment: improve output, remove unused code
+efca21311	testsuite/synth: add a test to #1428
+b397f08a5	testsuite/synth: add a test to attr01
+fd2fc5631	synth-vhdl_decls.adb: reformating
+7b8f02376	synth-vhdl_decls: remove unused code
+6be2c0ce3	testsuite/synth: add tests to err01
+827a7efbd	elab-vhdl_annotations: add markers, reformating
+53eedcb52	elab-vhdl_annotations: avoid double free
+c0e46615a	ghdlsynth.adb: finalize annotations
+5d8029f53	synth-vhdl_context: remove unused code
+1c05765d7	doc: -fexplicit is by default for vhdl 2008
+f434da0e8	testsuite/gna: add a test for #3124
+5bc402b53	vhdl-sem_assocs: adjust association operators of interface types
+5f6e2dc72	testsuite/gna: add test for #3130
+d8feece09	testsuite/gna: adjust #2696 after #3130
+204dcf234	testsuite/gna: add a reproducer for #3132
+432395967	synth: rework error handling in file operations.
+eeb0959a1	testsuite/gna: add a test for #3134
+1fd3e3fbd	synth: handle external variable names, improve error messages
+115b2a84a	testsuite/synth: add more tests for external names
+fb14d736b	testsuite/synth: add a testbench in dly1
+414ac0186	testsuite/synth: add a test for configuration instantiation
+8c6bc6465	testsuite/synth: add disabled tests to gen01
+c5d784706	elab-vhdl_insts.adb: reformating
+dbc460b77	synth-vhdl_expr: adjust markers
+39c625690	synth-vhdl_decls: add a todo for finalization
+c31fdd4cd	elab-vhdl_values: remove unused code, add markers
+113fd0f61	netlists-cleanup: cleanup! (remove unused code)
+044dc3935	elab-vhdl_stmts: reformating
+b56c33029	testsuite/synth: add tests for command line options
+238b99b77	elab-vhdl_files.adb: add markers
+6ae656397	testsuite/synth: add more tests for files
+3d7f2188b	testsuite/synth: add a test for verilog output
+719b986b5	synth-source: remove unused code
+dcdd7f14f	synth: move code from ieee-utils to ieee-std_logic_arith
+53bc62cc8	synth-ieee-std_logic_1164: minor reformating
+59b163caf	synth-vhdl_eval: handle one more operation
+54d0c17bb	testsuite/synth: add a test to sns02
+c7643b5d9	synth-ieee-numeric_std: fix warning condition for match_eq_vec_vec
+76ac088a0	numeric_std-body.vhdl: avoid a crash on divmod by 0
+a370d59db	synth-ieee-numeric_std: fix handling of corner cases
+0be668f7a	testsuite/synth: add tests to #1157
+b26caee9f	synth-vhdl_eval: handle more operations from numeric_bit
+d0495acf9	synth-ieee-utils: remove unused procedure
+9f2ac1507	synth-environment: remove unused procedure
+18089ebd9	netlists-folds.adb: add markers
+c8d634c37	netlists-utils.adb: add markers
+87cfbeb8b	synth-environment: remove unused subprograms
+16f42f776	synth: add support for many numeric_bit operations
+8489e0015	numeric_bit-body.vhdl: fix index errors
+4ce00aa79	synth-ieee-numeric_bit: fix some corner cases
+0abae2989	synth-ieee-utils: factorize code
+c61e3ca0b	synth-vhdl_stmts: refactor failed assertion routines
+dc2c18aab	synth-ieee-numeric_*: rework division by 0 assertions
+e3b23091a	libghd: extract libghdl_synth from ghdlsynth
+e8ff06bdb	synth.h: export more functions (to create pval)
+9ffc36f26	synth-ieee-std_logic_1164: use Internal_Error instead of CE.
+13f05fc57	synth-vhdl_eval: use specific functions for std_logic_arith cmp
+807164437	testsuite/synth: add example from #3129
+669a49a05	vhdl-configuration: abstract configure
+3c305ae3e	elab-vhdl_insts: refactoring
+ab5112372	libghdl_synth: add ghdl_synth_with_params
+44190a5fb	trans-chap3: add push_local_factory to protected init routines
+fc3f93676	testsuite/gna: add a test for #3143
+85b697200	ortho/debug: minor refactoring for dump code
+283fcf7b2	vhdl-scanner: adjust location of error message
+52183dcbb	testsuite/gna: add a test for previous commit
+12240f95e	ortho/debug: adjust ortho_debug-main
+3e809dc47	synth-vhdl_expr: check for NaN in conversions from float
+bc8b4ab84	testsuite/gna: add a test for #3145
+6ae2b2266	synth-ieee-std_logic_arith: fix some corner cases
+087c0766d	synth: fix handling of X for std_logic_arith in eval
+fea9e2a56	synth: refactoring to do incremental synthesis (WIP)
+8e11a8bb6	synth: adjust for yosys plugin
+41b79696d	Synth_All_Instances: only synthesize the newly added units
+6e4230295	libghdl_synth: handle parameters by position
+9276c423c	libraries/Makefile.inc: build vhdl 2019 libraries
+d11d5d1e3	vhdl: add some assert API in std.env
+513003c92	testsuite/gna: add a test for #3133
+29aac2b70	doc/ghdl.1: fix typo ("Elabortation")
+97cc112f7	Merge pull request #3148 from jespert/elabortation-typo
+0fe6bf07a	synth: free synth/elab tables at end of synthesis.
+9909cfbf7	create_default_map_aspect: handle subprograms of type association
+06a622b4e	elab: handle interface subprogram in operators
+acc57b8b6	testsuite/synth: add tests for #3144
+f9ee0265e	synth: Extend Get_Subprogram_Implementation
+50763cbe9	verilog: export and match foreign parameters
+001fb9606	testsuite/synth: add attributes for dump01
+577ce7b54	synth-ieee-utils: remove unused abs_vec function
+92030cb03	netlists-disp_vhdl: minor reformating
+3e9686e94	grt-vpi: handle vpiSigned
+289b73929	testsuite/vpi: add a test for #3149
+fde7c1f2f	testsuite/synth: add tests to external01
+4b0e75302	sem_external_name: set expression after analysis
+4447639a9	testsuite/synth: add more tests to external01
+020de915d	elab-vhdl_expr: remove unused code
+53a7fb531	synth-vhdl_expr: fix handling of type in sliced expr
+885292a1e	testsuite/synth: add tests to err01
+ee6b2ee33	elab-vhdl_expr: remove unused code
+2f6a41ef3	synth-vhdl_insts: handle discrete type in hash
+a35336234	vhdl-evaluation: handle process without names in instance_name
+6eb3fe17f	exec_name_subtype: handle character literal
+bc38856af	testsuite/gna: add a test for individual association
+0930630cd	testsuite/synth: add tests to attr02
+682c67576	testsuite/synth: add a test to err01
+0d2806bc7	testsuite/synth: add comp05 tests
+3d7b46df2	synth-vhdl_foreign: add markers
+e380b743a	elab-vhdl_context: remove unused code, add markers
+54fcd7a69	elab-vhdl_decls: refactoring to remive unused code
+6948d9947	elab-vhdl_objtypes: add markers
+58814b1f1	testsuite/synth: add a test to comp05
+a2eb67e34	simul-vhdl_compile: handle dynamic float subtypes
+0b2161698	synth-vhdl_stmts: add a comment
+414a4cb3a	is_scalar_subtype_compatible: fix handling of float ranges
+3211d0ddd	Remove memory leaks
+84771064e	testsuite/synth: add a blackbox with generics
+49d6de1a1	synth-flags.ads: adjust comments
+ac1c9b19a	netlists-memories: handle UL32 for initial content
+1f3681e52	testsuite/synth: add tests for verilog output
+b9d96a66f	netlists-disp_verilog: simplify addidx, minor reindentation
+c102351d5	testsuite/synth: add tests for addidx output
+3c62fcbaa	testsuite/synth: add a test to var02
+9b405ea49	convert_decl_chain: handle gate instantiations
+16a5d07ac	testsuite/synth: add gate01 test
+6c01b2850	synth_always: handle single name as event control
+c27d55b97	testsuite/synth: add a verilog test to case01
+ef1bf669c	elab-vhdl_types: remove unused code
+fef620cf0	testsuite/synth: add types01 tests
+cdfbd5863	synth-verulog_insts: preliminary refactoring
+c79514a85	elab-vhdl_heap: add markers
+5f03133bf	elab-vhdl_types: remove unused code
+fab8c847d	synth-verilog: reindentation
+b417811eb	files_map.adb: recognize .vh files as verilog files
+a0497474c	Add -lib/-no-lib switches for verilog blackboxes
+3f42b6096	verilog: parse implicit connections
+367a74936	synth: improved support of verilog enums
+9620540b1	verilog: resolve implicit connections
+b919d58fa	bignums: rewrite compute_part_insert
+51b2bc8fb	bignums: also rewrite compute_log_bit_part_insert
+ff8dcef12	testsuite/synth: add mem05 test
+4666c7089	synth-verilog_exprs: handle multi-dim memories
+917a982f9	testsuite/synth: add a test for multi-dim memory
+25d0c9b31	synth-verilog_insts: use pval_boolean for attributes without expr
+481086289	testsuite/synth: add a test in attr01
+ffc240c73	synth-verilog_insts: handle blackbox flag
+dd22b78ea	testsuite/synth: add a test in blackbox02
+5b98c9570	synth: fix handling of nested extended identifiers
+0e0a8c55c	synth: output real and integer parameters
+b79b34470	testsuite/synth: add a test for #3156
+870438d48	libghdl_synth.adb: adjust after refactoring
+4095a5aff	grt-lib.adb: Tentatively fix CI on windows
+530f0e0c7	grt: use Ghdl_E8 as interface type for severity
+5e72d400b	Updated pyTooling/Actions workflow templates to `@r7`.
+d730b1f38	Replaced commit and push code by deploy-pages@v4.
+6c8fee2d3	Merge pull request #3157 from Paebbels/paebbels/pipeline-update
+bbdf7fe0b	verilog: add comments
+a45059459	Update year in doc dir
+d2509fa2d	Update year in scripts dir
+3e055ff47	Update year in src dir
+27bcc5008	Merge pull request #3159 from Unike267/usainz/update-year
+277e75898	free_recursive: handle vunit declaration
+b35cc2f08	testsuite/gna: add a test for #3146
+6fcf8dd2a	testsuite/gna: adjust harness of #3146
+b24d92747	Updated Python 3.12 to 3.13 in MSYS2/MinGW64 and MSYS2/UCRT64.
+a951986bc	Merge pull request #3161 from Paebbels/paebbels/msys2-python313-update
+d01a1af8e	vhdl/translate: do not translate to be expanded components
+58eeff79f	testsuite/gna: add a test for #3164
+1680a1a35	verilog-sem_decls: rework parameter types
+9a57e09da	testsuite/synth: add tests to param01
+bba01c63d	netlists: disp constants for gates in vhdl and verilog
+aed4b5038	testsuite/synth: add a test for #3166
+e82e730b2	Reformat pyGHDL
+3568d36cf	netlists-inference: reindent of raise internal_error
+60d9a64fe	netlists-inference: simplify
+ba2169ea9	synth: remove unused netlists-butils
+b18371c33	errorout: remove earg_synth_net (not used anymore)
+d8f8e3dfe	vhdl: extract vhdl.chars from vhdl-scanner
+8989acb13	grt-vcd: dump timstamps only on signal change
+ca1cc6dd3	add simulation end timestamp to ref.vcd of issue2781
+38cbc6c98	Merge pull request #3169 from supervacuus/fix/grt-vcd/only_dump_timestamp_on_signal_change
+ec7caa792	rust: convert identifiers from command line to lower case
+436a9e563	main.rs: rework expect_failure
+e6f064ae3	main.rs: handle warning options
+cdab98e1f	main.rs: add --vpi-compile
+e26725f7e	main.rs: implement --vpi-link
+ceeadb42a	pnodesrs.py: replace underscore in warnid images
+b27e07d3b	main.rs: handle -Werror=
+cfc60ab83	main.rs: add -fPIC for --vpi-compile
+a198833ec	pyGHDL: use POINTER(c_char) for Get_File_Buffer return type
+929c44411	main.rs: check for no options after files for analysis command
+e4b5da369	files_map.py: reformatting
+4b9f183a1	synth_component_instantiation_statement: remove incorrect assert
+ba68458e9	testsuite/synth: add a test for #3171
+061b1974f	check_entity_declaration_top: handle view
+9f219f49f	testsuite/gna: add a test for #3172
+8ac11133f	elab_top_unit: handle interface package
+62e6bb118	testsuite/gna: add a test for #3167
+f3453431a	translate_entity_init_generics: handle interface package
+a9d39d635	synth: handle matching case statements
+c0fcdd140	testsuite/synth: add a test for #3170
+8c7b07ea0	py: Bumped dependencies.
+4f18792b7	libghdl: Changed utf-8 to iso-8859-1.
+fedb8e327	ci: Show download numbers in release notes.
+e4e64cac0	ci: MSYS2 updated Python 3.13 to 3.14, which breaks artifact uploads again.
+e665819a3	Merge pull request #3174 from Paebbels/paebbels/minor-updates
+c30f074cd	ci: Disable PR title check.
+5ded7a74a	sem_signal_port_association: handle view
+22880d6d9	testsuite/gna: add a test for #3173
+af7f34865	synth: change order of memidx within addridx
+fadd93d6b	testsuite/synth: add tests for #3175
+452778742	simul-vhdl_simul: handle creation of signals in interface view
+8f00cfddb	testsuite/gna: add a test for #3176
+782c73be7	elab-vhdl_decls, elab-vhdl_stmts: propagate elaboration errors
+f1f11f6a5	find_object_name_in_scope: also look in entity declaration
+c368d3647	testsuite/gna: add tests for #3177
+67cc17e90	simul-vhdl_simul: fix thinko for mode views.
+22ced14a8	testsuite/gna: add a test for #3179
+f134e36bb	testsuite/gna: improve harness of a test
+e9d876aad	synth: improve error handling during elaboration (for block stmt)
+d36afa4fd	testsuite/gna: add tests for errors in block statement
+a949b88d9	doc/development: Update LLVM Version Information
+73b93d8f4	Merge pull request #3182 from onsmallfin/doc/LLVMVersion
+3262cec7d	vhdl-evaluation: return uns64 for eval_discrete_range_length
+d6ce644b8	testsuite/gna: add a test for #3181
+6cc9809b1	grt: add support for 64b integer
+51eeed69e	testsuite/gna: add test for #3181
+73683f00e	debugger: handle EOF
+7eda4ad56	simul-vhdl_debug: handle view for info signal
+4c12efb89	vhdl-canon: extract sensitivity from view interface
+b65faa8b2	testsuite/gna: add a test for #3183
+bababe6b1	sem_signal_port_association: factorize code (for interface view)
+ec5e966c1	elab-vhdl_insts: propagate errors
+6b063da3b	convert_memidx: fix step of multi-dim memories
+9687e25c2	testsuite/synth: add a test for #3184
+6adfd8a44	netlists-memories: refactoring
+05302c5a5	netlists-expands: refactor gather_memidx
+e0f61a7c5	netlists-memories: factorize gather_memidx
+13cb67266	netlists-memories: factorize remove_memidx
+f2623ee41	netlists-memories: factorize (and rename) extract_address
+0b5b63b03	synth-vhdl_insts: handle interface types in create_module_name_hash
+5c0a7cea3	testsuite/synth: add a test for #3185
+52f011e58	synth-vhdl_insts: minor reformatting
+76667b309	testsuite/synth: run #3185 only with JIT backends
+c1696d76e	vhdl: handle alias prefix for name attributes
+e759a12f6	testsuite/gna: add a test for #3187
+b37a24ae1	netlists-memories: reformating
+b796da099	netlists-memories: remove unreachable code
+977bd4bc9	testsuite/synth: add a test for memories
+9d2914b7a	netlists-memories(extract_sub_constant): avoid copy
+41c71009b	testsuite/synth: add more tests for memory
+0f25344e3	netlists-memories: remove unused code
+817993f2c	trans-chap1: add recursion for Push_Pop_Instantiated_Architecture_Scope
+547688c85	synth-vhdl_insts: do not try to expand formal interface
+2fa2ddddb	testsuite/synth: add a test for #3188
+c1f27e704	testsuite/synth: add a test to memmux01
+dc896b6a7	synth: handle interface types in disp_memtyp
+c0dc039fc	netlists-disp_verilog: fix width_expr for dyn_insert
+780bdb9d0	netlists-disp_vhdl: fix disp of sensitivity for dyn_extract
+6d2c1a60f	synth-vhdl_expr: fix width of memidx output
+a8074cd5d	testsuite/synth: add tests with -de for memmux01
+898984f11	netlists-disp_verilog: rationalize comments
+ae7cde8b4	elab-debugger: add help for 'ch'
+4b68e9a28	elab-vhdl_debug: cann change to a process
+b3b9c0861	netlists-expands: fix dyn_extract for step > 1
+479851cbd	netlists-inference: fix a crash with -dc
+1a0c5078c	testsuite/synth: add a test for #3184
+ad874d295	synth: introduce getter for memidx
+c20231563	netlists-expand(memidx_no_overlap): handle more cases
+dafe7cad5	testsuite/synth: add a test to memmux01
+c20d9eaf0	netlists.adb: abstract get_input/output_port_desc_idx
+99614c8f8	synth-disp_vhdl: fix direction for arrays
+ffd95a3b0	netlists-memories: factorize lower_memidx_address
+32d16909f	testsuite/synth: add a test for #3184
+57a9604f1	testsuite/synth: add comments in test for #2876
+4f5bb0ddb	synth-vhdl_stmts.adb: fix crash
+75fe83f39	testsuite/synth: add a test for #3139
+e575aa769	Check_Simple_Signal_Target: check purity based on the prefix
+783b78dd7	testsuite/synth: add a test for previous commit
+2baf7858d	tentatively enable llvm 22.x
+9fcd8b758	testsuite/gna: add a test for #3192
+6011d3ed3	disp_pval_integer: handle null-range values
+73343b5c1	testsuite/synth: add a test for #3191
+1377069fb	netlists: replace param_pval_integer with param_pval_signed/unsigned
+9f10b65a9	testsuite/synth: add a test for previous commit
+8e673c36d	Update synth_gates.h
+69fff289d	Update NEWS.md
+f31dcb517	Regenerate ghdl.texi
+287942905	Bump version to 6.0.0-rc.1
+b981f25f3	Bump version to 6.0.0-rc2
+e589c698c	Bump version to 6.0.0

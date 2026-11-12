@@ -1,0 +1,55 @@
+--- a/sby_core.py
++++ b/sby_core.py
+@@ -21 +21 @@
+-if os.name == "posix":
++if os.name == "posix" and sys.platform != "emscripten":
+@@ -29,0 +30,2 @@
++if sys.platform == "emscripten":
++    from formal_process import SbyPopen, select_processes as select
+@@ -157 +159 @@
+-            if os.name == "posix":
++            if os.name == "posix" and sys.platform != "emscripten":
+@@ -225 +227,3 @@
+-            if os.name == "posix":
++            if sys.platform == "emscripten":
++                self.p = SbyPopen(self.cmdline, logstderr=self.logstderr)
++            elif os.name == "posix":
+@@ -442,0 +447,2 @@
++                    if sys.platform == "emscripten":
++                        self.error("Autotune is not supported in the browser")
+@@ -961 +967 @@
+-        if os.name == "posix":
++        if os.name == "posix" and sys.platform != "emscripten":
+@@ -1512 +1518,8 @@
+-        if os.name == "posix":
++        if sys.platform == "emscripten":
++            self.total_time = total_clock_time
++            self.summary.timing = [
++                "Elapsed clock time [H:MM:SS (secs)]: {}:{:02d}:{:02d} ({})".format(
++                    total_clock_time // (60*60), (total_clock_time // 60) % 60, total_clock_time % 60, total_clock_time),
++                "Elapsed process time unavailable in the browser",
++            ]
++        elif os.name == "posix":
+--- a/sby_jobserver.py
++++ b/sby_jobserver.py
+@@ -41,0 +42,8 @@
++
++    if sys.platform == "emscripten":
++        if "--jobserver-helper" in sys.argv:
++            raise ValueError("Jobserver helpers are not supported in the browser")
++        inherited_jobcount = 1
++        inherited_jobserver_auth_present = False
++        inherited_jobserver_auth = None
++        return
+@@ -208,0 +217,4 @@
++        elif sys.platform == "emscripten":
++            if jobcount != 1:
++                raise ValueError("Browser SBY requires exactly one job slot")
++            self.local_slots = 1
+--- a/sby.py
++++ b/sby.py
+@@ -70,0 +71,4 @@
++if sys.platform == "emscripten":
++    if jobcount != 1 or autotune or autotune_config or opt_tmpdir or linkmode:
++        raise ValueError("Browser SBY requires -j 1 without autotune, temporary directories, or links")
++

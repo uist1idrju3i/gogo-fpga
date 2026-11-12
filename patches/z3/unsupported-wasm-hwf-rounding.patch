@@ -1,0 +1,26 @@
+diff --git a/src/util/hwf.cpp b/src/util/hwf.cpp
+--- a/src/util/hwf.cpp
++++ b/src/util/hwf.cpp
+@@ -19,6 +19,7 @@ Revision History:
+ #include<math.h>
+ #include<float.h>
+ #include<sstream>
++#include "util/z3_exception.h"
+
+ #ifdef _WINDOWS
+ #if defined(_MSC_VER)
+@@ -555,5 +556,9 @@ unsigned hwf_manager::prev_power_of_two(hwf const & a) {
+ void hwf_manager::set_rounding_mode(mpf_rounding_mode rm)
+ {
++#if defined(__wasi__) || defined(__EMSCRIPTEN__)
++    (void)rm;
++    throw default_exception("Z3: hardware floating-point rounding is unsupported in this WebAssembly profile");
++#else
+ #ifdef _WINDOWS
+ #ifdef USE_INTRINSICS
+     switch (rm) {
+@@ -612,3 +617,4 @@ void hwf_manager::set_rounding_mode(mpf_rounding_mode rm)
+     }
+ #endif
++#endif
+ }
