@@ -16,7 +16,7 @@ const synthetic = Uint8Array.from(
   { length: 12 * 1024 },
   (_, index) => (index * 31 + (index >>> 4)) & 0xff,
 );
-const realAsset = readFileSync(resolve(repoRoot, "dist/synth/manifest.json"));
+const realAsset = readFileSync(resolve(repoRoot, "public_html/synth/manifest.json"));
 
 function compress(format, bytes) {
   if (format === "gzip") {

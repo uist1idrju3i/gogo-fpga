@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { resolve, sep } from "node:path";
 
 const root = resolve(import.meta.dirname, "../..");
-const dist = resolve(root, "dist");
+const dist = resolve(root, "public_html");
 const screenshots = resolve(root, "build/T4-ui/screens");
 const alternateVcd = readFileSync(resolve(root, "tests/fixtures/surfer/logic.vcd"), "utf8");
 const finiteTestbench = [
@@ -66,7 +66,7 @@ function assertStaticRequests(page, requests) {
     const relative = path === "/" ? "index.html" : path.slice(1);
     const file = resolve(dist, relative);
     expect(file.startsWith(`${dist}${sep}`)).toBe(true);
-    expect(existsSync(file), `${path} must be present in dist`).toBe(true);
+    expect(existsSync(file), `${path} must be present in public_html`).toBe(true);
   }
 }
 

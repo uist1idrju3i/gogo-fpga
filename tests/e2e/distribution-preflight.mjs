@@ -45,13 +45,13 @@ export function assertCopiedTreeMatches({
     try {
       distContents = readFileSync(resolve(distRoot, distRelativePath));
     } catch (error) {
-      throw new Error(`Playwright preflight: dist/${distRelativePath} is missing`, {
+      throw new Error(`Playwright preflight: public_html/${distRelativePath} is missing`, {
         cause: error,
       });
     }
     if (!readFileSync(sourceFile).equals(distContents)) {
       throw new Error(
-        `Playwright preflight: dist/${distRelativePath} differs from ` +
+        `Playwright preflight: public_html/${distRelativePath} differs from ` +
           sourcePathLabel(repoRoot, sourceFile),
       );
     }
@@ -80,13 +80,13 @@ export function assertCopiedFileMatches({
   try {
     distContents = readFileSync(resolve(distRoot, distPath));
   } catch (error) {
-    throw new Error(`Playwright preflight: dist/${distPath} is missing`, {
+    throw new Error(`Playwright preflight: public_html/${distPath} is missing`, {
       cause: error,
     });
   }
   if (!sourceContents.equals(distContents)) {
     throw new Error(
-      `Playwright preflight: dist/${distPath} differs from ${sourceLabel}`,
+      `Playwright preflight: public_html/${distPath} differs from ${sourceLabel}`,
     );
   }
   return new Set([distPath]);

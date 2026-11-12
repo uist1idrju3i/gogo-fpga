@@ -10,7 +10,7 @@ T5 では22候補を登録します。現段階の HDL は VHDL と Verilog で�
 - 固定する commit は `third_party/` の gitlink が正です。`git ls-tree -r HEAD -- third_party/` で確認できます。
 - [部品カタログ](../../libraries/catalog.json)は表示名、言語、ライセンス文書、依存を含む部品の定義を持ちます。取得元と commit の固定値は重複して書きません。
 - `scripts/build-library-assets.py` は gitlink と一致する checkout を要求し、固定した commit の blob から資材を作ります。作業ツリー上の変更を混入させず、上流のファイルとライセンス本文をそのまま配布します。
-- 生成する `dist/libraries/catalog.json` は取得元、commit、各ファイルの元のパス、サイズ、SHA-256 を含みます。ビルドで生成する記録であり、手書きの pin ではありません。
+- 生成する `public_html/libraries/catalog.json` は取得元、commit、各ファイルの元のパス、サイズ、SHA-256 を含みます。ビルドで生成する記録であり、手書きの pin ではありません。
 
 取得は `git submodule update --init --depth 1 -- third_party/` を使います。上流の submodule は再帰的に取得しません。ソースは参照する部品ごとに選び、取得できていない依存を黙って省きません。
 

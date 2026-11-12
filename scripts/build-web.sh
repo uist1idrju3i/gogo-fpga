@@ -11,7 +11,7 @@ if [[ "$build_root" != /* ]]; then
   build_root="$root/$build_root"
 fi
 artifacts="$build_root/jspi-pthread"
-dist="$root/dist"
+public_html="$root/public_html"
 cd "$root"
 
 case "${BUILD_INFO_CHECK:-full}" in
@@ -67,38 +67,38 @@ if [[ ! -f "$root/web/index.html" || ! -f "$root/web/serve.py" ]]; then
   exit 1
 fi
 
-rm -rf -- "$dist"
-mkdir -p "$dist"
-cp -R "$root/web/." "$dist/"
-python3 "$root/scripts/build-library-assets.py" --output "$dist/libraries"
-node_modules/.bin/esbuild web/editor/editor.mjs --bundle --minify --format=esm --outfile="$dist/editor/editor.bundle.mjs"
-node_modules/.bin/esbuild web/lib/project-zip.mjs --bundle --minify --format=esm --outfile="$dist/lib/project-zip.bundle.mjs"
-node_modules/.bin/esbuild web/lib/project-store.mjs --bundle --minify --format=esm --outfile="$dist/lib/project-store.mjs"
-cp "$artifacts/openFPGALoader.mjs" "$dist/openFPGALoader.mjs"
-cp "$artifacts/openFPGALoader.wasm" "$dist/openFPGALoader.wasm"
-cp "$artifacts/build-info.json" "$dist/build-info.json"
-mkdir -p "$dist/lib/decoders"
-cp "$build_root/wasi/decoders/zstd-decoder.wasm" "$dist/lib/decoders/"
-cp "$build_root/wasi/decoders/xz-decoder.wasm" "$dist/lib/decoders/"
-scripts/build-pack-assets.sh --dist-output "$dist/pack"
+rm -rf -- "$public_html"
+mkdir -p "$public_html"
+cp -R "$root/web/." "$public_html/"
+python3 "$root/scripts/build-library-assets.py" --output "$public_html/libraries"
+node_modules/.bin/esbuild web/editor/editor.mjs --bundle --minify --format=esm --outfile="$public_html/editor/editor.bundle.mjs"
+node_modules/.bin/esbuild web/lib/project-zip.mjs --bundle --minify --format=esm --outfile="$public_html/lib/project-zip.bundle.mjs"
+node_modules/.bin/esbuild web/lib/project-store.mjs --bundle --minify --format=esm --outfile="$public_html/lib/project-store.mjs"
+cp "$artifacts/openFPGALoader.mjs" "$public_html/openFPGALoader.mjs"
+cp "$artifacts/openFPGALoader.wasm" "$public_html/openFPGALoader.wasm"
+cp "$artifacts/build-info.json" "$public_html/build-info.json"
+mkdir -p "$public_html/lib/decoders"
+cp "$build_root/wasi/decoders/zstd-decoder.wasm" "$public_html/lib/decoders/"
+cp "$build_root/wasi/decoders/xz-decoder.wasm" "$public_html/lib/decoders/"
+scripts/build-pack-assets.sh --dist-output "$public_html/pack"
 S5_ASSET_DIR="$build_root/wasi" \
 GHDL_ASSET_DIR="$build_root/ghdl-wasm" \
 python3 "$root/scripts/build-synth-assets.py" \
   --output "$build_root/synth" \
-  --dist-output "$dist/synth"
-mkdir -p "$dist/surfer"
-cp -R "$build_root/surfer/dist/." "$dist/surfer/"
-mkdir -p "$dist/iverilog"
-cp "$build_root/iverilog-wasm/output/"*.wasm "$dist/iverilog/"
-cp "$root/THIRD_PARTY_NOTICES.md" "$dist/THIRD_PARTY_NOTICES.md"
-mkdir -p "$dist/licenses"
-cp -R "$root/licenses/." "$dist/licenses/"
-if ! grep -Eq '^/\*' "$dist/_headers" ||
-  ! grep -Eq 'Cross-Origin-Opener-Policy: same-origin' "$dist/_headers" ||
-  ! grep -Eq 'Cross-Origin-Embedder-Policy: require-corp' "$dist/_headers"; then
+  --dist-output "$public_html/synth"
+mkdir -p "$public_html/surfer"
+cp -R "$build_root/surfer/dist/." "$public_html/surfer/"
+mkdir -p "$public_html/iverilog"
+cp "$build_root/iverilog-wasm/output/"*.wasm "$public_html/iverilog/"
+cp "$root/THIRD_PARTY_NOTICES.md" "$public_html/THIRD_PARTY_NOTICES.md"
+mkdir -p "$public_html/licenses"
+cp -R "$root/licenses/." "$public_html/licenses/"
+if ! grep -Eq '^/\*' "$public_html/_headers" ||
+  ! grep -Eq 'Cross-Origin-Opener-Policy: same-origin' "$public_html/_headers" ||
+  ! grep -Eq 'Cross-Origin-Embedder-Policy: require-corp' "$public_html/_headers"; then
   printf 'COOP/COEP headers must cover the /surfer/* route.\n' >&2
   exit 1
 fi
-python3 "$root/scripts/check-dist-size.py" "$dist"
+python3 "$root/scripts/check-dist-size.py" "$public_html"
 
-printf 'Assembled web app in %s from %s\n' "$dist" "$artifacts"
+printf 'Assembled web app in %s from %s\n' "$public_html" "$artifacts"

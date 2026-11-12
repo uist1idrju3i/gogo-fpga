@@ -43,10 +43,10 @@ Bitwuzlaの隔離したMeson診断は、上流wrapで固定したCaDiCaL（MIT�
 | nextpnr-himbaechel | nextpnr-0.11.1 / `62e659ed6748e9f60b2a4aa25dd4fe79a9605881` | ISC | WASI WASM に静的リンク | `licenses/nextpnr-COPYING` |
 | Boost | 1.92.0 / SHA-256 `ea7b982002cc9dfbe59b0b217b206f470dc75f3de0bb2973d844118934d82411` | Boost Software License 1.0 | `program_options`、`iostreams` を nextpnr WASM に静的リンク | `licenses/boost-LICENSE_1_0.txt` |
 | Eigen | 5.0.1 / SHA-256 `e9c326dc8c05cd1e044c71f30f1b2e34a6161a3b6ecf445d56b53ff1669e3dec` | 主に MPL-2.0。一部に BSD など互換ライセンスのコード | nextpnr WASM のビルドでヘッダーを使用 | `licenses/eigen-*` |
-| Apicula / `gowin_pack` | 0.35、`requirements-nextpnr.txt` の wheel SHA-256 で固定 | MIT | Apicula wheel と Python コードを `dist/pack/wheels/` と Release に含む。Pyodide 上で bitstream を生成 | `licenses/apycula-LICENSE` |
-| Pyodide / micropip | npm 314.0.7、lock の micropip 0.11.1 | MPL-2.0 | `pyodide.mjs`、WASM、Python 標準ライブラリーと micropip wheel を `dist/pack/` に含む | `licenses/pyodide-MPL-2.0.txt` |
-| CPython | Pyodide に含まれる Python 3.14.2 | PSF License Version 2 | Pyodide の `python_stdlib.zip` として `dist/pack/pyodide/` に含む | `licenses/CPython-PSF-License.txt` |
-| NumPy / msgspec | Pyodide lock: 2.4.6 / 0.20.0 | NumPy: BSD-3-Clause、msgspec: BSD-3-Clause | Pyodide 用 wheel を `dist/pack/wheels/` に含む。native test 環境にも固定依存を導入 | `licenses/apycula-dependencies/numpy-LICENSE`、`licenses/apycula-dependencies/msgspec-LICENSE` |
+| Apicula / `gowin_pack` | 0.35、`requirements-nextpnr.txt` の wheel SHA-256 で固定 | MIT | Apicula wheel と Python コードを `public_html/pack/wheels/` と Release に含む。Pyodide 上で bitstream を生成 | `licenses/apycula-LICENSE` |
+| Pyodide / micropip | npm 314.0.7、lock の micropip 0.11.1 | MPL-2.0 | `pyodide.mjs`、WASM、Python 標準ライブラリーと micropip wheel を `public_html/pack/` に含む | `licenses/pyodide-MPL-2.0.txt` |
+| CPython | Pyodide に含まれる Python 3.14.2 | PSF License Version 2 | Pyodide の `python_stdlib.zip` として `public_html/pack/pyodide/` に含む | `licenses/CPython-PSF-License.txt` |
+| NumPy / msgspec | Pyodide lock: 2.4.6 / 0.20.0 | NumPy: BSD-3-Clause、msgspec: BSD-3-Clause | Pyodide 用 wheel を `public_html/pack/wheels/` に含む。native test 環境にも固定依存を導入 | `licenses/apycula-dependencies/numpy-LICENSE`、`licenses/apycula-dependencies/msgspec-LICENSE` |
 | fastcrc | `requirements-nextpnr.txt` で固定 | MIT | native `gowin_pack` の検証依存。Pyodide には含まず、Apicula の CRC table fallback を使う | `licenses/apycula-dependencies/fastcrc-LICENSE` |
 | wasi-sdk | 34.0 / `b761e3a0721dbae9c09a0059e5fdb2bf917d1b4a8a7b430fb3b5aafb0984b2c4`。ライセンス原文の source commit: `5a0bf653a1a06e1c18867567c5937006d3394a69` | Apache-2.0 | ビルド用 SDK | `licenses/wasi-sdk-LICENSE` |
 | LLVM runtime | `895aa2c896ada719451be2e3673c83da8ddf1141` | Apache-2.0 with LLVM Exceptions | libc++、libc++abi、libunwind などを Yosys WASM に静的リンク | `licenses/wasi-sdk-llvm-LICENSE.TXT` |
@@ -57,7 +57,7 @@ Bitwuzlaの隔離したMeson診断は、上流wrapで固定したCaDiCaL（MIT�
 | GHDL | v6.0.0 / `e589c698c351369ac5bcfe7abe1f1152ac5d4727` | GPL-2.0-or-later | GHDL WASM に静的リンク | `licenses/GHDL-COPYING.md` |
 | Icarus Verilog | v13_0 / `dfeee909ed9f20b4870dd93423156c0170c0e1ff` | GPL-2.0-or-later | `ivlpp`、`ivl`、`vvp` WASM に静的リンク | `licenses/iverilog-COPYING` |
 | Icarus Verilog `tgt-vvp` | v13_0 / `dfeee909ed9f20b4870dd93423156c0170c0e1ff` | LGPL-2.1 | `ivl` WASM に静的リンク | `licenses/iverilog-tgt-vvp-COPYING.lesser` |
-| Surfer | v0.7.0 / `bd749b1f786c1c62cd67893ca71346cbe6983915` | EUPL-1.2 | ブラウザー用波形ビューアーとして `dist/surfer/` に配布 | `licenses/surfer-LICENSE-EUPL-1.2.txt`、`dist/surfer/licenses/THIRD_PARTY_NOTICES.md` |
+| Surfer | v0.7.0 / `bd749b1f786c1c62cd67893ca71346cbe6983915` | EUPL-1.2 | ブラウザー用波形ビューアーとして `public_html/surfer/` に配布 | `licenses/surfer-LICENSE-EUPL-1.2.txt`、`public_html/surfer/licenses/THIRD_PARTY_NOTICES.md` |
 | synth-explorer | `d4dab3def346cb9fdac5bc171d801bd091df72e1` | Apache-2.0 | build script、WASM adapter、3 patches、GHDL WASM tests から一部を採用 | `licenses/synth-explorer-LICENSE` |
 | AdaWebPack | 24.0.0 / SHA-256 `8edaae8b9987a20aec430d750f30033f12f953ce2b6437afb87fbf8cc1063796` | BSD-3-Clause | GHDL WASM の開発用 Ada compiler | `licenses/AdaWebPack-LICENSE.BSD3` |
 | GCC libgnat | GCC 14.1.0 / commit `ed10445fe222d3973ae13eda9bf211f315c5e3f9` | GPL-3.0-or-later with GCC Runtime Library Exception | GNAT runtime units を GHDL WASM に静的リンク | `licenses/GPL-3.0.txt`、`licenses/GCC-RUNTIME-LIBRARY-EXCEPTION` |

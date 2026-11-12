@@ -393,7 +393,7 @@ async function main() {
   const baseUrl = `http://127.0.0.1:${port}`;
   const serverLog = `${outputPath}.server.log`;
   const logFd = openSync(serverLog, "wx");
-  const server = spawn("python3", ["dist/serve.py", "--port", String(port)], {
+  const server = spawn("python3", ["public_html/serve.py", "--port", String(port)], {
     cwd: root,
     stdio: ["ignore", logFd, logFd],
   });

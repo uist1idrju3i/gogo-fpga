@@ -76,7 +76,7 @@ def prepare(root: Path, output: Path) -> None:
         archive = root / "build/cache" / pin["asset"]
         if not archive.exists():
             archive.parent.mkdir(parents=True, exist_ok=True)
-            request = urllib.request.Request(pin["url"], headers={"User-Agent": "toolchain-source-build"})
+            request = urllib.request.Request(pin["url"], headers={"User-Agent": "gogo-fpga-source-build"})
             with urllib.request.urlopen(request, timeout=60) as response:
                 data = response.read()
             if hashlib.sha256(data).hexdigest() != pin["sha256"]:

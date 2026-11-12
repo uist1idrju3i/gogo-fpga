@@ -43,7 +43,7 @@ zstd と xz の WASM 展開器について、現在の `-O2`、`-O3`、`-Os`、L
 | OsLTO | `DECODER_OPT_LEVEL=s`、`DECODER_LTO=1` |
 | LTO | `DECODER_LTO=1` はコンパイルとリンクに `-flto` を加える。WASI SDK の sysroot にある `lib/wasm32-wasip1/llvm-lto` により libc も LTO 対象となるため、リンクで `llvm-lto` が使われた証拠を記録する |
 | 出力先 | `DECODER_OUT_DIR` は変種ごとに異なる相対パスを使い、出力を並べて保持する。未指定時の出力先は現行のままとする。この比較では既定ビルドの動作を変えない |
-| 入力 | `scripts/prepare-compressed-assets.sh` が作る S4B の `dist/bench`。Tang Nano 20K の 5 資材（`synth/yosys.wasm`、`synth/nextpnr-himbaechel-gowin.wasm`、`synth/yosys-share.tar`、`pack/pyodide/pyodide.asm.wasm`、`synth/chipdb/chipdb-GW2A-18C.bin`）を zstd と xz で展開する |
+| 入力 | `scripts/prepare-compressed-assets.sh` が作る S4B の `public_html/bench`。Tang Nano 20K の 5 資材（`synth/yosys.wasm`、`synth/nextpnr-himbaechel-gowin.wasm`、`synth/yosys-share.tar`、`pack/pyodide/pyodide.asm.wasm`、`synth/chipdb/chipdb-GW2A-18C.bin`）を zstd と xz で展開する |
 | ブラウザー | 同じホスト上の headless Chromium。計測中はほかの重い処理を実行しない |
 | 反復と順序 | 5 回以上。各反復で変種の順番を 1 つずつずらす round-robin とし、各反復で新しいページを使う |
 | 指標 | 各展開器の `WebAssembly.compile` 時間、資材ごとの展開時間、展開後 SHA-256、raw WASM bytes |

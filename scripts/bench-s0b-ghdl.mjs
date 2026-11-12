@@ -373,7 +373,7 @@ function serializeBrowserCase(testCase) {
 }
 
 async function startBrowser({ serverLogPath }) {
-  const distRoot = path.join(root, "dist");
+  const distRoot = path.join(root, "public_html");
   const benchRoot = path.join(distRoot, "s0b");
   mkdirSync(benchRoot, { recursive: true });
   writeFileSync(
@@ -488,7 +488,7 @@ self.addEventListener("message", async ({ data }) => {
   const port = await freePort();
   const baseUrl = `http://127.0.0.1:${port}`;
   const logFd = openSync(serverLogPath, "wx");
-  const server = spawn("python3", ["dist/serve.py", "--port", String(port)], {
+  const server = spawn("python3", ["public_html/serve.py", "--port", String(port)], {
     cwd: root,
     stdio: ["ignore", logFd, logFd],
   });

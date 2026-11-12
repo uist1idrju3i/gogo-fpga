@@ -108,7 +108,7 @@ Node testはHDL33件、CPU29件が成功し、失敗とskipは0でした。親te
 
 ```sh
 python3 scripts/audit-release-closure.py --root . \
-  --source build/t5-source-closure-07e2256/toolchain-source-v0.1.0-t5.07e2256 \
+  --source build/t5-source-closure-07e2256/gogo-fpga-source-v0.1.0-t5.07e2256 \
   --generated-libraries build/t5-source-closure-07e2256/generated-libraries \
   --version v0.1.0-t5.07e2256 --revision 07e2256a1c090abc456af60830f514e36af6085a \
   --output build/t5-source-closure-audit-new.json

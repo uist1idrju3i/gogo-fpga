@@ -99,16 +99,16 @@ def audit(root: Path, source: Path, generated: Path, version: str, revision: str
                 "Formal source manifest mismatch")
     metadata = json.loads((source / "RELEASE-SOURCE.json").read_text())
     require(metadata["commit"] == revision and metadata["version"] == version, "Release metadata mismatch")
-    catalog_bytes = (root / "dist/libraries/catalog.json").read_bytes()
+    catalog_bytes = (root / "public_html/libraries/catalog.json").read_bytes()
     entries = json.loads(catalog_bytes)["entries"]
     require(bool(entries) and len(entries) == len({entry["id"] for entry in entries}), "Empty or duplicate catalog")
-    for location in [generated, source / "dist/libraries"]:
+    for location in [generated, source / "public_html/libraries"]:
         require((location / "catalog.json").read_bytes() == catalog_bytes, "Catalog mismatch")
-        require(files(location) == files(root / "dist/libraries"), "Library distribution paths mismatch")
+        require(files(location) == files(root / "public_html/libraries"), "Library distribution paths mismatch")
     require((source / "libraries/source-manifest.json").read_bytes() == catalog_bytes, "Source manifest mismatch")
     verified = {}
-    web_prefix = f"toolchain-web-{version}/"
-    with zipfile.ZipFile(root / f"release/toolchain-web-{version}.zip") as web:
+    web_prefix = f"gogo-fpga-web-{version}/"
+    with zipfile.ZipFile(root / f"release/gogo-fpga-web-{version}.zip") as web:
         members = web.infolist()
         names = [member.filename for member in members]
         require(len(names) == len(set(names)), "Duplicate Web ZIP member")
@@ -128,9 +128,9 @@ def audit(root: Path, source: Path, generated: Path, version: str, revision: str
             for asset in assets(entry):
                 key = asset["asset"]
                 safe_path(key)
-                original = (root / "dist/libraries" / key).read_bytes()
+                original = (root / "public_html/libraries" / key).read_bytes()
                 require(len(original) == asset["size"] and digest(original) == asset["sha256"], "Library asset hash mismatch")
-                for location in [generated, source / "dist/libraries"]:
+                for location in [generated, source / "public_html/libraries"]:
                     require((location / key).read_bytes() == original, "Regenerated library asset mismatch")
                 require(web.read(web_prefix + "libraries/" + key) == original, "Web ZIP library asset mismatch")
                 verified[key] = asset["sha256"]
@@ -144,19 +144,19 @@ def audit(root: Path, source: Path, generated: Path, version: str, revision: str
             expected = (source / "vendor" / name / license_path).read_bytes()
             require(bool(expected) and web.read(web_prefix + f"licenses/{name}-{license_path}") == expected,
                     "Formal source ZIP license mismatch")
-        for location, prefix in [(root / "dist/surfer/licenses", "surfer/licenses/"), (root / "licenses", "licenses/")]:
+        for location, prefix in [(root / "public_html/surfer/licenses", "surfer/licenses/"), (root / "licenses", "licenses/")]:
             require(location.is_dir() and bool(files(location)), f"Missing license directory: {prefix}")
             for relative in files(location):
                 expected = (location / relative).read_bytes()
                 require(bool(expected) and web.read(web_prefix + prefix + relative) == expected, "License mismatch")
         for folder in ["synth", "pack", "iverilog", "surfer"]:
-            location = root / "dist" / folder
+            location = root / "public_html" / folder
             require(location.is_dir() and bool(files(location)), f"Missing tool distribution: {folder}")
             for relative in files(location):
                 expected = (location / relative).read_bytes()
                 require(web.read(web_prefix + folder + "/" + relative) == expected, "Tool distribution mismatch")
-        for relative in files(root / "dist"):
-            require(web.read(web_prefix + relative) == (root / "dist" / relative).read_bytes(),
+        for relative in files(root / "public_html"):
+            require(web.read(web_prefix + relative) == (root / "public_html" / relative).read_bytes(),
                     f"Web distribution mismatch: {relative}")
         web_files = sum(not member.is_dir() for member in members)
     snapshot_files = 0
@@ -187,12 +187,12 @@ def audit(root: Path, source: Path, generated: Path, version: str, revision: str
             require(local.is_file() and not local.is_symlink()
                     and local.read_bytes() == git_bytes(root, revision, relative), f"Source snapshot mismatch: {relative}")
             snapshot_files += 1
-    with tarfile.open(root / f"release/toolchain-source-{version}.tar.gz", "r:gz") as archive:
+    with tarfile.open(root / f"release/gogo-fpga-source-{version}.tar.gz", "r:gz") as archive:
         members = archive.getmembers()
         require(len(members) == len({member.name for member in members}), "Duplicate source archive member")
         for member in members:
             safe_path(member.name)
-            prefix = f"toolchain-source-{version}/"
+            prefix = f"gogo-fpga-source-{version}/"
             require(member.name.startswith(prefix) or (member.isdir() and member.name == prefix[:-1]),
                     "Unexpected source archive prefix")
             if member.issym() or member.islnk():
@@ -217,10 +217,10 @@ def audit(root: Path, source: Path, generated: Path, version: str, revision: str
             "Git-free source archive and safe member paths",
             "Library revision pins and .gitcommit files",
             "Every root snapshot file and direct submodule gitlink matches the recorded Git revision",
-            "Catalog and every declared source/license asset byte-identical in root, Git-free regeneration, source-built dist, and Web ZIP",
+            "Catalog and every declared source/license asset byte-identical in root, Git-free regeneration, source-built public_html, and Web ZIP",
             "Exact NOTICE/LICENSE/README/third-party notices and Surfer/root licenses in distribution",
             "All synth/pack/Icarus/Surfer distribution bytes identical to Web ZIP",
-            "Every dist file byte-identical to Web ZIP and every source archive file byte-identical to extracted source",
+            "Every public_html file byte-identical to Web ZIP and every source archive file byte-identical to extracted source",
             "Every Web ZIP member smaller than 25 MiB",
         ],
         "cached_inputs": "Previously verified native/WASM binaries and npm dependencies reused for Git-free Web assembly; compilers were not rebuilt from this archive.",

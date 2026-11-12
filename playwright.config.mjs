@@ -29,7 +29,7 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: `scripts/build-web.sh && python3 dist/serve.py --port ${playwrightPort}`,
+    command: `scripts/build-web.sh && python3 public_html/serve.py --port ${playwrightPort}`,
     url: baseURL,
     reuseExistingServer: false,
     stdout: "pipe",

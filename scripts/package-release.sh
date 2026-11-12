@@ -12,8 +12,8 @@ version="$1"
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 release_dir="$root/release"
-web_name="toolchain-web-$version"
-source_name="toolchain-source-$version"
+web_name="gogo-fpga-web-$version"
+source_name="gogo-fpga-source-$version"
 web_archive="$web_name.zip"
 source_archive="$source_name.tar.gz"
 submodules=(
@@ -126,33 +126,33 @@ for tool in git tar gzip zip sha256sum python3 find sort touch chmod cp xargs; d
 done
 
 required_files=(
-  "$root/dist/build-info.json"
-  "$root/dist/surfer/index.html"
-  "$root/dist/surfer/surfer_bg.wasm"
-  "$root/dist/surfer/licenses/THIRD_PARTY_NOTICES.md"
-  "$root/dist/openFPGALoader.mjs"
-  "$root/dist/openFPGALoader.wasm"
-  "$root/dist/serve.py"
-  "$root/dist/synth/manifest.json"
-  "$root/dist/synth/yosys.wasm.zst"
-  "$root/dist/synth/ghdl-synth.wasm.zst"
-  "$root/dist/synth/libraries.tar.zst"
-  "$root/dist/synth/nextpnr-himbaechel-gowin.wasm.zst"
-  "$root/dist/lib/decoders/zstd-decoder.wasm"
-  "$root/dist/lib/decoders/xz-decoder.wasm"
-  "$root/dist/synth/yosys-share.tar.zst"
-  "$root/dist/synth/chipdb/chipdb-GW1NZ-1.bin.zst"
-  "$root/dist/synth/chipdb/chipdb-GW1NS-4.bin.zst"
-  "$root/dist/synth/chipdb/chipdb-GW1N-9C.bin.zst"
-  "$root/dist/synth/chipdb/chipdb-GW2A-18C.bin.zst"
-  "$root/dist/pack/pyodide/pyodide.mjs"
-  "$root/dist/pack/pyodide/pyodide.asm.mjs"
-  "$root/dist/pack/manifest.json"
-  "$root/dist/pack/pyodide/pyodide.asm.wasm.zst"
-  "$root/dist/pack/pyodide/pyodide-lock.json.zst"
-  "$root/dist/pack/pyodide/python_stdlib.zip"
-  "$root/dist/libraries/catalog.json"
-  "$root/dist/_headers"
+  "$root/public_html/build-info.json"
+  "$root/public_html/surfer/index.html"
+  "$root/public_html/surfer/surfer_bg.wasm"
+  "$root/public_html/surfer/licenses/THIRD_PARTY_NOTICES.md"
+  "$root/public_html/openFPGALoader.mjs"
+  "$root/public_html/openFPGALoader.wasm"
+  "$root/public_html/serve.py"
+  "$root/public_html/synth/manifest.json"
+  "$root/public_html/synth/yosys.wasm.zst"
+  "$root/public_html/synth/ghdl-synth.wasm.zst"
+  "$root/public_html/synth/libraries.tar.zst"
+  "$root/public_html/synth/nextpnr-himbaechel-gowin.wasm.zst"
+  "$root/public_html/lib/decoders/zstd-decoder.wasm"
+  "$root/public_html/lib/decoders/xz-decoder.wasm"
+  "$root/public_html/synth/yosys-share.tar.zst"
+  "$root/public_html/synth/chipdb/chipdb-GW1NZ-1.bin.zst"
+  "$root/public_html/synth/chipdb/chipdb-GW1NS-4.bin.zst"
+  "$root/public_html/synth/chipdb/chipdb-GW1N-9C.bin.zst"
+  "$root/public_html/synth/chipdb/chipdb-GW2A-18C.bin.zst"
+  "$root/public_html/pack/pyodide/pyodide.mjs"
+  "$root/public_html/pack/pyodide/pyodide.asm.mjs"
+  "$root/public_html/pack/manifest.json"
+  "$root/public_html/pack/pyodide/pyodide.asm.wasm.zst"
+  "$root/public_html/pack/pyodide/pyodide-lock.json.zst"
+  "$root/public_html/pack/pyodide/python_stdlib.zip"
+  "$root/public_html/libraries/catalog.json"
+  "$root/public_html/_headers"
   "$root/README.md"
   "$root/LICENSE"
   "$root/NOTICE"
@@ -164,15 +164,15 @@ for required_file in "${required_files[@]}"; do
     exit 1
   fi
 done
-if [[ ! -d "$root/dist/synth" ]] || [[ -z "$(find "$root/dist/synth" -type f -print -quit)" ]]; then
+if [[ ! -d "$root/public_html/synth" ]] || [[ -z "$(find "$root/public_html/synth" -type f -print -quit)" ]]; then
   printf 'Required synthesis assets are missing or empty.\n' >&2
   exit 1
 fi
 asset_wheels=(
-  "$root"/dist/pack/wheels/apycula-*.whl
-  "$root"/dist/pack/wheels/micropip-*.whl
-  "$root"/dist/pack/wheels/numpy-*.whl
-  "$root"/dist/pack/wheels/msgspec-*.whl
+  "$root"/public_html/pack/wheels/apycula-*.whl
+  "$root"/public_html/pack/wheels/micropip-*.whl
+  "$root"/public_html/pack/wheels/numpy-*.whl
+  "$root"/public_html/pack/wheels/msgspec-*.whl
 )
 if [[ ${#asset_wheels[@]} != 4 ]]; then
   printf 'Release must contain exactly one Apicula, micropip, NumPy, and msgspec wheel.\n' >&2
@@ -187,7 +187,7 @@ done
 
 python3 "$root/scripts/build-info.py" check-artifacts \
   --root "$root" \
-  --artifacts "$root/dist"
+  --artifacts "$root/public_html"
 
 commit="$(git -C "$root" rev-parse HEAD)"
 source_date_epoch="$(git -C "$root" log -1 --format=%ct)"
@@ -205,7 +205,7 @@ source_root="$work/$source_name"
 mkdir -p "$web_root" "$web_root/licenses" "$source_root"
 python3 "$root/scripts/prepare-formal-sources.py" --output "$work/formal-sources"
 cp "$work/formal-sources/licenses/"* "$web_root/licenses/"
-cp -R "$root/dist/." "$web_root/"
+cp -R "$root/public_html/." "$web_root/"
 cp "$root/README.md" "$root/LICENSE" "$root/NOTICE" \
   "$root/THIRD_PARTY_NOTICES.md" "$web_root/"
 
@@ -296,7 +296,7 @@ find "$web_root" -exec touch -h -d "@$SOURCE_DATE_EPOCH" {} +
 git -C "$root" archive --format=tar HEAD | tar -xf - -C "$source_root"
 mkdir -p "$source_root/vendor/formal-archives"
 cp "$work/formal-sources/"*.tar.xz "$work/formal-sources/manifest.json" "$source_root/vendor/formal-archives/"
-cp "$root/dist/libraries/catalog.json" "$source_root/libraries/source-manifest.json"
+cp "$root/public_html/libraries/catalog.json" "$source_root/libraries/source-manifest.json"
 submodule_lines="$(git -C "$root" ls-tree HEAD -- "${submodules[@]}")"
 declare -A submodule_shas=()
 while IFS=$'\t' read -r metadata path; do
@@ -328,7 +328,7 @@ module.copy_nested_assets(root, manifest, output)
 PY
 python3 "$source_root/scripts/build-library-assets.py" \
   --root "$source_root" --output "$work/library-rebuild"
-cmp "$root/dist/libraries/catalog.json" "$work/library-rebuild/catalog.json"
+cmp "$root/public_html/libraries/catalog.json" "$work/library-rebuild/catalog.json"
 for path in "${submodules[@]}"; do
   if [[ -z "${submodule_shas[$path]:-}" ]]; then
     printf 'Missing submodule gitlink: %s\n' "$path" >&2
@@ -462,7 +462,7 @@ if [[ ! -s "$source_root/vendor/ghdl/.gitcommit" ||
 fi
 
 python3 - "$source_root/RELEASE-SOURCE.json" "$version" "$commit" \
-  "$source_date_epoch" "$emsdk_version" "$root/dist/build-info.json" "$iverilog_pin" <<'PY'
+  "$source_date_epoch" "$emsdk_version" "$root/public_html/build-info.json" "$iverilog_pin" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -504,7 +504,7 @@ chmod 644 "$source_root/RELEASE-SOURCE.json"
 )
 TZ=UTC gzip -n -9 -c "$work/$source_name.tar" > "$release_dir/$source_archive"
 
-python3 - "$root" "$root/dist/build-info.json" "$release_dir/notes.md" "$version" \
+python3 - "$root" "$root/public_html/build-info.json" "$release_dir/notes.md" "$version" \
   "$commit" "$emsdk_version" "$yosys_version" "${submodules[@]}" <<'PY'
 import json
 import re
@@ -516,7 +516,7 @@ root = Path(sys.argv[1])
 build_info_path = Path(sys.argv[2])
 notes_path = Path(sys.argv[3])
 version, commit, emsdk_version, yosys_version = sys.argv[4:8]
-source_name = f"toolchain-source-{version}"
+source_name = f"gogo-fpga-source-{version}"
 submodules = sys.argv[8:]
 build_info = json.loads(build_info_path.read_text(encoding="utf-8"))
 labels = {
@@ -587,7 +587,7 @@ text = [
     "",
     "## 使い方",
     "",
-    "1. `toolchain-web-<version>.zip` をダウンロードして展開します。",
+    "1. `gogo-fpga-web-<version>.zip` をダウンロードして展開します。",
     "2. 展開先で `python3 serve.py` を実行します。",
     "3. 表示された URL を Chrome または Edge で開きます。",
     "",

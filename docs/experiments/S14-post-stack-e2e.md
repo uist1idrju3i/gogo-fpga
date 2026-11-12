@@ -44,7 +44,7 @@ Git情報なしの再生成では、未使用の `build/t5-source-closure-876c2a
 
 ```sh
 python3 scripts/audit-release-closure.py --root . \
-  --source build/t5-source-closure-876c2a8/toolchain-source-v0.1.0-t5.876c2a8 \
+  --source build/t5-source-closure-876c2a8/gogo-fpga-source-v0.1.0-t5.876c2a8 \
   --generated-libraries build/t5-source-closure-876c2a8/generated-libraries \
   --version v0.1.0-t5.876c2a8 --revision 876c2a824e97943fbcd57118494f54f80f9745b9 \
   --output build/t5-source-closure-876c2a8-audit-new.json

@@ -241,7 +241,7 @@ test("corrupted GHDL runtime asset fails its compressed digest check", async ({
 }) => {
   await createProject(page, BOARDS[0]);
   const compressed = Buffer.from(
-    readFileSync(resolve(root, "dist/synth/ghdl-synth.wasm.zst")),
+    readFileSync(resolve(root, "public_html/synth/ghdl-synth.wasm.zst")),
   );
   compressed[Math.floor(compressed.byteLength / 2)] ^= 1;
   await page.route("**/synth/ghdl-synth.wasm.zst", (route) =>
@@ -265,7 +265,7 @@ test("corrupted cached GHDL runtime asset is discarded and refetched", async ({
 }) => {
   await createProject(page, BOARDS[0]);
   const manifest = JSON.parse(
-    readFileSync(resolve(root, "dist/synth/manifest.json"), "utf8"),
+    readFileSync(resolve(root, "public_html/synth/manifest.json"), "utf8"),
   );
   const asset = manifest.assets.find(({ path }) => path === "ghdl-synth.wasm");
   await page.evaluate(async (sha256) => {

@@ -185,7 +185,7 @@ R1-R6 の SHA-256 log は計 4,560 行（各 run 760 path）、R7/R8 を加え�
 
 R1-R6 の GHDL cache log はすべて `CACHE_HIT: true` だったが、cache restore path は `build/cache/ghdl-wasm/` と `build/cache/ghdl-host-packages/` で、native `.cf` 出力を保存・復元する cache ではない。R7/R8 の log にも `Build input cache restore: true` とある。build script は出力を再生成するため、native `.cf` は R1-R6 の間でも各 path で6種類の hash だった。正規化済み WASM staging library と archive は R1-R8 で一致した。
 
-`scripts/build-web.sh` は GHDL output directory を `dist/` にコピーせず、`scripts/package-release.sh` は `dist/` を web zip に格納する。そのため native `.cf` は現在の web / release package には含まれない。一方、build / release workflow は `build/ghdl-wasm/` と `build/ghdl-native/` を一時 CI artifact に upload する。これは製品配布物ではないが CI artifact には native intermediate が含まれる。現行 `build-web.sh` は GHDL WASM library も `dist/` にコピーしていないため、正規化済み GHDL library が browser に配信されているとは確認できなかった。
+`scripts/build-web.sh` は GHDL output directory を `public_html/` にコピーせず、`scripts/package-release.sh` は `public_html/` を web zip に格納する。そのため native `.cf` は現在の web / release package には含まれない。一方、build / release workflow は `build/ghdl-wasm/` と `build/ghdl-native/` を一時 CI artifact に upload する。これは製品配布物ではないが CI artifact には native intermediate が含まれる。現行 `build-web.sh` は GHDL WASM library も `public_html/` にコピーしていないため、正規化済み GHDL library が browser に配信されているとは確認できなかった。
 
 Yosys の build-info.json hash は R1-R3/W4 と R4/R5 で異なる。生成コード上、comment-only 変更が反映される metadata field は `build_script_sha256` であり、基準/R4/R5 の script hash はそれぞれ `eb932977382e880bc80fa005fc8fad955c909d845fd11a5102014ea6edb6c14a`、`a9b37d4b35f8ea44a94b27083eb092088525ec1ae9592b48aa5880e5d7c82791`、`98fa89127a95f15fe1e946376d75c894d50ac4d40a1ec56da109686efe24afc0` である。artifact download は行っていないため JSON field values 自体の読み戻し比較はしていない。
 

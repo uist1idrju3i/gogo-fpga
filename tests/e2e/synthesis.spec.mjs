@@ -193,7 +193,7 @@ test("corrupted compressed synthesis asset fails its SHA-256 check", async ({
 }) => {
   await createProject(page, BOARDS[0]);
   const compressed = Buffer.from(
-    readFileSync(resolve(root, "dist/synth/yosys.wasm.zst")),
+    readFileSync(resolve(root, "public_html/synth/yosys.wasm.zst")),
   );
   compressed[Math.floor(compressed.byteLength / 2)] ^= 1;
   await page.route("**/synth/yosys.wasm.zst", (route) =>
@@ -217,7 +217,7 @@ test("corrupted cached synthesis asset is discarded and refetched", async ({
 }) => {
   await createProject(page, BOARDS[0]);
   const manifest = JSON.parse(
-    readFileSync(resolve(root, "dist/synth/manifest.json"), "utf8"),
+    readFileSync(resolve(root, "public_html/synth/manifest.json"), "utf8"),
   );
   const asset = manifest.assets.find(({ path }) => path === "yosys.wasm");
   await page.evaluate(async (sha256) => {
@@ -311,13 +311,13 @@ test("corrupt compressed pack asset fails, then a corrupt cache entry is refetch
 }) => {
   await createProject(page, BOARDS[0]);
   const manifest = JSON.parse(
-    readFileSync(resolve(root, "dist/pack/manifest.json"), "utf8"),
+    readFileSync(resolve(root, "public_html/pack/manifest.json"), "utf8"),
   );
   const asset = manifest.assets.find(
     ({ path }) => path === "pyodide/pyodide.asm.wasm",
   );
   const compressed = Buffer.from(
-    readFileSync(resolve(root, "dist/pack/pyodide/pyodide.asm.wasm.zst")),
+    readFileSync(resolve(root, "public_html/pack/pyodide/pyodide.asm.wasm.zst")),
   );
   compressed[Math.floor(compressed.byteLength / 2)] ^= 1;
   const compressedRoute = (route) =>

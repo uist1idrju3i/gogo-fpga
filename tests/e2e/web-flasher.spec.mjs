@@ -37,7 +37,7 @@ function sha256(contents) {
 
 function assertPackMatchesBuild() {
   const buildPackRoot = resolve(repoRoot, "build/pack");
-  const distRoot = resolve(repoRoot, "dist");
+  const distRoot = resolve(repoRoot, "public_html");
   const distPackRoot = resolve(distRoot, "pack");
   const buildPackPaths = new Set(
     listFiles(buildPackRoot).map((path) =>
@@ -52,7 +52,7 @@ function assertPackMatchesBuild() {
   const manifestPath = resolve(distPackRoot, "manifest.json");
   const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
   if (manifest.format_version !== 1 || !Array.isArray(manifest.assets)) {
-    throw new Error("Playwright preflight: invalid dist/pack/manifest.json");
+    throw new Error("Playwright preflight: invalid public_html/pack/manifest.json");
   }
   const manifestPaths = manifest.assets.map((asset) => asset.path);
   if (
@@ -61,7 +61,7 @@ function assertPackMatchesBuild() {
     manifestPaths.some((path) => !buildPackPaths.has(path))
   ) {
     throw new Error(
-      "Playwright preflight: dist/pack/manifest.json does not match build/pack",
+      "Playwright preflight: public_html/pack/manifest.json does not match build/pack",
     );
   }
   const expectedDistPaths = new Set(["manifest.json"]);
@@ -89,7 +89,7 @@ function assertPackMatchesBuild() {
         sha256(compressedBytes) !== asset.compressed_sha256
       ) {
         throw new Error(
-          `Playwright preflight: dist/pack/${compressedPath} differs from its manifest`,
+          `Playwright preflight: public_html/pack/${compressedPath} differs from its manifest`,
         );
       }
       expectedDistPaths.add(compressedPath);
@@ -106,7 +106,7 @@ function assertPackMatchesBuild() {
       const distPath = resolve(distPackRoot, asset.path);
       if (!source.equals(readFileSync(distPath))) {
         throw new Error(
-          `Playwright preflight: dist/pack/${asset.path} differs from build/pack/${asset.path}`,
+          `Playwright preflight: public_html/pack/${asset.path} differs from build/pack/${asset.path}`,
         );
       }
       expectedDistPaths.add(asset.path);
@@ -115,13 +115,13 @@ function assertPackMatchesBuild() {
 
   for (const path of distPackPaths) {
     if (!expectedDistPaths.has(path)) {
-      throw new Error(`Playwright preflight: unexpected dist/pack/${path}`);
+      throw new Error(`Playwright preflight: unexpected public_html/pack/${path}`);
     }
   }
 
   for (const path of expectedDistPaths) {
     if (!distPackPaths.has(path)) {
-      throw new Error(`Playwright preflight: dist/pack/${path} is missing`);
+      throw new Error(`Playwright preflight: public_html/pack/${path} is missing`);
     }
   }
 
@@ -131,7 +131,7 @@ function assertPackMatchesBuild() {
 function assertSynthMatchesBuild() {
   const buildRoot = resolve(repoRoot, process.env.BUILD_ROOT ?? "build");
   const buildSynthRoot = resolve(buildRoot, "synth");
-  const distRoot = resolve(repoRoot, "dist");
+  const distRoot = resolve(repoRoot, "public_html");
   const distSynthRoot = resolve(distRoot, "synth");
   const distSynthPaths = new Set(
     listFiles(distSynthRoot).map((path) =>
@@ -147,19 +147,19 @@ function assertSynthMatchesBuild() {
 
   for (const path of distSynthPaths) {
     if (!expectedPaths.has(path)) {
-      throw new Error(`Playwright preflight: unexpected dist/synth/${path}`);
+      throw new Error(`Playwright preflight: unexpected public_html/synth/${path}`);
     }
   }
 
   for (const path of expectedPaths) {
     if (!distSynthPaths.has(path)) {
-      throw new Error(`Playwright preflight: dist/synth/${path} is missing`);
+      throw new Error(`Playwright preflight: public_html/synth/${path} is missing`);
     }
     const buildPath = resolve(buildSynthRoot, path);
     const distPath = resolve(distSynthRoot, path);
     if (!readFileSync(buildPath).equals(readFileSync(distPath))) {
       throw new Error(
-        `Playwright preflight: dist/synth/${path} differs from ` +
+        `Playwright preflight: public_html/synth/${path} differs from ` +
           `${relative(repoRoot, buildSynthRoot)}/${path}`,
       );
     }
@@ -201,7 +201,7 @@ function assertSynthMatchesBuild() {
     !readFileSync(resolve(distSynthRoot, "manifest.json")).equals(buildManifest)
   ) {
     throw new Error(
-      "Playwright preflight: dist/synth/manifest.json differs from build/synth/manifest.json",
+      "Playwright preflight: public_html/synth/manifest.json differs from build/synth/manifest.json",
     );
   }
 
@@ -231,7 +231,7 @@ function assertLibrariesMatchSources(distRoot, buildRoot) {
 
 function assertDistributionMatchesSources() {
   const webRoot = resolve(repoRoot, "web");
-  const distRoot = resolve(repoRoot, "dist");
+  const distRoot = resolve(repoRoot, "public_html");
   const sourcePaths = new Set();
   for (const sourcePath of listFiles(webRoot)) {
     const path = relative(webRoot, sourcePath);
@@ -241,7 +241,7 @@ function assertDistributionMatchesSources() {
     try {
       distContents = readFileSync(distPath);
     } catch (error) {
-      throw new Error(`Playwright preflight: dist/${path} is missing`, {
+      throw new Error(`Playwright preflight: public_html/${path} is missing`, {
         cause: error,
       });
     }
@@ -256,7 +256,7 @@ function assertDistributionMatchesSources() {
       }).outputFiles[0].contents)
       : readFileSync(sourcePath);
     if (!expectedContents.equals(distContents)) {
-      throw new Error(`Playwright preflight: dist/${path} differs from web/${path}`);
+      throw new Error(`Playwright preflight: public_html/${path} differs from web/${path}`);
     }
   }
 
@@ -314,7 +314,7 @@ function assertDistributionMatchesSources() {
     if (iverilogPaths.delete(path)) continue;
     if (thirdPartyNoticePaths.delete(path)) continue;
     if (libraryPaths.delete(path)) continue;
-    throw new Error(`Playwright preflight: unexpected dist/${path}`);
+    throw new Error(`Playwright preflight: unexpected public_html/${path}`);
   }
   if (generatedFileAllowlist.size > 0) {
     throw new Error(
@@ -324,12 +324,12 @@ function assertDistributionMatchesSources() {
   }
   if (packPaths.size > 0) {
     throw new Error(
-      `Playwright preflight: dist/${packPaths.values().next().value} is missing`,
+      `Playwright preflight: public_html/${packPaths.values().next().value} is missing`,
     );
   }
   if (synthPaths.size > 0) {
     throw new Error(
-      `Playwright preflight: dist/${synthPaths.values().next().value} is missing`,
+      `Playwright preflight: public_html/${synthPaths.values().next().value} is missing`,
     );
   }
   for (const copiedPaths of [
@@ -341,13 +341,13 @@ function assertDistributionMatchesSources() {
   ]) {
     if (copiedPaths.size > 0) {
       throw new Error(
-        `Playwright preflight: dist/${copiedPaths.values().next().value} is missing`,
+        `Playwright preflight: public_html/${copiedPaths.values().next().value} is missing`,
       );
     }
   }
   for (const path of runtimeFiles) {
     if (!distPaths.has(path)) {
-      throw new Error(`Playwright preflight: dist/${path} is missing`);
+      throw new Error(`Playwright preflight: public_html/${path} is missing`);
     }
   }
 
@@ -357,7 +357,7 @@ function assertDistributionMatchesSources() {
   const distHash = sha256(readFileSync(distWasm));
   if (distHash !== buildHash) {
     throw new Error(
-      `Playwright preflight: dist/openFPGALoader.wasm SHA-256 ${distHash} ` +
+      `Playwright preflight: public_html/openFPGALoader.wasm SHA-256 ${distHash} ` +
         `does not match ${relative(repoRoot, buildWasm)} SHA-256 ${buildHash}`,
     );
   }
@@ -374,31 +374,31 @@ async function openSupportedPage(page) {
 
 test("built distribution matches sources and the build-root WASM", () => {
   assertDistributionMatchesSources();
-  const catalogPath = resolve(repoRoot, "dist/libraries/catalog.json");
+  const catalogPath = resolve(repoRoot, "public_html/libraries/catalog.json");
   const originalCatalog = readFileSync(catalogPath);
   for (const contents of [Buffer.concat([originalCatalog, Buffer.from("\n")]), null]) {
     try {
       if (contents) writeFileSync(catalogPath, contents);
       else rmSync(catalogPath);
-      assert.throws(assertDistributionMatchesSources, /dist\/libraries\/catalog\.json (differs|is missing)/);
+      assert.throws(assertDistributionMatchesSources, /public_html\/libraries\/catalog\.json (differs|is missing)/);
     } finally {
       writeFileSync(catalogPath, originalCatalog);
     }
   }
-  const extraLibrary = resolve(repoRoot, "dist/libraries/unexpected-preflight-negative-control.v");
+  const extraLibrary = resolve(repoRoot, "public_html/libraries/unexpected-preflight-negative-control.v");
   let extraCreated = false;
   try {
     writeFileSync(extraLibrary, "module extra; endmodule\n", { flag: "wx" });
     extraCreated = true;
-    assert.throws(assertDistributionMatchesSources, /unexpected dist\/libraries\/unexpected-preflight-negative-control\.v/);
+    assert.throws(assertDistributionMatchesSources, /unexpected public_html\/libraries\/unexpected-preflight-negative-control\.v/);
   } finally {
     if (extraCreated) rmSync(extraLibrary);
   }
-  const storePath = resolve(repoRoot, "dist/lib/project-store.mjs");
+  const storePath = resolve(repoRoot, "public_html/lib/project-store.mjs");
   const originalStore = readFileSync(storePath);
   try {
     writeFileSync(storePath, Buffer.concat([originalStore, Buffer.from("\n")]));
-    assert.throws(assertDistributionMatchesSources, /dist\/lib\/project-store\.mjs differs/);
+    assert.throws(assertDistributionMatchesSources, /public_html\/lib\/project-store\.mjs differs/);
   } finally {
     writeFileSync(storePath, originalStore);
   }
@@ -410,13 +410,13 @@ test("built distribution matches sources and the build-root WASM", () => {
       "  Cross-Origin-Resource-Policy: same-origin\n",
   );
 
-  const packRoot = resolve(repoRoot, "dist/pack");
+  const packRoot = resolve(repoRoot, "public_html/pack");
   const extraPath = resolve(packRoot, `.preflight-extra-${randomUUID()}`);
   try {
     writeFileSync(extraPath, "unexpected");
     assert.throws(
       () => assertDistributionMatchesSources(),
-      /unexpected dist\/pack\/\.preflight-extra-/,
+      /unexpected public_html\/pack\/\.preflight-extra-/,
     );
   } finally {
     rmSync(extraPath, { force: true });
@@ -430,13 +430,13 @@ test("built distribution matches sources and the build-root WASM", () => {
     writeFileSync(lockPath, alteredLock);
     assert.throws(
       () => assertDistributionMatchesSources(),
-      /dist\/pack\/pyodide\/pyodide-lock\.json\.zst differs from its manifest/,
+      /public_html\/pack\/pyodide\/pyodide-lock\.json\.zst differs from its manifest/,
     );
   } finally {
     writeFileSync(lockPath, originalLock);
   }
 
-  const synthRoot = resolve(repoRoot, "dist/synth");
+  const synthRoot = resolve(repoRoot, "public_html/synth");
   const extraSynthPath = resolve(
     synthRoot,
     `.preflight-extra-${randomUUID()}`,
@@ -445,7 +445,7 @@ test("built distribution matches sources and the build-root WASM", () => {
     writeFileSync(extraSynthPath, "unexpected");
     assert.throws(
       () => assertDistributionMatchesSources(),
-      /unexpected dist\/synth\/\.preflight-extra-/,
+      /unexpected public_html\/synth\/\.preflight-extra-/,
     );
   } finally {
     rmSync(extraSynthPath, { force: true });
@@ -459,13 +459,13 @@ test("built distribution matches sources and the build-root WASM", () => {
     writeFileSync(manifestPath, alteredManifest);
     assert.throws(
       () => assertDistributionMatchesSources(),
-      /dist\/synth\/manifest\.json differs from build\/(?:.*\/)?synth\/manifest\.json/,
+      /public_html\/synth\/manifest\.json differs from build\/(?:.*\/)?synth\/manifest\.json/,
     );
   } finally {
     writeFileSync(manifestPath, originalManifest);
   }
 
-  const licenseRoot = resolve(repoRoot, "dist/licenses");
+  const licenseRoot = resolve(repoRoot, "public_html/licenses");
   const extraLicensePath = resolve(
     licenseRoot,
     `.preflight-extra-${randomUUID()}`,
@@ -474,13 +474,13 @@ test("built distribution matches sources and the build-root WASM", () => {
     writeFileSync(extraLicensePath, "unexpected");
     assert.throws(
       () => assertDistributionMatchesSources(),
-      /unexpected dist\/licenses\/\.preflight-extra-/,
+      /unexpected public_html\/licenses\/\.preflight-extra-/,
     );
   } finally {
     rmSync(extraLicensePath, { force: true });
   }
 
-  const surferIndexPath = resolve(repoRoot, "dist/surfer/index.html");
+  const surferIndexPath = resolve(repoRoot, "public_html/surfer/index.html");
   const originalSurferIndex = readFileSync(surferIndexPath);
   const alteredSurferIndex = Buffer.from(originalSurferIndex);
   alteredSurferIndex[0] ^= 1;
@@ -488,14 +488,14 @@ test("built distribution matches sources and the build-root WASM", () => {
     writeFileSync(surferIndexPath, alteredSurferIndex);
     assert.throws(
       () => assertDistributionMatchesSources(),
-      /dist\/surfer\/index\.html differs from .*surfer\/dist\/index\.html/,
+      /public_html\/surfer\/index\.html differs from .*surfer\/public_html\/index\.html/,
     );
   } finally {
     writeFileSync(surferIndexPath, originalSurferIndex);
   }
 
   for (const name of ["ivlpp", "ivl", "vvp"]) {
-    const path = resolve(repoRoot, `dist/iverilog/${name}.wasm`);
+    const path = resolve(repoRoot, `public_html/iverilog/${name}.wasm`);
     const original = readFileSync(path);
     const altered = Buffer.from(original);
     altered[0] ^= 1;
@@ -508,10 +508,10 @@ test("built distribution matches sources and the build-root WASM", () => {
       writeFileSync(path, original);
     }
   }
-  const extraIverilogPath = resolve(repoRoot, `dist/iverilog/.preflight-extra-${randomUUID()}`);
+  const extraIverilogPath = resolve(repoRoot, `public_html/iverilog/.preflight-extra-${randomUUID()}`);
   try {
     writeFileSync(extraIverilogPath, "unexpected");
-    assert.throws(() => assertDistributionMatchesSources(), /unexpected dist\/iverilog\/\.preflight-extra-/);
+    assert.throws(() => assertDistributionMatchesSources(), /unexpected public_html\/iverilog\/\.preflight-extra-/);
   } finally {
     rmSync(extraIverilogPath, { force: true });
   }

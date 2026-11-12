@@ -92,7 +92,7 @@ test("reports a parse error for a corrupt VCD", async ({ page }) => {
 });
 
 test("ships Surfer without Service Worker registration", async () => {
-  const dist = resolve(root, "dist/surfer");
+  const dist = resolve(root, "public_html/surfer");
   const html = readFileSync(resolve(dist, "index.html"), "utf8");
   expect(html).not.toMatch(/navigator\.serviceWorker\.register/);
   expect(existsSync(resolve(dist, "manifest.json"))).toBe(false);

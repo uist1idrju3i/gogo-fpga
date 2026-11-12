@@ -1,5 +1,5 @@
 /build/
-/dist/
+/public_html/
 /release/
 /node_modules/
 __pycache__/

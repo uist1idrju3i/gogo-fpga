@@ -24,7 +24,7 @@ textarea 重ね型、CodeJar、prism-code-editor は、診断の表示、差分�
 | CodeMirror 6 | あり（IEEE 1800-2012 のキーワード。`always_ff`、`logic` も色分け） | あり。`force`、`release`、`protected` がキーワードにない | `@codemirror/legacy-modes` 6.5.5 の `mode/verilog.js`、`mode/vhdl.js` |
 | Monaco Editor | あり（`verilog` と `systemverilog` の 2 つの ID が同じ定義を使う） | なし。Monarch の定義を自分で書く | 0.57.0 の `esm/vs/languages/definitions/` に vhdl がない |
 | Ace | あり（`always_ff`、`logic` はキーワードにない） | あり。`force`、`release`、`protected` も含む | 1.45.2 の `src/mode/verilog.js`、`vhdl.js` |
-| prism-code-editor | あり | あり | 5.4.0 の `dist/languages/verilog.js`、`vhdl.js` |
+| prism-code-editor | あり | あり | 5.4.0 の `public_html/languages/verilog.js`、`vhdl.js` |
 
 どれも、構文木ではなく字句の規則による色分けです。足りないキーワードは、自分のコードで規則を足せば補えます。構文の理解（補完の候補、定義への移動、エラーの即時表示）は、エディターではなく LSP（VHDL は rust_hdl の vhdl_ls、Verilog は Verible など。[oss-survey.md](oss-survey.md) を参照）か、合成・シミュレーションのツールの診断に任せます。
 

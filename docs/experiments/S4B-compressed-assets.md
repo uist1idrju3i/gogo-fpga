@@ -31,7 +31,7 @@
 | 圧縮ツール | gzip 1.14（`-9 -n`）、zstd 1.5.7（`-19`）、xz 5.8.3（`-9e -T1`） |
 | 展開器 | zstd v1.5.7 の単一ファイル decoder、xz-embedded v20240322。WASI SDK 34、`-O2` |
 | 展開器の SHA-256 | `zstd-decoder.wasm` `c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37`（70,356 bytes、gzip 後 26,202 bytes）、`xz-decoder.wasm` `0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e`（20,994 bytes、gzip 後 8,551 bytes） |
-| 資材 | `scripts/build-web.sh` で作った `dist/`。SHA-256 は `dist/bench/index.tsv` に記録され、`yosys.wasm` は `aa18e2c1…d9cc58aa` で manifest と一致 |
+| 資材 | `scripts/build-web.sh` で作った `public_html/`。SHA-256 は `public_html/bench/index.tsv` に記録され、`yosys.wasm` は `aa18e2c1…d9cc58aa` で manifest と一致 |
 | 変える条件 | 圧縮形式 |
 | 変えない条件 | 資材、ブラウザー、ページ（同じページで 3 形式を交互に実行） |
 | 繰り返し | 各形式 5 回。回ごとに形式の順番を 1 つずつずらす |
@@ -41,8 +41,8 @@
 ```sh
 scripts/build-decoders.sh
 scripts/build-web.sh
-scripts/prepare-compressed-assets.sh dist
-python3 dist/serve.py --port 8231 &
+scripts/prepare-compressed-assets.sh public_html
+python3 public_html/serve.py --port 8231 &
 node scripts/bench-decompress.mjs --base-url http://127.0.0.1:8231 --repeats 5 --out docs/experiments/S4B-compressed-assets.csv
 ```
 

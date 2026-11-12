@@ -11,7 +11,7 @@
 
 ## 測り方
 
-- Chromium：Playwright の headless Chromium（`@playwright/test` の固定版）。`web/lib/ghdl-host.mjs` の `runGhdlSynth` を、配信した `dist/` の module Worker の中で呼ぶ。
+- Chromium：Playwright の headless Chromium（`@playwright/test` の固定版）。`web/lib/ghdl-host.mjs` の `runGhdlSynth` を、配信した `public_html/` の module Worker の中で呼ぶ。
 - 1 回の値：例ごとに、`WebAssembly.instantiate` の開始から `runGhdlSynth` が Verilog を返すまで（インスタンス化を含む）。`WebAssembly.compile` は案ごとに 1 回で、別の列に記録する。
 - 回数：各案・各例 5 回以上。回ごとに案の順番を入れ替える（1 回目は Os→B0、2 回目は B0→Os…）。最初に 1 回の空回し（記録しない）を行う。
 - Node：同じ例を `node --test` ではなく専用の測定スクリプトで、同じ回数・同じ順番の規則で測る。

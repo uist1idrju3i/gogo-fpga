@@ -34,8 +34,8 @@ archiveの負の対照ではhash違い、license欠落、絶対パス、親へ�
 
 | 成果物 | SHA-256 |
 |---|---|
-| toolchain-source-v0.1.0-t6p0.c41e5c5.tar.gz | `c33b4ec1a26de1cbbe6c046e12bd689461e9f8cece248dda01eabc5dbe0fec8c` |
-| toolchain-web-v0.1.0-t6p0.c41e5c5.zip | `1ef4c6da097ad185b6f41ebf4f730fb69e0df94b11504553ce5d3fb43754df65` |
+| gogo-fpga-source-v0.1.0-t6p0.c41e5c5.tar.gz | `c33b4ec1a26de1cbbe6c046e12bd689461e9f8cece248dda01eabc5dbe0fec8c` |
+| gogo-fpga-web-v0.1.0-t6p0.c41e5c5.zip | `1ef4c6da097ad185b6f41ebf4f730fb69e0df94b11504553ce5d3fb43754df65` |
 | source-closure-c41e5c5.json | `4bb10694ded57111e589eb100d6e14fdcf62439850188f69ddec420ce7011c9f` |
 | git-free-web-c41e5c5.json | `b2dd0ca0a412a23081fd034c61972ec096f7abfd0e9fd57e4061a4ac34bb65c2` |
 

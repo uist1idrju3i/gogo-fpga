@@ -13,7 +13,7 @@
       "content": "確認済みの事実と未確認事項を区別してください。書き込み部は tests/sim/fake-webusb.mjs の仮想の FT2232・GOWIN TAP・NOR フラッシュ、Node のテスト（tests/sim/）、Playwright（tests/e2e/）で確かめます。実機の Tang Nano では試していません。仮想デバイスで測った時間を実機の値のように書かないでください。"
     },
     {
-      "content": "現在の書き込み部の流れです。scripts/build-wasm.sh が libusb・libftdi・zlib・openFPGALoader を JSPI + pthread + -fwasm-exceptions + -Os でビルドし、build-info.json を作ります。scripts/build-web.sh が web/ と WASM を dist/ にまとめ、build-info.json と照合します。画面（web/app.js）は .fs の IDCODE を確認してから navigator.usb.requestDevice を呼び出す実装です。各実行では、新しい Worker（web/worker.js）と WASM のインスタンスを作成し、callMain に引数を渡します。引数は web/lib/build-args.mjs が作り、適用条件は web/lib/options.mjs が決めます。"
+      "content": "現在の書き込み部の流れです。scripts/build-wasm.sh が libusb・libftdi・zlib・openFPGALoader を JSPI + pthread + -fwasm-exceptions + -Os でビルドし、build-info.json を作ります。scripts/build-web.sh が web/ と WASM を public_html/ にまとめ、build-info.json と照合します。画面（web/app.js）は .fs の IDCODE を確認してから navigator.usb.requestDevice を呼び出す実装です。各実行では、新しい Worker（web/worker.js）と WASM のインスタンスを作成し、callMain に引数を渡します。引数は web/lib/build-args.mjs が作り、適用条件は web/lib/options.mjs が決めます。"
     }
   ],
   "pages": [

@@ -12,7 +12,7 @@ shim が公開する import は `args_get`、`args_sizes_get`、`clock_time_get`
 
 T3-2 の Playwright は 37/37 成功しました。4 board の VHDL template から作った `.fs` は、native GHDL、native Yosys、native nextpnr、native `gowin_pack` の期待値と byte-identical です。混在の両方向、VHDL-2019、`keep` の正例と負例、構文・意味エラー、file ordering error、GHDL asset の欠落・破損・破損 cache の検出も確認しました。GHDL WASM は 2,001,408 bytes（SHA-256 `5c8df2a9102f9bdd577df7e250739876cc29642f8dd7fa0c9844799b0a817c80`）、deterministic `libraries.tar` は 3,901,440 bytes（SHA-256 `5f08af4dd4ecb42959faf2286b1dba0055ae0b6642c906e60e3688b7ecd04e07`）です。詳細な parity hash、asset manifest、診断結果は [S0 GHDL build-and-smoke 記録](../../docs/experiments/S0-ghdl-wasm.md) を参照してください。画面 capture は `build/T3-2/screenshots/` にあります。実機での合成・書き込みは本リポジトリでは試していない。
 
-Playwright の preflight は `build/synth` と `dist/synth` の相対 file set と各 file の byte 列を比較します。E2E の期待値は Node WASI Yosys、Node WASI nextpnr、native `gowin_pack` で生成し、ブラウザー成果物と比較します。測定値は Chromium と VM の値として記録し、実機の性能値とは扱いません。
+Playwright の preflight は `build/synth` と `public_html/synth` の相対 file set と各 file の byte 列を比較します。E2E の期待値は Node WASI Yosys、Node WASI nextpnr、native `gowin_pack` で生成し、ブラウザー成果物と比較します。測定値は Chromium と VM の値として記録し、実機の性能値とは扱いません。
 
 全4ボードで5回ずつ、Chromium内の出力が期待する`.fs`とbyte-identicalであること、IDCODE、fake USBによるSRAM書込みを確認しました。20回分の段階別時間と各toolの`memoryBytes`、出力sizeは [S4A実験記録](../../docs/experiments/S4A-browser-build.md) とCSVに記録しています。中央値はVM/Chromium上で合成1,533–1,563 ms、配置配線468–1,079 ms、ビットストリーム318–1,423 msです。各boardの最初のビットストリーム計測はPyodide初期化を含みます。これらの測定値をTang Nano実機の性能として扱いません。
 
@@ -48,7 +48,7 @@ Yosys v0.69 から v0.70 では `alumacc -macc-only`、`optbarriers`、`flatten`
 
 `xz-embedded` v20240322 では、v20240124 以降の decoder、CRC、build 設定の変更と、0BSD への切り替えを確認しました。採用する `linux/lib/xz/` の CRC32、CRC64、stream、LZMA2 decoder は 0BSD です。CRC64 を有効にし、`XZ_SINGLE` で一つの stream を復号します。BCJ decoder は使いません。変更履歴は [v20240124 から v20240322 の比較](https://github.com/tukaani-project/xz-embedded/compare/v20240124...v20240322)を参照してください。
 
-`gzip` は `DecompressionStream` で処理し、`zstd` と `xz` は WASI reactor の decoder を使います。decoder は `dist/lib/decoders/` に配置しますが、この段階では既存の資材取得経路を変更しません。
+`gzip` は `DecompressionStream` で処理し、`zstd` と `xz` は WASI reactor の decoder を使います。decoder は `public_html/lib/decoders/` に配置しますが、この段階では既存の資材取得経路を変更しません。
 
 ## 配信の大きさと配信先
 
@@ -70,7 +70,7 @@ Yosys v0.69 から v0.70 では `alumacc -macc-only`、`optbarriers`、`flatten`
 
 S6 では zstd・xz 展開器の最適化を比較しました。OsLTO が最速でしたが、B より 3.224% の短縮にとどまり、凍結した 5% 基準を満たす候補はありませんでした。そのため B を維持し、既定 build は変更していません。LTO の zstd・xz WASM は `wasi_snapshot_preview1.random_get` を import するため、将来 LTO を既定にする場合は本番展開器にも対応が必要です。詳細は [S6 実験記録](../../docs/experiments/S6-decoder-build-options.md) を参照してください。
 
-この実装では `manifest.json` を除く `dist/synth/` の資材を zstd 形式で配信する構成にしました。manifest の各項目には展開後の `size` と `sha256` に加えて `encoding: "zstd"`、`compressed_size`、`compressed_sha256` を記録します。ビルド Worker は圧縮前後のサイズと SHA-256 を検証し、展開後のデータを Cache Storage `gogo-fpga-synth-v1` に `new URL(path + "?sha256=" + sha256, synthURL)` のキーで保存します。実際のビルドで得た圧縮サイズの合計は、共有する 3 資材と各ボードの chipdb を合わせて Tang Nano 1K が 16,003,246 bytes、4K が 16,155,020 bytes、9K が 16,164,593 bytes、20K が 16,256,883 bytes です。最大の圧縮ファイルは `yosys.wasm.zst` の 9,448,361 bytes でした。
+この実装では `manifest.json` を除く `public_html/synth/` の資材を zstd 形式で配信する構成にしました。manifest の各項目には展開後の `size` と `sha256` に加えて `encoding: "zstd"`、`compressed_size`、`compressed_sha256` を記録します。ビルド Worker は圧縮前後のサイズと SHA-256 を検証し、展開後のデータを Cache Storage `gogo-fpga-synth-v1` に `new URL(path + "?sha256=" + sha256, synthURL)` のキーで保存します。実際のビルドで得た圧縮サイズの合計は、共有する 3 資材と各ボードの chipdb を合わせて Tang Nano 1K が 16,003,246 bytes、4K が 16,155,020 bytes、9K が 16,164,593 bytes、20K が 16,256,883 bytes です。最大の圧縮ファイルは `yosys.wasm.zst` の 9,448,361 bytes でした。
 
 冷たい browser context で初回のビルドと fake USB 書き込みを行う Playwright 計測では、同一 origin の成功 GET 応答本文を集計しました。各ボードで 43 個の異なる要求パスがあり、合計は Tang Nano 1K が 33,408,160 bytes、4K が 33,559,934 bytes、9K が 33,569,507 bytes、20K が 33,661,797 bytes でした。内訳は次のとおりです。
 

@@ -48,7 +48,7 @@ if (s5bVariants.length > 0) {
           `S5B Chromium ${s5bVariant} ${board.id} repeat ${repeat}`,
           async ({ page }) => {
             const source = path.resolve(root, s5bAssetBundleRoot, s5bVariant);
-            const destination = path.join(root, "dist/synth");
+            const destination = path.join(root, "public_html/synth");
             rmSync(destination, { recursive: true, force: true });
             cpSync(source, destination, { recursive: true });
             const projectName = await createProject(page, board);

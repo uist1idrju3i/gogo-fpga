@@ -29,7 +29,7 @@ class ReleaseClosureTest(unittest.TestCase):
         self.source = self.base / "source"
         self.generated = self.base / "generated"
         self.version = "vtest"
-        self.prefix = f"toolchain-web-{self.version}/"
+        self.prefix = f"gogo-fpga-web-{self.version}/"
         self.root.mkdir()
         self.source.mkdir()
         self.pin = "a" * 40
@@ -58,7 +58,7 @@ class ReleaseClosureTest(unittest.TestCase):
                                "license": {"files": [descriptors["sample/LICENSE"]]},
                                "files": [descriptors["sample/source.v"]]}]}
         catalog_bytes = json.dumps(catalog).encode()
-        for location in [self.root / "dist/libraries", self.source / "dist/libraries", self.generated]:
+        for location in [self.root / "public_html/libraries", self.source / "public_html/libraries", self.generated]:
             self.write(location / "catalog.json", catalog_bytes)
             for name, content in payloads.items():
                 self.write(location / name, content)
@@ -66,24 +66,24 @@ class ReleaseClosureTest(unittest.TestCase):
         self.write(self.source / "third_party/sample/.gitcommit", self.pin.encode())
         self.write(self.source / "RELEASE-SOURCE.json", json.dumps({"commit": self.revision, "version": self.version}).encode())
         self.write(self.source / "ordinary.txt", b"Source file\n")
-        self.write(self.root / "dist/index.html", b"<title>Fixture</title>\n")
+        self.write(self.root / "public_html/index.html", b"<title>Fixture</title>\n")
         self.write(self.root / "licenses/root.txt", b"Root license\n")
-        self.write(self.root / "dist/surfer/licenses/surfer.txt", b"Surfer license\n")
+        self.write(self.root / "public_html/surfer/licenses/surfer.txt", b"Surfer license\n")
         for folder in ["synth", "pack", "iverilog", "surfer"]:
-            self.write(self.root / "dist" / folder / "asset.bin", folder.encode())
+            self.write(self.root / "public_html" / folder / "asset.bin", folder.encode())
         (self.root / "release").mkdir()
-        self.web_zip = self.root / f"release/toolchain-web-{self.version}.zip"
+        self.web_zip = self.root / f"release/gogo-fpga-web-{self.version}.zip"
         with zipfile.ZipFile(self.web_zip, "w") as archive:
-            for file in (self.root / "dist").rglob("*"):
+            for file in (self.root / "public_html").rglob("*"):
                 if file.is_file():
-                    archive.write(file, self.prefix + file.relative_to(self.root / "dist").as_posix())
+                    archive.write(file, self.prefix + file.relative_to(self.root / "public_html").as_posix())
             for file in (self.root / "licenses").rglob("*"):
                 archive.write(file, self.prefix + file.relative_to(self.root).as_posix())
             for name in ["README.md", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"]:
                 archive.write(self.root / name, self.prefix + name)
-        self.source_tar = self.root / f"release/toolchain-source-{self.version}.tar.gz"
+        self.source_tar = self.root / f"release/gogo-fpga-source-{self.version}.tar.gz"
         with tarfile.open(self.source_tar, "w:gz") as archive:
-            archive.add(self.source, arcname=f"toolchain-source-{self.version}")
+            archive.add(self.source, arcname=f"gogo-fpga-source-{self.version}")
 
     @staticmethod
     def write(path, content):
@@ -109,7 +109,7 @@ class ReleaseClosureTest(unittest.TestCase):
 
     def test_modified_assets_and_notices_are_rejected(self):
         cases = [(self.generated / "sample/source.v", "Regenerated library asset mismatch"),
-                 (self.root / "dist/libraries/sample/source.v", "Library asset hash mismatch"),
+                 (self.root / "public_html/libraries/sample/source.v", "Library asset hash mismatch"),
                  (self.source / "NOTICE", "Source notice mismatch"),
                  (self.source / "code.txt", "Source snapshot mismatch"),
                  (self.source / "third_party/sample/.gitcommit", "Source gitlink mismatch"),
@@ -125,13 +125,13 @@ class ReleaseClosureTest(unittest.TestCase):
                     file.write_bytes(original)
 
     def test_missing_tool_directory_is_rejected(self):
-        shutil.rmtree(self.root / "dist/synth")
+        shutil.rmtree(self.root / "public_html/synth")
         with self.assertRaisesRegex(ValueError, "Missing tool distribution"):
             self.audit()
 
     def test_all_source_and_web_bytes_are_checked(self):
         for file, reason in [(self.source / "ordinary.txt", "Source archive content mismatch"),
-                             (self.root / "dist/index.html", "Web distribution mismatch")]:
+                             (self.root / "public_html/index.html", "Web distribution mismatch")]:
             with self.subTest(file=str(file.relative_to(self.base))):
                 original = file.read_bytes()
                 try:
@@ -150,8 +150,8 @@ class ReleaseClosureTest(unittest.TestCase):
             self.audit()
 
     def test_source_escape_and_git_metadata_are_rejected(self):
-        for name, link in [(f"toolchain-source-{self.version}/.git/config", None),
-                           (f"toolchain-source-{self.version}/escape", "../../escape")]:
+        for name, link in [(f"gogo-fpga-source-{self.version}/.git/config", None),
+                           (f"gogo-fpga-source-{self.version}/escape", "../../escape")]:
             with self.subTest(name=name):
                 with tarfile.open(self.source_tar, "w:gz") as archive:
                     info = tarfile.TarInfo(name)

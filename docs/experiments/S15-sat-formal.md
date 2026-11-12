@@ -74,9 +74,9 @@ commit `a420942` で、T4/T5 の回帰と配布の制約を確かめました。
 | `tests/sim/*.test.mjs`（`WASM_BUILD_ROOT=build`、直列） | 43 pass / 0 fail |
 | `tests/web/*.test.mjs`（直列） | 351 pass / 0 fail。最初の実行は、この VM に `build/wasi/decoders` と `build/jspi-pthread/build-info.json` が無く 2 件で失敗した。資材を補って再実行した |
 | `tests/synth/*.test.mjs`（直列） | 261 pass / 0 fail、約49.5分。資材を補った後の1回の実行である |
-| 25 MiB 制約 | CI の Web 成果物（`toolchain-web-<sha>`）に含まれる各ファイルは 25 MiB 未満。最大は `surfer/surfer_bg.wasm` の 12,867,021 bytes |
+| 25 MiB 制約 | CI の Web 成果物（`gogo-fpga-web-<sha>`）に含まれる各ファイルは 25 MiB 未満。最大は `surfer/surfer_bg.wasm` の 12,867,021 bytes |
 | ソース closure | 形式検証ソース（vendor/sby・yices2・z3・boolector・bitwuzla・click、yosys・iverilog・ghdl）の gitlink と `scripts/prepare-formal-sources.py`・`licenses/` は、[S15 P0 の配布ソース照合](S15-formal-source-closure.md)（`c41e5c5`）から `a420942` まで変わっていない。S14 の監査器と単体検査もそのまま使える |
-| NOTICE と license | Web 成果物の `dist/licenses/` には、`THIRD_PARTY_NOTICES.md` が参照するライセンス本文のうち 28 件（Yosys・ABC・Zstd・openFPGALoader・Emscripten 系など）が無い。完全な集合は Release の zip にだけ入る。これは本記録の範囲では未解決で、方針を決めてから直す |
+| NOTICE と license | Web 成果物の `public_html/licenses/` には、`THIRD_PARTY_NOTICES.md` が参照するライセンス本文のうち 28 件（Yosys・ABC・Zstd・openFPGALoader・Emscripten 系など）が無い。完全な集合は Release の zip にだけ入る。これは本記録の範囲では未解決で、方針を決めてから直す |
 
 回帰に使った資材のうち、この VM のスナップショットには無かったものを、CI の成果物とローカルのビルドで補いました。次のとおりです。
 
@@ -88,10 +88,10 @@ commit `a420942` で、T4/T5 の回帰と配布の制約を確かめました。
 - `tests/fixtures/build-fs.sh` が作る 4 ボードの `.fs`
 - `scripts/build-wasm.sh` でビルドした openFPGALoader の WASM。`build-info.json` を必要とするテストのために使う
 
-`scripts/build-web.sh` が作る `dist/` は、Surfer の WASM をローカルでビルドしていないため、この VM では組み立てていません。したがって、Release の zip の組立（`scripts/package-release.sh`）と、その中の完全な license 集合の検査は、CI か Release の経路で確かめる範囲に残ります。
+`scripts/build-web.sh` が作る `public_html/` は、Surfer の WASM をローカルでビルドしていないため、この VM では組み立てていません。したがって、Release の zip の組立（`scripts/package-release.sh`）と、その中の完全な license 集合の検査は、CI か Release の経路で確かめる範囲に残ります。
 
 ## 残件
 
 - 実機の Tang Nano では試していない。
 - 製品画面からの SAT 実行は、反例を「利用不可」と表示し、「反例検証済み」とは表示しない。画面での再実行層の接続と、formal 資材のオフライン同梱は後続のタスク11で扱う。
-- `dist/` に完全なライセンス集合が無い件（上表）は、方針を決めたうえで別の変更として直す。
+- `public_html/` に完全なライセンス集合が無い件（上表）は、方針を決めたうえで別の変更として直す。

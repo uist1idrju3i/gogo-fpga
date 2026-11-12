@@ -1,8 +1,8 @@
 #!/bin/sh
 # Compress the large web assets with each candidate format for scripts/bench-decompress.mjs.
 set -eu
-dist=${1:?usage: prepare-compressed-assets.sh <dist-dir>}
-out="$dist/bench"
+public_html=${1:?usage: prepare-compressed-assets.sh <public-html-dir>}
+out="$public_html/bench"
 if [ -e "$out" ]; then
   echo "$out already exists; remove it first" >&2
   exit 1
@@ -12,7 +12,7 @@ assets="synth/yosys.wasm synth/nextpnr-himbaechel-gowin.wasm synth/yosys-share.t
 index="$out/index.tsv"
 printf 'path\tsize\tsha256\tformat\tcompressed_size\tcompressed_sha256\n' > "$index"
 for asset in $assets; do
-  src="$dist/$asset"
+  src="$public_html/$asset"
   size=$(wc -c < "$src" | tr -d ' ')
   sha=$(sha256sum "$src" | cut -d' ' -f1)
   name=$(echo "$asset" | tr '/' '_')

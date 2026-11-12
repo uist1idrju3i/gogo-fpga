@@ -6,7 +6,7 @@
 
 ## 目的
 
-Surfer v0.7.0 を upstream source から `wasm32-unknown-unknown` 向けにビルドし、`dist/surfer/` と Release に含めます。ビルドの再現性、依存 crate のライセンス、同一 origin iframe での VCD 読み込みを検証します。Surfer をアプリの UI に統合する作業は T4 Stack step 2 で行うため、この記録には含めません。
+Surfer v0.7.0 を upstream source から `wasm32-unknown-unknown` 向けにビルドし、`public_html/surfer/` と Release に含めます。ビルドの再現性、依存 crate のライセンス、同一 origin iframe での VCD 読み込みを検証します。Surfer をアプリの UI に統合する作業は T4 Stack step 2 で行うため、この記録には含めません。
 
 ## 固定条件
 
@@ -71,7 +71,7 @@ emsdk の tag を含まない shallow clone では、`build-info.py` が使う `
 
 `libsurfer/Cargo.toml` の `egui_skia_renderer` は `[dev-dependencies]` にあり、WASM runtime dependency graph の外です。依頼にあった dev dependency を除外する条件を優先し、配布 license table には含めていません。upstream の Git source と revision は Cargo.lock に固定されています。
 
-`scripts/build-web.sh` は成功し、Surfer を `dist/surfer/` に配置しました。Surfer を含む各配布ファイルの 25 MiB 上限と、`/surfer/*` を含む COOP/COEP header 設定も build 内で検査されました。log は `build/S12/build-web-final.log` です。
+`scripts/build-web.sh` は成功し、Surfer を `public_html/surfer/` に配置しました。Surfer を含む各配布ファイルの 25 MiB 上限と、`/surfer/*` を含む COOP/COEP header 設定も build 内で検査されました。log は `build/S12/build-web-final.log` です。
 
 最初の E2E 起動は Surfer の spec より前に、既存の synthesis harness が要求する native nextpnr、Apycula packer、native GHDL が worktree にないため停止しました。Surfer 以外の検証資材を用意して再実行し、同じ Surfer distribution に対する spec を完了しました。既存の Surfer trial distribution は使用していません。
 

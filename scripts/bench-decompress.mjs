@@ -1,6 +1,6 @@
 // Measures in-browser decompression time of the large web assets for each format.
 // Usage: node scripts/bench-decompress.mjs --base-url http://127.0.0.1:8000 --repeats 5 --out <csv>
-// Requires dist/bench/ from scripts/prepare-compressed-assets.sh and dist/serve.py running.
+// Requires public_html/bench/ from scripts/prepare-compressed-assets.sh and public_html/serve.py running.
 import { existsSync, writeFileSync } from "node:fs";
 import { parseArgs } from "node:util";
 import { chromium } from "@playwright/test";

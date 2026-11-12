@@ -53,7 +53,7 @@ mise exec -- node scripts/bench-s0b-ghdl.mjs --repeats=5 \
   2>&1 | tee build/S0B/measurement-final2.log
 ```
 
-Chromium は Playwright の headless Chromium を使い、配信した `dist/` の module Worker から `web/lib/ghdl-host.mjs` の `runGhdlSynth` を呼んだ。各回で native GHDL の Verilog hash と比較した。4ボードの例は、生成された Verilog を Chromium/WASI の build pipeline に渡し、`.fs` hash と native GHDL、native Yosys、native nextpnr、native `gowin_pack` の経路で得た期待値を比較した。Yosys、nextpnr、`gowin_pack` の時間は同じ pipeline の `timings` から記録した。
+Chromium は Playwright の headless Chromium を使い、配信した `public_html/` の module Worker から `web/lib/ghdl-host.mjs` の `runGhdlSynth` を呼んだ。各回で native GHDL の Verilog hash と比較した。4ボードの例は、生成された Verilog を Chromium/WASI の build pipeline に渡し、`.fs` hash と native GHDL、native Yosys、native nextpnr、native `gowin_pack` の経路で得た期待値を比較した。Yosys、nextpnr、`gowin_pack` の時間は同じ pipeline の `timings` から記録した。
 
 ## GHDL の compile / run 時間
 

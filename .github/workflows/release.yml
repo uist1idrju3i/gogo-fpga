@@ -219,16 +219,16 @@ jobs:
         run: |
           cd release
           sha256sum -c SHA256SUMS
-          mkdir -p "$RUNNER_TEMP/toolchain-source"
-          tar -xzf "toolchain-source-${VERSION}.tar.gz" \
-            -C "$RUNNER_TEMP/toolchain-source" --strip-components=1
+          mkdir -p "$RUNNER_TEMP/gogo-fpga-source"
+          tar -xzf "gogo-fpga-source-${VERSION}.tar.gz" \
+            -C "$RUNNER_TEMP/gogo-fpga-source" --strip-components=1
 
       - name: npm 依存を取得
-        working-directory: ${{ runner.temp }}/toolchain-source
+        working-directory: ${{ runner.temp }}/gogo-fpga-source
         run: npm ci
 
       - name: ソース tarball からビルド
-        working-directory: ${{ runner.temp }}/toolchain-source
+        working-directory: ${{ runner.temp }}/gogo-fpga-source
         run: |
           scripts/build-wasm.sh
           scripts/build-synth-wasm.sh
@@ -244,16 +244,16 @@ jobs:
 
       - name: Release zip と再ビルドの hash を比較
         run: |
-          python3 - "$VERSION" "$RUNNER_TEMP/toolchain-source/dist/build-info.json" \
-            "$RUNNER_TEMP/toolchain-source/build/jspi-pthread/build-info.json" <<'PY'
+          python3 - "$VERSION" "$RUNNER_TEMP/gogo-fpga-source/public_html/build-info.json" \
+            "$RUNNER_TEMP/gogo-fpga-source/build/jspi-pthread/build-info.json" <<'PY'
           import json
           import sys
           import zipfile
 
           version, rebuilt_path, rebuilt_artifact_path = sys.argv[1:]
-          with zipfile.ZipFile(f"release/toolchain-web-{version}.zip") as archive:
+          with zipfile.ZipFile(f"release/gogo-fpga-web-{version}.zip") as archive:
               packaged = json.loads(
-                  archive.read(f"toolchain-web-{version}/build-info.json")
+                  archive.read(f"gogo-fpga-web-{version}/build-info.json")
               )
           rebuilt = json.load(open(rebuilt_path, encoding="utf-8"))
           rebuilt_artifact = json.load(open(rebuilt_artifact_path, encoding="utf-8"))
@@ -262,7 +262,7 @@ jobs:
               actual = rebuilt["artifacts"][name]
               if actual != expected or rebuilt_artifact["artifacts"][name] != expected:
                   raise SystemExit(
-                      f"{name} hash mismatch: package={expected}, dist={actual}, "
+                      f"{name} hash mismatch: package={expected}, public_html={actual}, "
                       f"build={rebuilt_artifact['artifacts'][name]}"
                   )
               print(f"{name} SHA-256 matches: {actual}")
@@ -291,8 +291,8 @@ jobs:
             --title "$VERSION"
             --notes-file release/notes.md
             --repo "$GITHUB_REPOSITORY"
-            "release/toolchain-web-${VERSION}.zip"
-            "release/toolchain-source-${VERSION}.tar.gz"
+            "release/gogo-fpga-web-${VERSION}.zip"
+            "release/gogo-fpga-source-${VERSION}.tar.gz"
             release/SHA256SUMS
           )
           if [[ "$VERSION" == *-* ]]; then

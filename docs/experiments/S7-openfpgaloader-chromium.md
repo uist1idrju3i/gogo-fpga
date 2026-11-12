@@ -208,7 +208,7 @@ B と選定変種 B+LTOA のそれぞれで Tang Nano 9K SRAM を用い、`.fs` 
 
 ### レビュー時の E2E 回帰確認（2026-10-30）
 
-`tests/e2e/web-flasher.spec.mjs` と `tests/e2e/synthesis.spec.mjs` はどちらも `fake-usb-helpers.mjs` を import する。両 spec を含む下記コマンドは 38/38 pass（web-flasher 26、synthesis 12）した。`playwright.config.mjs` の webServer が `scripts/build-web.sh` を実行してから配信するため、この実行で `dist/` も再構築した。
+`tests/e2e/web-flasher.spec.mjs` と `tests/e2e/synthesis.spec.mjs` はどちらも `fake-usb-helpers.mjs` を import する。両 spec を含む下記コマンドは 38/38 pass（web-flasher 26、synthesis 12）した。`playwright.config.mjs` の webServer が `scripts/build-web.sh` を実行してから配信するため、この実行で `public_html/` も再構築した。
 
 ```sh
 PLAYWRIGHT_PORT=8123 mise exec -- npx playwright test \

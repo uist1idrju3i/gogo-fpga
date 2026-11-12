@@ -93,10 +93,10 @@ node --test tests/web/*.test.mjs
 WASM_BUILD_ROOT=build node --test --test-concurrency=1 tests/sim/*.test.mjs
 npx playwright install --with-deps chromium
 npx playwright test
-python3 dist/serve.py --port 8000
+python3 public_html/serve.py --port 8000
 ```
 
-書き込み部は Emscripten、合成・配置配線と Icarus Verilog は WASI SDK、GHDL の合成部は AdaWebPack と WASI SDK、Surfer は Rust で WASM にします。Apicula は Pyodide で動かします。`scripts/build-web.sh` が Web 画面と各ツールの資材・ライセンスを `dist/` にまとめます。
+書き込み部は Emscripten、合成・配置配線と Icarus Verilog は WASI SDK、GHDL の合成部は AdaWebPack と WASI SDK、Surfer は Rust で WASM にします。Apicula は Pyodide で動かします。`scripts/build-web.sh` が Web 画面と各ツールの資材・ライセンスを `public_html/` にまとめます。
 
 ビルドには Autotools、CMake 3.28 以上、rustup などが必要です。`scripts/build-wasm.sh` は `vendor/emsdk` を使います。ツールの固定版と取得元は [RESEARCH.md](RESEARCH.md) を参照してください。
 

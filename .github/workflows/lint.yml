@@ -64,12 +64,12 @@ jobs:
           persist-credentials: false
 
       - name: zizmor の仮想環境を作成
-        run: python3 -m venv "$HOME/.cache/toolchain-zizmor"
+        run: python3 -m venv "$HOME/.cache/gogo-fpga-zizmor"
 
       - name: ハッシュを検証して zizmor をインストール
         run: |
-          "$HOME/.cache/toolchain-zizmor/bin/pip" install --require-hashes -r .github/zizmor-requirements.txt
+          "$HOME/.cache/gogo-fpga-zizmor/bin/pip" install --require-hashes -r .github/zizmor-requirements.txt
 
       - name: ワークフローを監査
         run: |
-          "$HOME/.cache/toolchain-zizmor/bin/zizmor" --offline --format=github .github/workflows/
+          "$HOME/.cache/gogo-fpga-zizmor/bin/zizmor" --offline --format=github .github/workflows/
