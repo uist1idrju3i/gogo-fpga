@@ -23,16 +23,18 @@ export function initializeOpenRouterUI({ panel, showPanel, flushPendingSave }) {
     <p id="ai-auth-status" role="status" aria-live="polite"></p>
     <p id="ai-auth-error" role="alert" hidden></p>
     <button id="ai-connect" type="button">OpenRouter で接続する</button>
-    <label id="ai-persist-label" class="ai-persist" hidden><input id="ai-persist" type="checkbox">このブラウザーに保存する</label>
-    <p>保存しない場合は、このタブのメモリーだけで保持します。再読み込みやタブを閉じると接続は解除されます。共有端末では保存しないでください。</p>
-    <button id="ai-disconnect" type="button" class="secondary" hidden>接続を解除する</button>
-    <p>解除すると、このブラウザーの接続情報を削除します。OpenRouter 側の鍵は失効しません。上限額の設定や鍵の無効化は OpenRouter の設定で行ってください。</p>`;
+    <label id="ai-persist-label" class="ai-persist" hidden><input id="ai-persist" type="checkbox" aria-describedby="ai-persist-note">このブラウザーに保存する</label>
+    <p id="ai-persist-note" hidden>保存しない場合は、このタブのメモリーだけで保持します。再読み込みやタブを閉じると接続は解除されます。共有端末では保存しないでください。</p>
+    <button id="ai-disconnect" type="button" class="secondary" aria-describedby="ai-disconnect-note" hidden>接続を解除する</button>
+    <p id="ai-disconnect-note" hidden>解除すると、このブラウザーの接続情報を削除します。OpenRouter 側の鍵は失効しません。上限額の設定や鍵の無効化は OpenRouter の設定で行ってください。</p>`;
   const status = panel.querySelector("#ai-auth-status");
   const error = panel.querySelector("#ai-auth-error");
   const connect = panel.querySelector("#ai-connect");
   const disconnect = panel.querySelector("#ai-disconnect");
   const persist = panel.querySelector("#ai-persist");
   const persistLabel = panel.querySelector("#ai-persist-label");
+  const persistNote = panel.querySelector("#ai-persist-note");
+  const disconnectNote = panel.querySelector("#ai-disconnect-note");
   const keys = createKeyStore();
   let busy = false;
   function render() {
@@ -43,6 +45,8 @@ export function initializeOpenRouterUI({ panel, showPanel, flushPendingSave }) {
     connect.hidden = connected;
     disconnect.hidden = !connected && !keys.persisted;
     persistLabel.hidden = !connected;
+    persistNote.hidden = persistLabel.hidden;
+    disconnectNote.hidden = !connected;
     if (!busy) persist.checked = keys.persisted;
     for (const control of [connect, disconnect, persist]) control.disabled = busy;
   }

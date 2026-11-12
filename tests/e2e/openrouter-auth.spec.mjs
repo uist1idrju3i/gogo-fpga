@@ -9,6 +9,14 @@ async function openAi(page) {
   await expect(page.locator("#project-name")).toHaveText("blink");
   await page.locator("#right-tab-ai").click();
   await expect(page.locator("#ai-connect")).toBeEnabled();
+  await expectConnectionNotes(page, false);
+}
+
+async function expectConnectionNotes(page, connected) {
+  for (const id of ["ai-persist-note", "ai-disconnect-note"]) {
+    if (connected) await expect(page.locator(`#${id}`)).toBeVisible();
+    else await expect(page.locator(`#${id}`)).toBeHidden();
+  }
 }
 
 async function mockOpenRouter(page, { tamper = false, httpError = false } = {}) {
@@ -60,6 +68,12 @@ test("same-tab PKCE flushes edits, scrubs callback, keeps default key only in me
   await page.locator("#ai-connect").click();
   await expect(page.locator("#ai-auth-status")).toHaveText("接続済み（このタブを閉じるまで）");
   await expect(page.locator("#right-tab-ai")).toHaveAttribute("aria-selected", "true");
+  await expectConnectionNotes(page, true);
+  await expect(page.locator("#ai-persist")).toHaveAttribute("aria-describedby", "ai-persist-note");
+  await expect(page.locator("#ai-disconnect")).toHaveAttribute("aria-describedby", "ai-disconnect-note");
+  const button = await page.locator("#ai-disconnect").boundingBox();
+  const note = await page.locator("#ai-disconnect-note").boundingBox();
+  expect(note.y - (button.y + button.height)).toBeGreaterThanOrEqual(12);
   expect(count()).toBe(1);
   expect(context.pages()).toHaveLength(1);
   expect(page.url()).not.toContain(testKey);
@@ -73,6 +87,7 @@ test("same-tab PKCE flushes edits, scrubs callback, keeps default key only in me
   await page.reload();
   await page.locator("#right-tab-ai").click();
   await expect(page.locator("#ai-auth-status")).toHaveText("未接続です。");
+  await expectConnectionNotes(page, false);
 });
 
 test("IndexedDB is explicitly opt-in, restores after reload and is erased when unchecked or disconnected", async ({ page }) => {
@@ -94,8 +109,18 @@ test("IndexedDB is explicitly opt-in, restores after reload and is erased when u
   await expect(page.locator("#ai-persist")).toBeEnabled();
   await page.locator("#ai-persist").check();
   await expect(page.locator("#ai-auth-status")).toContainText("保存済み");
+  await page.evaluate(() => {
+    window.originalCredentialDelete = IDBObjectStore.prototype.delete;
+    IDBObjectStore.prototype.delete = () => { throw new Error("Delete unavailable"); };
+  });
+  await page.locator("#ai-disconnect").click();
+  await expect(page.locator("#ai-auth-error")).toContainText("保存・削除できません");
+  await expect(page.locator("#ai-auth-status")).toHaveText("未接続です。");
+  await expectConnectionNotes(page, false);
+  await page.evaluate(() => { IDBObjectStore.prototype.delete = window.originalCredentialDelete; });
   await page.locator("#ai-disconnect").click();
   await expect(page.locator("#ai-auth-status")).toHaveText("未接続です。");
+  await expectConnectionNotes(page, false);
   await page.reload();
   await page.locator("#right-tab-ai").click();
   await expect(page.locator("#ai-auth-status")).toHaveText("未接続です。");
@@ -106,6 +131,7 @@ test("tampered state is rejected without exchange and pending data is removed", 
   await openAi(page);
   await page.locator("#ai-connect").click();
   await expect(page.locator("#ai-auth-error")).toContainText("確認情報が一致しません");
+  await expectConnectionNotes(page, false);
   expect(count()).toBe(0);
   expect(await page.evaluate((key) => sessionStorage.getItem(key), pendingKey)).toBeNull();
   expect(page.url()).not.toMatch(/[?&](code|state)=/);
@@ -117,6 +143,7 @@ test("failed exchange displays only sanitized Japanese text and clears pending",
   await openAi(page);
   await page.locator("#ai-connect").click();
   await expect(page.locator("#ai-auth-error")).toContainText("接続を受け付けませんでした");
+  await expectConnectionNotes(page, false);
   expect(await page.locator("#right-panel-ai").innerText()).not.toContain(testKey);
   expect(await page.evaluate((key) => sessionStorage.getItem(key), pendingKey)).toBeNull();
 });

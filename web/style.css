@@ -1218,6 +1218,7 @@ button.secondary:not(.danger):hover:not(:disabled),
 .board-pane .simulation-settings { margin-top: 1rem; }
 #simulation-files label, #formal-files label { display: flex; align-items: center; gap: 0.4rem; overflow-wrap: anywhere; }
 #simulation-files input, #formal-files input { flex: 0 0 18px; width: 18px; height: 18px; min-height: 18px; padding: 0; margin: 0; }
+#right-panel-ai button { margin-block: 0.75rem; }
 .ai-persist { display: flex; align-items: center; gap: 0.4rem; margin: 0.75rem 0; }
 .ai-persist input { flex: 0 0 18px; width: 18px; height: 18px; min-height: 18px; padding: 0; margin: 0; }
 #ai-auth-error { color: #b42318; }
