@@ -242,7 +242,7 @@
     }
   ],
   "design": {
-    "contract_sha256": "sha256:50da6440f40070f65a3e6d786cf045839581904621e54643f09b9523bdd0ffb0",
+    "contract_sha256": "sha256:7cc94f8d17da9378d3ce0105038fcf18530ed2d53bd659c47b77dcb6bb0c8c13",
     "name": "gogo-fpga"
   },
   "elements": {

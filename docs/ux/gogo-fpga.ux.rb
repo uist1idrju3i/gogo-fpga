@@ -139,18 +139,20 @@ UX.design "gogo-fpga" do
     on :building, :build_succeeded, to: :built
     on :building, :build_errored, to: :build_failed
     on :build_failed, :source_edited, to: :editing
+    on :build_failed, :build_requested, to: :loading_tools, guard: "tools_not_cached"
     on :build_failed, :build_requested, to: :building, guard: "tools_cached"
     on :building, :build_cancelled, to: :editing
     on :editing, :write_requested, to: :writing, guard: "uploaded_fs_selected && board_idcode_matches"
     on :stale, :write_requested, to: :stale, actions: %w[explain_rebuild_needed]
     on :built, :source_edited, to: :stale
-    on :stale, :build_requested, to: :building
+    on :stale, :build_requested, to: :loading_tools, guard: "tools_not_cached"
+    on :stale, :build_requested, to: :building, guard: "tools_cached"
     on :built, :write_requested, to: :writing, guard: "board_idcode_matches"
     on :writing, :write_succeeded, to: :written
     on :writing, :write_errored, to: :write_failed
-    on :write_failed, :write_requested, to: :writing
+    on :write_failed, :write_requested, to: :writing, guard: "board_idcode_matches"
     on :written, :source_edited, to: :stale
-    on :written, :write_requested, to: :writing
+    on :written, :write_requested, to: :writing, guard: "board_idcode_matches"
   end
 
   statechart :ai_connection do

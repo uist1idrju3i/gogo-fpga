@@ -13,6 +13,10 @@
       "on": {
         "build_requested": [
           {
+            "guard": "tools_not_cached",
+            "target": "loading_tools"
+          },
+          {
             "guard": "tools_cached",
             "target": "building"
           }
@@ -98,7 +102,16 @@
         "surface": "web_app"
       },
       "on": {
-        "build_requested": "building",
+        "build_requested": [
+          {
+            "guard": "tools_not_cached",
+            "target": "loading_tools"
+          },
+          {
+            "guard": "tools_cached",
+            "target": "building"
+          }
+        ],
         "write_requested": [
           {
             "actions": [
@@ -118,7 +131,12 @@
         "surface": "web_app"
       },
       "on": {
-        "write_requested": "writing"
+        "write_requested": [
+          {
+            "guard": "board_idcode_matches",
+            "target": "writing"
+          }
+        ]
       }
     },
     "writing": {
@@ -144,7 +162,12 @@
       },
       "on": {
         "source_edited": "stale",
-        "write_requested": "writing"
+        "write_requested": [
+          {
+            "guard": "board_idcode_matches",
+            "target": "writing"
+          }
+        ]
       }
     }
   }

@@ -862,6 +862,13 @@
           "actions": [],
           "event": "build_requested",
           "from": "build_failed",
+          "guard": "tools_not_cached",
+          "to": "loading_tools"
+        },
+        {
+          "actions": [],
+          "event": "build_requested",
+          "from": "build_failed",
           "guard": "tools_cached",
           "to": "building"
         },
@@ -899,7 +906,14 @@
           "actions": [],
           "event": "build_requested",
           "from": "stale",
-          "guard": "",
+          "guard": "tools_not_cached",
+          "to": "loading_tools"
+        },
+        {
+          "actions": [],
+          "event": "build_requested",
+          "from": "stale",
+          "guard": "tools_cached",
           "to": "building"
         },
         {
@@ -927,7 +941,7 @@
           "actions": [],
           "event": "write_requested",
           "from": "write_failed",
-          "guard": "",
+          "guard": "board_idcode_matches",
           "to": "writing"
         },
         {
@@ -941,7 +955,7 @@
           "actions": [],
           "event": "write_requested",
           "from": "written",
-          "guard": "",
+          "guard": "board_idcode_matches",
           "to": "writing"
         }
       ]

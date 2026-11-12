@@ -8,16 +8,18 @@ loading_tools --> build_failed : download_failed
 building --> built : build_succeeded
 building --> build_failed : build_errored
 build_failed --> editing : source_edited
+build_failed --> loading_tools : build_requested [tools_not_cached]
 build_failed --> building : build_requested [tools_cached]
 building --> editing : build_cancelled
 editing --> writing : write_requested [uploaded_fs_selected && board_idcode_matches]
 stale --> stale : write_requested / explain_rebuild_needed
 built --> stale : source_edited
-stale --> building : build_requested
+stale --> loading_tools : build_requested [tools_not_cached]
+stale --> building : build_requested [tools_cached]
 built --> writing : write_requested [board_idcode_matches]
 writing --> written : write_succeeded
 writing --> write_failed : write_errored
-write_failed --> writing : write_requested
+write_failed --> writing : write_requested [board_idcode_matches]
 written --> stale : source_edited
-written --> writing : write_requested
+written --> writing : write_requested [board_idcode_matches]
 @enduml

@@ -33,10 +33,16 @@ export const DESIGN_FLOW_TRANSITIONS = freezeTransitions({
   },
   build_failed: {
     source_edited: "editing",
-    build_requested: [{ guard: "tools_cached", target: "building" }],
+    build_requested: [
+      { guard: "tools_not_cached", target: "loading_tools" },
+      { guard: "tools_cached", target: "building" },
+    ],
   },
   stale: {
-    build_requested: "building",
+    build_requested: [
+      { guard: "tools_not_cached", target: "loading_tools" },
+      { guard: "tools_cached", target: "building" },
+    ],
     write_requested: [{ actions: ["explain_rebuild_needed"], target: "stale" }],
   },
   writing: {
@@ -45,10 +51,10 @@ export const DESIGN_FLOW_TRANSITIONS = freezeTransitions({
   },
   written: {
     source_edited: "stale",
-    write_requested: "writing",
+    write_requested: [{ guard: "board_idcode_matches", target: "writing" }],
   },
   write_failed: {
-    write_requested: "writing",
+    write_requested: [{ guard: "board_idcode_matches", target: "writing" }],
   },
 });
 

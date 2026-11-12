@@ -32,6 +32,7 @@
       <log label="action" expr="'open_problem_list'"/>
     </onentry>
     <transition event="source_edited" target="editing"/>
+    <transition event="build_requested" target="loading_tools" cond="tools_not_cached"/>
     <transition event="build_requested" target="building" cond="tools_cached"/>
   </state>
   <state id="stale">
@@ -41,7 +42,8 @@
     <transition event="write_requested" target="stale">
       <log label="action" expr="'explain_rebuild_needed'"/>
     </transition>
-    <transition event="build_requested" target="building"/>
+    <transition event="build_requested" target="loading_tools" cond="tools_not_cached"/>
+    <transition event="build_requested" target="building" cond="tools_cached"/>
   </state>
   <state id="writing">
     <onentry>
@@ -55,12 +57,12 @@
       <log label="action" expr="'show_write_result'"/>
     </onentry>
     <transition event="source_edited" target="stale"/>
-    <transition event="write_requested" target="writing"/>
+    <transition event="write_requested" target="writing" cond="board_idcode_matches"/>
   </state>
   <state id="write_failed">
     <onentry>
       <log label="action" expr="'show_write_hint'"/>
     </onentry>
-    <transition event="write_requested" target="writing"/>
+    <transition event="write_requested" target="writing" cond="board_idcode_matches"/>
   </state>
 </scxml>

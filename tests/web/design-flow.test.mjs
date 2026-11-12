@@ -84,7 +84,9 @@ test("initial, failure, cancellation and retry transitions preserve caller conte
   assert.equal(transitionDesignFlow(state, "build_cancelled"), "editing");
   assert.equal(transitionDesignFlow(state, "build_errored"), "build_failed");
   assert.equal(transitionDesignFlow("writing", "write_errored"), "write_failed");
-  assert.equal(transitionDesignFlow("write_failed", "write_requested"), "writing");
+  assert.equal(transitionDesignFlow("write_failed", "write_requested", {
+    board_idcode_matches: true,
+  }), "writing");
   assert.deepEqual(context, { tools_not_cached: true, tools_cached: false });
 });
 
@@ -95,4 +97,20 @@ test("invalid states fail closed and the transition table is immutable", () => {
   assert.equal(transitionDesignFlow("editing"), "editing");
   assert.throws(() => { DESIGN_FLOW_TRANSITIONS.built.write_requested[0].guard = ""; }, TypeError);
   assert.throws(() => { DESIGN_FLOW_TRANSITIONS.stale.write_requested[0].actions.push("write"); }, TypeError);
+});
+
+test("failed downloads and stale builds retry through the appropriate tool-loading state", () => {
+  for (const state of ["build_failed", "stale"]) {
+    assert.equal(transitionDesignFlow(state, "build_requested", { tools_not_cached: true }), "loading_tools");
+    assert.equal(transitionDesignFlow(state, "build_requested", { tools_cached: true }), "building");
+    assert.equal(transitionDesignFlow(state, "build_requested"), state);
+  }
+});
+
+test("all built and retry write paths reject a mismatched board", () => {
+  for (const state of ["built", "written", "write_failed"]) {
+    assert.equal(transitionDesignFlow(state, "write_requested", { board_idcode_matches: false }), state);
+    assert.equal(transitionDesignFlow(state, "write_requested"), state);
+    assert.equal(transitionDesignFlow(state, "write_requested", { board_idcode_matches: true }), "writing");
+  }
 });

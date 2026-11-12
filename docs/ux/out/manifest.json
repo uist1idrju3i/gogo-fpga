@@ -55,19 +55,19 @@
     },
     {
       "path": "gogo-fpga.design_flow.scxml",
-      "sha256": "63a889443d61713239158574f2c47a4ead4e90171331945dc69038226aa4434d"
+      "sha256": "ba4de71b1387e8c6daa1093ac801c3e8df4228907472364a6c4bdbdb6bba1eda"
     },
     {
       "path": "gogo-fpga.design_flow.statechart.mmd",
-      "sha256": "410e2d87914cd2ee0518fd6b5d1ad1be100065b6791a98f7182c2563b86d74d2"
+      "sha256": "9a37cb5b03d186847e2e47a5068d9e242b9b7cc76b38bef22999dc91135dface"
     },
     {
       "path": "gogo-fpga.design_flow.statechart.puml",
-      "sha256": "286b6f67c6611f814348c92419e65fc8aec4d19f3b215af10affd79e02377a83"
+      "sha256": "4d67cd28995485833e542c85ae2bd99f4a414a393b073963b67b5592210954bf"
     },
     {
       "path": "gogo-fpga.design_flow.xstate.json",
-      "sha256": "77f195a6512bf907efee6a3144e5ad449208d38c93f1d6d535c62278cbc568df"
+      "sha256": "f09ce01a4467f54ddc809f27f9bc2897421a372efa7530383218460d0871acb5"
     },
     {
       "path": "gogo-fpga.experience-loops.mmd",
