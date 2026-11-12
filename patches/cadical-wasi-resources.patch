@@ -1,0 +1,35 @@
+--- a/src/resources.cpp
++++ b/src/resources.cpp
+@@ -49,9 +49,14 @@
+ // This seems to work on Linux (man page says since Linux 2.6.32).
+ 
+ size_t maximum_resident_set_size () {
++#ifdef __wasi__
++  // Native RSS is unavailable; zero is the upstream unavailable sentinel.
++  return 0;
++#else
+   struct rusage u;
+   if (getrusage (RUSAGE_SELF, &u)) return 0;
+   return ((size_t) u.ru_maxrss) << 10;
++#endif
+ }
+ 
+ // Unfortunately 'getrusage' on Linux does not support current resident set
+@@ -62,6 +67,9 @@
+ // '_SC_PAGESIZE' are available).
+ 
+ size_t current_resident_set_size () {
++#ifdef __wasi__
++  return 0;
++#else
+   char path[40];
+   sprintf (path, "/proc/%" PRId64 "/statm", (int64_t) getpid ());
+   FILE * file = fopen (path, "r");
+@@ -70,6 +78,7 @@
+   int scanned = fscanf (file, "%" PRId64 " %" PRId64 "", &dummy, &rss);
+   fclose (file);
+   return scanned == 2 ? rss * sysconf (_SC_PAGESIZE) : 0;
++#endif
+ }
+ 
+ }

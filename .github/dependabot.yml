@@ -1,0 +1,61 @@
+# Dependabot が取得できる依存の更新を週次で確認します。
+# libftdi は developer.intra2net.com に Dependabot が接続できないため、固定版確認ワークフローで監視します。
+version: 2
+updates:
+  # Dependabot が取得できる branch submodule を対象にします。
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    allow:
+      # dependency-name は .gitmodules の path と一致させます。
+      - dependency-name: "vendor/yomiyasu"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+
+  # タグで固定した submodule は Dependabot が branch HEAD に進めないよう対象外です。
+  # openFPGALoader、libusb、zlib、emsdk、Yosys、nextpnr、wasi-sdk、Boost、Eigen、Apycula は固定版確認ワークフローで監視します。
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "pip"
+    directory: "/.github"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "pip"
+    directory: "/tests/fixtures"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    ignore:
+      # yowasp-nextpnr-himbaechel-gowin が Apycula の版を固定しているため、単独では上げられません。
+      # yowasp-nextpnr-himbaechel-gowin の更新 PR で、要求に合わせて手で上げます。
+      - dependency-name: "apycula"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5

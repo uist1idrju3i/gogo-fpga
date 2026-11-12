@@ -1,0 +1,116 @@
+--- a/src/file.cpp
++++ b/src/file.cpp
+@@ -17,4 +17,4 @@
+-#ifndef _WIN32
+-
+-extern "C" {
+-#include <sys/wait.h>
++#if !defined(_WIN32) && !defined(__wasi__)
++
++extern "C" {
++#include <sys/wait.h>
+@@ -227,2 +227,7 @@
+-FILE *File::open_pipe (Internal *internal, const char *fmt,
+-                       const char *path, const char *mode) {
++FILE *File::open_pipe (Internal *internal, const char *fmt,
++                       const char *path, const char *mode) {
++#ifdef __wasi__
++  (void) internal, (void) fmt, (void) path, (void) mode;
++  fputs ("CaDiCaL: external pipe commands are unavailable on WASI\n", stderr);
++  abort ();
++#else
+@@ -251,3 +256,4 @@
+-  delete[] cmd;
+-  return res;
+-}
++  delete[] cmd;
++  return res;
++#endif
++}
+@@ -275,2 +281,7 @@
+-FILE *File::write_pipe (Internal *internal, const char *command,
+-                        const char *path, int &child_pid) {
++FILE *File::write_pipe (Internal *internal, const char *command,
++                        const char *path, int &child_pid) {
++#ifdef __wasi__
++  (void) internal, (void) command, (void) path, (void) child_pid;
++  fputs ("CaDiCaL: child processes are unavailable on WASI\n", stderr);
++  abort ();
++#else
+@@ -349,4 +360,5 @@
+-    compressed_file_writing_mutex.unlock ();
+-#endif
+-  return res;
+-}
++    compressed_file_writing_mutex.unlock ();
++#endif
++  return res;
++#endif
++}
+@@ -443,1 +455,6 @@
+-    pclose (file);
++#ifdef __wasi__
++  fputs ("CaDiCaL: external pipe closures are unavailable on WASI\n", stderr);
++  abort ();
++#else
++    pclose (file);
++#endif
+@@ -450,1 +467,6 @@
+-    waitpid (child_pid, 0, 0);
++#ifdef __wasi__
++  fputs ("CaDiCaL: child process waits are unavailable on WASI\n", stderr);
++  abort ();
++#else
++    waitpid (child_pid, 0, 0);
++#endif
+--- a/src/resources.cpp
++++ b/src/resources.cpp
+@@ -129,2 +129,5 @@
+-uint64_t maximum_resident_set_size () {
+-  struct rusage u;
++uint64_t maximum_resident_set_size () {
++#ifdef __wasi__
++  return 0;
++#else
++  struct rusage u;
+@@ -133,2 +136,3 @@
+-  return ((uint64_t) u.ru_maxrss) << 10;
+-}
++  return ((uint64_t) u.ru_maxrss) << 10;
++#endif
++}
+@@ -143,2 +147,5 @@
+-uint64_t current_resident_set_size () {
+-  char path[64];
++uint64_t current_resident_set_size () {
++#ifdef __wasi__
++  return 0;
++#else
++  char path[64];
+@@ -153,2 +160,3 @@
+-  return scanned == 2 ? rss * sysconf (_SC_PAGESIZE) : 0;
+-}
++  return scanned == 2 ? rss * sysconf (_SC_PAGESIZE) : 0;
++#endif
++}
+--- a/src/signal.cpp
++++ b/src/signal.cpp
+@@ -8,1 +8,3 @@
+-#include <csignal>
++#include <csignal>
++#include <cstdio>
++#include <cstdlib>
+@@ -124,1 +126,6 @@
+-void Signal::alarm (int seconds) {
++void Signal::alarm (int seconds) {
++#ifdef __wasi__
++  (void) seconds;
++  fputs ("CaDiCaL: OS alarms are unavailable on WASI\n", stderr);
++  abort ();
++#else
+@@ -131,2 +138,3 @@
+-  ::alarm (seconds);
+-}
++  ::alarm (seconds);
++#endif
++}

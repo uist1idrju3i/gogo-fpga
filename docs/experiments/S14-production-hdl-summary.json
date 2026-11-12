@@ -1,0 +1,5402 @@
+{
+  "expected": 32,
+  "verified_cases": 32,
+  "passed": 32,
+  "routed_cases": 32,
+  "capacity_cases": 0,
+  "frontend_cases": 0,
+  "repeats": 5,
+  "calibration_executions": 20,
+  "rejected_executions": 10,
+  "measured_executions": 320,
+  "timing_statistics": [
+    {
+      "id": "libfpga",
+      "board": "tangnano1k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 31.016148000000157,
+        "maximum": 38.7636,
+        "median": 34.0823519999999
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 47.733926999999994,
+        "maximum": 155.57816500000013,
+        "median": 71.11325699999998
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 18743296,
+        "maximum": 18743296,
+        "median": 18743296
+      }
+    },
+    {
+      "id": "libfpga",
+      "board": "tangnano4k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 49.55521999999996,
+        "maximum": 56.12182599999983,
+        "median": 51.32663200000002
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 78.33302099999992,
+        "maximum": 239.1968589999999,
+        "median": 116.7428930000001
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 23527424,
+        "maximum": 23527424,
+        "median": 23527424
+      }
+    },
+    {
+      "id": "libfpga",
+      "board": "tangnano9k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 64.17667500000016,
+        "maximum": 77.35605200000009,
+        "median": 66.53594299999986
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 119.96516100000008,
+        "maximum": 302.9158719999998,
+        "median": 137.39005299999985
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 26411008,
+        "maximum": 26411008,
+        "median": 26411008
+      }
+    },
+    {
+      "id": "libfpga",
+      "board": "tangnano20k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 165.62352599999986,
+        "maximum": 176.83305699999983,
+        "median": 167.04894299999978
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 308.6289929999998,
+        "maximum": 503.5493959999999,
+        "median": 346.54715699999997
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 32243712,
+        "maximum": 32243712,
+        "median": 32243712
+      }
+    },
+    {
+      "id": "colibri",
+      "board": "tangnano1k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 29.620447999999897,
+        "maximum": 40.00709600000005,
+        "median": 33.73672600000009
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 60.032032999999956,
+        "maximum": 137.44403699999998,
+        "median": 76.41562299999987
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 18743296,
+        "maximum": 18743296,
+        "median": 18743296
+      }
+    },
+    {
+      "id": "colibri",
+      "board": "tangnano4k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 46.7538219999999,
+        "maximum": 55.008974999999964,
+        "median": 47.98059699999999
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 91.74148600000012,
+        "maximum": 197.41124400000012,
+        "median": 93.30760899999996
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 23527424,
+        "maximum": 23527424,
+        "median": 23527424
+      }
+    },
+    {
+      "id": "colibri",
+      "board": "tangnano9k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 57.99897799999985,
+        "maximum": 62.12634200000002,
+        "median": 61.00315499999988
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 97.76565600000004,
+        "maximum": 214.0238710000001,
+        "median": 137.5631629999998
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 26411008,
+        "maximum": 26411008,
+        "median": 26411008
+      }
+    },
+    {
+      "id": "colibri",
+      "board": "tangnano20k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 168.09076500000037,
+        "maximum": 175.392511,
+        "median": 172.80873900000006
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 302.95001,
+        "maximum": 498.11926199999994,
+        "median": 306.52864100000033
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 32964608,
+        "maximum": 32964608,
+        "median": 32964608
+      }
+    },
+    {
+      "id": "open-logic",
+      "board": "tangnano1k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 43.31092899999999,
+        "maximum": 48.900491999999986,
+        "median": 44.488178999999946
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 67.23259200000007,
+        "maximum": 193.1428699999999,
+        "median": 91.42982099999995
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 18743296,
+        "maximum": 18743296,
+        "median": 18743296
+      }
+    },
+    {
+      "id": "open-logic",
+      "board": "tangnano4k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 64.08572200000026,
+        "maximum": 70.46757700000012,
+        "median": 67.12675799999988
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 106.40030200000001,
+        "maximum": 255.30450300000007,
+        "median": 118.17096600000013
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 23592960,
+        "maximum": 23592960,
+        "median": 23592960
+      }
+    },
+    {
+      "id": "open-logic",
+      "board": "tangnano9k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 79.68818499999998,
+        "maximum": 82.80452399999967,
+        "median": 80.92963700000018
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 143.70894400000043,
+        "maximum": 300.07774300000005,
+        "median": 148.06637999999998
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 26476544,
+        "maximum": 26476544,
+        "median": 26476544
+      }
+    },
+    {
+      "id": "open-logic",
+      "board": "tangnano20k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 203.53009500000007,
+        "maximum": 444.07602900000006,
+        "median": 431.99991599999976
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 391.4893259999999,
+        "maximum": 837.6103880000001,
+        "median": 596.9972170000001
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 33816576,
+        "maximum": 33816576,
+        "median": 33816576
+      }
+    },
+    {
+      "id": "hdl-modules",
+      "board": "tangnano1k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 33.73658699999987,
+        "maximum": 39.53238999999985,
+        "median": 36.30384300000014
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 48.774280999999974,
+        "maximum": 171.24357699999996,
+        "median": 88.36749599999985
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 18743296,
+        "maximum": 18743296,
+        "median": 18743296
+      }
+    },
+    {
+      "id": "hdl-modules",
+      "board": "tangnano4k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 55.16131500000006,
+        "maximum": 64.74332100000015,
+        "median": 56.73946799999999
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 91.36867600000005,
+        "maximum": 286.42905099999984,
+        "median": 116.39876500000014
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 23592960,
+        "maximum": 23592960,
+        "median": 23592960
+      }
+    },
+    {
+      "id": "hdl-modules",
+      "board": "tangnano9k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 69.05147499999998,
+        "maximum": 81.29275099999973,
+        "median": 71.860455
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 124.05375600000002,
+        "maximum": 284.7465579999998,
+        "median": 148.54222200000004
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 26411008,
+        "maximum": 26411008,
+        "median": 26411008
+      }
+    },
+    {
+      "id": "hdl-modules",
+      "board": "tangnano20k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 191.71809099999973,
+        "maximum": 400.55425700000023,
+        "median": 211.50081999999975
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 359.3108610000004,
+        "maximum": 691.7148050000005,
+        "median": 502.0276749999998
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 33292288,
+        "maximum": 33292288,
+        "median": 33292288
+      }
+    },
+    {
+      "id": "verilog-axis",
+      "board": "tangnano1k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 44.97951799999964,
+        "maximum": 99.74030600000015,
+        "median": 46.63478500000019
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 76.7807670000002,
+        "maximum": 291.397872,
+        "median": 118.44787099999985
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 18743296,
+        "maximum": 18743296,
+        "median": 18743296
+      }
+    },
+    {
+      "id": "verilog-axis",
+      "board": "tangnano4k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 74.52536799999962,
+        "maximum": 157.58010400000012,
+        "median": 95.74852800000008
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 133.9230980000002,
+        "maximum": 478.63988399999994,
+        "median": 182.70555999999988
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 23592960,
+        "maximum": 23592960,
+        "median": 23592960
+      }
+    },
+    {
+      "id": "verilog-axis",
+      "board": "tangnano9k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 86.32596899999999,
+        "maximum": 98.01046900000006,
+        "median": 87.39136300000018
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 138.31095900000014,
+        "maximum": 262.653763,
+        "median": 150.57091100000002
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 26411008,
+        "maximum": 26411008,
+        "median": 26411008
+      }
+    },
+    {
+      "id": "verilog-axis",
+      "board": "tangnano20k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 213.14927499999976,
+        "maximum": 250.08538700000008,
+        "median": 227.55744800000002
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 403.689656,
+        "maximum": 596.668394,
+        "median": 431.1524010000003
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 35323904,
+        "maximum": 35323904,
+        "median": 35323904
+      }
+    },
+    {
+      "id": "verilog-uart",
+      "board": "tangnano1k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 437.36180200000035,
+        "maximum": 495.3525080000004,
+        "median": 466.5595209999992
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 744.6447829999997,
+        "maximum": 1416.1245049999998,
+        "median": 1081.214082
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 20709376,
+        "maximum": 20709376,
+        "median": 20709376
+      }
+    },
+    {
+      "id": "verilog-uart",
+      "board": "tangnano4k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 418.5910680000002,
+        "maximum": 531.0358249999999,
+        "median": 463.3383390000008
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 680.836268,
+        "maximum": 956.1494950000001,
+        "median": 684.9084399999992
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 25624576,
+        "maximum": 25624576,
+        "median": 25624576
+      }
+    },
+    {
+      "id": "verilog-uart",
+      "board": "tangnano9k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 415.84998300000007,
+        "maximum": 438.0494410000001,
+        "median": 420.4773809999999
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 681.3815880000002,
+        "maximum": 981.9437200000002,
+        "median": 734.0253569999995
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 29163520,
+        "maximum": 29163520,
+        "median": 29163520
+      }
+    },
+    {
+      "id": "verilog-uart",
+      "board": "tangnano20k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 562.150936,
+        "maximum": 660.4921519999989,
+        "median": 564.0454390000004
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 966.080301,
+        "maximum": 1246.965461,
+        "median": 1023.590745
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 39190528,
+        "maximum": 39190528,
+        "median": 39190528
+      }
+    },
+    {
+      "id": "verilog-axi",
+      "board": "tangnano1k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 63.959749999999985,
+        "maximum": 74.87115600000016,
+        "median": 64.8168310000001
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 105.23860999999988,
+        "maximum": 276.178181,
+        "median": 138.19114100000002
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 18808832,
+        "maximum": 18808832,
+        "median": 18808832
+      }
+    },
+    {
+      "id": "verilog-axi",
+      "board": "tangnano4k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 93.04664999999977,
+        "maximum": 100.09730599999989,
+        "median": 95.7915559999999
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 155.58224000000018,
+        "maximum": 350.97946,
+        "median": 173.09772499999963
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 23658496,
+        "maximum": 23658496,
+        "median": 23658496
+      }
+    },
+    {
+      "id": "verilog-axi",
+      "board": "tangnano9k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 112.88902099999996,
+        "maximum": 129.41680699999984,
+        "median": 114.11389000000008
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 184.77008799999976,
+        "maximum": 411.3727000000001,
+        "median": 206.15159100000005
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 26476544,
+        "maximum": 26476544,
+        "median": 26476544
+      }
+    },
+    {
+      "id": "verilog-axi",
+      "board": "tangnano20k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 259.8342269999998,
+        "maximum": 296.53045900000006,
+        "median": 277.1358299999997
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 477.94164999999975,
+        "maximum": 715.6189249999998,
+        "median": 535.176023
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 35913728,
+        "maximum": 35913728,
+        "median": 35913728
+      }
+    },
+    {
+      "id": "verilog-ethernet",
+      "board": "tangnano1k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 85.72391999999991,
+        "maximum": 89.8680139999999,
+        "median": 86.2380290000001
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 138.245543,
+        "maximum": 359.78355999999985,
+        "median": 169.67588100000012
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 18939904,
+        "maximum": 18939904,
+        "median": 18939904
+      }
+    },
+    {
+      "id": "verilog-ethernet",
+      "board": "tangnano4k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 97.33447799999976,
+        "maximum": 110.34862499999986,
+        "median": 100.07193299999972
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 165.558947,
+        "maximum": 448.3323130000001,
+        "median": 178.21773900000017
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 23724032,
+        "maximum": 23724032,
+        "median": 23724032
+      }
+    },
+    {
+      "id": "verilog-ethernet",
+      "board": "tangnano9k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 119.94508299999984,
+        "maximum": 153.8588749999999,
+        "median": 123.79987100000017
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 202.14402700000028,
+        "maximum": 423.0939799999999,
+        "median": 220.90212199999996
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 26607616,
+        "maximum": 26607616,
+        "median": 26607616
+      }
+    },
+    {
+      "id": "verilog-ethernet",
+      "board": "tangnano20k",
+      "native_ms": {
+        "count": 5,
+        "minimum": 258.8538159999998,
+        "maximum": 372.748736,
+        "median": 275.8960709999992
+      },
+      "wasi_ms": {
+        "count": 5,
+        "minimum": 461.11354800000026,
+        "maximum": 722.8911420000002,
+        "median": 552.0662499999999
+      },
+      "wasi_memory_bytes": {
+        "count": 5,
+        "minimum": 35192832,
+        "maximum": 35192832,
+        "median": 35192832
+      }
+    }
+  ],
+  "load_average_end": [
+    2.52,
+    1.52,
+    1.45
+  ],
+  "script_sha256": "2076e35088fc4eb4f235ac9c2883b66fbcbd77d7fa937e244a33db277d63e669",
+  "csv_sha256": "b345cd00882f391fbc3693e972811fc715f891d00ddc89fb7a79a4687616e4c1",
+  "manifests": [
+    {
+      "name": "aa1-verilog-uart-tangnano1k",
+      "metadata_sha256": "1620e541154f1e1906192093f6faad36e4c51f1bd7f40226e878f64ad214cb45",
+      "summary_sha256": "26e7ab9d2029add51bd81f24b6f442f7770b8a47b246d1123526aa3d4c56a8b6",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 48
+        },
+        "LUT4": {
+          "used": 217,
+          "total": 1152
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 38
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 38
+        },
+        "MUX2_LUT5": {
+          "used": 37,
+          "total": 576
+        },
+        "MUX2_LUT6": {
+          "used": 14,
+          "total": 288
+        },
+        "MUX2_LUT7": {
+          "used": 5,
+          "total": 144
+        },
+        "MUX2_LUT8": {
+          "used": 1,
+          "total": 144
+        },
+        "ALU": {
+          "used": 74,
+          "total": 864
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 81,
+          "total": 864
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 72
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 4
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "BANDGAP": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 1
+        },
+        "FLASH64KZ": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 18
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 12
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 4
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 8
+        },
+        "DLLDLY": {
+          "used": 0,
+          "total": 4
+        }
+      }
+    },
+    {
+      "name": "aa2-verilog-uart-tangnano1k",
+      "metadata_sha256": "1620e541154f1e1906192093f6faad36e4c51f1bd7f40226e878f64ad214cb45",
+      "summary_sha256": "81c6f17c1824d7c3033d33e0c2d21c1338ec83cc2cabd9a4e6a41a4b2c06d172",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 48
+        },
+        "LUT4": {
+          "used": 217,
+          "total": 1152
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 38
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 38
+        },
+        "MUX2_LUT5": {
+          "used": 37,
+          "total": 576
+        },
+        "MUX2_LUT6": {
+          "used": 14,
+          "total": 288
+        },
+        "MUX2_LUT7": {
+          "used": 5,
+          "total": 144
+        },
+        "MUX2_LUT8": {
+          "used": 1,
+          "total": 144
+        },
+        "ALU": {
+          "used": 74,
+          "total": 864
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 81,
+          "total": 864
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 72
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 4
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "BANDGAP": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 1
+        },
+        "FLASH64KZ": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 18
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 12
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 4
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 8
+        },
+        "DLLDLY": {
+          "used": 0,
+          "total": 4
+        }
+      }
+    },
+    {
+      "name": "negative-verilog-uart-tangnano1k",
+      "metadata_sha256": "5453d2f621fab7187bff5efef91cf0385d87c38183a91287545b2b6876f480ba",
+      "summary_sha256": "6b7874dc2e5d31725809fcb7a8c9213e5d07ef62d3eac98e5ee2d30822c61b54"
+    },
+    {
+      "name": "main-libfpga-tangnano1k",
+      "metadata_sha256": "9f6e6fa1e25b316b6b28d062d4f859729fa8e99fcad4cc89886553c37298de43",
+      "summary_sha256": "ed08b5e41c35b7dc0cf5560e92c081ef7fe7ba7be9bc5d949e570c1850fc5a5e",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 48
+        },
+        "LUT4": {
+          "used": 10,
+          "total": 1152
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 38
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 38
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 576
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 288
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 144
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 144
+        },
+        "ALU": {
+          "used": 6,
+          "total": 864
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 7,
+          "total": 864
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 72
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 4
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "BANDGAP": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 1
+        },
+        "FLASH64KZ": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 18
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 12
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 4
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 8
+        },
+        "DLLDLY": {
+          "used": 0,
+          "total": 4
+        }
+      }
+    },
+    {
+      "name": "main-libfpga-tangnano4k",
+      "metadata_sha256": "9da5933a054a222cfbf1d3552d2776a4866edf97d20b7995548096118bc5c02f",
+      "summary_sha256": "e9342e64a161859cea55ea85458a4342eb0ef30b9c8e7f6dd30ff2414abbc7b3",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 124
+        },
+        "LUT4": {
+          "used": 10,
+          "total": 4608
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 46
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 46
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 124
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 124
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 2304
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 1152
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 576
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 576
+        },
+        "ALU": {
+          "used": 6,
+          "total": 3456
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 7,
+          "total": 3456
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 10
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 4
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 16
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 32
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 16
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 32
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "PLLVR": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH256K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 17
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 18
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 6
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 12
+        },
+        "EMCU": {
+          "used": 0,
+          "total": 1
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 8
+        }
+      }
+    },
+    {
+      "name": "main-libfpga-tangnano9k",
+      "metadata_sha256": "b448830d007aa3e6b321846e50c2f9d340955d54b0cfe082ad3202b703f54063",
+      "summary_sha256": "30c6103734a748622c0ed604c32273bc3b61e0cef54de109f48253a23bf5a8c7",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 276
+        },
+        "LUT4": {
+          "used": 10,
+          "total": 8640
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 80
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 80
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 276
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 276
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 4320
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 2160
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 1080
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 1080
+        },
+        "ALU": {
+          "used": 6,
+          "total": 6480
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 7,
+          "total": 6480
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 270
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 26
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 5
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 20
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 40
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 20
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 40
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH608K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 22
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 22
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 20
+        }
+      }
+    },
+    {
+      "name": "main-libfpga-tangnano20k",
+      "metadata_sha256": "4ef434ec11c9849e11705ad2e9824e4c514dbbe204882c341e22a1a1f75e9d81",
+      "summary_sha256": "2741c9182cccf5ef0f63d870c78f860512097b7e0adb1034257e6cc638c336f6",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 10,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 6,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 7,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      }
+    },
+    {
+      "name": "main-colibri-tangnano1k",
+      "metadata_sha256": "61f9d831b7e66323e953e32a093ac0e7e348b0cbb5303aa68bf4a1d3b57cc25b",
+      "summary_sha256": "867704ed44e780a5b20c4344df268c85dcc8ada1950aa014767971e84e09e9e1",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 48
+        },
+        "LUT4": {
+          "used": 8,
+          "total": 1152
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 38
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 38
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 576
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 288
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 144
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 144
+        },
+        "ALU": {
+          "used": 6,
+          "total": 864
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 4,
+          "total": 864
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 72
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 4
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "BANDGAP": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 1
+        },
+        "FLASH64KZ": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 18
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 12
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 4
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 8
+        },
+        "DLLDLY": {
+          "used": 0,
+          "total": 4
+        }
+      }
+    },
+    {
+      "name": "main-colibri-tangnano4k",
+      "metadata_sha256": "5cf5d9d3ca0295bd6dbc8487a7b1dd515d3d05ecebef5225091c0c67c97bc7b6",
+      "summary_sha256": "a2975637a3ce878ce359cdfe239a07e552724d1424fb20808a8c17f76743e6fa",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 124
+        },
+        "LUT4": {
+          "used": 8,
+          "total": 4608
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 46
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 46
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 124
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 124
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 2304
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 1152
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 576
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 576
+        },
+        "ALU": {
+          "used": 6,
+          "total": 3456
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 4,
+          "total": 3456
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 10
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 4
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 16
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 32
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 16
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 32
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "PLLVR": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH256K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 17
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 18
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 6
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 12
+        },
+        "EMCU": {
+          "used": 0,
+          "total": 1
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 8
+        }
+      }
+    },
+    {
+      "name": "main-colibri-tangnano9k",
+      "metadata_sha256": "28e2ea9aa49785bdd78e73dff392bdd2c69ddf36add27edbdb75115d3a12755f",
+      "summary_sha256": "175256737553c58f2ec0c26cdfdc1a5ad34f30c94a744ec3206fcf583733b172",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 276
+        },
+        "LUT4": {
+          "used": 8,
+          "total": 8640
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 80
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 80
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 276
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 276
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 4320
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 2160
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 1080
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 1080
+        },
+        "ALU": {
+          "used": 6,
+          "total": 6480
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 4,
+          "total": 6480
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 270
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 26
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 5
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 20
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 40
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 20
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 40
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH608K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 22
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 22
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 20
+        }
+      }
+    },
+    {
+      "name": "main-colibri-tangnano20k",
+      "metadata_sha256": "02412c273f1a70b75ca7a8b207812cf9dffa0b5aa7db2f245213ff884082009d",
+      "summary_sha256": "581fe6abe52bb6145ef7bf32ec67f53877a6229d374ead4a7be5c22c9d39425f",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 8,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 6,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 4,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      }
+    },
+    {
+      "name": "main-open-logic-tangnano1k",
+      "metadata_sha256": "a4678d44e647b43e3ac4f4a9a808b307f2db6981d7f2ab4f60b66adaeb3a059d",
+      "summary_sha256": "b7f5241501115e50077ce1a69b20427372b51aef7b604881f114a54b19dbac26",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 48
+        },
+        "LUT4": {
+          "used": 22,
+          "total": 1152
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 38
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 38
+        },
+        "MUX2_LUT5": {
+          "used": 2,
+          "total": 576
+        },
+        "MUX2_LUT6": {
+          "used": 1,
+          "total": 288
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 144
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 144
+        },
+        "ALU": {
+          "used": 10,
+          "total": 864
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 15,
+          "total": 864
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 72
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 4
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "BANDGAP": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 1
+        },
+        "FLASH64KZ": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 18
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 12
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 4
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 8
+        },
+        "DLLDLY": {
+          "used": 0,
+          "total": 4
+        }
+      }
+    },
+    {
+      "name": "main-open-logic-tangnano4k",
+      "metadata_sha256": "b8d7f2fb7adc0701c9e1e1035dd7f0dfce8c8a09f566110c32fbccb95f866f7d",
+      "summary_sha256": "12f56c65b60a433b54389e09e21c21172eaf5d3e947eb1012231877dccd2172b",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 124
+        },
+        "LUT4": {
+          "used": 22,
+          "total": 4608
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 46
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 46
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 124
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 124
+        },
+        "MUX2_LUT5": {
+          "used": 2,
+          "total": 2304
+        },
+        "MUX2_LUT6": {
+          "used": 1,
+          "total": 1152
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 576
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 576
+        },
+        "ALU": {
+          "used": 10,
+          "total": 3456
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 15,
+          "total": 3456
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 10
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 4
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 16
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 32
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 16
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 32
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "PLLVR": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH256K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 17
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 18
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 6
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 12
+        },
+        "EMCU": {
+          "used": 0,
+          "total": 1
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 8
+        }
+      }
+    },
+    {
+      "name": "main-open-logic-tangnano9k",
+      "metadata_sha256": "e3c35a5d8a73d1275d4dee31356f4961abe538387710cf8686fb61873f2be67b",
+      "summary_sha256": "6f1c80171750b5544b5b806540e0e2d7c320fd99753cb4d78aa5ac14538aa6c5",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 276
+        },
+        "LUT4": {
+          "used": 22,
+          "total": 8640
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 80
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 80
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 276
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 276
+        },
+        "MUX2_LUT5": {
+          "used": 2,
+          "total": 4320
+        },
+        "MUX2_LUT6": {
+          "used": 1,
+          "total": 2160
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 1080
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 1080
+        },
+        "ALU": {
+          "used": 10,
+          "total": 6480
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 15,
+          "total": 6480
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 270
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 26
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 5
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 20
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 40
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 20
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 40
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH608K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 22
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 22
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 20
+        }
+      }
+    },
+    {
+      "name": "main-open-logic-tangnano20k",
+      "metadata_sha256": "0407ce5a5824035da9e6465dbca5acb646441fc513674cfbedd34b9115cc1c62",
+      "summary_sha256": "2efb4a199e7dd4a361a3924f5e0587a34bbeb4dbe9b5c6b246fb4c85040906b6",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 22,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 2,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 1,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 10,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 15,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      }
+    },
+    {
+      "name": "main-hdl-modules-tangnano1k",
+      "metadata_sha256": "7ce1a96d8cb528411ac6ffebcf9aa76c97a1352ea6923a406359accd44d74bb0",
+      "summary_sha256": "2a4f4de6e09987476c01bd13384c13f20d787ff5293f623e28463af49a25265d",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 48
+        },
+        "LUT4": {
+          "used": 15,
+          "total": 1152
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 38
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 38
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 576
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 288
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 144
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 144
+        },
+        "ALU": {
+          "used": 4,
+          "total": 864
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 10,
+          "total": 864
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 72
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 4
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "BANDGAP": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 1
+        },
+        "FLASH64KZ": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 18
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 12
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 4
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 8
+        },
+        "DLLDLY": {
+          "used": 0,
+          "total": 4
+        }
+      }
+    },
+    {
+      "name": "main-hdl-modules-tangnano4k",
+      "metadata_sha256": "64a2f5c7cd75ccc01fcd68729a56218e652a9c8211d45aba098f7d7a74eaa850",
+      "summary_sha256": "10d8e3670d9366e671bd256d33e9070fb06b0b537f2c3a443197eed7be246c27",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 124
+        },
+        "LUT4": {
+          "used": 15,
+          "total": 4608
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 46
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 46
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 124
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 124
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 2304
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 1152
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 576
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 576
+        },
+        "ALU": {
+          "used": 4,
+          "total": 3456
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 10,
+          "total": 3456
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 10
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 4
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 16
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 32
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 16
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 32
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "PLLVR": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH256K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 17
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 18
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 6
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 12
+        },
+        "EMCU": {
+          "used": 0,
+          "total": 1
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 8
+        }
+      }
+    },
+    {
+      "name": "main-hdl-modules-tangnano9k",
+      "metadata_sha256": "e98255f452662d1cad3289106c64efdf9c55db84344309730cb1ca52277e6b85",
+      "summary_sha256": "1e608889d62017c93ee08f6d19a04d85b30dc74cbdff3ccc86ac87cf9f34b4d3",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 276
+        },
+        "LUT4": {
+          "used": 15,
+          "total": 8640
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 80
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 80
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 276
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 276
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 4320
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 2160
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 1080
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 1080
+        },
+        "ALU": {
+          "used": 4,
+          "total": 6480
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 10,
+          "total": 6480
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 270
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 26
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 5
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 20
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 40
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 20
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 40
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH608K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 22
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 22
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 20
+        }
+      }
+    },
+    {
+      "name": "main-hdl-modules-tangnano20k",
+      "metadata_sha256": "d3fcd9d9c47bfe972fee1bde3fdc995c3f47d088ca20e20ce4aed20e84f60815",
+      "summary_sha256": "b7dc6824b492b7364c7217aba6e76336443dd89a0080e3427d75c201241562b1",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 15,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 0,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 4,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 10,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      }
+    },
+    {
+      "name": "main-verilog-axis-tangnano1k",
+      "metadata_sha256": "bc54acc48b39d6731bb7596a8a766e1c87068e6c7ed793f68bba189448f4f3ea",
+      "summary_sha256": "886023332f8e5ba8b59b7a4c72ce0abcf1d6c7de24f61696a924f62e8f42c99d",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 48
+        },
+        "LUT4": {
+          "used": 15,
+          "total": 1152
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 38
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 38
+        },
+        "MUX2_LUT5": {
+          "used": 1,
+          "total": 576
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 288
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 144
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 144
+        },
+        "ALU": {
+          "used": 4,
+          "total": 864
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 12,
+          "total": 864
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 72
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 4
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "BANDGAP": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 1
+        },
+        "FLASH64KZ": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 18
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 12
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 4
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 8
+        },
+        "DLLDLY": {
+          "used": 0,
+          "total": 4
+        }
+      }
+    },
+    {
+      "name": "main-verilog-axis-tangnano4k",
+      "metadata_sha256": "2467f9b03e5d80546873d0c3e189560cb90e80ac347d9062de292931fa3c9afc",
+      "summary_sha256": "f6d1a9803f2f72980cff5327ac2486b12d50fe5dc16eb0741d7f37a165e0e97a",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 124
+        },
+        "LUT4": {
+          "used": 15,
+          "total": 4608
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 46
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 46
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 124
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 124
+        },
+        "MUX2_LUT5": {
+          "used": 1,
+          "total": 2304
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 1152
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 576
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 576
+        },
+        "ALU": {
+          "used": 4,
+          "total": 3456
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 12,
+          "total": 3456
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 10
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 4
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 16
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 32
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 16
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 32
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "PLLVR": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH256K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 17
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 18
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 6
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 12
+        },
+        "EMCU": {
+          "used": 0,
+          "total": 1
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 8
+        }
+      }
+    },
+    {
+      "name": "main-verilog-axis-tangnano9k",
+      "metadata_sha256": "cb9f04f0728a7534c0e0fa921d29ef4410f0bffff1d95ce7cba9fc6977d5fec7",
+      "summary_sha256": "4b42afd2e435b80149764bf8e5a105cd41bcb9620076741b150114cf10f9696d",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 276
+        },
+        "LUT4": {
+          "used": 15,
+          "total": 8640
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 80
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 80
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 276
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 276
+        },
+        "MUX2_LUT5": {
+          "used": 1,
+          "total": 4320
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 2160
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 1080
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 1080
+        },
+        "ALU": {
+          "used": 4,
+          "total": 6480
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 12,
+          "total": 6480
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 270
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 26
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 5
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 20
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 40
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 20
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 40
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH608K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 22
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 22
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 20
+        }
+      }
+    },
+    {
+      "name": "main-verilog-axis-tangnano20k",
+      "metadata_sha256": "e4c5b8cb1c803481d0eb2f40a8f630e53f980fd9032c827271102c5161ac3742",
+      "summary_sha256": "baf939b9798452668cd10a10f499c2e14b59a5b7cdc25346e73902932b2dba56",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 15,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 1,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 0,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 4,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 12,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      }
+    },
+    {
+      "name": "main-verilog-uart-tangnano1k",
+      "metadata_sha256": "1620e541154f1e1906192093f6faad36e4c51f1bd7f40226e878f64ad214cb45",
+      "summary_sha256": "25eb8a26f394389ebc04a8bcd8013dcf608716329f6797fb57b8957d96366c78",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 48
+        },
+        "LUT4": {
+          "used": 217,
+          "total": 1152
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 38
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 38
+        },
+        "MUX2_LUT5": {
+          "used": 37,
+          "total": 576
+        },
+        "MUX2_LUT6": {
+          "used": 14,
+          "total": 288
+        },
+        "MUX2_LUT7": {
+          "used": 5,
+          "total": 144
+        },
+        "MUX2_LUT8": {
+          "used": 1,
+          "total": 144
+        },
+        "ALU": {
+          "used": 74,
+          "total": 864
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 81,
+          "total": 864
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 72
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 4
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "BANDGAP": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 1
+        },
+        "FLASH64KZ": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 18
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 12
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 4
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 8
+        },
+        "DLLDLY": {
+          "used": 0,
+          "total": 4
+        }
+      }
+    },
+    {
+      "name": "main-verilog-uart-tangnano4k",
+      "metadata_sha256": "d9d8efe6dff0a06f20747985533bc14f8a33c03f6f21d355aa77c47ac7d80cb5",
+      "summary_sha256": "214542d5987c399d0c35abfe306725b245e4d30a5229418cac15d852abf9c8d1",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 124
+        },
+        "LUT4": {
+          "used": 217,
+          "total": 4608
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 46
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 46
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 124
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 124
+        },
+        "MUX2_LUT5": {
+          "used": 37,
+          "total": 2304
+        },
+        "MUX2_LUT6": {
+          "used": 14,
+          "total": 1152
+        },
+        "MUX2_LUT7": {
+          "used": 5,
+          "total": 576
+        },
+        "MUX2_LUT8": {
+          "used": 1,
+          "total": 576
+        },
+        "ALU": {
+          "used": 74,
+          "total": 3456
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 81,
+          "total": 3456
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 10
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 4
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 16
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 32
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 16
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 32
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "PLLVR": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH256K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 17
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 18
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 6
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 12
+        },
+        "EMCU": {
+          "used": 0,
+          "total": 1
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 8
+        }
+      }
+    },
+    {
+      "name": "main-verilog-uart-tangnano9k",
+      "metadata_sha256": "0b53aa7b5b20696424a9ec5da46503e4dc36614428fbc72c689b28152f2825a8",
+      "summary_sha256": "8e7c534897738f92fbfd36ccbf3fa9d447a20807d3135eb92216f45ddbc03224",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 276
+        },
+        "LUT4": {
+          "used": 217,
+          "total": 8640
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 80
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 80
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 276
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 276
+        },
+        "MUX2_LUT5": {
+          "used": 37,
+          "total": 4320
+        },
+        "MUX2_LUT6": {
+          "used": 14,
+          "total": 2160
+        },
+        "MUX2_LUT7": {
+          "used": 5,
+          "total": 1080
+        },
+        "MUX2_LUT8": {
+          "used": 1,
+          "total": 1080
+        },
+        "ALU": {
+          "used": 74,
+          "total": 6480
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 81,
+          "total": 6480
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 270
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 26
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 5
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 20
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 40
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 20
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 40
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH608K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 22
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 22
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 20
+        }
+      }
+    },
+    {
+      "name": "main-verilog-uart-tangnano20k",
+      "metadata_sha256": "59b43a9f87a13d10f6ef06fb23d140ce851f36813855d68b3de572754df3d608",
+      "summary_sha256": "9a1533fdbc9420b84cdcd6610faee6e3f18690732974e9124b1451a1bb7619b6",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 217,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 37,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 14,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 5,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 1,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 74,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 81,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      }
+    },
+    {
+      "name": "main-verilog-axi-tangnano1k",
+      "metadata_sha256": "c50dfd568ffbaa20ca9b363a1a5d08f5fe320ad4f46f8854691f6eb408e78893",
+      "summary_sha256": "308074ec2c5c3366d53e112febeefeeacd1bcaa66d0d260cdbcccca00ae9c79d",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 48
+        },
+        "LUT4": {
+          "used": 28,
+          "total": 1152
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 38
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 38
+        },
+        "MUX2_LUT5": {
+          "used": 3,
+          "total": 576
+        },
+        "MUX2_LUT6": {
+          "used": 1,
+          "total": 288
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 144
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 144
+        },
+        "ALU": {
+          "used": 4,
+          "total": 864
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 19,
+          "total": 864
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 72
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 4
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "BANDGAP": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 1
+        },
+        "FLASH64KZ": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 18
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 12
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 4
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 8
+        },
+        "DLLDLY": {
+          "used": 0,
+          "total": 4
+        }
+      }
+    },
+    {
+      "name": "main-verilog-axi-tangnano4k",
+      "metadata_sha256": "399bc2f1528a6366b134374ee04aa447b372893f2e2bc5ae184fabdbc9b93869",
+      "summary_sha256": "4323defe59515d445f69397855b00ca680ae659493e0d529abcc0fa7ca06652b",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 124
+        },
+        "LUT4": {
+          "used": 28,
+          "total": 4608
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 46
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 46
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 124
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 124
+        },
+        "MUX2_LUT5": {
+          "used": 3,
+          "total": 2304
+        },
+        "MUX2_LUT6": {
+          "used": 1,
+          "total": 1152
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 576
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 576
+        },
+        "ALU": {
+          "used": 4,
+          "total": 3456
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 19,
+          "total": 3456
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 10
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 4
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 16
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 32
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 16
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 32
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "PLLVR": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH256K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 17
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 18
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 6
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 12
+        },
+        "EMCU": {
+          "used": 0,
+          "total": 1
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 8
+        }
+      }
+    },
+    {
+      "name": "main-verilog-axi-tangnano9k",
+      "metadata_sha256": "68ec9e368fa4fbffafd004f39cef9a877e501efb16696ed842d8d4d9799f63ce",
+      "summary_sha256": "34dc5072920086d69705d84a8adf23ef1d898e6512b1c6c43b330f8796b7ad33",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 276
+        },
+        "LUT4": {
+          "used": 28,
+          "total": 8640
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 80
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 80
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 276
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 276
+        },
+        "MUX2_LUT5": {
+          "used": 3,
+          "total": 4320
+        },
+        "MUX2_LUT6": {
+          "used": 1,
+          "total": 2160
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 1080
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 1080
+        },
+        "ALU": {
+          "used": 4,
+          "total": 6480
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 19,
+          "total": 6480
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 270
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 26
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 5
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 20
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 40
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 20
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 40
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH608K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 22
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 22
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 20
+        }
+      }
+    },
+    {
+      "name": "main-verilog-axi-tangnano20k",
+      "metadata_sha256": "bd5487b552fd211b3a7b141e47154dcf093457a43ece784bafdd212be8a2f530",
+      "summary_sha256": "e37cb4fa8d14e20fdf6dd266e95e4433236f4f16cc65411f3acb9247f47228a4",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 28,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 3,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 1,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 0,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 4,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 19,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      }
+    },
+    {
+      "name": "main-verilog-ethernet-tangnano1k",
+      "metadata_sha256": "d735d52fac02290787b6bb1c5f88eaa956281d4c8373ca06f1aff19d2a815688",
+      "summary_sha256": "cb334f30062b79061a5668cbd02a0ff5fb09dc3562bdfac32bc46ecdf356520b",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 48
+        },
+        "LUT4": {
+          "used": 47,
+          "total": 1152
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 38
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 38
+        },
+        "MUX2_LUT5": {
+          "used": 14,
+          "total": 576
+        },
+        "MUX2_LUT6": {
+          "used": 5,
+          "total": 288
+        },
+        "MUX2_LUT7": {
+          "used": 1,
+          "total": 144
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 144
+        },
+        "ALU": {
+          "used": 10,
+          "total": 864
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 24,
+          "total": 864
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 72
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 4
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "BANDGAP": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 1
+        },
+        "FLASH64KZ": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 18
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 12
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 4
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 8
+        },
+        "DLLDLY": {
+          "used": 0,
+          "total": 4
+        }
+      }
+    },
+    {
+      "name": "main-verilog-ethernet-tangnano4k",
+      "metadata_sha256": "4dccb0247ca0e992b19a0142d87f8390e06422b204b99cb3cfbbf57ae6681f0f",
+      "summary_sha256": "9ddabb344abd0c6b31c135999d47db1564ed49d56f171fea2b1b5c16552da191",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 124
+        },
+        "LUT4": {
+          "used": 47,
+          "total": 4608
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 46
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 46
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 124
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 124
+        },
+        "MUX2_LUT5": {
+          "used": 14,
+          "total": 2304
+        },
+        "MUX2_LUT6": {
+          "used": 5,
+          "total": 1152
+        },
+        "MUX2_LUT7": {
+          "used": 1,
+          "total": 576
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 576
+        },
+        "ALU": {
+          "used": 10,
+          "total": 3456
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 24,
+          "total": 3456
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 10
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 8
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 4
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 16
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 32
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 16
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 32
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSCZ": {
+          "used": 0,
+          "total": 1
+        },
+        "PLLVR": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH256K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 17
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 12
+        },
+        "DCS": {
+          "used": 0,
+          "total": 4
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 18
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 6
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 12
+        },
+        "EMCU": {
+          "used": 0,
+          "total": 1
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 8
+        }
+      }
+    },
+    {
+      "name": "main-verilog-ethernet-tangnano9k",
+      "metadata_sha256": "d79a534c4346a2f90d358f4caefd8991399a27543084a80b91aaced3f0273b83",
+      "summary_sha256": "4753ddefe5f375f3c626a7493445a7329f63ecfcddac51ce1ea9742f86900942",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 276
+        },
+        "LUT4": {
+          "used": 47,
+          "total": 8640
+        },
+        "OSER16": {
+          "used": 0,
+          "total": 80
+        },
+        "IDES16": {
+          "used": 0,
+          "total": 80
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 276
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 276
+        },
+        "MUX2_LUT5": {
+          "used": 14,
+          "total": 4320
+        },
+        "MUX2_LUT6": {
+          "used": 5,
+          "total": 2160
+        },
+        "MUX2_LUT7": {
+          "used": 1,
+          "total": 1080
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 1080
+        },
+        "ALU": {
+          "used": 10,
+          "total": 6480
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 24,
+          "total": 6480
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 270
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 26
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 10
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 5
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 20
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 40
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 20
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 40
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "FLASH608K": {
+          "used": 0,
+          "total": 1
+        },
+        "BUFG": {
+          "used": 0,
+          "total": 22
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        },
+        "MIPI_IBUF": {
+          "used": 0,
+          "total": 22
+        },
+        "MIPI_OBUF": {
+          "used": 0,
+          "total": 20
+        }
+      }
+    },
+    {
+      "name": "main-verilog-ethernet-tangnano20k",
+      "metadata_sha256": "3220ba7a341f9c32643f3772654496cdd499ec20e703923a1e2276824258f211",
+      "summary_sha256": "4d5b7b8437271ad80dc1d9ad3d6970e84176d38d592625c5524049bf71c44eae",
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 47,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 14,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 5,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 1,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 0,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 10,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 24,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 0,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      }
+    }
+  ]
+}

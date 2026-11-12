@@ -1,0 +1,4 @@
+Info: Using uarch 'gowin' for device 'GW1NZ-LV1QN48C6/I5'
+
+Info: Reading constraints...
+ERROR: Pin INVALID_PIN_NAME not found (pin# style)

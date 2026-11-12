@@ -1,0 +1,12 @@
+午後のFPGA
+Copyright (c) 2026, Y.Yamashiro
+
+本リポジトリー自体のライセンスは BSD-3-Clause です。第三者ソフトウェア
+openFPGALoader は Apache-2.0 でライセンスされ、その著作権者として
+Gwenhael Goavec-Merou がソース内の著作権表示に記載されています。
+その他の第三者ソフトウェアは THIRD_PARTY_NOTICES.md に記録しています。
+
+形式検証の候補ソースとして SBY、Yices2、Z3、Boolector、Bitwuzla、Click、
+GMP を登録しています。実行機能の提供とは区別します。各著作権表示と
+ライセンス原文は配布ソースと licenses/ に保持し、原本と条件の参照先を
+THIRD_PARTY_NOTICES.md と docs/research/formal-sources.md に記録しています。

@@ -1,0 +1,116 @@
+{
+  "archive": {
+    "bytes": 951744,
+    "files": 13387,
+    "manifestSha256": "4afaafcfb2ec0f4c20e9b3f32f659ad6ef1116120457408d7b7ba5cb8aec1200",
+    "name": "S15-sat-formal-formal-01-evidence.zip",
+    "objects": 882,
+    "restoreAudit": "pass (empty destination, saved auditor, commit a420942)",
+    "sha256": "ab8651373469fb3d08958617c3a29e8b51ae3531a912eb38755e3ac3d7f1fc50"
+  },
+  "binaries": {
+    "distribution-yosys-wasm": {
+      "bytes": 35038277,
+      "note": "CI toolchain-web artifact (build run 42487436271, inputs unchanged at a420942); differs from local build only in embedded compiler path and version banner",
+      "sha256": "0c8db523819e5a053950fcefead02a8306c49a0fd45eb7e70a88fc55b3e51eee"
+    },
+    "iverilog": {
+      "native": {
+        "ivl": {
+          "bytes": 4320168,
+          "sha256": "fa80c74f3c275b34c27a6fa578fce90b00f8c0b3bd8013314007c29f3b90694e"
+        },
+        "ivlpp": {
+          "bytes": 85560,
+          "sha256": "272678cb06591880763219b60da8adcbfa80ba273d1ec55fc63ec33bad937f49"
+        },
+        "vvp": {
+          "bytes": 2266448,
+          "sha256": "06b819775608ce66b35ad23a75e9473658f492617bc8499a6311bb5057addeae"
+        }
+      },
+      "wasm": {
+        "ivl.wasm": {
+          "bytes": 6630370,
+          "sha256": "936223cd9204283fe16a1b3232684a9766573088d2d0da3fa08a2c94fcfdb30f"
+        },
+        "ivlpp.wasm": {
+          "bytes": 428432,
+          "sha256": "7ab296df67635fc272b5dfa95c3e0e5e0f7176271b4035d26f847e266c6936af"
+        },
+        "vvp.wasm": {
+          "bytes": 4824816,
+          "sha256": "909014061e6dbde49f2f86b47c4a2b536abaea0c79678a7b901e6b816de1bc83"
+        }
+      }
+    },
+    "yosys-native": {
+      "bytes": 27570616,
+      "sha256": "d298997c12f89e845b76ba0a8b484ad5ebbe63b604397948bbd0d8ecfd9e318c"
+    },
+    "yosys-wasm": {
+      "bytes": 35038261,
+      "sha256": "85812d62f2aaf0a4ab9ed8c933a862cc4eec18a874160b4fc36e5871d82ff644"
+    }
+  },
+  "campaign": {
+    "aaRows": 48,
+    "audits": {
+      "detail": "audits.json (aa 4, run 10)",
+      "pass": 14,
+      "total": 14
+    },
+    "columns": 24,
+    "commit": "a4209427efa8511690899192c23d8a42a79cba20",
+    "csvSha256": "1c274a53e013a84f9103ac973a0f33632feb988250c64e4e2e16ce4cc17a39a1",
+    "formalRows": 120,
+    "kind": "sat-formal-campaign-v1",
+    "replays": 56,
+    "rows": 168,
+    "schedule": "aa 1-2 then run 1-5, verdict+error each pass, runtime order alternates by iteration parity",
+    "status": "pass"
+  },
+  "distributionCrossCheck": {
+    "evidence": "build/S15/sat-formal-ci-wasm-{verdict,error}/ in the archive",
+    "result": "all rows identical to formal run-1 except elapsedMs, runtimeIndex, binarySha256, distributionBytes, logSha256; logSha256 differences reduce to the Yosys version banner line",
+    "what": "probe-sat-formal.mjs verdict+error against the CI-distributed yosys.wasm (0c8db523...)"
+  },
+  "environment": {
+    "environment": {
+      "LC_ALL": "C",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "0",
+      "TZ": "UTC"
+    },
+    "host": {
+      "architecture": "x64",
+      "cpus": 2,
+      "platform": "linux",
+      "release": "6.8.0-1061-aws"
+    },
+    "node": "v24.21.0"
+  },
+  "negativeControls": {
+    "allRejected": true,
+    "controls": 100,
+    "note": "every mutation of the formal evidence must be rejected by audit-sat-formal.py with non-zero exit",
+    "status": "pass"
+  },
+  "preliminary": {
+    "commit": "e8d1da9f16cf7eaac9ad88eada99917043416c9c",
+    "csvSha256": "d17ba90a0f591e3b32dcf3ee78e758f423bb6dffa4313011a89408cb3ec4c062",
+    "negativeControls": {
+      "allRejected": true,
+      "controls": 100,
+      "status": "pass"
+    },
+    "rows": 168,
+    "status": "pass"
+  },
+  "versions": {
+    "iverilogCommit": "dfeee909ed9f20b4870dd93423156c0170c0e1ff",
+    "vvp": "Icarus Verilog runtime version 13.0 (stable) (v13_0)",
+    "wasiSdk": "34.0",
+    "yosysSource": "v0.70 / 28ba3cb926fe376fa05ebfc1b921747d011d4557"
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "kind": "cpu",
+  "revision": "55585c135ed82554b30fc24471ded7c3ef948c01",
+  "repeats": 5,
+  "matrix_dir": "build/t5-cpu-production-scalar-matrix-3",
+  "command": [
+    "node",
+    "scripts/verify-pnr-library-matrix.mjs",
+    "--kind",
+    "cpu",
+    "--matrix-dir",
+    "build/t5-cpu-production-scalar-matrix-3",
+    "--out",
+    "build/t5-cpu-production-scalar-formal-2"
+  ],
+  "matrix_sha256": "9506d2539d5277368c89f9d6f591a3bd97c61d38db6b1339162a2d05f3f25b8b",
+  "os": "Linux 6.8.0-1061-aws x64",
+  "architecture": "x64",
+  "node": "v24.21.0",
+  "cpus": 2,
+  "memory_bytes": 8327749632,
+  "cpu_model": "Intel(R) Xeon(R) Processor",
+  "available_parallelism": 2,
+  "load_average": [
+    0.22,
+    0.8,
+    1.24
+  ],
+  "environment": {
+    "S5_WASI_ROOT": null,
+    "S5_NATIVE_ROOT": null,
+    "IVERILOG_WASM_DIR": null,
+    "IVERILOG_NATIVE_DIR": null,
+    "EXPERIMENT_CONCURRENT_WORKLOAD": "CPU and HDL formal verification; not isolated speedup benchmarking"
+  },
+  "submodules": " 3fa784121ccea86d9e65b2e0dc08d2a3327f5f2f third_party/colibri (2026.07)\n b353438ff469c030c89f6804f3b24a2852880e8b third_party/cv32e40p (heads/master)\n 955511961f139c54d3385063cd9bf40f4dddadd8 third_party/darkriscv (heads/master)\n f5ada24ae6cca67d99889daec2c4ee44a6e59417 third_party/femtorv (heads/master)\n 8af992930f71a69b0e06c38734c1094f41a05ca0 third_party/hazard3 (v1.1.1)\n 8142d3a1d878651811427e609293946e699c5cb7 third_party/hdl-modules (8142d3a)\n f4515520c0045bb8ef1e72d46ed82499a6ac5f18 third_party/ibex (heads/master)\n a4ef4a3fa4ac1de6aa485baf3efc56f14a6df704 third_party/libfpga (heads/main)\n 84743cdbeefccb531f836d66933c8478f1d9bf71 third_party/neorv32 (84743cd)\n d9f123aae1c6022288782668067311f9794da0a2 third_party/open-logic (d9f123a)\n 716d751566b4fb6479f69c38cc01790744c911b7 third_party/osvvm (2026.09)\n ef203c2b0a3fb793280f5114941416c425c5b461 third_party/picorv32 (heads/main)\n f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8 third_party/serv (heads/main)\n cc70b270b910d369ab1ad7b3855e76399fd461f1 third_party/taxi (heads/master)\n 825072572dbf2d6079c9ca07a55964271b724664 third_party/uvvm (heads/master)\n 516bd5dadc3365b7f9e225d2af8fe0b8d804fe53 third_party/verilog-axi (heads/master)\n 48ff7a7e2ef782cf778d47910cf85835c64b1bce third_party/verilog-axis (heads/master)\n 77320a9471d19c7dd383914bc049e02d9f4f1ffb third_party/verilog-ethernet (heads/master)\n 1b867e53af738e4a8bc7c839ca2f1c07f40382dc third_party/verilog-uart (heads/master)\n 9f70315deb3390b283995c5b8f1bd38215ecf52b third_party/vexiiriscv (heads/dev)\n 642ecfed1c84460555d6d803d660cc60cfc1ecb6 third_party/vexriscv (2026.08)\n 6c2f49f0ec4c4e2a84013a987901c8fce848c654 third_party/vunit (heads/master)\n 35659964bc2762fffec0d257997fb61475f765b7 vendor/emsdk (6.0.13)\n e589c698c351369ac5bcfe7abe1f1152ac5d4727 vendor/ghdl (v6.0.0)\n dfeee909ed9f20b4870dd93423156c0170c0e1ff vendor/iverilog (v13_0)\n 92d657bcb543a9622947d984d4a8e725fb680e8c vendor/libftdi (heads/master)\n 87a55632db62c9bdc58cd31d3ccfa673f1bb017f vendor/libusb (v1.0.30)\n 62e659ed6748e9f60b2a4aa25dd4fe79a9605881 vendor/nextpnr (nextpnr-0.11.1)\n befbab4f646207dbaf1daf8b144dd980ad283dd5 vendor/openFPGALoader (v1.2.0)\n bd749b1f786c1c62cd67893ca71346cbe6983915 vendor/surfer (bd749b1)\n 62d5603b5114c5aa8bb5f6bb461efbe0e3b51891 vendor/xz-embedded (v20240322)\n 552c12c472ddfb79e2ee7a15219847782686a945 vendor/yomiyasu (v2.4.0-1-g552c12c)\n 28ba3cb926fe376fa05ebfc1b921747d011d4557 vendor/yosys (v0.70)\n da607da739fa6047df13e66a2af6b8bec7c2a498 vendor/zlib (v1.3.2)\n f8745da6ff1ad1e7bab384bd1f9d742439278e99 vendor/zstd (v1.5.7)\n",
+  "binary_info": {
+    "native": {
+      "executable": "build/native/nextpnr/nextpnr-himbaechel-gowin",
+      "sha256": "9b8865b8cc784a205861a1b2788bcc6f33f41255cd13ee0dc5dcae834b79d1e9",
+      "size": 55407256,
+      "info_sha256": "4c21e7c0702d0f6ef9a8c0059cbff3279da88e049b6f05a37030979cb1405583",
+      "patches": [
+        {
+          "patch": "0002-stabilize-equal-coordinate-cuts.patch",
+          "patch_sha256": "5270f2497ec0f4302fe60efbf04005ebd068f157e0960ac1810369573f6196fb",
+          "patched_source_sha256": "1a088adcbbbe523dc919034e48b7aad8fd29e0544bcfdaff55be6e074cd475db",
+          "source_sha256": "a4e839805c917e3925fac6b0eafca50723d16436038c9c2bc039dbad725a17f9",
+          "translation_unit": "common/place/placer_heap.cc"
+        },
+        {
+          "patch": "0004-stabilize-segment-grid-order.patch",
+          "patch_sha256": "334ead88d4ecb1f0ac22168e212fbd267ebc319f9707f332a255c38c630c9651",
+          "patched_source_sha256": "989ccb3a921637bc2017c40c5fe14dc2f5f8d40682f55e69a921ab31606f77cf",
+          "source_sha256": "427240fc5a62c984b51bf713db28cce7a6f9db9e7e5525e0d546b9a2b4e4599f",
+          "translation_unit": "himbaechel/uarch/gowin/globals.cc"
+        }
+      ],
+      "chipdb": [
+        {
+          "path": "share/himbaechel/gowin/chipdb-GW1N-9C.bin",
+          "sha256": "eb6d5a3483485ff8796af44cf4fbc27bb56780cc5ac9080eb49aac47b544c467",
+          "size": 12842337
+        },
+        {
+          "path": "share/himbaechel/gowin/chipdb-GW1NS-4.bin",
+          "sha256": "556e78cbfd3153d0998231e05707b42c4215f8ca125c8d408ea61ac80f84f6d1",
+          "size": 10192846
+        },
+        {
+          "path": "share/himbaechel/gowin/chipdb-GW1NZ-1.bin",
+          "sha256": "b3575174c846dd2d79745630f55b07adf9120ee8b6a80147ab65e0b4d07675f4",
+          "size": 5922384
+        },
+        {
+          "path": "share/himbaechel/gowin/chipdb-GW2A-18C.bin",
+          "sha256": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+          "size": 17493739
+        }
+      ],
+      "numerics": {
+        "eigen_definitions": [
+          "EIGEN_DONT_VECTORIZE"
+        ],
+        "translation_unit": "common/place/placer_heap.cc"
+      }
+    },
+    "wasi": {
+      "executable": "build/wasi/nextpnr/nextpnr-himbaechel-gowin.wasm",
+      "sha256": "70ee0c70f83069329240c6c19115ba6b548e1937261e8d0da9630141bca1f684",
+      "size": 27884801,
+      "info_sha256": "196a37b9ecbacf23d77a7b9e6430d3462f539e9227a0e90a9d5e0c3672b959f5",
+      "patches": [
+        {
+          "patch": "0002-stabilize-equal-coordinate-cuts.patch",
+          "patch_sha256": "5270f2497ec0f4302fe60efbf04005ebd068f157e0960ac1810369573f6196fb",
+          "patched_source_sha256": "1a088adcbbbe523dc919034e48b7aad8fd29e0544bcfdaff55be6e074cd475db",
+          "source_sha256": "a4e839805c917e3925fac6b0eafca50723d16436038c9c2bc039dbad725a17f9",
+          "translation_unit": "common/place/placer_heap.cc"
+        },
+        {
+          "patch": "0004-stabilize-segment-grid-order.patch",
+          "patch_sha256": "334ead88d4ecb1f0ac22168e212fbd267ebc319f9707f332a255c38c630c9651",
+          "patched_source_sha256": "989ccb3a921637bc2017c40c5fe14dc2f5f8d40682f55e69a921ab31606f77cf",
+          "source_sha256": "427240fc5a62c984b51bf713db28cce7a6f9db9e7e5525e0d546b9a2b4e4599f",
+          "translation_unit": "himbaechel/uarch/gowin/globals.cc"
+        }
+      ],
+      "chipdb": [
+        {
+          "path": "share/himbaechel/gowin/chipdb-GW1N-9C.bin",
+          "sha256": "eb6d5a3483485ff8796af44cf4fbc27bb56780cc5ac9080eb49aac47b544c467",
+          "size": 12842337
+        },
+        {
+          "path": "share/himbaechel/gowin/chipdb-GW1NS-4.bin",
+          "sha256": "556e78cbfd3153d0998231e05707b42c4215f8ca125c8d408ea61ac80f84f6d1",
+          "size": 10192846
+        },
+        {
+          "path": "share/himbaechel/gowin/chipdb-GW1NZ-1.bin",
+          "sha256": "b3575174c846dd2d79745630f55b07adf9120ee8b6a80147ab65e0b4d07675f4",
+          "size": 5922384
+        },
+        {
+          "path": "share/himbaechel/gowin/chipdb-GW2A-18C.bin",
+          "sha256": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+          "size": 17493739
+        }
+      ],
+      "numerics": {
+        "eigen_definitions": [
+          "EIGEN_DONT_VECTORIZE"
+        ],
+        "translation_unit": "common/place/placer_heap.cc"
+      }
+    }
+  },
+  "iverilog_hashes": {
+    "ivlpp": {
+      "native": "272678cb06591880763219b60da8adcbfa80ba273d1ec55fc63ec33bad937f49",
+      "wasi": "7ab296df67635fc272b5dfa95c3e0e5e0f7176271b4035d26f847e266c6936af"
+    },
+    "ivl": {
+      "native": "fa80c74f3c275b34c27a6fa578fce90b00f8c0b3bd8013314007c29f3b90694e",
+      "wasi": "936223cd9204283fe16a1b3232684a9766573088d2d0da3fa08a2c94fcfdb30f"
+    },
+    "vvp": {
+      "native": "06b819775608ce66b35ad23a75e9473658f492617bc8499a6311bb5057addeae",
+      "wasi": "909014061e6dbde49f2f86b47c4a2b536abaea0c79678a7b901e6b816de1bc83"
+    }
+  },
+  "iverilog_info": {
+    "native": {
+      "artifacts": {
+        "ivl": {
+          "bytes": 4320168,
+          "sha256": "fa80c74f3c275b34c27a6fa578fce90b00f8c0b3bd8013314007c29f3b90694e"
+        },
+        "ivlpp": {
+          "bytes": 85560,
+          "sha256": "272678cb06591880763219b60da8adcbfa80ba273d1ec55fc63ec33bad937f49"
+        },
+        "vvp": {
+          "bytes": 2266448,
+          "sha256": "06b819775608ce66b35ad23a75e9473658f492617bc8499a6311bb5057addeae"
+        }
+      },
+      "compiler": "cc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+      "flags": "-O2 -g0 -ffile-prefix-map=/home/ubuntu/repos/toolchain=/src -ffile-prefix-map=/home/ubuntu/repos/toolchain/build/iverilog-native=/build -O2 -g0 -ffile-prefix-map=/home/ubuntu/repos/toolchain=/src -ffile-prefix-map=/home/ubuntu/repos/toolchain/build/iverilog-native=/build  -lm -lbz2 -lz -lpthread -lreadline -ltermcap ",
+      "format": 1,
+      "iverilog": {
+        "commit": "dfeee909ed9f20b4870dd93423156c0170c0e1ff",
+        "version": "v13_0"
+      },
+      "mode": "native",
+      "patches": [
+        {
+          "path": "patches/iverilog/static-wasi.patch",
+          "sha256": "a84be9f404dcba1be2080cc8e4dfe81bcc6c2716ef5aa25880fa107b03e0d24d"
+        }
+      ]
+    },
+    "wasi": {
+      "artifacts": {
+        "ivl.wasm": {
+          "bytes": 6630370,
+          "sha256": "936223cd9204283fe16a1b3232684a9766573088d2d0da3fa08a2c94fcfdb30f"
+        },
+        "ivlpp.wasm": {
+          "bytes": 428432,
+          "sha256": "7ab296df67635fc272b5dfa95c3e0e5e0f7176271b4035d26f847e266c6936af"
+        },
+        "vvp.wasm": {
+          "bytes": 4824816,
+          "sha256": "909014061e6dbde49f2f86b47c4a2b536abaea0c79678a7b901e6b816de1bc83"
+        }
+      },
+      "compiler": "clang version 23.1.0-wasi-sdk (https://github.com/llvm/llvm-project 895aa2c896ada719451be2e3673c83da8ddf1141)",
+      "flags": "-O2 -g0 -ffile-prefix-map=/home/ubuntu/repos/toolchain=/src -ffile-prefix-map=/home/ubuntu/repos/toolchain/build/iverilog-wasm=/build -fwasm-exceptions -mllvm -wasm-use-legacy-eh=false -O2 -g0 -ffile-prefix-map=/home/ubuntu/repos/toolchain=/src -ffile-prefix-map=/home/ubuntu/repos/toolchain/build/iverilog-wasm=/build -fwasm-exceptions -mllvm -wasm-use-legacy-eh=false -fwasm-exceptions -lunwind -Wl,-z,stack-size=8388608 ",
+      "format": 1,
+      "iverilog": {
+        "commit": "dfeee909ed9f20b4870dd93423156c0170c0e1ff",
+        "version": "v13_0"
+      },
+      "mode": "wasi",
+      "patches": [
+        {
+          "path": "patches/iverilog/static-wasi.patch",
+          "sha256": "a84be9f404dcba1be2080cc8e4dfe81bcc6c2716ef5aa25880fa107b03e0d24d"
+        }
+      ],
+      "wasi_sdk": "34.0"
+    }
+  },
+  "iverilog_actual_version": "Icarus Verilog runtime version 13.0 (stable) (v13_0)\n\nCopyright (c) 2001-2026 Stephen Williams (steve@icarus.com)\n\n  This program is free software; you can redistribute it and/or modify\n  it under the terms of the GNU General Public License as published by\n  the Free Software Foundation; either version 2 of the License, or\n  (at your option) any later version.\n\n  This program is distributed in the hope that it will be useful,\n  but WITHOUT ANY WARRANTY; without even the implied warranty of\n  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n  GNU General Public License for more details.\n\n  You should have received a copy of the GNU General Public License along\n  with this program; if not, write to the Free Software Foundation, Inc.,\n  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.",
+  "source_hashes": {
+    "scripts/diagnose-pnr-layout.mjs": "be68bb759aa5510c78be3f8c47d13f78dbf8786b2d301bee6825b0c26ebe4309",
+    "scripts/verify-pnr-library-matrix.mjs": "2076e35088fc4eb4f235ac9c2883b66fbcbd77d7fa937e244a33db277d63e669",
+    "tests/synth/nextpnr-helpers.mjs": "e71586b594b8831e5e23ccba192a79bcbf7a44db82c6fd79d4586b786881693c",
+    "tests/synth/iverilog-helpers.mjs": "4f1fd920ee6abd434f716fcd8e029c144d23b682d09737d91b0980a6f9b3d54b",
+    "tests/synth/library-measurements.mjs": "9770e9ccd4e6cc0552ed987d1b2d959de63b6b3095cf5bfd65860bef934aee68",
+    "tests/synth/gowin-pack.test.mjs": "a27fe22af315e4c82e50e6a5b313c1eb5ea85c3fdae467c27a6f027c420cb5d8",
+    "tests/fixtures/cpus/bench.mjs": "8f6d23e8159a78f76ce6971f0d9117fe31cf7e32fc934a32dee8fe19790a5522",
+    "tests/fixtures/cpus/cases.mjs": "cf19d4e16dd673ac4b83fb5281ab45cc707c3d5bc4e2babdc1a4c525f8041fa0"
+  },
+  "criteria": "At least five alternated native/WASI PNR runs for each routed or capacity case. Routed raw bytes, resources, and output must match; capacity must have numeric overflow and identical placement errors. Unsupported frontends require identical real Icarus failures, not fake PNR successes. A/A and negative controls must reject corrupted inputs. Synthesis, lowering, structure and pack measurements are from the prerequisite full matrix and are not repeated here."
+}

@@ -1,0 +1,569 @@
+run_id,variant,repeat,format,asset,metric,value,unit,valid,decoder_sha256,expected_sha256,actual_sha256,note
+S6-2026-10-29-formal,,0,,,node_version,v24.22.1,,true,,,,
+S6-2026-10-29-formal,,0,,,chromium_version,156.0.8078.4,,true,,,,
+S6-2026-10-29-formal,B,0,zstd,,decoder_bytes,70356,bytes,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal,B,0,xz,,decoder_bytes,20994,bytes,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal,B2,0,zstd,,decoder_bytes,70356,bytes,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal,B2,0,xz,,decoder_bytes,20994,bytes,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal,O3,0,zstd,,decoder_bytes,72208,bytes,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,,,
+S6-2026-10-29-formal,O3,0,xz,,decoder_bytes,21066,bytes,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,,,
+S6-2026-10-29-formal,O3LTO,0,zstd,,decoder_bytes,73251,bytes,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,,,
+S6-2026-10-29-formal,O3LTO,0,xz,,decoder_bytes,23176,bytes,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,,,
+S6-2026-10-29-formal,Os,0,zstd,,decoder_bytes,62086,bytes,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,,,
+S6-2026-10-29-formal,Os,0,xz,,decoder_bytes,18472,bytes,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,,,
+S6-2026-10-29-formal,OsLTO,0,zstd,,decoder_bytes,61808,bytes,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,,,
+S6-2026-10-29-formal,OsLTO,0,xz,,decoder_bytes,20281,bytes,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,,,
+S6-2026-10-29-formal,B,1,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B,1,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B2,1,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B2,1,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3,1,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3,1,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3LTO,1,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3LTO,1,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,Os,1,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,Os,1,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,OsLTO,1,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,OsLTO,1,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B,2,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B,2,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B2,2,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B2,2,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3,2,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3,2,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3LTO,2,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3LTO,2,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,Os,2,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,Os,2,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,OsLTO,2,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,OsLTO,2,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B,3,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B,3,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B2,3,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B2,3,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3,3,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3,3,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3LTO,3,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3LTO,3,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,Os,3,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,Os,3,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,OsLTO,3,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,OsLTO,3,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B,4,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B,4,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B2,4,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B2,4,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3,4,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3,4,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3LTO,4,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3LTO,4,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,Os,4,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,Os,4,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,OsLTO,4,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,OsLTO,4,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B,5,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B,5,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B2,5,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,B2,5,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3,5,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3,5,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3LTO,5,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,O3LTO,5,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,Os,5,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,Os,5,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,OsLTO,5,zstd,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal,OsLTO,5,xz,,page_failure,,,false,,,,"page failed: page.evaluate: Error: Asset is absent from benchmark index: zstd:synth/chipdb-GW2A-18C.bin
+    at eval (eval at evaluate (:370:30), <anonymous>:59:31)
+    at async <anonymous>:396:30"
+S6-2026-10-29-formal-rerun,,0,,,node_version,v24.22.1,,true,,,,
+S6-2026-10-29-formal-rerun,,0,,,chromium_version,156.0.8078.4,,true,,,,
+S6-2026-10-29-formal-rerun,B,0,zstd,,decoder_bytes,70356,bytes,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B,0,xz,,decoder_bytes,20994,bytes,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B2,0,zstd,,decoder_bytes,70356,bytes,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B2,0,xz,,decoder_bytes,20994,bytes,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,O3,0,zstd,,decoder_bytes,72208,bytes,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,,,
+S6-2026-10-29-formal-rerun,O3,0,xz,,decoder_bytes,21066,bytes,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,,,
+S6-2026-10-29-formal-rerun,O3LTO,0,zstd,,decoder_bytes,73251,bytes,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,,,
+S6-2026-10-29-formal-rerun,O3LTO,0,xz,,decoder_bytes,23176,bytes,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,,,
+S6-2026-10-29-formal-rerun,Os,0,zstd,,decoder_bytes,62086,bytes,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,,,
+S6-2026-10-29-formal-rerun,Os,0,xz,,decoder_bytes,18472,bytes,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,,,
+S6-2026-10-29-formal-rerun,OsLTO,0,zstd,,decoder_bytes,61808,bytes,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,,,
+S6-2026-10-29-formal-rerun,OsLTO,0,xz,,decoder_bytes,20281,bytes,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,,,
+S6-2026-10-29-formal-rerun,B,1,zstd,,decoder_compile_ms,1.430,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B,1,zstd,synth/yosys.wasm,decode_ms,165.685,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B,1,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,115.200,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B,1,zstd,synth/yosys-share.tar,decode_ms,16.825,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B,1,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.130,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B,1,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.275,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B,1,xz,,decoder_compile_ms,0.820,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B,1,xz,synth/yosys.wasm,decode_ms,1029.410,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B,1,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,660.620,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B,1,xz,synth/yosys-share.tar,decode_ms,99.795,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B,1,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,275.720,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B,1,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.460,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B2,1,zstd,,decoder_compile_ms,16.230,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B2,1,zstd,synth/yosys.wasm,decode_ms,167.535,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B2,1,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,116.605,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B2,1,zstd,synth/yosys-share.tar,decode_ms,16.665,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B2,1,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.365,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B2,1,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.185,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B2,1,xz,,decoder_compile_ms,18.505,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B2,1,xz,synth/yosys.wasm,decode_ms,1029.115,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B2,1,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,660.585,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B2,1,xz,synth/yosys-share.tar,decode_ms,100.505,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B2,1,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,275.485,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B2,1,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.245,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3,1,zstd,,decoder_compile_ms,15.770,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,,,
+S6-2026-10-29-formal-rerun,O3,1,zstd,synth/yosys.wasm,decode_ms,166.190,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3,1,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.850,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3,1,zstd,synth/yosys-share.tar,decode_ms,16.515,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3,1,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.220,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3,1,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.035,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3,1,xz,,decoder_compile_ms,14.360,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,,,
+S6-2026-10-29-formal-rerun,O3,1,xz,synth/yosys.wasm,decode_ms,1037.615,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3,1,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,663.505,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3,1,xz,synth/yosys-share.tar,decode_ms,99.765,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3,1,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,277.205,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3,1,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,145.920,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3LTO,1,zstd,,decoder_compile_ms,19.600,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,,,
+S6-2026-10-29-formal-rerun,O3LTO,1,zstd,synth/yosys.wasm,decode_ms,165.315,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3LTO,1,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.150,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3LTO,1,zstd,synth/yosys-share.tar,decode_ms,16.365,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3LTO,1,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.075,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3LTO,1,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.825,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3LTO,1,xz,,decoder_compile_ms,11.470,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,,,
+S6-2026-10-29-formal-rerun,O3LTO,1,xz,synth/yosys.wasm,decode_ms,1051.100,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3LTO,1,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,676.470,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3LTO,1,xz,synth/yosys-share.tar,decode_ms,104.475,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3LTO,1,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,280.790,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3LTO,1,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,153.035,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,Os,1,zstd,,decoder_compile_ms,16.315,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,,,
+S6-2026-10-29-formal-rerun,Os,1,zstd,synth/yosys.wasm,decode_ms,159.430,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,Os,1,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,107.875,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,Os,1,zstd,synth/yosys-share.tar,decode_ms,16.465,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,Os,1,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,37.465,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,Os,1,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.630,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,Os,1,xz,,decoder_compile_ms,12.230,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,,,
+S6-2026-10-29-formal-rerun,Os,1,xz,synth/yosys.wasm,decode_ms,1019.610,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,Os,1,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,652.120,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,Os,1,xz,synth/yosys-share.tar,decode_ms,98.655,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,Os,1,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,271.055,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,Os,1,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,145.465,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,OsLTO,1,zstd,,decoder_compile_ms,6.705,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,,,
+S6-2026-10-29-formal-rerun,OsLTO,1,zstd,synth/yosys.wasm,decode_ms,158.355,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,OsLTO,1,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,106.550,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,OsLTO,1,zstd,synth/yosys-share.tar,decode_ms,16.120,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,OsLTO,1,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,37.320,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,OsLTO,1,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.545,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,OsLTO,1,xz,,decoder_compile_ms,4.160,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,,,
+S6-2026-10-29-formal-rerun,OsLTO,1,xz,synth/yosys.wasm,decode_ms,1028.850,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,OsLTO,1,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,661.590,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,OsLTO,1,xz,synth/yosys-share.tar,decode_ms,99.590,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,OsLTO,1,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,273.225,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,OsLTO,1,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,147.615,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B2,2,zstd,,decoder_compile_ms,1.405,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B2,2,zstd,synth/yosys.wasm,decode_ms,166.345,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B2,2,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,114.535,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B2,2,zstd,synth/yosys-share.tar,decode_ms,16.690,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B2,2,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.230,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B2,2,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.445,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B2,2,xz,,decoder_compile_ms,0.820,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B2,2,xz,synth/yosys.wasm,decode_ms,1031.025,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B2,2,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,660.350,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B2,2,xz,synth/yosys-share.tar,decode_ms,100.235,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B2,2,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,276.595,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B2,2,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.505,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3,2,zstd,,decoder_compile_ms,16.755,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,,,
+S6-2026-10-29-formal-rerun,O3,2,zstd,synth/yosys.wasm,decode_ms,167.925,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3,2,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,115.330,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3,2,zstd,synth/yosys-share.tar,decode_ms,16.620,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3,2,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.220,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3,2,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.090,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3,2,xz,,decoder_compile_ms,18.065,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,,,
+S6-2026-10-29-formal-rerun,O3,2,xz,synth/yosys.wasm,decode_ms,1038.400,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3,2,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,668.500,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3,2,xz,synth/yosys-share.tar,decode_ms,99.990,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3,2,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,277.640,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3,2,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,145.975,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3LTO,2,zstd,,decoder_compile_ms,17.190,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,,,
+S6-2026-10-29-formal-rerun,O3LTO,2,zstd,synth/yosys.wasm,decode_ms,163.830,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3LTO,2,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.125,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3LTO,2,zstd,synth/yosys-share.tar,decode_ms,16.335,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3LTO,2,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.030,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3LTO,2,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.880,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3LTO,2,xz,,decoder_compile_ms,11.605,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,,,
+S6-2026-10-29-formal-rerun,O3LTO,2,xz,synth/yosys.wasm,decode_ms,1053.610,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3LTO,2,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,688.005,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3LTO,2,xz,synth/yosys-share.tar,decode_ms,109.085,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3LTO,2,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,279.805,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3LTO,2,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,151.940,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,Os,2,zstd,,decoder_compile_ms,9.380,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,,,
+S6-2026-10-29-formal-rerun,Os,2,zstd,synth/yosys.wasm,decode_ms,158.815,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,Os,2,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,109.215,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,Os,2,zstd,synth/yosys-share.tar,decode_ms,16.390,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,Os,2,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.425,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,Os,2,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.495,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,Os,2,xz,,decoder_compile_ms,1.290,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,,,
+S6-2026-10-29-formal-rerun,Os,2,xz,synth/yosys.wasm,decode_ms,1031.095,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,Os,2,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,658.680,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,Os,2,xz,synth/yosys-share.tar,decode_ms,100.055,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,Os,2,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,274.585,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,Os,2,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.225,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,OsLTO,2,zstd,,decoder_compile_ms,13.000,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,,,
+S6-2026-10-29-formal-rerun,OsLTO,2,zstd,synth/yosys.wasm,decode_ms,161.215,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,OsLTO,2,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,106.600,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,OsLTO,2,zstd,synth/yosys-share.tar,decode_ms,16.010,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,OsLTO,2,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,38.110,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,OsLTO,2,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.260,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,OsLTO,2,xz,,decoder_compile_ms,7.135,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,,,
+S6-2026-10-29-formal-rerun,OsLTO,2,xz,synth/yosys.wasm,decode_ms,1022.400,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,OsLTO,2,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,656.360,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,OsLTO,2,xz,synth/yosys-share.tar,decode_ms,99.855,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,OsLTO,2,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,272.865,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,OsLTO,2,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,147.470,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B,2,zstd,,decoder_compile_ms,8.485,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B,2,zstd,synth/yosys.wasm,decode_ms,167.060,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B,2,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.380,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B,2,zstd,synth/yosys-share.tar,decode_ms,16.485,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B,2,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,38.915,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B,2,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.955,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B,2,xz,,decoder_compile_ms,4.190,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B,2,xz,synth/yosys.wasm,decode_ms,1038.810,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B,2,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,660.210,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B,2,xz,synth/yosys-share.tar,decode_ms,100.410,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B,2,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,276.285,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B,2,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.500,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3,3,zstd,,decoder_compile_ms,1.325,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,,,
+S6-2026-10-29-formal-rerun,O3,3,zstd,synth/yosys.wasm,decode_ms,166.025,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3,3,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,115.920,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3,3,zstd,synth/yosys-share.tar,decode_ms,16.770,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3,3,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.145,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3,3,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.275,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3,3,xz,,decoder_compile_ms,0.835,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,,,
+S6-2026-10-29-formal-rerun,O3,3,xz,synth/yosys.wasm,decode_ms,1037.580,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3,3,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,665.775,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3,3,xz,synth/yosys-share.tar,decode_ms,99.940,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3,3,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,277.170,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3,3,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.545,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3LTO,3,zstd,,decoder_compile_ms,14.000,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,,,
+S6-2026-10-29-formal-rerun,O3LTO,3,zstd,synth/yosys.wasm,decode_ms,166.815,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3LTO,3,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,113.990,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3LTO,3,zstd,synth/yosys-share.tar,decode_ms,16.395,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3LTO,3,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,38.990,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3LTO,3,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.880,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3LTO,3,xz,,decoder_compile_ms,17.690,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,,,
+S6-2026-10-29-formal-rerun,O3LTO,3,xz,synth/yosys.wasm,decode_ms,1054.030,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3LTO,3,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,675.860,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3LTO,3,xz,synth/yosys-share.tar,decode_ms,103.885,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3LTO,3,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,280.170,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3LTO,3,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,152.265,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,Os,3,zstd,,decoder_compile_ms,14.935,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,,,
+S6-2026-10-29-formal-rerun,Os,3,zstd,synth/yosys.wasm,decode_ms,159.185,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,Os,3,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,107.395,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,Os,3,zstd,synth/yosys-share.tar,decode_ms,16.320,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,Os,3,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,37.555,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,Os,3,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.560,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,Os,3,xz,,decoder_compile_ms,15.060,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,,,
+S6-2026-10-29-formal-rerun,Os,3,xz,synth/yosys.wasm,decode_ms,1025.000,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,Os,3,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,653.960,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,Os,3,xz,synth/yosys-share.tar,decode_ms,98.595,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,Os,3,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,273.040,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,Os,3,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,145.580,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,OsLTO,3,zstd,,decoder_compile_ms,19.350,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,,,
+S6-2026-10-29-formal-rerun,OsLTO,3,zstd,synth/yosys.wasm,decode_ms,160.680,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,OsLTO,3,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,108.530,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,OsLTO,3,zstd,synth/yosys-share.tar,decode_ms,16.120,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,OsLTO,3,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,37.390,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,OsLTO,3,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.420,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,OsLTO,3,xz,,decoder_compile_ms,17.325,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,,,
+S6-2026-10-29-formal-rerun,OsLTO,3,xz,synth/yosys.wasm,decode_ms,1034.325,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,OsLTO,3,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,661.820,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,OsLTO,3,xz,synth/yosys-share.tar,decode_ms,100.315,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,OsLTO,3,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,276.050,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,OsLTO,3,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,147.960,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B,3,zstd,,decoder_compile_ms,20.795,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B,3,zstd,synth/yosys.wasm,decode_ms,164.670,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B,3,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.610,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B,3,zstd,synth/yosys-share.tar,decode_ms,16.510,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B,3,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.085,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B,3,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.395,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B,3,xz,,decoder_compile_ms,5.130,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B,3,xz,synth/yosys.wasm,decode_ms,1029.700,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B,3,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,660.905,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B,3,xz,synth/yosys-share.tar,decode_ms,100.345,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B,3,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,278.495,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B,3,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.250,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B2,3,zstd,,decoder_compile_ms,6.940,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B2,3,zstd,synth/yosys.wasm,decode_ms,164.195,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B2,3,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,112.265,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B2,3,zstd,synth/yosys-share.tar,decode_ms,17.020,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B2,3,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.440,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B2,3,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.950,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B2,3,xz,,decoder_compile_ms,3.935,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B2,3,xz,synth/yosys.wasm,decode_ms,1030.245,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B2,3,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,662.750,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B2,3,xz,synth/yosys-share.tar,decode_ms,99.800,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B2,3,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,276.255,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B2,3,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.220,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3LTO,4,zstd,,decoder_compile_ms,1.205,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,,,
+S6-2026-10-29-formal-rerun,O3LTO,4,zstd,synth/yosys.wasm,decode_ms,166.500,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3LTO,4,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,115.925,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3LTO,4,zstd,synth/yosys-share.tar,decode_ms,16.610,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3LTO,4,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,38.885,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3LTO,4,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.550,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3LTO,4,xz,,decoder_compile_ms,0.835,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,,,
+S6-2026-10-29-formal-rerun,O3LTO,4,xz,synth/yosys.wasm,decode_ms,1056.220,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3LTO,4,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,688.230,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3LTO,4,xz,synth/yosys-share.tar,decode_ms,103.895,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3LTO,4,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,279.865,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3LTO,4,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,153.175,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,Os,4,zstd,,decoder_compile_ms,14.940,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,,,
+S6-2026-10-29-formal-rerun,Os,4,zstd,synth/yosys.wasm,decode_ms,164.260,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,Os,4,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,111.175,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,Os,4,zstd,synth/yosys-share.tar,decode_ms,16.385,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,Os,4,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,37.585,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,Os,4,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.660,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,Os,4,xz,,decoder_compile_ms,14.020,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,,,
+S6-2026-10-29-formal-rerun,Os,4,xz,synth/yosys.wasm,decode_ms,1028.110,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,Os,4,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,658.870,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,Os,4,xz,synth/yosys-share.tar,decode_ms,99.395,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,Os,4,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,275.835,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,Os,4,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,148.180,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,OsLTO,4,zstd,,decoder_compile_ms,15.385,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,,,
+S6-2026-10-29-formal-rerun,OsLTO,4,zstd,synth/yosys.wasm,decode_ms,158.570,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,OsLTO,4,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,107.070,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,OsLTO,4,zstd,synth/yosys-share.tar,decode_ms,16.125,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,OsLTO,4,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,37.550,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,OsLTO,4,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.390,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,OsLTO,4,xz,,decoder_compile_ms,15.195,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,,,
+S6-2026-10-29-formal-rerun,OsLTO,4,xz,synth/yosys.wasm,decode_ms,1024.550,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,OsLTO,4,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,657.670,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,OsLTO,4,xz,synth/yosys-share.tar,decode_ms,99.750,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,OsLTO,4,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,273.625,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,OsLTO,4,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,147.260,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B,4,zstd,,decoder_compile_ms,21.345,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B,4,zstd,synth/yosys.wasm,decode_ms,165.115,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B,4,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.465,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B,4,zstd,synth/yosys-share.tar,decode_ms,16.460,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B,4,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.115,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B,4,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.455,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B,4,xz,,decoder_compile_ms,14.135,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B,4,xz,synth/yosys.wasm,decode_ms,1030.985,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B,4,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,661.605,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B,4,xz,synth/yosys-share.tar,decode_ms,99.705,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B,4,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,276.300,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B,4,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.430,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B2,4,zstd,,decoder_compile_ms,19.245,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B2,4,zstd,synth/yosys.wasm,decode_ms,165.230,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B2,4,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,111.095,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B2,4,zstd,synth/yosys-share.tar,decode_ms,17.045,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B2,4,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,38.980,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B2,4,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.980,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B2,4,xz,,decoder_compile_ms,14.740,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B2,4,xz,synth/yosys.wasm,decode_ms,1027.765,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B2,4,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,661.235,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B2,4,xz,synth/yosys-share.tar,decode_ms,99.500,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B2,4,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,276.475,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B2,4,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.130,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3,4,zstd,,decoder_compile_ms,8.085,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,,,
+S6-2026-10-29-formal-rerun,O3,4,zstd,synth/yosys.wasm,decode_ms,166.095,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3,4,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.880,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3,4,zstd,synth/yosys-share.tar,decode_ms,16.550,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3,4,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.205,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3,4,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.250,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3,4,xz,,decoder_compile_ms,24.300,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,,,
+S6-2026-10-29-formal-rerun,O3,4,xz,synth/yosys.wasm,decode_ms,1040.215,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3,4,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,664.655,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3,4,xz,synth/yosys-share.tar,decode_ms,100.110,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3,4,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,277.510,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3,4,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.310,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,Os,5,zstd,,decoder_compile_ms,1.445,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,,,
+S6-2026-10-29-formal-rerun,Os,5,zstd,synth/yosys.wasm,decode_ms,159.625,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,Os,5,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,111.495,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,Os,5,zstd,synth/yosys-share.tar,decode_ms,16.705,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,Os,5,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,40.210,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,Os,5,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.695,ms,true,e60f580fb0ed7cc245d3c8cc1806e1c8eb46b58bc1c184af179a20e780b3a514,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,Os,5,xz,,decoder_compile_ms,1.025,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,,,
+S6-2026-10-29-formal-rerun,Os,5,xz,synth/yosys.wasm,decode_ms,1016.985,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,Os,5,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,656.035,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,Os,5,xz,synth/yosys-share.tar,decode_ms,99.115,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,Os,5,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,271.725,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,Os,5,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,145.555,ms,true,c10057f92b0c0355223490ec661e43e256800d5f5a39cd59b707442db30c0176,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,OsLTO,5,zstd,,decoder_compile_ms,13.755,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,,,
+S6-2026-10-29-formal-rerun,OsLTO,5,zstd,synth/yosys.wasm,decode_ms,160.480,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,OsLTO,5,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,111.300,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,OsLTO,5,zstd,synth/yosys-share.tar,decode_ms,16.060,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,OsLTO,5,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,38.200,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,OsLTO,5,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.680,ms,true,d42c6a2cdd3cc130179f7766f8316a0fdf08dffb235f394f6bde01282e8bfecd,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,OsLTO,5,xz,,decoder_compile_ms,20.020,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,,,
+S6-2026-10-29-formal-rerun,OsLTO,5,xz,synth/yosys.wasm,decode_ms,1024.270,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,OsLTO,5,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,657.280,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,OsLTO,5,xz,synth/yosys-share.tar,decode_ms,99.695,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,OsLTO,5,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,273.655,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,OsLTO,5,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,148.535,ms,true,f835d6a8c3dfdb46c4b2c79c4b0a73d17e9335d0bd99904381655719b18099ad,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B,5,zstd,,decoder_compile_ms,14.935,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B,5,zstd,synth/yosys.wasm,decode_ms,167.535,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B,5,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.855,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B,5,zstd,synth/yosys-share.tar,decode_ms,16.515,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B,5,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.270,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B,5,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.105,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B,5,xz,,decoder_compile_ms,14.795,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B,5,xz,synth/yosys.wasm,decode_ms,1033.935,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B,5,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,661.035,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B,5,xz,synth/yosys-share.tar,decode_ms,100.280,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B,5,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,276.120,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B,5,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.575,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B2,5,zstd,,decoder_compile_ms,19.650,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,,,
+S6-2026-10-29-formal-rerun,B2,5,zstd,synth/yosys.wasm,decode_ms,164.135,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B2,5,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.900,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B2,5,zstd,synth/yosys-share.tar,decode_ms,16.600,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B2,5,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.095,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B2,5,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,26.965,ms,true,c80c619579e0cbc5a3981fca7741b436b8f1de714ed91ac7e07259d18ea00f37,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,B2,5,xz,,decoder_compile_ms,14.180,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,,,
+S6-2026-10-29-formal-rerun,B2,5,xz,synth/yosys.wasm,decode_ms,1031.320,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,B2,5,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,660.525,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,B2,5,xz,synth/yosys-share.tar,decode_ms,99.545,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,B2,5,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,276.160,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,B2,5,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.700,ms,true,0486d7ae22a9601748588a953a0dbaae3ca6189a41bb1694b9d0b8217088a48e,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3,5,zstd,,decoder_compile_ms,24.390,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,,,
+S6-2026-10-29-formal-rerun,O3,5,zstd,synth/yosys.wasm,decode_ms,165.925,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3,5,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.760,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3,5,zstd,synth/yosys-share.tar,decode_ms,16.585,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3,5,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,38.890,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3,5,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.020,ms,true,8df13348b175a1107e86abb87d573ea54b45dd191edef1e0f30aa53265fb3bad,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3,5,xz,,decoder_compile_ms,14.145,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,,,
+S6-2026-10-29-formal-rerun,O3,5,xz,synth/yosys.wasm,decode_ms,1038.890,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3,5,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,665.735,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3,5,xz,synth/yosys-share.tar,decode_ms,100.705,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3,5,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,278.220,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3,5,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,146.375,ms,true,7d003aaebd3ee0f6e6d2f858cb9c0358093f8c22bdda8017b5a05c6e8d440b42,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3LTO,5,zstd,,decoder_compile_ms,19.435,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,,,
+S6-2026-10-29-formal-rerun,O3LTO,5,zstd,synth/yosys.wasm,decode_ms,164.075,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3LTO,5,zstd,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,110.885,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3LTO,5,zstd,synth/yosys-share.tar,decode_ms,16.360,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3LTO,5,zstd,pack/pyodide/pyodide.asm.wasm,decode_ms,39.460,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3LTO,5,zstd,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,27.140,ms,true,e8824aa17908585884f7a388b18f0da17786e01ebd4dc99f5d12769aff0324ec,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,
+S6-2026-10-29-formal-rerun,O3LTO,5,xz,,decoder_compile_ms,15.110,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,,,
+S6-2026-10-29-formal-rerun,O3LTO,5,xz,synth/yosys.wasm,decode_ms,1050.980,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,aa18e2c167d614e4194796041bf4cb533a659b0028668418ee109a6cd9cc58aa,
+S6-2026-10-29-formal-rerun,O3LTO,5,xz,synth/nextpnr-himbaechel-gowin.wasm,decode_ms,675.600,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,b011f1d2798dead2698d58037d40523885330b7c0c7df2cf9577f07dbcfc7e7f,
+S6-2026-10-29-formal-rerun,O3LTO,5,xz,synth/yosys-share.tar,decode_ms,103.685,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,531b97d2d9d99eb375177def6adaace730539ab33f529d09294840cb00bead5f,
+S6-2026-10-29-formal-rerun,O3LTO,5,xz,pack/pyodide/pyodide.asm.wasm,decode_ms,279.770,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6,
+S6-2026-10-29-formal-rerun,O3LTO,5,xz,synth/chipdb/chipdb-GW2A-18C.bin,decode_ms,153.765,ms,true,3fc7387471f888f371bdb030f478f6c66c7cc8b70fc0c105e0aff01a77539d71,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,8c1b6dcf30c212a06367217a7e67cbd0cd00078c11a12b22efcaeaa6ef26797d,

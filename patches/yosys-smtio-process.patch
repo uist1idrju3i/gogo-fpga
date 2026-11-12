@@ -1,0 +1,40 @@
+--- a/smtio.py
++++ b/smtio.py
+@@ -21 +21 @@
+-if os.name == "posix":
++if os.name == "posix" and sys.platform != "emscripten":
+@@ -22,0 +23,5 @@
++if sys.platform == "emscripten":
++    from formal_process import Popen, SolverQueue, check_output
++else:
++    Popen = subprocess.Popen
++    check_output = subprocess.check_output
+@@ -36,0 +41 @@
++if os.name == "posix" and sys.platform != "emscripten":
+@@ -66 +71,4 @@
+-            os.kill(p.pid, signal.SIGTERM)
++            if sys.platform == "emscripten":
++                p.terminate()
++            else:
++                os.kill(p.pid, signal.SIGTERM)
+@@ -187 +195,4 @@
+-            os.killpg(os.getpgid(self.p.pid), signal.SIGTERM)
++            if sys.platform == "emscripten":
++                self.p.terminate()
++            else:
++                os.killpg(os.getpgid(self.p.pid), signal.SIGTERM)
+@@ -241 +253 @@
+-                help_text = subprocess.check_output([self.solver, "--help"], text=True)
++                help_text = check_output([self.solver, "--help"], text=True)
+@@ -410 +421 @@
+-            self.p = subprocess.Popen(self.popen_vargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
++            self.p = Popen(self.popen_vargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+@@ -418,2 +429,6 @@
+-        self.p_thread = Thread(target=self.p_thread_main)
+-        self.p_thread.start()
++        if sys.platform == "emscripten":
++            self.p_queue = SolverQueue(self)
++            self.p_thread = self.p_queue
++        else:
++            self.p_thread = Thread(target=self.p_thread_main)
++            self.p_thread.start()

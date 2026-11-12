@@ -1,0 +1,75 @@
+name: lint
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  ACTIONLINT_VERSION: 1.7.12
+  ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+
+jobs:
+  lint:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: actionlint を取得して検査
+        run: |
+          archive="$RUNNER_TEMP/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          curl --fail --location --silent --show-error \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz" \
+            --output "$archive"
+          printf '%s  %s\n' "$ACTIONLINT_SHA256" "$archive" | sha256sum --check -
+          tar -xzf "$archive" -C "$RUNNER_TEMP" actionlint
+          "$RUNNER_TEMP/actionlint" -version
+          "$RUNNER_TEMP/actionlint" .github/workflows/*.yml
+
+      - name: ShellCheck で追跡中のシェルを検査
+        run: |
+          shellcheck --version
+          git ls-files -z -- '*.sh' | xargs -0 shellcheck
+
+      - name: 形式検証ソースの原文ライセンスを取得
+        run: |
+          git submodule update --init --depth 1 -- \
+            vendor/sby vendor/yices2 vendor/z3 \
+            vendor/boolector vendor/bitwuzla vendor/click
+
+      - name: 固定値の整合性を検査
+        run: python3 .github/scripts/check-pins.py consistency
+
+      - name: 固定値検査のテスト
+        run: sh tests/check-pins/run.sh
+
+      - name: 配布ソース照合のテスト
+        run: python3 -m unittest discover -s tests/check-release-closure -p 'test_*.py' -v
+
+      - name: simulation shard coverage のテスト
+        run: python3 -m unittest discover -s tests/check-sim-shards -p 'test_*.py' -v
+
+  zizmor:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: zizmor の仮想環境を作成
+        run: python3 -m venv "$HOME/.cache/gogo-fpga-zizmor"
+
+      - name: ハッシュを検証して zizmor をインストール
+        run: |
+          "$HOME/.cache/gogo-fpga-zizmor/bin/pip" install --require-hashes -r .github/zizmor-requirements.txt
+
+      - name: ワークフローを監査
+        run: |
+          "$HOME/.cache/gogo-fpga-zizmor/bin/zizmor" --offline --format=github .github/workflows/

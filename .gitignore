@@ -1,0 +1,11 @@
+/build/
+/public_html/
+/release/
+/node_modules/
+__pycache__/
+/playwright-report/
+/test-results/
+/.yomiyasu/
+/AGENTS.override.md
+/CLAUDE.local.md
+/.claude/settings.local.json

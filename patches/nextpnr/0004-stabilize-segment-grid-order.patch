@@ -1,0 +1,11 @@
+--- a/himbaechel/uarch/gowin/globals.cc
++++ b/himbaechel/uarch/gowin/globals.cc
+@@ -900,7 +900,7 @@
+         // of a few LUTs in the cell gives 400 columns and 400 rows.  We use
+         // the combination of row number << 16 and column number as a key.
+         auto xy_to_key = [&](int x, int y) -> uint32_t { return (y << 16) | x; };
+-        std::unordered_multimap<uint32_t, grid_net> grid;
++        std::multimap<uint32_t, grid_net> grid;
+         int min_x = ctx->getGridDimX();
+         int max_x = -1;
+         int min_y = ctx->getGridDimY();

@@ -1,0 +1,37 @@
+## 5d752ee-nextpnr
+2026-10-30T03:13:51.5098705Z   CACHE_HIT: true
+2026-10-30T03:15:29.4755733Z   CACHE_HIT: true
+2026-10-30T03:16:23.5318108Z Error: ENOENT: no such file or directory, open '/home/runner/work/toolchain/toolchain/build/wasi/yosys/yosys.wasm'
+2026-10-30T03:16:23.5320899Z   code: 'ENOENT',
+2026-10-30T03:16:23.5321259Z   path: '/home/runner/work/toolchain/toolchain/build/wasi/yosys/yosys.wasm'
+2026-10-30T03:16:23.5482329Z ##[error]Process completed with exit code 1.
+2026-10-30T03:16:23.5525013Z     echo "Incomplete time log: $log" >&2
+2026-10-30T03:16:23.5552837Z   CACHE_HIT: true
+2026-10-30T03:16:23.5661426Z Incomplete time log: build/timings/nextpnr-wasi.time.log
+2026-10-30T03:16:23.5664739Z ##[error]Process completed with exit code 1.
+## 5d752ee-ghdl
+2026-10-30T03:17:18.4151672Z Build wall time: 193 seconds
+2026-10-30T03:17:18.4233291Z   echo "Missing or incomplete time log: $log" >&2
+2026-10-30T03:17:18.4383584Z Missing or incomplete time log: build/timings/ghdl.time.log
+2026-10-30T03:17:18.4395013Z ##[error]Process completed with exit code 1.
+## 6a5e595-yosys-compare
+2026-10-30T03:47:01.5536913Z   AssertionError [ERR_ASSERTION]: native tangnano1k exited 1
+2026-10-30T03:47:01.5537842Z   ERROR: ABC: execution of command ""/home/runner/work/toolchain/toolchain/build/native/yosys-abc" -s -f /tmp/yosys-abc-pFeVeI/abc.script 2>&1" failed: return code 127.
+2026-10-30T03:47:01.5557277Z   AssertionError [ERR_ASSERTION]: native tangnano4k exited 1
+2026-10-30T03:47:01.5559528Z   ERROR: ABC: execution of command ""/home/runner/work/toolchain/toolchain/build/native/yosys-abc" -s -f /tmp/yosys-abc-cVagG9/abc.script 2>&1" failed: return code 127.
+2026-10-30T03:47:01.5585670Z   AssertionError [ERR_ASSERTION]: native tangnano9k exited 1
+2026-10-30T03:47:01.5587662Z   ERROR: ABC: execution of command ""/home/runner/work/toolchain/toolchain/build/native/yosys-abc" -s -f /tmp/yosys-abc-NhXSbm/abc.script 2>&1" failed: return code 127.
+2026-10-30T03:47:01.5602112Z   AssertionError [ERR_ASSERTION]: native tangnano20k exited 1
+2026-10-30T03:47:01.5603000Z   ERROR: ABC: execution of command ""/home/runner/work/toolchain/toolchain/build/native/yosys-abc" -s -f /tmp/yosys-abc-iU5IfU/abc.script 2>&1" failed: return code 127.
+2026-10-30T03:47:01.5626618Z ##[error]Process completed with exit code 1.
+## M1-nextpnr
+2026-10-30T03:56:10.8398133Z Cache restored successfully
+2026-10-30T03:56:10.8817520Z Cache restored from key: nextpnr-ubuntu-26.04-62e659ed6748e9f60b2a4aa25dd4fe79a9605881-3c366540471441707e0933b47f1f50031981041e1372dc4ea48f4354b3bd0dee-ba1dd03d2b3801050c8ca1e32412c4c07cf46626e34f57aa8fc584fe2f818f4d
+2026-10-30T03:56:10.9046366Z printf 'nextpnr build cache hit=%s\n' "${CACHE_HIT:-miss}"
+2026-10-30T03:56:10.9073841Z   CACHE_HIT: true
+2026-10-30T03:56:10.9250702Z nextpnr build cache hit=true
+2026-10-30T03:57:42.7605730Z printf 'nextpnr build cache hit=%s\n' "${CACHE_HIT:-miss}"
+2026-10-30T03:57:42.7630576Z   CACHE_HIT: true
+2026-10-30T03:57:42.7688021Z nextpnr build cache hit=true
+2026-10-30T03:58:32.1537481Z   printf 'Build cache restore: %s\n\n' "${CACHE_HIT:-miss}"
+2026-10-30T03:58:32.1563560Z   CACHE_HIT: true

@@ -1,0 +1,64 @@
+name: 固定版の更新確認
+
+on:
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: 形式検証ソースの原文ライセンスを取得
+        run: |
+          git submodule update --init --depth 1 -- \
+            vendor/sby vendor/yices2 vendor/z3 \
+            vendor/boolector vendor/bitwuzla vendor/click
+
+      - name: 固定値の整合性を確認
+        run: python3 .github/scripts/check-pins.py consistency
+
+      - name: 固定版を確認
+        id: report
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          report="$RUNNER_TEMP/pins.md"
+          python3 .github/scripts/check-pins.py upstream --report "$report" --github-output "$GITHUB_OUTPUT"
+          cat "$report" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Issue を更新
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEEDS_UPDATE: ${{ steps.report.outputs.needs_update }}
+        run: |
+          set -euo pipefail
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          issue="$(gh issue list --state open --json number,title --limit 100 |
+            jq -r '.[] | select(.title == "固定版の更新確認") | .number' | head -n 1)"
+          if [ "$NEEDS_UPDATE" = "true" ]; then
+            report="$RUNNER_TEMP/pins.md"
+            body="$(cat "$report")
+
+          実行: $run_url"
+            if [ -n "$issue" ]; then
+              gh issue edit "$issue" --body "$body"
+            else
+              gh issue create --title "固定版の更新確認" --body "$body"
+            fi
+          elif [ -n "$issue" ]; then
+            gh issue comment "$issue" --body "全ての固定版が最新です。$run_url"
+            gh issue close "$issue"
+          fi

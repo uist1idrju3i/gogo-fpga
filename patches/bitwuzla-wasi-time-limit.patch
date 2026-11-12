@@ -1,0 +1,40 @@
+--- a/src/main/time_limit.cpp
++++ b/src/main/time_limit.cpp
+@@ -3,1 +3,24 @@
+-#include <pthread.h>  // Required for workaround
++#ifdef __wasi__
++#include <cstdio>
++#include <cstdlib>
++
++namespace bzla::main {
++
++void
++set_time_limit(uint64_t time_limit)
++{
++  if (time_limit > 0)
++  {
++    fputs("Bitwuzla: threaded CLI time limits are unavailable on WASI\n", stderr);
++    abort();
++  }
++}
++
++void reset_time_limit() {}
++
++void print_statistics_time_limit(bitwuzla::parser::Parser*) {}
++
++}  // namespace bzla::main
++
++#else
++#include <pthread.h>  // Required for workaround
+@@ -94,1 +117,2 @@
+-}  // namespace bzla::main
++}  // namespace bzla::main
++#endif
+--- a/src/main/meson.build
++++ b/src/main/meson.build
+@@ -18,1 +18,4 @@
+-thread_dep = dependency('threads')
++thread_dep = []
++if host_machine.system() != 'wasi'
++  thread_dep = dependency('threads')
++endif

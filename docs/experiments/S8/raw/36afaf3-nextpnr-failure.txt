@@ -1,0 +1,13 @@
+run head: 36afaf3; run: 41015023020; job: nextpnr WASI place and route (123929433753)
+2026-10-30T06:39:06.2485936Z scripts/build-pnr-wasm.sh: 272: cd: can't cd to build/native
+2026-10-30T06:39:06.2503986Z ##[error]Process completed with exit code 2.
+2026-10-30T06:39:06.2571791Z [36;1m    echo "Missing time log: $log" >&2[0m
+2026-10-30T06:39:06.2743165Z Missing time log: /home/runner/work/toolchain/toolchain/build/timings/nextpnr-native.time.log
+2026-10-30T06:39:06.2805428Z [36;1m  printf 'S8-SHA256 nextpnr MISSING %s\n' "$path"[0m
+2026-10-30T06:39:06.2806253Z [36;1m  printf 'S8-CACHE nextpnr hit=%s valid=not-checked\n' "${CACHE_HIT:-false}"[0m
+2026-10-30T06:39:06.2907334Z S8-CACHE nextpnr hit=false valid=not-checked
+2026-10-30T06:39:06.2907967Z S8-SHA256 nextpnr MISSING build/wasi/nextpnr/nextpnr-himbaechel-gowin.wasm
+2026-10-30T06:39:06.2908656Z S8-SHA256 nextpnr MISSING build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1N-9C.bin
+2026-10-30T06:39:06.2909843Z S8-SHA256 nextpnr MISSING build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1NS-4.bin
+2026-10-30T06:39:06.2910530Z S8-SHA256 nextpnr MISSING build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1NZ-1.bin
+2026-10-30T06:39:06.2911207Z S8-SHA256 nextpnr MISSING build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW2A-18C.bin

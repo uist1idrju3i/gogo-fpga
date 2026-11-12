@@ -1,0 +1,38 @@
+--- a/src/btor2parser/btor2parser.c
++++ b/src/btor2parser/btor2parser.c
+@@ -258,7 +258,7 @@
+ static Btor2Line *
+ id2line_bfr (Btor2Parser *bfr, int64_t id)
+ {
+-  int64_t absid = labs (id);
++  int64_t absid = llabs (id);
+   if (!absid || absid >= bfr->ntable) return 0;
+   return bfr->table[absid];
+ }
+@@ -770,7 +770,7 @@
+   Btor2Line *l;
+   int64_t res, absres;
+   if (!parse_signed_id_bfr (bfr, &res)) return 0;
+-  absres = labs (res);
++  absres = llabs (res);
+   if (absres >= bfr->ntable)
+     return perr_bfr (bfr, "argument id too large (undefined)");
+   l = bfr->table[absres];
+@@ -1245,7 +1245,7 @@
+   line = id2line_bfr (bfr, init_id);
+
+   // 'init_id' is the highest id we will see when traversing down
+-  size_t size = (labs (init_id) + 1) * sizeof (char);
++  size_t size = (llabs (init_id) + 1) * sizeof (char);
+   cache       = btor2parser_malloc (size);
+   memset (cache, 0, size);
+
+@@ -1290,7 +1290,7 @@
+   state = id2line_bfr (bfr, l->args[0]);
+   if (state->tag != BTOR2_TAG_state)
+     return perr_bfr (bfr, "expected state as first argument");
+-  if (l->args[0] < labs (l->args[1]))
++  if (l->args[0] < llabs (l->args[1]))
+     return perr_bfr (bfr, "state id must be greater than id of second operand");
+   if (!check_state_init (bfr, l->args[0], l->args[1])) return 0;
+   if (state->init)

@@ -1,0 +1,17 @@
+$date
+  2026-10-31
+$end
+$version
+  S12 fixture
+$end
+$timescale 1ns $end
+$scope module logic $end
+$var wire 1 ! clk $end
+$upscope $end
+$enddefinitions $end
+#0
+0!
+#5
+1!
+#10
+0!

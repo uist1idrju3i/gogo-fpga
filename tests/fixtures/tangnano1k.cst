@@ -1,0 +1,5 @@
+// Clock and red LED pins from YosysHQ/apicula examples/tangnano1k.cst.
+IO_LOC "clk" 47;
+IO_PORT "clk" IO_TYPE=LVCMOS33;
+IO_LOC "led" 9;
+IO_PORT "led" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8;

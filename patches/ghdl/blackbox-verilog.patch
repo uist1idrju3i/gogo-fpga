@@ -1,0 +1,19 @@
+#
+# Adapted from synth-explorer/tools/ghdl-wasm/blackbox-verilog.patch.
+# Copyright 2025 synth-explorer contributors.
+# Licensed under the Apache License, Version 2.0.
+# https://www.apache.org/licenses/LICENSE-2.0
+# SPDX-License-Identifier: Apache-2.0
+#
+--- netlists-disp_verilog.adb
++++ netlists-disp_verilog.adb
+@@ -1474 +1474,8 @@
+-         return;
++         Wr ("(* blackbox *) module ");
++         Put_Name (Get_Module_Name (M));
++         Wr_Line;
++         Disp_Module_Parameters (M);
++         Disp_Module_Ports (M);
++         Wr_Line ("endmodule");
++         Wr_Line;
++         return;

@@ -1,0 +1,1950 @@
+{
+  "rows": 60,
+  "columns": 11,
+  "samples": {
+    "old": {
+      "source": "build/S15/serv20k-ci-old-five",
+      "source_revision": "571da8ac6961a4cc4bb3d990182d3eac07a085d3",
+      "diff_sha256": "49e5025369ae50dcb43ce74c6275faf93046975084589eb4ee87f7704a1c2734",
+      "hashes": {
+        "netlist": "fb3130cc993ea5899f184d9ece04e23fbe521cc3c19b1e096f0cf6d6370e1b60",
+        "cst": "38c763dc7c36a0722a5c92d305748857d35bd2429f6a5e40c398a2153d17faf6",
+        "native": "569f3fb0eeb1aa81e3b62a290a3c597e5c15884a5ab5f55d73975f1ac6c50eed",
+        "wasi": "01ce4caa090a176eaf11aaa7bb4a1656bd5797070497dd84e5d44d6ed9eda9ac",
+        "native_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "wasi_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "native_build_info": "0c17d4e8116e31c337ef6424ae66a7090c50c4a7531dc2329956340b3aa2a506",
+        "wasi_build_info": "ef400e3c2d6971429dd564d4e14258bb134912fcde76b1e404fc6582178c2bff",
+        "script": "fcc5b78d5844f42171186d6df84ea2439ad9b3e348550e0ab985074a85db003c",
+        "helper": "e71586b594b8831e5e23ccba192a79bcbf7a44db82c6fd79d4586b786881693c"
+      },
+      "binary_bytes": {
+        "native": 55501176,
+        "wasi": 27884785
+      },
+      "versions": {
+        "native": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version 62e659e)",
+        "wasi": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version 62e659e)"
+      },
+      "repeats": 5,
+      "layouts": {
+        "native": "3ffcfa37164faf66bc871feab925562ebbe6b92058486d617a73ed9528749dff",
+        "wasi": "bb8b4c53bea1c95730675b3b76f1d5424016be42265d984f1fef0d811fb0cd14"
+      },
+      "cross_backend_same": false,
+      "timings_ms": {
+        "native": {
+          "min": 4478.606546,
+          "median": 4549.279878000001,
+          "max": 7394.099780000004
+        },
+        "wasi": {
+          "min": 8649.142751,
+          "median": 12202.980919000001,
+          "max": 28381.633445
+        }
+      },
+      "wasi_memory_bytes": {
+        "min": 53477376,
+        "median": 53477376,
+        "max": 53477376
+      },
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 1322,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 285,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 108,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 48,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 22,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 158,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 469,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 40,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      },
+      "negative_controls": {
+        "changed_value": "rejected",
+        "changed_key_order": "rejected"
+      },
+      "diagnostics": [
+        {
+          "run": "native-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-1",
+          "stream": "stderr",
+          "sha256": "4ebd7aa494471ef4d5bb1c8566b6e5b103e15873068b287652a29db178f78107",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stderr",
+          "sha256": "3fc60fce30ec339814facf55e992ec71002c60d6c6fc259fa14137926fdb9c5a",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stderr",
+          "sha256": "d4391fff0553ec98b6150ff0c1e7c04727c920ff449883000acfa7a26c89618e",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-2",
+          "stream": "stderr",
+          "sha256": "7b36da16195676ae37284536b0e331e324393d6fb4bc935b48252db2038df4f5",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-3",
+          "stream": "stderr",
+          "sha256": "8fa51af52c58240deaf53ca47933135eb39c01da557e10f02e3215d1d9d9e716",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stderr",
+          "sha256": "f0be8f89b1557696599c3b63743d9109a3549c202f12f86f4b4f45f375481e88",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stderr",
+          "sha256": "99d48e347ad35371ba04de25bd6b85e7042208768baf8aba129eb6ed8c081720",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-4",
+          "stream": "stderr",
+          "sha256": "692ea437b5e8cc016c861cd8faa1d425e56855c056a7b9c4f3042b95cc4af6c9",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-5",
+          "stream": "stderr",
+          "sha256": "185ad457368a78a06943ff7bed924f9206f0b348d180bfc343c741fd9a3a11dc",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stderr",
+          "sha256": "167165e12d385b430b490ece4f8dcbbf1c7c956ec87278bc484b04486ec1bef1",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        }
+      ]
+    },
+    "off": {
+      "source": "build/S15/serv20k-ci-off-five",
+      "source_revision": "571da8ac6961a4cc4bb3d990182d3eac07a085d3",
+      "diff_sha256": "49e5025369ae50dcb43ce74c6275faf93046975084589eb4ee87f7704a1c2734",
+      "hashes": {
+        "netlist": "fb3130cc993ea5899f184d9ece04e23fbe521cc3c19b1e096f0cf6d6370e1b60",
+        "cst": "38c763dc7c36a0722a5c92d305748857d35bd2429f6a5e40c398a2153d17faf6",
+        "native": "b91559f0789cb2b47256bbf5c79e182ff74d2c09cfb0d48a19ea2a3f156d3516",
+        "wasi": "01ce4caa090a176eaf11aaa7bb4a1656bd5797070497dd84e5d44d6ed9eda9ac",
+        "native_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "wasi_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "native_build_info": "0c17d4e8116e31c337ef6424ae66a7090c50c4a7531dc2329956340b3aa2a506",
+        "wasi_build_info": "ef400e3c2d6971429dd564d4e14258bb134912fcde76b1e404fc6582178c2bff",
+        "script": "fcc5b78d5844f42171186d6df84ea2439ad9b3e348550e0ab985074a85db003c",
+        "helper": "e71586b594b8831e5e23ccba192a79bcbf7a44db82c6fd79d4586b786881693c"
+      },
+      "binary_bytes": {
+        "native": 55532176,
+        "wasi": 27884785
+      },
+      "versions": {
+        "native": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version 62e659e)",
+        "wasi": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version 62e659e)"
+      },
+      "repeats": 5,
+      "layouts": {
+        "native": "bb8b4c53bea1c95730675b3b76f1d5424016be42265d984f1fef0d811fb0cd14",
+        "wasi": "bb8b4c53bea1c95730675b3b76f1d5424016be42265d984f1fef0d811fb0cd14"
+      },
+      "cross_backend_same": true,
+      "timings_ms": {
+        "native": {
+          "min": 7384.658901999996,
+          "median": 15673.841621,
+          "max": 18808.339022
+        },
+        "wasi": {
+          "min": 18693.582851999992,
+          "median": 35685.887977999984,
+          "max": 44028.105156
+        }
+      },
+      "wasi_memory_bytes": {
+        "min": 53477376,
+        "median": 53477376,
+        "max": 53477376
+      },
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 1322,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 285,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 108,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 48,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 22,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 158,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 469,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 40,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      },
+      "negative_controls": {
+        "changed_value": "rejected",
+        "changed_key_order": "rejected"
+      },
+      "diagnostics": [
+        {
+          "run": "native-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-1",
+          "stream": "stderr",
+          "sha256": "066b9deb279c2572ab86652b46e9aa3d9c9f2dd025002638321a31fc14a70b3c",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stderr",
+          "sha256": "04a8fd8aa9c38cf49e51508112eb37f7c2dd6cab517d1a39a65fcf2d334f3894",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stderr",
+          "sha256": "c247bba5eb63e027c65ff64a8b85818e7b35e138f813523b5578f52d6fce7bed",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-2",
+          "stream": "stderr",
+          "sha256": "b536f8f1f9309ec30461bd6b967b58f3f7003a18052ad51d197c2484d4909511",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-3",
+          "stream": "stderr",
+          "sha256": "578ed05bea03f1c373ee8ebd4ff7828b08848fbbc14d8e6afbf4999697d8f475",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stderr",
+          "sha256": "00e85eadc24ad7e787e352c3c5c6dcc8854c13bacbccaa6f1785382f98360e07",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stderr",
+          "sha256": "5ec28792f029ca54da0e4cf29ec6471b1386903d97b9ae6b1628b28ad73d643f",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-4",
+          "stream": "stderr",
+          "sha256": "3e1c61ca484edf6d608769bfdd5c6b9b54af1fec0e8dcfe2d61c984daceda24e",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-5",
+          "stream": "stderr",
+          "sha256": "29ba8d7c228ca6b42ed232b727c4d7488533e7da3704a3755f4e5e841d9f7d24",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stderr",
+          "sha256": "2257b377c8dfba05c53a9236da578a8ed626bdf74ffab2a64d06a52ce7f9c0f2",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        }
+      ]
+    },
+    "fast-control": {
+      "source": "build/S15/serv20k-ci-fast-control2-five",
+      "source_revision": "571da8ac6961a4cc4bb3d990182d3eac07a085d3",
+      "diff_sha256": "f3c4f3e748e9d38c29ea6b15b5d34d607732aeb525734cefe7e79161643fe5da",
+      "hashes": {
+        "netlist": "fb3130cc993ea5899f184d9ece04e23fbe521cc3c19b1e096f0cf6d6370e1b60",
+        "cst": "38c763dc7c36a0722a5c92d305748857d35bd2429f6a5e40c398a2153d17faf6",
+        "native": "47bae400f1cc663bc3d1dba5ccf2b52191add3a29b5d057b1fd1656e463d8fc3",
+        "wasi": "01ce4caa090a176eaf11aaa7bb4a1656bd5797070497dd84e5d44d6ed9eda9ac",
+        "native_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "wasi_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "native_build_info": null,
+        "wasi_build_info": "ef400e3c2d6971429dd564d4e14258bb134912fcde76b1e404fc6582178c2bff",
+        "script": "fcc5b78d5844f42171186d6df84ea2439ad9b3e348550e0ab985074a85db003c",
+        "helper": "e71586b594b8831e5e23ccba192a79bcbf7a44db82c6fd79d4586b786881693c"
+      },
+      "binary_bytes": {
+        "native": 55531472,
+        "wasi": 27884785
+      },
+      "versions": {
+        "native": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version 62e659e)",
+        "wasi": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version 62e659e)"
+      },
+      "repeats": 5,
+      "layouts": {
+        "native": "3ffcfa37164faf66bc871feab925562ebbe6b92058486d617a73ed9528749dff",
+        "wasi": "bb8b4c53bea1c95730675b3b76f1d5424016be42265d984f1fef0d811fb0cd14"
+      },
+      "cross_backend_same": false,
+      "timings_ms": {
+        "native": {
+          "min": 4606.487617999999,
+          "median": 7096.910093000006,
+          "max": 7318.494015000004
+        },
+        "wasi": {
+          "min": 8933.453401000006,
+          "median": 14386.411519000001,
+          "max": 15491.011081999999
+        }
+      },
+      "wasi_memory_bytes": {
+        "min": 53477376,
+        "median": 53477376,
+        "max": 53477376
+      },
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 1322,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 285,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 108,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 48,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 22,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 158,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 469,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 40,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      },
+      "negative_controls": {
+        "changed_value": "rejected",
+        "changed_key_order": "rejected"
+      },
+      "diagnostics": [
+        {
+          "run": "native-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-1",
+          "stream": "stderr",
+          "sha256": "d5f8215ae2c6ff9273bdac4958d70e65034e6816be450c0c3771925c7d5633c9",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stderr",
+          "sha256": "f41deacb7d0fdb5db1a77e10df3aca5daee60b4f73dbd01a3266c7e6582f4f22",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stderr",
+          "sha256": "54a73993a55f58e60b5fbdacfa0ba0b92f26612b01df204acefd10aecb9da117",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-2",
+          "stream": "stderr",
+          "sha256": "ce177673302d5bc9f557a9ae31e1ecc7cb1565754cf8467f09f59cff82c5830e",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-3",
+          "stream": "stderr",
+          "sha256": "d5ee6c496d4b2f5be63e06c4cd95198890c20cc7d25c151911c04e2a88472c9b",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stderr",
+          "sha256": "0a3606bad179b8f7389296ed80ec87417ec6d86c83a6fc588fe49df7169c4143",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stderr",
+          "sha256": "da5e55d01c04ecafc6affdabf289b6c9150fea48c478ee111754c76837ca073c",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-4",
+          "stream": "stderr",
+          "sha256": "42c774a60aece87574940f1a0d41db21c5cc80953ec910361e2beb5f9a925e21",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-5",
+          "stream": "stderr",
+          "sha256": "ebde4c73f15dd160a471538a4fe82681a6e15b2b343061023e2c0ce532716fdf",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stderr",
+          "sha256": "f3ed9350b938453ba1da2996eff33243ceff067cd5098348c65f54d4fec8c172",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        }
+      ]
+    },
+    "off-control": {
+      "source": "build/S15/serv20k-ci-off-control2-five",
+      "source_revision": "571da8ac6961a4cc4bb3d990182d3eac07a085d3",
+      "diff_sha256": "f3c4f3e748e9d38c29ea6b15b5d34d607732aeb525734cefe7e79161643fe5da",
+      "hashes": {
+        "netlist": "fb3130cc993ea5899f184d9ece04e23fbe521cc3c19b1e096f0cf6d6370e1b60",
+        "cst": "38c763dc7c36a0722a5c92d305748857d35bd2429f6a5e40c398a2153d17faf6",
+        "native": "681b72fb0d1bc3d0222ff6d6cdffc6e4d7ac021ae92c9c06d78a908b5344f715",
+        "wasi": "01ce4caa090a176eaf11aaa7bb4a1656bd5797070497dd84e5d44d6ed9eda9ac",
+        "native_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "wasi_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "native_build_info": null,
+        "wasi_build_info": "ef400e3c2d6971429dd564d4e14258bb134912fcde76b1e404fc6582178c2bff",
+        "script": "fcc5b78d5844f42171186d6df84ea2439ad9b3e348550e0ab985074a85db003c",
+        "helper": "e71586b594b8831e5e23ccba192a79bcbf7a44db82c6fd79d4586b786881693c"
+      },
+      "binary_bytes": {
+        "native": 55532280,
+        "wasi": 27884785
+      },
+      "versions": {
+        "native": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version 62e659e)",
+        "wasi": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version 62e659e)"
+      },
+      "repeats": 5,
+      "layouts": {
+        "native": "bb8b4c53bea1c95730675b3b76f1d5424016be42265d984f1fef0d811fb0cd14",
+        "wasi": "bb8b4c53bea1c95730675b3b76f1d5424016be42265d984f1fef0d811fb0cd14"
+      },
+      "cross_backend_same": true,
+      "timings_ms": {
+        "native": {
+          "min": 4801.650056,
+          "median": 5214.320852000001,
+          "max": 13048.028561
+        },
+        "wasi": {
+          "min": 8860.054418,
+          "median": 16777.913408,
+          "max": 20997.312186999996
+        }
+      },
+      "wasi_memory_bytes": {
+        "min": 53477376,
+        "median": 53477376,
+        "max": 53477376
+      },
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 1322,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 285,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 108,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 48,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 22,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 158,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 469,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 40,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      },
+      "negative_controls": {
+        "changed_value": "rejected",
+        "changed_key_order": "rejected"
+      },
+      "diagnostics": [
+        {
+          "run": "native-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-1",
+          "stream": "stderr",
+          "sha256": "41451a49ae89f046156b6b966a80be096f583031f26aeb94318a8b947baa243d",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stderr",
+          "sha256": "22e69f58bbaf06ce71d2daa631c9fe7b847eb5a113546d04237716817ea54185",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stderr",
+          "sha256": "83464bb9a899d9ae68e93673b405d3673c1240f124d49afc52db87eb759f4bf2",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-2",
+          "stream": "stderr",
+          "sha256": "a1cc6a829b944dbc7ce53e1c4bbe2915b56b2d0d18e27712e3b521b313ca2909",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-3",
+          "stream": "stderr",
+          "sha256": "a0ea1f0e1b3291a49349d1356facaff131199d90d22fb95335950babc42b838e",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stderr",
+          "sha256": "bdecbd7977077f5ff7d8e7792e342369eb4a50801cbfca985563f63902221fd3",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stderr",
+          "sha256": "9aa701ccf6f025cae08511a7014a2fc4be029bfbbd5257956f097b83228e7dcb",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-4",
+          "stream": "stderr",
+          "sha256": "016a2a2b3cdc3d9044be342cb937cbbc09c071abb1eb308a7166605e71c1278a",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-5",
+          "stream": "stderr",
+          "sha256": "1525914fcf2eb5098c5d3c48b3203a3118f562bf9b7772e97e5627f06c6c9c7e",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stderr",
+          "sha256": "8847faf6c7bdae27a734d01dd77bbdb40c3d104b2de93a7ccfd6e1f9277cf30b",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        }
+      ]
+    },
+    "product": {
+      "source": "build/S15/serv20k-product-five",
+      "source_revision": "571da8ac6961a4cc4bb3d990182d3eac07a085d3",
+      "diff_sha256": "f3c4f3e748e9d38c29ea6b15b5d34d607732aeb525734cefe7e79161643fe5da",
+      "hashes": {
+        "netlist": "fb3130cc993ea5899f184d9ece04e23fbe521cc3c19b1e096f0cf6d6370e1b60",
+        "cst": "38c763dc7c36a0722a5c92d305748857d35bd2429f6a5e40c398a2153d17faf6",
+        "native": "b4cfd0926bb1ab709377053a63b58e8e0a916469faa2b218cad20249b67b3f82",
+        "wasi": "44e1043057fe35ace437934aa00301e6f51f034f80f379cd11d80da1943d74bd",
+        "native_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "wasi_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "native_build_info": "384a0e9fd05e34560b770487f90c27bff8443dd1a29712f86163c70c62bd53d2",
+        "wasi_build_info": "6d433825bdb06aca15a897cee2ee8399a39cbf362ff43d5c4326b8157127810d",
+        "script": "fcc5b78d5844f42171186d6df84ea2439ad9b3e348550e0ab985074a85db003c",
+        "helper": "e71586b594b8831e5e23ccba192a79bcbf7a44db82c6fd79d4586b786881693c"
+      },
+      "binary_bytes": {
+        "native": 55411080,
+        "wasi": 27884842
+      },
+      "versions": {
+        "native": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version nextpnr-0.11.1)",
+        "wasi": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version nextpnr-0.11.1)"
+      },
+      "repeats": 5,
+      "layouts": {
+        "native": "d1f5cc0f072c9169c966eb8e5a3f674d041d2fca11b38ec6ea15e394f1887d03",
+        "wasi": "d1f5cc0f072c9169c966eb8e5a3f674d041d2fca11b38ec6ea15e394f1887d03"
+      },
+      "cross_backend_same": true,
+      "timings_ms": {
+        "native": {
+          "min": 5084.443064000006,
+          "median": 9718.12133,
+          "max": 12743.386153000007
+        },
+        "wasi": {
+          "min": 9485.08644,
+          "median": 12490.436587999997,
+          "max": 20040.971541999996
+        }
+      },
+      "wasi_memory_bytes": {
+        "min": 53477376,
+        "median": 53477376,
+        "max": 53477376
+      },
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 1322,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 285,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 108,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 48,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 22,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 158,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 469,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 40,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      },
+      "negative_controls": {
+        "changed_value": "rejected",
+        "changed_key_order": "rejected"
+      },
+      "diagnostics": [
+        {
+          "run": "native-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-1",
+          "stream": "stderr",
+          "sha256": "de6a1a0f362cf0930b9c254cd540f0a3f6e81c2bf3bc0a00ed9fba182bc88d69",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stderr",
+          "sha256": "e51e675bf9b3349bb33cf0391500b90d30e17ddabb526441cdbb86d9e0939bfe",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stderr",
+          "sha256": "79cfb5d38ff9cf5e746cc59e4c2cd4a5eddca69227b6585649d398672887d9c5",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-2",
+          "stream": "stderr",
+          "sha256": "552512f86f4a07dca3ebf8c4880da36bcd57858af609a2d50ef56a180bf59e99",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-3",
+          "stream": "stderr",
+          "sha256": "d71e03106fdef56b84e5ae6e1f4a31373e65dc1d60d14bf38c44934e11cbc426",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stderr",
+          "sha256": "4a48382ab0b6f6cba50adf77e06972dbe89e83d079de25469c0ef29c4e913b0b",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stderr",
+          "sha256": "7b8d556a34f1a601decbcb9c32de83ebb8e14a42d2978d85058a31c52a92113d",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-4",
+          "stream": "stderr",
+          "sha256": "6431eb4b827b32757c26ffb066cbfb7f00526fbd9bc28cb58149b05e78c82e22",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-5",
+          "stream": "stderr",
+          "sha256": "1eddf4de4e279507c517425df906b0c1e75c2b383344064158bbf5233f7718a2",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stderr",
+          "sha256": "de0f8f9cc2fc36595b60373fbb8f6fb68fd32ec5a0798d0fdc94dc883710c51e",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        }
+      ]
+    },
+    "product-aa": {
+      "source": "build/S15/serv20k-product-aa-five",
+      "source_revision": "571da8ac6961a4cc4bb3d990182d3eac07a085d3",
+      "diff_sha256": "f3c4f3e748e9d38c29ea6b15b5d34d607732aeb525734cefe7e79161643fe5da",
+      "hashes": {
+        "netlist": "fb3130cc993ea5899f184d9ece04e23fbe521cc3c19b1e096f0cf6d6370e1b60",
+        "cst": "38c763dc7c36a0722a5c92d305748857d35bd2429f6a5e40c398a2153d17faf6",
+        "native": "b4cfd0926bb1ab709377053a63b58e8e0a916469faa2b218cad20249b67b3f82",
+        "wasi": "44e1043057fe35ace437934aa00301e6f51f034f80f379cd11d80da1943d74bd",
+        "native_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "wasi_chipdb": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+        "native_build_info": "384a0e9fd05e34560b770487f90c27bff8443dd1a29712f86163c70c62bd53d2",
+        "wasi_build_info": "6d433825bdb06aca15a897cee2ee8399a39cbf362ff43d5c4326b8157127810d",
+        "script": "fcc5b78d5844f42171186d6df84ea2439ad9b3e348550e0ab985074a85db003c",
+        "helper": "e71586b594b8831e5e23ccba192a79bcbf7a44db82c6fd79d4586b786881693c"
+      },
+      "binary_bytes": {
+        "native": 55411080,
+        "wasi": 27884842
+      },
+      "versions": {
+        "native": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version nextpnr-0.11.1)",
+        "wasi": "\"nextpnr-himbaechel-gowin\" -- Next Generation Place and Route (Version nextpnr-0.11.1)"
+      },
+      "repeats": 5,
+      "layouts": {
+        "native": "d1f5cc0f072c9169c966eb8e5a3f674d041d2fca11b38ec6ea15e394f1887d03",
+        "wasi": "d1f5cc0f072c9169c966eb8e5a3f674d041d2fca11b38ec6ea15e394f1887d03"
+      },
+      "cross_backend_same": true,
+      "timings_ms": {
+        "native": {
+          "min": 5116.816058,
+          "median": 5156.488246000001,
+          "max": 5269.945590000003
+        },
+        "wasi": {
+          "min": 9085.542094000004,
+          "median": 11051.192348000004,
+          "max": 12558.694650999998
+        }
+      },
+      "wasi_memory_bytes": {
+        "min": 53477376,
+        "median": 53477376,
+        "max": 53477376
+      },
+      "resources": {
+        "VCC": {
+          "used": 1,
+          "total": 1
+        },
+        "IOB": {
+          "used": 2,
+          "total": 384
+        },
+        "LUT4": {
+          "used": 1322,
+          "total": 20736
+        },
+        "IOLOGICI": {
+          "used": 0,
+          "total": 384
+        },
+        "IOLOGICO": {
+          "used": 0,
+          "total": 384
+        },
+        "MUX2_LUT5": {
+          "used": 285,
+          "total": 10368
+        },
+        "MUX2_LUT6": {
+          "used": 108,
+          "total": 5184
+        },
+        "MUX2_LUT7": {
+          "used": 48,
+          "total": 2592
+        },
+        "MUX2_LUT8": {
+          "used": 22,
+          "total": 2592
+        },
+        "ALU": {
+          "used": 158,
+          "total": 15552
+        },
+        "GND": {
+          "used": 1,
+          "total": 1
+        },
+        "DFF": {
+          "used": 469,
+          "total": 15552
+        },
+        "RAM16SDP4": {
+          "used": 40,
+          "total": 648
+        },
+        "BSRAM": {
+          "used": 0,
+          "total": 46
+        },
+        "ALU54D": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTADDALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU18X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULTALU36X18": {
+          "used": 0,
+          "total": 24
+        },
+        "MULT36X36": {
+          "used": 0,
+          "total": 12
+        },
+        "MULT18X18": {
+          "used": 0,
+          "total": 48
+        },
+        "MULT9X9": {
+          "used": 0,
+          "total": 96
+        },
+        "PADD18": {
+          "used": 0,
+          "total": 48
+        },
+        "PADD9": {
+          "used": 0,
+          "total": 96
+        },
+        "GSR": {
+          "used": 1,
+          "total": 1
+        },
+        "OSC": {
+          "used": 0,
+          "total": 1
+        },
+        "rPLL": {
+          "used": 0,
+          "total": 2
+        },
+        "BUFG": {
+          "used": 1,
+          "total": 24
+        },
+        "DQCE": {
+          "used": 0,
+          "total": 24
+        },
+        "DCS": {
+          "used": 0,
+          "total": 8
+        },
+        "DHCEN": {
+          "used": 0,
+          "total": 24
+        },
+        "CLKDIV": {
+          "used": 0,
+          "total": 8
+        },
+        "CLKDIV2": {
+          "used": 0,
+          "total": 16
+        }
+      },
+      "negative_controls": {
+        "changed_value": "rejected",
+        "changed_key_order": "rejected"
+      },
+      "diagnostics": [
+        {
+          "run": "native-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-1",
+          "stream": "stderr",
+          "sha256": "4e2d269394646dff8d9f7ebcdc10285ccc2ce1dc51ee31d88966c4ff08fa1892",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-1",
+          "stream": "stderr",
+          "sha256": "24719f74612b559680aa26016c725cf8612b5a2e4d5192ceb40f0adab94a92fe",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-2",
+          "stream": "stderr",
+          "sha256": "dbdcf5d1f13ffbd1fadcb758b6933221416dc55ca7b2017c35867db6c1e5efdf",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-2",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-2",
+          "stream": "stderr",
+          "sha256": "12ddf1f3af490a9def7a4541b9c779c77fa05f89cc3fb0217fc588f6bccbb3ef",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-3",
+          "stream": "stderr",
+          "sha256": "f81fd226404337c351d0d1b6b20a089fe700c0d97dc4de2e96bffc2d85cfb33a",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-3",
+          "stream": "stderr",
+          "sha256": "9a95cece81640f42724982820097ab0e447227c02e5d2df5f236546a94e33db3",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-4",
+          "stream": "stderr",
+          "sha256": "ddd77353860594430f441914f22818686a5862bdefaa2010161eabe5ded0975b",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-4",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-4",
+          "stream": "stderr",
+          "sha256": "9a2fe96e0089d70acd78505b0122b0850f90098ed832d8d2ae00fa1fe335ddd1",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "native-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "native-5",
+          "stream": "stderr",
+          "sha256": "c1a548048872e4b69beec425baa4d7cf58daae906c3f75860e749f90e8bc5861",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "warnings": []
+        },
+        {
+          "run": "wasi-5",
+          "stream": "stderr",
+          "sha256": "df57eb81dfb482bcabe728f68bf77a46f794638551e2aa9b414623e83ad58980",
+          "warnings": [
+            "Info: Critical path report for clock 'cpu.clk' (posedge -> posedge):"
+          ]
+        }
+      ]
+    }
+  }
+}

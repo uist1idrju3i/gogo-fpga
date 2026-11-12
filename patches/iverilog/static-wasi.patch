@@ -1,0 +1,337 @@
+diff --git a/t-dll.h b/t-dll.h
+--- a/t-dll.h
++++ b/t-dll.h
+@@ -26,7 +26,9 @@
+ # include  <vector>
+ # include  <map>
+ 
+-#if defined(__MINGW32__)
++#if defined(IVL_STATIC_TARGET)
++typedef void* ivl_dll_t;
++#elif defined(__MINGW32__)
+ #include <windows.h>
+ typedef void *ivl_dll_t;
+ #elif defined(HAVE_DLFCN_H)
+diff --git a/t-dll.cc b/t-dll.cc
+--- a/t-dll.cc
++++ b/t-dll.cc
+@@ -39,7 +39,28 @@ using namespace std;
+ 
+ struct dll_target dll_target_obj;
+ 
+-#if defined(__WIN32__)
++#if defined(IVL_STATIC_TARGET)
++inline ivl_dll_t ivl_dlopen(const char*)
++{ return reinterpret_cast<ivl_dll_t>(1); }
++
++inline void* ivl_dlsym(ivl_dll_t, const char* name)
++{
++      if (name[0] == '_')
++            name += 1;
++      if (strcmp(name, "target_design") == 0)
++            return reinterpret_cast<void*>(target_design);
++      if (strcmp(name, "target_query") == 0)
++            return reinterpret_cast<void*>(target_query);
++      return 0;
++}
++
++inline void ivl_dlclose(ivl_dll_t)
++{}
++
++inline const char* dlerror()
++{ return "statically linked target lookup failed"; }
++
++#elif defined(__WIN32__)
+ 
+ inline ivl_dll_t ivl_dlopen(const char *name)
+ {
+diff --git a/ivlpp/lexor.lex b/ivlpp/lexor.lex
+--- a/ivlpp/lexor.lex
++++ b/ivlpp/lexor.lex
+@@ -2101,0 +2102,9 @@
++#if defined(__wasi__)
++      if (cp && (strcmp(cp, ".vhd") == 0 || strcmp(cp, ".vhdl") == 0)) {
++            emit_pathline(isp);
++            fprintf(stderr, "VHDL input is not supported in this build\n");
++            error_count += 1;
++            early_exit();
++            return;
++      }
++#endif
+@@ -2116,1 +2125,8 @@
+-      size_t cmdlen = strlen(vhdlpp_path);
++#if defined(__wasi__)
++      emit_pathline(isp);
++      fprintf(stderr, "VHDL input is not supported in this build\n");
++      error_count += 1;
++      early_exit();
++      return;
++#else
++      size_t cmdlen = strlen(vhdlpp_path);
+@@ -2141,0 +2157,1 @@
++#endif
+diff --git a/vpi_modules.cc b/vpi_modules.cc
+--- a/vpi_modules.cc
++++ b/vpi_modules.cc
+@@ -24,1 +24,2 @@
+ #include "vvp/ivl_dlfcn.h"
++#include <cstring>
+@@ -240,1 +240,4 @@
+ typedef void (*vlog_startup_routines_t)(void);
++#if defined(IVL_STATIC_SYSTEM_VPI)
++extern "C" void (*vlog_startup_routines[])(void);
++#endif
+@@ -242,8 +245,21 @@
+ bool load_vpi_module(const char*path)
+ {
+-    ivl_dll_t dll = ivl_dlopen(path, false);
+-    if (dll == 0) {
+-	cerr << "error: Failed to open '" << path << "' because:" << endl;
+-        cerr << "     : " << dlerror() << endl;
+-	return false;
+-    }
++    ivl_dll_t dll = 0;
++    void*table = 0;
++#if defined(IVL_STATIC_SYSTEM_VPI)
++    const char*module = strrchr(path, '/');
++    module = module ? module + 1 : path;
++    if (strcmp(module, "system") != 0 &&
++        strcmp(module, "system.vpi") != 0) {
++        cerr << "Unsupported statically linked VPI module: " << path << endl;
++        return false;
++    }
++    table = vlog_startup_routines;
++#else
++    dll = ivl_dlopen(path, false);
++    if (dll == 0) {
++	cerr << "error: Failed to open '" << path << "' because:" << endl;
++        cerr << "     : " << dlerror() << endl;
++	return false;
++    }
++#endif
+@@ -267,1 +284,3 @@
+-    void*table = ivl_dlsym(dll, LU "vlog_startup_routines" TU);
++#if !defined(IVL_STATIC_SYSTEM_VPI)
++    table = ivl_dlsym(dll, LU "vlog_startup_routines" TU);
++#endif
+diff --git a/pform.cc b/pform.cc
+--- a/pform.cc
++++ b/pform.cc
+@@ -3430,1 +3430,5 @@
+       } else if (ivlpp_string) {
++#if defined(__wasi__)
++            cerr << "ivlpp subprocess is not supported in this build; pass preprocessed input on stdin." << endl;
++            return 1;
++#else
+@@ -3450,0 +3454,1 @@
++#endif
+@@ -3489,6 +3494,10 @@
+       if (vl_input != stdin) {
++#if defined(__wasi__)
++            fclose(vl_input);
++#else
+ 	    if (ivlpp_string)
+ 		  pclose(vl_input);
+ 	    else
+ 		  fclose(vl_input);
++#endif
+       }
+diff --git a/Makefile.in b/Makefile.in
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -215,3 +215,9 @@ else
+-ivl@EXEEXT@: $O
+-	$(CXX) $(LDFLAGS) -o ivl@EXEEXT@ $O $(dllib)
++ivl@EXEEXT@: $O tgt-vvp/libvvp-target.a vpi/libsystem.a
++	$(CXX) $(LDFLAGS) -o ivl@EXEEXT@ $O tgt-vvp/libvvp-target.a vpi/libsystem.a $(dllib) $(IVL_EXTRA_LIBS)
+ endif
++
++tgt-vvp/libvvp-target.a:
++	$(MAKE) -C tgt-vvp libvvp-target.a
++
++vpi/libsystem.a:
++	$(MAKE) -C vpi libsystem.a
+diff --git a/tgt-vvp/Makefile.in b/tgt-vvp/Makefile.in
+--- a/tgt-vvp/Makefile.in
++++ b/tgt-vvp/Makefile.in
+@@ -35,1 +35,3 @@
+ INSTALL_DATA = @INSTALL_DATA@
++AR = @AR@
++RANLIB = @RANLIB@
+@@ -86,4 +88,9 @@ vvp.tgt: $O $(TGTDEPLIBS)
+ 	$(CC) @shared@ $(LDFLAGS) -o $@ $O $(TGTLDFLAGS)
+ 
++libvvp-target.a: dep $O
++	rm -f $@
++	$(AR) cqv $@ $O
++	$(RANLIB) $@
++
+ vvp.conf: $(srcdir)/vvp.conf.in Makefile
+ 	echo 'flag:VVP_EXECUTABLE=$(bindir)/vvp$(suffix)' | cat $(srcdir)/vvp.conf.in - > vvp.conf
+diff --git a/vpi/Makefile.in b/vpi/Makefile.in
+--- a/vpi/Makefile.in
++++ b/vpi/Makefile.in
+@@ -90,1 +90,6 @@
+ check: all
++libsystem.a: dep $O $(OPP) libvpi.o
++	rm -f $@
++	$(AR) cqv $@ $O $(OPP) libvpi.o
++	$(RANLIB) $@
++
+@@ -93,1 +98,2 @@ clean:
+ 	rm -rf *.o sys_readmem_lex.c dep libvpi.a system.vpi
++	rm -f libsystem.a
+diff --git a/vvp/Makefile.in b/vvp/Makefile.in
+--- a/vvp/Makefile.in
++++ b/vvp/Makefile.in
+@@ -157,4 +157,7 @@ else
+-vvp@EXEEXT@: $O main.o
+-	$(CXX) $(LDFLAGS) -o vvp@EXEEXT@ main.o $O $(LIBS) $(dllib)
++vvp@EXEEXT@: $O main.o ../vpi/libsystem.a
++	$(CXX) $(LDFLAGS) -o vvp@EXEEXT@ main.o $O ../vpi/libsystem.a $(LIBS) $(dllib) $(IVL_EXTRA_LIBS)
+ endif
+ endif
++
++../vpi/libsystem.a:
++	$(MAKE) -C ../vpi libsystem.a
+@@ -170,2 +173,2 @@
+ tables.cc: $(srcdir)/draw_tt.c
+-	$(BUILDCC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o draw_tt$(BUILDEXT) $(srcdir)/draw_tt.c
++	$(BUILDCC) @CPPFLAGS_FOR_BUILD@ @CFLAGS_FOR_BUILD@ @LDFLAGS_FOR_BUILD@ -o draw_tt$(BUILDEXT) $(srcdir)/draw_tt.c
+diff --git a/vvp/ivl_dlfcn.h b/vvp/ivl_dlfcn.h
+--- a/vvp/ivl_dlfcn.h
++++ b/vvp/ivl_dlfcn.h
+@@ -21,6 +21,9 @@
+ # include <windows.h>
+ # include <cstdio>
+ typedef void * ivl_dll_t;
+-#elif defined(HAVE_DLFCN_H)
++#elif defined(IVL_STATIC_SYSTEM_VPI)
++typedef void* ivl_dll_t;
++inline void ivl_dlclose(ivl_dll_t) {}
++#elif defined(HAVE_DLFCN_H)
+ # include  <dlfcn.h>
+ typedef void* ivl_dll_t;
+@@ -65,4 +68,8 @@
+ }
+ 
+-#elif defined(HAVE_DLFCN_H)
++#elif defined(IVL_STATIC_SYSTEM_VPI)
++inline ivl_dll_t ivl_dlopen(const char*, bool) { return 0; }
++inline void* ivl_dlsym(ivl_dll_t, const char*) { return 0; }
++inline const char* dlerror(void) { return "dynamic VPI modules are not supported"; }
++#elif defined(HAVE_DLFCN_H)
+ inline ivl_dll_t ivl_dlopen(const char*name, bool global_flag)
+ { return dlopen(name,RTLD_LAZY|(global_flag?RTLD_GLOBAL:0)); }
+diff --git a/vvp/vpi_modules.cc b/vvp/vpi_modules.cc
+--- a/vvp/vpi_modules.cc
++++ b/vvp/vpi_modules.cc
+@@ -34,5 +34,9 @@ static unsigned dll_list_cnt = 0;
+ #endif
+ typedef void (*vlog_startup_routines_t)(void);
+ 
++#if defined(IVL_STATIC_SYSTEM_VPI)
++extern "C" void (*vlog_startup_routines[])(void);
++#endif
++
+ # define VPIP_MODULE_PATH_MAX 64
+ 
+@@ -151,4 +155,12 @@ void vpip_load_module(const char*name)
+ {
++#if defined(IVL_STATIC_SYSTEM_VPI)
++      if (strcmp(name, "system") != 0) {
++            fprintf(stderr, "Unsupported statically linked VPI module: %s\n", name);
++            return;
++      }
++      ivl_dll_t dll = reinterpret_cast<ivl_dll_t>(1);
++      void*table = vlog_startup_routines;
++#else
+       struct stat sb;
+       int rc;
+       bool export_flag = false;
+@@ -243,2 +255,3 @@ void vpip_load_module(const char*name)
+       void*table = ivl_dlsym(dll, LU "vlog_startup_routines" TU);
++#endif
+       if (table == 0) {
+diff --git a/vvp/schedule.cc b/vvp/schedule.cc
+--- a/vvp/schedule.cc
++++ b/vvp/schedule.cc
+@@ -27,4 +27,6 @@
+ # include  <new>
+ # include  <typeinfo>
++#if !defined(__wasi__)
+ # include  <csignal>
++#endif
+ # include  <cstdlib>
+@@ -620,45 +622,53 @@
+ /*
+  * These are the signal handling infrastructure. The SIGINT signal
+  * leads to an implicit $stop. The SIGHUP and SIGTERM signals lead
+  * to an implicit $finish.
+  */
++#if !defined(__wasi__)
+ extern bool stop_is_finish;
+ 
+ extern "C" void signals_handler(int signum)
+ {
+ #ifdef __MINGW32__
+ 	// Windows implements the original UNIX semantics for signal,
+ 	// so we have to re-establish the signal handler each time a
+ 	// signal is caught.
+       signal(signum, &signals_handler);
+ #endif
+       if (signum != SIGINT)
+ 	    stop_is_finish = true;
+       schedule_stopped_flag = true;
+ }
+ 
+ static void signals_capture(void)
+ {
+       if (no_signals_flag)
+ 	   return;
+ #ifndef __MINGW32__
+       signal(SIGHUP,  &signals_handler);
+ #endif
+       signal(SIGINT,  &signals_handler);
+       signal(SIGTERM, &signals_handler);
+ }
+ 
+ static void signals_revert(void)
+ {
+       if (no_signals_flag)
+ 	   return;
+ #ifndef __MINGW32__
+       signal(SIGHUP,  SIG_DFL);
+ #endif
+       signal(SIGINT,  SIG_DFL);
+       signal(SIGTERM, SIG_DFL);
+ }
++#else
++static void signals_capture(void)
++{
++      (void)no_signals_flag;
++}
++static void signals_revert(void) {}
++#endif
+ 
+ /*
+  * This function puts an event on the end of the pre-simulation event queue.
+  */
+diff --git a/vpi/sys_vcd.c b/vpi/sys_vcd.c
+--- a/vpi/sys_vcd.c
++++ b/vpi/sys_vcd.c
+@@ -426,5 +426,13 @@
+ 	    time_t walltime;
+ 	    fprintf(dump_file, "$date\n");
+-	    time(&walltime);
++	    const char *source_date_epoch = getenv("SOURCE_DATE_EPOCH");
++	    if (source_date_epoch && *source_date_epoch) {
++		  char *end;
++		  long long epoch = strtoll(source_date_epoch, &end, 10);
++		  if (*end == '\0') walltime = (time_t)epoch;
++		  else time(&walltime);
++	    } else {
++		  time(&walltime);
++	    }
+ 	    fprintf(dump_file, "\t%s",asctime(localtime(&walltime)));
+ 	    fprintf(dump_file, "$end\n");

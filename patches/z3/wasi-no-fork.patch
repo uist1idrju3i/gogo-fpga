@@ -1,0 +1,10 @@
+diff --git a/src/util/scoped_timer.cpp b/src/util/scoped_timer.cpp
+--- a/src/util/scoped_timer.cpp
++++ b/src/util/scoped_timer.cpp
+@@ -120,5 +120,5 @@
+ void scoped_timer::initialize() {
+-#ifndef _WINDOWS
++#if !defined(_WINDOWS) && !defined(__wasi__)
+     static bool pthread_atfork_set = false;
+     if (!pthread_atfork_set) {
+         pthread_atfork(finalize, nullptr, nullptr);

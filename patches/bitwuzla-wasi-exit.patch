@@ -1,0 +1,9 @@
+--- a/src/main/error.h
++++ b/src/main/error.h
+@@ -22,1 +22,5 @@
+-  [[noreturn]] ~Error()
++#ifdef __wasi__
++  [[noreturn]] ~Error() noexcept(false)
++#else
++  [[noreturn]] ~Error()
++#endif

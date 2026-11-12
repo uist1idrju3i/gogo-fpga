@@ -1,0 +1,3 @@
+# path	json_pointer	value_sha256	reason
+docs/experiments/S14-production-cpu-metadata.json	/iverilog_info/native/flags	463eaa2c699c1331ca624403a2dff4cbd67f94fab28b27dfbb835b67895f6b05	正式測定のcompiler flags原文を保持する。prefix mapの入力は再現手順や根拠の参照先ではない。
+docs/experiments/S14-production-cpu-metadata.json	/iverilog_info/wasi/flags	5b8d3f9fd143d09425a62f78afcd61df950b635dcf2e07c2a36d7404ce42cc39	正式測定のcompiler flags原文を保持する。prefix mapの入力は再現手順や根拠の参照先ではない。

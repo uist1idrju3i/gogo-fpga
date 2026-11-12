@@ -1,0 +1,231 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -39,0 +40 @@
++AS_IF([test "x$host_os" = "xemscripten"], [ac_cv_func_fpurge=no])
+@@ -216 +217,2 @@
+-PKG_CHECK_MODULES([libffi], [libffi >= 3.0])
++AS_IF([test "x$host_os" != "xemscripten"],
++      [PKG_CHECK_MODULES([libffi], [libffi >= 3.0])])
+--- a/src/jit/jit-code.c
++++ b/src/jit/jit-code.c
+@@ -602,0 +603 @@
++#ifndef __EMSCRIPTEN__
+@@ -603,0 +605 @@
++#endif
+@@ -848,0 +851,6 @@
++#ifdef __EMSCRIPTEN__
++   (void)blob;
++   (void)dest;
++   fatal("native JIT code emission is not supported in this build");
++   return NULL;
++#else
+@@ -874,0 +883 @@
++#endif
+--- a/src/thread.c
++++ b/src/thread.c
+@@ -61 +61 @@
+-#if !defined __MINGW32__ && !defined __APPLE__
++#if !defined __MINGW32__ && !defined __APPLE__ && !defined __EMSCRIPTEN__
+@@ -524,0 +525,4 @@
++#ifdef __EMSCRIPTEN__
++   max_workers = 1;
++#endif
++
+@@ -1373,0 +1378,3 @@
++#elif defined __EMSCRIPTEN__
++   if (relaxed_load(&max_thread_id) != 0)
++      fatal("multi-threading is not supported in this build");
+@@ -1439,0 +1447,3 @@
++#elif defined __EMSCRIPTEN__
++   if (maxthread != 0)
++      fatal("multi-threading is not supported in this build");
+--- a/src/util.c
++++ b/src/util.c
+@@ -49,0 +50,3 @@
++#ifdef __EMSCRIPTEN__
++#include <setjmp.h>
++#endif
+@@ -1076 +1079,4 @@
+-#if ASAN_ENABLED
++#if defined __EMSCRIPTEN__
++   (void)ptr;
++   (void)length;
++#elif ASAN_ENABLED
+@@ -1089 +1095 @@
+-#if ASAN_ENABLED
++#if ASAN_ENABLED || defined __EMSCRIPTEN__
+@@ -2138,0 +2145,6 @@
++#elif defined __EMSCRIPTEN__
++   jmp_buf regs;
++   (void)setjmp(regs);
++   memset(cpu, '\0', sizeof(struct cpu_state));
++   cpu->sp = (uintptr_t)&regs;
++   memcpy(cpu->regs, regs, MIN(sizeof(regs), sizeof(cpu->regs)));
+--- a/src/vhpi/vhpi_user.h
++++ b/src/vhpi/vhpi_user.h
+@@ -55 +55 @@
+-#elif defined(__MINGW32__) || defined(__APPLE__)
++#elif defined(__MINGW32__) || defined(__APPLE__) || defined(__EMSCRIPTEN__)
+--- a/thirdparty/cpustate.c
++++ b/thirdparty/cpustate.c
+@@ -35 +35,9 @@
+-#if defined __unix__ || defined __APPLE__
++#if defined __EMSCRIPTEN__
++
++void fill_cpu_state(struct cpu_state *cpu, ucontext_t *uc)
++{
++   (void)uc;
++   memset(cpu, '\0', sizeof(struct cpu_state));
++}
++
++#elif defined __unix__ || defined __APPLE__
+--- a/src/jit/jit-ffi.c
++++ b/src/jit/jit-ffi.c
+@@ -17,0 +18,126 @@
++#ifdef __EMSCRIPTEN__
++
++#include "util.h"
++#include "ident.h"
++#include "jit/jit-ffi.h"
++#include "jit/jit-priv.h"
++#include "jit/jit.h"
++#include "vlog/vlog-node.h"
++#include "vpi/vpi-model.h"
++
++#include <assert.h>
++#include <ctype.h>
++#include <string.h>
++
++struct _jit_dll {
++   int unused;
++};
++
++static jit_dll_t wasm_executable;
++
++ffi_uarray_t ffi_wrap(void *ptr, int64_t left, int64_t right)
++{
++   const int64_t length = right < left ? 0 : right - left + 1;
++   ffi_uarray_t u = {
++      .ptr = ptr,
++      .dims = { [0] = { .left = left, .length = length } }
++   };
++   return u;
++}
++
++void ffi_return_string(const char *str, jit_scalar_t *args, tlab_t *tlab)
++{
++   const size_t len = strlen(str);
++   void *mem = tlab_alloc(tlab, len);
++   memcpy(mem, str, len);
++   args[0].pointer = mem;
++   args[1].integer = 1;
++   args[2].integer = len;
++}
++
++bool ffi_is_integral(ffi_type_t type)
++{
++   return type == FFI_INT8 || type == FFI_INT16 || type == FFI_INT32
++      || type == FFI_INT64 || type == FFI_UINT8 || type == FFI_UINT16
++      || type == FFI_UINT32;
++}
++
++ffi_spec_t ffi_spec_new(const ffi_type_t *types, size_t count)
++{
++   assert(count > 0);
++   ffi_spec_t spec = {};
++   if (count < 7) {
++      memcpy(spec.embed, types, count);
++      spec.count = count;
++   }
++   else
++      spec.ext = types;
++   return spec;
++}
++
++jit_dll_t *ffi_load_dll(const char *path)
++{
++   if (path != NULL)
++      fatal("loading foreign libraries is not supported in this build");
++   return &wasm_executable;
++}
++
++void ffi_unload_dll(jit_dll_t *dll)
++{
++   (void)dll;
++}
++
++void *ffi_find_symbol(jit_dll_t *dll, const char *name)
++{
++   (void)dll;
++   if (name != NULL)
++      fatal("foreign subprogram calls are not supported in this build: %s",
++            name);
++   return NULL;
++}
++
++void jit_bind_foreign(jit_func_t *f, const uint8_t *spec, size_t length,
++                      tree_t where, tree_t region)
++{
++   (void)f;
++   (void)spec;
++   (void)length;
++   (void)where;
++   (void)region;
++   jit_msg(NULL, DIAG_FATAL,
++           "foreign subprogram calls are not supported in this build");
++}
++
++void jit_do_syscall(vlog_node_t where, jit_anchor_t *caller,
++                    jit_scalar_t *args, tlab_t *tlab)
++{
++   ident_t name = vlog_ident(where);
++   vpiHandle handle = vpi_bind_foreign(name, where);
++   if (handle == NULL)
++      jit_msg(NULL, DIAG_FATAL, "system task %s not registered", istr(name));
++   vpi_call_foreign(handle, args, tlab);
++   (void)caller;
++}
++
++void ffi_copy_closure(ffi_closure_t *dst, const ffi_closure_t *src)
++{
++   if (src == NULL) {
++      dst->handle = JIT_HANDLE_INVALID;
++      dst->nargs = 0;
++   }
++   else {
++      dst->handle = src->handle;
++      dst->nargs = src->nargs;
++      memcpy(dst->args, src->args, src->nargs * sizeof(jit_scalar_t));
++   }
++}
++
++size_t ffi_closure_size(const ffi_closure_t *c)
++{
++   if (c == NULL)
++      return 0;
++   return sizeof(ffi_closure_t) + (c->nargs - 1) * sizeof(jit_scalar_t);
++}
++
++#else
++
+@@ -606,0 +733,2 @@
++
++#endif
+--- a/src/jit/jit-intrin.c
++++ b/src/jit/jit-intrin.c
+@@ -135,0 +136,7 @@
++static const uint32_t spread_nibble[16] = {
++   0x02020202, 0x03020202, 0x02030202, 0x03030202,
++   0x02020302, 0x03020302, 0x02030302, 0x03030302,
++   0x02020203, 0x03020203, 0x02030203, 0x03030203,
++   0x02020303, 0x03020303, 0x02030303, 0x03030303,
++};
++
+@@ -195,7 +201,0 @@
+-};
+-
+-static const uint32_t spread_nibble[16] = {
+-   0x02020202, 0x03020202, 0x02030202, 0x03030202,
+-   0x02020302, 0x03020302, 0x02030302, 0x03030302,
+-   0x02020203, 0x03020203, 0x02030203, 0x03030203,
+-   0x02020303, 0x03020303, 0x02030303, 0x03030303,

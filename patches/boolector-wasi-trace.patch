@@ -1,0 +1,21 @@
+--- a/src/btortrapi.c
++++ b/src/btortrapi.c
+@@ -7,6 +7,7 @@
+  */
+
+ #include "btortrapi.h"
++#include <stdlib.h>
+
+ void
+ btor_trapi_print (Btor *btor, const char *msg, ...)
+@@ -61,6 +62,10 @@
+
+   if (len >= 3 && !strcmp (name + len - 3, ".gz"))
+   {
++#ifdef __wasi__
++    fputs ("Boolector: gzip API traces are unavailable on WASI\n", stderr);
++    abort ();
++#endif
+     len += 20;
+     BTOR_NEWN (btor->mm, cmd, len);
+     sprintf (cmd, "gzip -c > %s", name);

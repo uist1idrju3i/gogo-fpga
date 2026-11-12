@@ -1,0 +1,5 @@
+# Latest mutually compatible PyPI tool set for Stage 1a. The newest Gowin
+# nextpnr wheel pins Apycula to exactly 0.32, so Apycula 0.35 cannot be used here.
+apycula==0.32
+yowasp-yosys==0.70.0.0.post1259
+yowasp-nextpnr-himbaechel-gowin==0.11.1.0.post826

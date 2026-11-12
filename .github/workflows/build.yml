@@ -1,0 +1,1802 @@
+name: build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 4 * * 1"
+  workflow_dispatch:
+    inputs:
+      cache:
+        description: Use the emsdk, WASI SDK, and fixture caches
+        required: false
+        type: boolean
+        default: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    name: Changes
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      build: ${{ steps.filter.outputs.build }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - id: filter
+        name: Check whether the build is needed
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          if [[ "$EVENT_NAME" != "pull_request" && "$EVENT_NAME" != "push" ]]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [[ "$EVENT_NAME" == "pull_request" ]] &&
+             ! git cat-file -e "$HEAD_SHA^{commit}" 2>/dev/null; then
+            if ! git fetch --no-tags origin \
+              "refs/pull/${PR_NUMBER}/head:refs/remotes/pull/${PR_NUMBER}/head"; then
+              echo "build=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+          if [[ ! "$BASE_SHA" =~ ^0+$ ]] && git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null &&
+             git cat-file -e "$HEAD_SHA^{commit}" 2>/dev/null; then
+            if ! git diff --name-only -z "${BASE_SHA}...${HEAD_SHA}" > "$RUNNER_TEMP/changed-files"; then
+              echo "build=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          else
+            echo "build=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          build=false
+          while IFS= read -r -d '' path; do
+            case "$path" in
+              .github/workflows/build.yml|.github/scripts/check-pins.py|RESEARCH.md|requirements-nextpnr.txt)
+                build=true
+                break
+                ;;
+              *.md|docs/*|.agents/*|.claude/*|.devin/*|vendor/yomiyasu|LICENSE|tests/check-*/*|.github/*)
+                ;;
+              *)
+                build=true
+                break
+                ;;
+            esac
+          done < "$RUNNER_TEMP/changed-files"
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+
+      - name: Summarize step timings
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_DISPLAY_NAME: Changes
+        run: |
+          step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
+            .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
+            select(.completed_at != null) |
+            [.number, .name, (if .started_at == null then "unknown" else ((.completed_at | fromdateiso8601) - (.started_at | fromdateiso8601)) end), .conclusion] |
+            @tsv
+          ' 2>/dev/null)" || step_lines=""
+          if [[ -n "$step_lines" ]]; then
+            {
+              printf '| # | Step | Seconds | Conclusion |\n|---:|---|---:|---|\n'
+              printf '%s\n' "$step_lines" | awk -F '\t' '{ printf "| %s | %s | %s | %s |\n", $1, $2, $3, $4 }'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  build:
+    name: Build
+    needs: [changes, synth, synth-compare, nextpnr, nextpnr-compare, ghdl, iverilog, surfer]
+    if: needs.changes.outputs.build == 'true' && needs.synth.result == 'success' && needs.synth-compare.result == 'success' && needs.nextpnr.result == 'success' && needs.nextpnr-compare.result == 'success' && needs.ghdl.result == 'success' && needs.iverilog.result == 'success' && needs.surfer.result == 'success'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+          persist-credentials: false
+
+      - name: 必要な submodule を取得
+        run: |
+          git submodule update --init --depth 1 -- \
+            vendor/emsdk vendor/iverilog vendor/libftdi vendor/libusb vendor/openFPGALoader \
+            vendor/yomiyasu vendor/zlib vendor/zstd vendor/yosys vendor/nextpnr vendor/surfer
+          git submodule update --init --depth 1 -- third_party/
+          git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv
+          git -C vendor/yosys submodule update --init --depth 1 -- \
+            abc libs/cxxopts libs/fmt libs/tomlplusplus libs/boost_regex libs/symfpu
+
+      - name: Autotools をインストール
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y autoconf automake libtool
+          autoconf --version | head -n 1
+          automake --version | head -n 1
+          libtoolize --version | head -n 1
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: npm 依存を取得
+        run: npm ci
+
+      - id: emsdk-key
+        name: emsdk cache key を作成
+        run: echo "revision=$(git rev-parse HEAD:vendor/emsdk)" >> "$GITHUB_OUTPUT"
+
+      - id: emsdk-cache-restore
+        name: emsdk をキャッシュから復元
+        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/emsdk-*
+          key: emsdk-ubuntu-26.04-${{ steps.emsdk-key.outputs.revision }}-${{ hashFiles('scripts/build-wasm.sh') }}
+
+      - name: emsdk のタグを取得
+        run: git -C vendor/emsdk fetch --depth=1 --tags origin
+
+      - id: wasm-build
+        name: WASM をビルド
+        run: scripts/build-wasm.sh
+
+      - name: Icarus Verilog の比較用資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-iverilog-${{ github.run_id }}
+          path: build
+
+      - name: WASI Yosys のブラウザー用資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-yosys-web-assets-${{ github.run_id }}
+          path: build/wasi/yosys
+
+      - name: WASI nextpnr のブラウザー用資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-nextpnr-web-assets-${{ github.run_id }}
+          path: build/wasi/nextpnr
+
+      - name: GHDL WASM 資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-ghdl-wasm-${{ github.run_id }}
+          path: build
+
+      - name: Icarus Verilog WASM 資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-iverilog-web-assets-${{ github.run_id }}
+          path: build/iverilog-wasm/output
+
+      - name: Surfer WASM 資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-surfer-wasm-${{ github.run_id }}
+          path: build/surfer/dist
+
+      - name: WASI decoder のブラウザー用資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-decoder-web-assets-${{ github.run_id }}
+          path: build/wasi/decoders
+
+      - name: emsdk cache を保存
+        if: steps.emsdk-cache-restore.outputs.cache-hit != 'true' && steps.wasm-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/emsdk-*
+          key: emsdk-ubuntu-26.04-${{ steps.emsdk-key.outputs.revision }}-${{ hashFiles('scripts/build-wasm.sh') }}
+
+      - name: Web アプリを組み立て
+        run: scripts/build-web.sh
+
+      - id: fixture-key
+        name: fixture cache key を作成
+        run: echo "python-version=$(python3 --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - id: fixture-cache-restore
+        name: fixture をキャッシュから復元
+        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/fixtures/*.fs
+          key: fixtures-${{ steps.fixture-key.outputs.python-version }}-${{ hashFiles('tests/fixtures/**') }}
+
+      - name: テスト用ビットストリームを生成
+        id: fixture-build
+        if: steps.fixture-cache-restore.outputs.cache-hit != 'true'
+        run: tests/fixtures/build-fs.sh
+
+      - name: fixture cache を保存
+        if: steps.fixture-cache-restore.outputs.cache-hit != 'true' && steps.fixture-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/fixtures/*.fs
+          key: fixtures-${{ steps.fixture-key.outputs.python-version }}-${{ hashFiles('tests/fixtures/**') }}
+
+      - name: fixture の SHA-256 を記録
+        run: sha256sum build/fixtures/*.fs | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Web 単体テスト
+        run: node --test tests/web/*.test.mjs
+
+      - name: 成果物の SHA-256 を記録
+        if: always()
+        run: |
+          hash_file() {
+            local path="$1"
+            local result digest
+            if [[ -f "$path" ]]; then
+              result="$(sha256sum -- "$path" 2>/dev/null)" || result=""
+              digest="${result%% *}"
+              if [[ "$digest" =~ ^[[:xdigit:]]{64}$ ]]; then
+                printf 'S8-SHA256 build %s %s\n' "$digest" "$path"
+                return 0
+              fi
+            fi
+            printf 'S8-SHA256 build MISSING %s\n' "$path"
+          }
+          {
+            hash_file build/jspi-pthread/openFPGALoader.wasm
+            hash_file build/jspi-pthread/openFPGALoader.mjs
+          } | tee -a "$GITHUB_STEP_SUMMARY" || true
+
+      - name: CI ビルド成果物を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-build-${{ github.run_id }}
+          path: |
+            build/jspi-pthread/
+            build/fixtures/*.fs
+          retention-days: 1
+
+      - name: Web 成果物を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: gogo-fpga-web-${{ github.sha }}
+          path: public_html/
+          retention-days: 30
+
+      - name: Summarize step timings
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_DISPLAY_NAME: Build
+        run: |
+          step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
+            .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
+            select(.completed_at != null) |
+            [.number, .name, (if .started_at == null then "unknown" else ((.completed_at | fromdateiso8601) - (.started_at | fromdateiso8601)) end), .conclusion] |
+            @tsv
+          ' 2>/dev/null)" || step_lines=""
+          if [[ -n "$step_lines" ]]; then
+            {
+              printf '| # | Step | Seconds | Conclusion |\n|---:|---|---:|---|\n'
+              printf '%s\n' "$step_lines" | awk -F '\t' '{ printf "| %s | %s | %s | %s |\n", $1, $2, $3, $4 }'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  synth:
+    name: Yosys WASI synthesis
+    needs: changes
+    if: needs.changes.outputs.build == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 90
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+          persist-credentials: false
+
+      - name: Yosys と必要な nested submodule を取得
+        run: |
+          git submodule update --init --depth 1 -- vendor/yosys
+          git -C vendor/yosys submodule update --init --depth 1 -- \
+            abc libs/cxxopts libs/fmt libs/tomlplusplus libs/boost_regex libs/symfpu
+
+      - name: zstd と xz-embedded のソースを取得
+        run: git submodule update --init --depth 1 -- vendor/zstd vendor/xz-embedded
+
+      - name: ビルド依存をインストール
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bison flex
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - id: synth-key
+        name: Yosys と WASI SDK の cache key を作成
+        run: |
+          pin="$(python3 .github/scripts/check-pins.py wasi-sdk-pin)"
+          effective_flags="$(
+            {
+              printf 'WASI_OPT_FLAGS=%s\n' "${WASI_OPT_FLAGS--Os}"
+              printf 'WASI_EXTRA_CFLAGS=%s\n' "${WASI_EXTRA_CFLAGS--flto}"
+              printf 'WASI_EXTRA_CXXFLAGS=%s\n' "${WASI_EXTRA_CXXFLAGS--flto}"
+              printf 'WASI_EXTRA_LDFLAGS=%s\n' "${WASI_EXTRA_LDFLAGS--flto}"
+            } | sha256sum | awk '{print $1}'
+          )"
+          printf 'revision=%s\n' "$(git rev-parse HEAD:vendor/yosys)" >> "$GITHUB_OUTPUT"
+          printf 'pin=%s\n' "$(printf '%s\n%s\n' "$pin" "$effective_flags" | sha256sum | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+
+      - id: synth-cache-restore
+        name: WASI SDK を cache から復元
+        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/cache/
+            build/wasi-sdk-*
+          key: yosys-wasi-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
+
+      - id: synth-wasi-output-cache-restore
+        name: Yosys WASI build output cache を復元
+        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/wasi/yosys/yosys.wasm
+            build/wasi/yosys/share/
+            build/wasi/yosys/build-info.json
+          key: yosys-wasi-out-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
+
+      - id: synth-wasi-output-cache-check
+        name: Yosys WASI cache artifact の整合性を確認
+        if: steps.synth-wasi-output-cache-restore.outputs.cache-hit == 'true'
+        run: |
+          if python3 scripts/build-synth-info.py \
+            --check --mode wasi \
+            --binary build/wasi/yosys/yosys.wasm \
+            --output build/wasi/yosys/build-info.json \
+            && test -d build/wasi/yosys/share; then
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "valid=false" >> "$GITHUB_OUTPUT"
+            rm -f build/wasi/yosys/yosys.wasm build/wasi/yosys/build-info.json
+            rm -rf build/wasi/yosys/share
+          fi
+
+      - name: Runner resources
+        run: |
+          printf 'nproc='
+          nproc
+          free -g
+
+      - id: synth-wasi-build
+        name: Yosys WASI 版をビルド
+        if: steps.synth-wasi-output-cache-restore.outputs.cache-hit != 'true' || steps.synth-wasi-output-cache-check.outputs.valid != 'true'
+        run: |
+          timing_dir="$GITHUB_WORKSPACE/build/timings"
+          mkdir -p "$timing_dir"
+          printf 'nproc='
+          nproc
+          free -g
+          LC_ALL=C JOBS="$(nproc)" /usr/bin/time -v -o "$timing_dir/yosys-wasi.time.log" scripts/build-synth-wasm.sh
+
+      - id: decoder-wasi-build
+        name: 圧縮 decoder WASM をビルド
+        run: scripts/build-decoders.sh
+
+      - name: WASI SDK cache を保存
+        if: steps.synth-cache-restore.outputs.cache-hit != 'true' && steps.synth-wasi-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/cache/
+            build/wasi-sdk-*
+          key: yosys-wasi-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
+
+      - name: Yosys WASI output cache を保存
+        if: steps.synth-wasi-output-cache-restore.outputs.cache-hit != 'true' && steps.synth-wasi-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/wasi/yosys/yosys.wasm
+            build/wasi/yosys/share/
+            build/wasi/yosys/build-info.json
+          key: yosys-wasi-out-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
+
+      - name: Yosys build resource summary
+        if: always()
+        env:
+          BUILD_OUTCOME: ${{ steps.synth-wasi-build.outcome }}
+          CACHE_HIT: ${{ steps.synth-wasi-output-cache-restore.outputs.cache-hit }}
+          CACHE_VALID: ${{ steps.synth-wasi-output-cache-check.outputs.valid }}
+        run: |
+          log="$GITHUB_WORKSPACE/build/timings/yosys-wasi.time.log"
+          {
+            echo '### Yosys WASI build resources'
+            if [[ "$BUILD_OUTCOME" == skipped && "$CACHE_HIT" == true && "$CACHE_VALID" == true ]]; then
+              echo 'Valid output cache hit; build skipped.'
+            elif [[ -f "$log" ]]; then
+              wall="$(sed -n 's/^[[:space:]]*Elapsed (wall clock) time (h:mm:ss or m:ss): //p' "$log" | tail -n 1)"
+              rss="$(sed -n 's/^[[:space:]]*Maximum resident set size (kbytes): //p' "$log" | tail -n 1)"
+              if [[ -z "$wall" || -z "$rss" ]]; then
+                echo "Incomplete time log: $log" >&2
+                exit 1
+              fi
+              printf '| Build | Wall time | Max RSS (KiB) |\n|---|---:|---:|\n| Yosys WASI | %s | %s |\n' "$wall" "$rss"
+            else
+              echo "Missing time log: $log" >&2
+              exit 1
+            fi
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: 成果物の SHA-256 を記録
+        if: always()
+        env:
+          CACHE_HIT: ${{ steps.synth-wasi-output-cache-restore.outputs.cache-hit }}
+          CACHE_VALID: ${{ steps.synth-wasi-output-cache-check.outputs.valid }}
+        run: |
+          hash_file() {
+            local job="$1"
+            local path="$2"
+            local result digest
+            if [[ -f "$path" ]]; then
+              result="$(sha256sum -- "$path" 2>/dev/null)" || result=""
+              digest="${result%% *}"
+              if [[ "$digest" =~ ^[[:xdigit:]]{64}$ ]]; then
+                printf 'S8-SHA256 %s %s %s\n' "$job" "$digest" "$path"
+                return 0
+              fi
+            fi
+            printf 'S8-SHA256 %s MISSING %s\n' "$job" "$path"
+          }
+          hash_tree() {
+            local job="$1"
+            local path="$2"
+            local result line digest file
+            if [[ -d "$path" ]]; then
+              result="$(find "$path" -type f -print 2>/dev/null | LC_ALL=C sort | xargs -r sha256sum 2>/dev/null)" || result=""
+              if [[ -n "$result" ]]; then
+                while IFS= read -r line; do
+                  digest="${line%% *}"
+                  file="${line#*  }"
+                  printf 'S8-SHA256 %s %s %s\n' "$job" "$digest" "$file"
+                done <<< "$result"
+                return 0
+              fi
+            fi
+            printf 'S8-SHA256 %s MISSING %s\n' "$job" "$path"
+          }
+          shopt -s nullglob
+          decoder_wasms=(build/wasi/decoders/*.wasm)
+          {
+            printf 'S8-CACHE synth hit=%s valid=%s\n' "${CACHE_HIT:-false}" "${CACHE_VALID:-not-checked}"
+            hash_file synth build/wasi/yosys/yosys.wasm
+            hash_tree synth build/wasi/yosys/share
+            hash_file synth build/wasi/yosys/build-info.json
+            if ((${#decoder_wasms[@]})); then
+              for path in "${decoder_wasms[@]}"; do
+                hash_file synth "$path"
+              done
+            else
+              printf 'S8-SHA256 synth MISSING build/wasi/decoders/*.wasm\n'
+            fi
+          } | tee -a "$GITHUB_STEP_SUMMARY" || true
+
+      - name: 合成成果物を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-yosys-synth-${{ github.run_id }}
+          path: |
+            build/wasi/yosys/yosys.wasm
+            build/wasi/yosys/share/
+            build/wasi/yosys/build-info.json
+          retention-days: 1
+
+      - name: Yosys のブラウザー用資材を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-yosys-web-assets-${{ github.run_id }}
+          path: |
+            build/wasi/yosys/yosys.wasm
+            build/wasi/yosys/share/
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: WASI decoder のブラウザー用資材を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-decoder-web-assets-${{ github.run_id }}
+          path: build/wasi/decoders/*.wasm
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Summarize step timings
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_DISPLAY_NAME: Yosys WASI synthesis
+        run: |
+          step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
+            .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
+            select(.completed_at != null) |
+            [.number, .name, (if .started_at == null then "unknown" else ((.completed_at | fromdateiso8601) - (.started_at | fromdateiso8601)) end), .conclusion] |
+            @tsv
+          ' 2>/dev/null)" || step_lines=""
+          if [[ -n "$step_lines" ]]; then
+            {
+              printf '| # | Step | Seconds | Conclusion |\n|---:|---|---:|---|\n'
+              printf '%s\n' "$step_lines" | awk -F '\t' '{ printf "| %s | %s | %s | %s |\n", $1, $2, $3, $4 }'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  synth-native:
+    name: Yosys native synthesis
+    needs: changes
+    if: needs.changes.outputs.build == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 90
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+          persist-credentials: false
+
+      - name: Yosys と必要な nested submodule を取得
+        run: |
+          git submodule update --init --depth 1 -- vendor/yosys
+          git -C vendor/yosys submodule update --init --depth 1 -- \
+            abc libs/cxxopts libs/fmt libs/tomlplusplus libs/boost_regex libs/symfpu
+
+      - name: ビルド依存をインストール
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bison flex
+
+      - id: synth-key
+        name: Yosys と WASI SDK の cache key を作成
+        run: |
+          pin="$(python3 .github/scripts/check-pins.py wasi-sdk-pin)"
+          effective_flags="$(
+            {
+              printf 'WASI_OPT_FLAGS=%s\n' "${WASI_OPT_FLAGS--Os}"
+              printf 'WASI_EXTRA_CFLAGS=%s\n' "${WASI_EXTRA_CFLAGS--flto}"
+              printf 'WASI_EXTRA_CXXFLAGS=%s\n' "${WASI_EXTRA_CXXFLAGS--flto}"
+              printf 'WASI_EXTRA_LDFLAGS=%s\n' "${WASI_EXTRA_LDFLAGS--flto}"
+            } | sha256sum | awk '{print $1}'
+          )"
+          printf 'revision=%s\n' "$(git rev-parse HEAD:vendor/yosys)" >> "$GITHUB_OUTPUT"
+          printf 'pin=%s\n' "$(printf '%s\n%s\n' "$pin" "$effective_flags" | sha256sum | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+
+      - id: synth-native-output-cache-restore
+        name: Yosys native build output cache を復元
+        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/native/yosys
+            build/native/yosys-abc
+            build/native/share/
+            build/native/build-info.json
+          key: yosys-native-out-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
+
+      - id: synth-native-output-cache-check
+        name: Yosys native cache artifact の整合性を確認
+        if: steps.synth-native-output-cache-restore.outputs.cache-hit == 'true'
+        run: |
+          if python3 scripts/build-synth-info.py \
+            --check --mode native \
+            --binary build/native/yosys \
+            --output build/native/build-info.json \
+            && test -x build/native/yosys-abc \
+            && test -d build/native/share/gowin; then
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "valid=false" >> "$GITHUB_OUTPUT"
+            rm -f build/native/yosys build/native/yosys-abc build/native/build-info.json
+            rm -rf build/native/share
+          fi
+
+      - name: Runner resources
+        run: |
+          printf 'nproc='
+          nproc
+          free -g
+
+      - id: synth-native-build
+        name: Yosys native 版をビルド
+        if: steps.synth-native-output-cache-restore.outputs.cache-hit != 'true' || steps.synth-native-output-cache-check.outputs.valid != 'true'
+        run: |
+          timing_dir="$GITHUB_WORKSPACE/build/timings"
+          mkdir -p "$timing_dir"
+          printf 'nproc='
+          nproc
+          free -g
+          LC_ALL=C JOBS="$(nproc)" /usr/bin/time -v -o "$timing_dir/yosys-native.time.log" scripts/build-synth-wasm.sh --native
+
+      - name: Yosys native output cache を保存
+        if: steps.synth-native-output-cache-restore.outputs.cache-hit != 'true' && steps.synth-native-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/native/yosys
+            build/native/yosys-abc
+            build/native/share/
+            build/native/build-info.json
+          key: yosys-native-out-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
+
+      - name: Yosys native build resource summary
+        if: always()
+        env:
+          BUILD_OUTCOME: ${{ steps.synth-native-build.outcome }}
+          CACHE_HIT: ${{ steps.synth-native-output-cache-restore.outputs.cache-hit }}
+          CACHE_VALID: ${{ steps.synth-native-output-cache-check.outputs.valid }}
+        run: |
+          log="$GITHUB_WORKSPACE/build/timings/yosys-native.time.log"
+          {
+            echo '### Yosys native build resources'
+            if [[ "$BUILD_OUTCOME" == skipped && "$CACHE_HIT" == true && "$CACHE_VALID" == true ]]; then
+              echo 'Valid output cache hit; build skipped.'
+            elif [[ -f "$log" ]]; then
+              wall="$(sed -n 's/^[[:space:]]*Elapsed (wall clock) time (h:mm:ss or m:ss): //p' "$log" | tail -n 1)"
+              rss="$(sed -n 's/^[[:space:]]*Maximum resident set size (kbytes): //p' "$log" | tail -n 1)"
+              if [[ -z "$wall" || -z "$rss" ]]; then
+                echo "Incomplete time log: $log" >&2
+                exit 1
+              fi
+              printf '| Build | Wall time | Max RSS (KiB) |\n|---|---:|---:|\n| Yosys native | %s | %s |\n' "$wall" "$rss"
+            else
+              echo "Missing time log: $log" >&2
+              exit 1
+            fi
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Native Yosys share を確認
+        run: |
+          test -d build/native/share/gowin
+          test -x build/native/yosys-abc
+
+      - name: 成果物の SHA-256 を記録
+        if: always()
+        env:
+          CACHE_HIT: ${{ steps.synth-native-output-cache-restore.outputs.cache-hit }}
+          CACHE_VALID: ${{ steps.synth-native-output-cache-check.outputs.valid }}
+        run: |
+          hash_file() {
+            local job="$1"
+            local path="$2"
+            local result digest
+            if [[ -f "$path" ]]; then
+              result="$(sha256sum -- "$path" 2>/dev/null)" || result=""
+              digest="${result%% *}"
+              if [[ "$digest" =~ ^[[:xdigit:]]{64}$ ]]; then
+                printf 'S8-SHA256 %s %s %s\n' "$job" "$digest" "$path"
+                return 0
+              fi
+            fi
+            printf 'S8-SHA256 %s MISSING %s\n' "$job" "$path"
+          }
+          hash_tree() {
+            local job="$1"
+            local path="$2"
+            local result line digest file
+            if [[ -d "$path" ]]; then
+              result="$(find "$path" -type f -print 2>/dev/null | LC_ALL=C sort | xargs -r sha256sum 2>/dev/null)" || result=""
+              if [[ -n "$result" ]]; then
+                while IFS= read -r line; do
+                  digest="${line%% *}"
+                  file="${line#*  }"
+                  printf 'S8-SHA256 %s %s %s\n' "$job" "$digest" "$file"
+                done <<< "$result"
+                return 0
+              fi
+            fi
+            printf 'S8-SHA256 %s MISSING %s\n' "$job" "$path"
+          }
+          {
+            printf 'S8-CACHE synth-native hit=%s valid=%s\n' "${CACHE_HIT:-false}" "${CACHE_VALID:-not-checked}"
+            hash_file synth-native build/native/yosys
+            hash_file synth-native build/native/yosys-abc
+            hash_tree synth-native build/native/share
+            hash_file synth-native build/native/build-info.json
+          } | tee -a "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Native Yosys 成果物を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-yosys-native-${{ github.run_id }}
+          path: |
+            build/native/yosys
+            build/native/yosys-abc
+            build/native/share/
+            build/native/build-info.json
+          if-no-files-found: error
+          retention-days: 1
+
+  synth-compare:
+    name: Yosys WASM/native comparison
+    needs: [changes, synth, synth-native]
+    if: needs.changes.outputs.build == 'true' && needs.synth.result == 'success' && needs.synth-native.result == 'success'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 90
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: WASI Yosys artifact を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-yosys-synth-${{ github.run_id }}
+          path: build/wasi/yosys
+
+      - name: Native Yosys artifact を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-yosys-native-${{ github.run_id }}
+          path: build/native
+
+      - name: Native Yosys の実行権限を設定
+        run: chmod +x build/native/yosys build/native/yosys-abc
+
+      - name: WASM/native 合成を比較
+        run: node --test tests/synth/yosys.test.mjs
+
+      - id: formal-sat
+        name: Yosys SATの準備・前提・証明判定を比較
+        run: node --test --test-concurrency=1 tests/synth/formal-sat.test.mjs
+
+      - name: SAT比較の入力・ログ・反例を保存
+        if: always() && steps.formal-sat.outcome != 'skipped'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-formal-sat-${{ github.run_id }}
+          path: build/S15/p1-sat-*/
+          if-no-files-found: error
+          retention-days: 7
+
+  nextpnr:
+    name: nextpnr WASI place and route
+    needs: changes
+    if: needs.changes.outputs.build == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 90
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+          persist-credentials: false
+
+      - name: nextpnr submodule を取得
+        run: git submodule update --init --depth 1 -- vendor/nextpnr
+
+      - name: Python venv をインストール
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-venv
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - id: nextpnr-pin
+        name: nextpnr cache key pins を作成
+        run: |
+          echo "gitlink=$(git rev-parse HEAD:vendor/nextpnr)" >> "$GITHUB_OUTPUT"
+          pins="$(python3 .github/scripts/check-pins.py pnr-cache-pin)"
+          printf '%s' "$pins" | sha256sum | awk '{ print "dependencies=" $1 }' >> "$GITHUB_OUTPUT"
+
+      - name: nextpnr の整列パッチと負の対照を検証
+        run: node --test tests/synth/nextpnr-control-set.test.mjs
+
+      - id: nextpnr-cache-restore
+        name: nextpnr build cache を復元
+        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/cache/
+            build/deps/
+            build/wasi-sdk-*
+            build/wasi/nextpnr/
+            build/native/nextpnr/
+          key: nextpnr-ubuntu-26.04-${{ steps.nextpnr-pin.outputs.gitlink }}-${{ steps.nextpnr-pin.outputs.dependencies }}-${{ hashFiles('scripts/build-pnr-wasm.sh', 'scripts/build-pnr-info.py', 'scripts/prepare-pnr-source.py', 'scripts/nextpnr-patches.cmake', 'patches/nextpnr/*.patch') }}
+
+      - id: nextpnr-wasi-build
+        name: WASI nextpnr と chipdb をビルド
+        env:
+          CACHE_HIT: ${{ steps.nextpnr-cache-restore.outputs.cache-hit }}
+        run: |
+          timing_dir="$GITHUB_WORKSPACE/build/timings"
+          mkdir -p "$timing_dir"
+          printf 'nextpnr build cache hit=%s\n' "${CACHE_HIT:-miss}"
+          printf 'nproc='
+          nproc
+          free -g
+          LC_ALL=C JOBS="$(nproc)" /usr/bin/time -v -o "$timing_dir/nextpnr-wasi.time.log" scripts/build-pnr-wasm.sh
+
+      - name: nextpnr build cache を保存
+        if: steps.nextpnr-cache-restore.outputs.cache-hit != 'true' && steps.nextpnr-wasi-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/cache/
+            build/deps/
+            build/wasi-sdk-*
+            build/wasi/nextpnr/
+            build/native/nextpnr/
+          key: nextpnr-ubuntu-26.04-${{ steps.nextpnr-pin.outputs.gitlink }}-${{ steps.nextpnr-pin.outputs.dependencies }}-${{ hashFiles('scripts/build-pnr-wasm.sh', 'scripts/build-pnr-info.py', 'scripts/prepare-pnr-source.py', 'scripts/nextpnr-patches.cmake', 'patches/nextpnr/*.patch') }}
+
+      - name: native nextpnr をビルド
+        env:
+          CACHE_HIT: ${{ steps.nextpnr-cache-restore.outputs.cache-hit }}
+        run: |
+          timing_dir="$GITHUB_WORKSPACE/build/timings"
+          mkdir -p "$timing_dir"
+          printf 'nextpnr build cache hit=%s\n' "${CACHE_HIT:-miss}"
+          printf 'nproc='
+          nproc
+          free -g
+          LC_ALL=C JOBS="$(nproc)" /usr/bin/time -v -o "$timing_dir/nextpnr-native.time.log" scripts/build-pnr-wasm.sh --native
+
+      - name: nextpnr build resource summary
+        if: always()
+        env:
+          CACHE_HIT: ${{ steps.nextpnr-cache-restore.outputs.cache-hit }}
+        run: |
+          report_time() {
+            local label="$1"
+            local log="$2"
+            local wall rss
+            if [[ ! -f "$log" ]]; then
+              echo "Missing time log: $log" >&2
+              return 1
+            fi
+            wall="$(sed -n 's/^[[:space:]]*Elapsed (wall clock) time (h:mm:ss or m:ss): //p' "$log" | tail -n 1)"
+            rss="$(sed -n 's/^[[:space:]]*Maximum resident set size (kbytes): //p' "$log" | tail -n 1)"
+            if [[ -z "$wall" || -z "$rss" ]]; then
+              echo "Incomplete time log: $log" >&2
+              return 1
+            fi
+            printf '| %s | %s | %s |\n' "$label" "$wall" "$rss"
+          }
+          {
+            echo '### nextpnr build resources'
+            printf 'Build cache restore: %s\n\n' "${CACHE_HIT:-miss}"
+            echo '| Build | Wall time | Max RSS (KiB) |'
+            echo '|---|---:|---:|'
+            report_time 'nextpnr WASI' "$GITHUB_WORKSPACE/build/timings/nextpnr-wasi.time.log"
+            report_time 'nextpnr native' "$GITHUB_WORKSPACE/build/timings/nextpnr-native.time.log"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: 成果物の SHA-256 を記録
+        if: always()
+        env:
+          CACHE_HIT: ${{ steps.nextpnr-cache-restore.outputs.cache-hit }}
+        run: |
+          hash_file() {
+            local path="$1"
+            local result digest
+            if [[ -f "$path" ]]; then
+              result="$(sha256sum -- "$path" 2>/dev/null)" || result=""
+              digest="${result%% *}"
+              if [[ "$digest" =~ ^[[:xdigit:]]{64}$ ]]; then
+                printf 'S8-SHA256 nextpnr %s %s\n' "$digest" "$path"
+                return 0
+              fi
+            fi
+            printf 'S8-SHA256 nextpnr MISSING %s\n' "$path"
+          }
+          {
+            printf 'S8-CACHE nextpnr hit=%s valid=not-checked\n' "${CACHE_HIT:-false}"
+            hash_file build/wasi/nextpnr/nextpnr-himbaechel-gowin.wasm
+            hash_file build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1N-9C.bin
+            hash_file build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1NS-4.bin
+            hash_file build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1NZ-1.bin
+            hash_file build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW2A-18C.bin
+          } | tee -a "$GITHUB_STEP_SUMMARY" || true
+
+      - name: nextpnr 成果物を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-nextpnr-${{ github.run_id }}
+          path: |
+            build/wasi/nextpnr/
+            build/native/nextpnr/
+          retention-days: 1
+
+      - name: nextpnr のブラウザー用資材を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-nextpnr-web-assets-${{ github.run_id }}
+          path: |
+            build/wasi/nextpnr/nextpnr-himbaechel-gowin.wasm
+            build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1N-9C.bin
+            build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1NS-4.bin
+            build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1NZ-1.bin
+            build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW2A-18C.bin
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Summarize step timings
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_DISPLAY_NAME: nextpnr WASI place and route
+        run: |
+          step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
+            .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
+            select(.completed_at != null) |
+            [.number, .name, (if .started_at == null then "unknown" else ((.completed_at | fromdateiso8601) - (.started_at | fromdateiso8601)) end), .conclusion] |
+            @tsv
+          ' 2>/dev/null)" || step_lines=""
+          if [[ -n "$step_lines" ]]; then
+            {
+              printf '| # | Step | Seconds | Conclusion |\n|---:|---|---:|---|\n'
+              printf '%s\n' "$step_lines" | awk -F '\t' '{ printf "| %s | %s | %s | %s |\n", $1, $2, $3, $4 }'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  nextpnr-compare:
+    name: nextpnr WASI/native comparison
+    needs: [changes, synth, nextpnr]
+    if: needs.changes.outputs.build == 'true' && needs.synth.result == 'success' && needs.nextpnr.result == 'success'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 90
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Yosys WASM artifact を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-yosys-synth-${{ github.run_id }}
+          path: build/wasi/yosys
+
+      - name: nextpnr artifacts を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-nextpnr-${{ github.run_id }}
+          path: build
+
+      - name: Native nextpnr の実行権限を設定
+        run: chmod +x build/native/nextpnr/nextpnr-himbaechel-gowin
+
+      - name: WASI Preview 1 shim を検証
+        run: node --test tests/synth/wasi-p1.test.mjs
+
+      - name: WASI/native P&R を比較
+        run: node --test tests/synth/nextpnr.test.mjs
+
+  ghdl:
+    name: GHDL WASM synthesis
+    needs: changes
+    if: needs.changes.outputs.build == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 90
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+          persist-credentials: false
+
+      - name: GHDL submodule を取得
+        run: |
+          git submodule update --init --depth 1 -- vendor/ghdl third_party/
+          git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv
+
+      - name: GNAT を確認
+        run: |
+          if ! command -v gnatmake >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y gnat
+          fi
+          gnatmake --version | head -n 1
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: npm 依存を取得
+        run: npm ci
+
+      - id: ghdl-key
+        name: GHDL の cache key を作成
+        run: |
+          echo "ghdl=$(git rev-parse HEAD:vendor/ghdl)" >> "$GITHUB_OUTPUT"
+          wasi_pin="$(python3 .github/scripts/check-pins.py wasi-sdk-pin)"
+          echo "wasi=$(printf '%s' "$wasi_pin" | sha256sum | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+
+      - id: ghdl-cache-restore
+        name: GHDL build inputs を cache から復元
+        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/cache/ghdl-wasm/
+            build/cache/ghdl-host-packages/
+            build/wasi-sdk-*
+          key: ghdl-wasm-ubuntu-26.04-${{ steps.ghdl-key.outputs.ghdl }}-${{ steps.ghdl-key.outputs.wasi }}-${{ hashFiles('scripts/build-ghdl-wasm.sh', 'scripts/ghdl-wasm/**', 'patches/ghdl/**') }}
+
+      - name: Pinned WASI SDK 34 を取得
+        run: |
+          pin="$(python3 .github/scripts/check-pins.py wasi-sdk-pin)"
+          IFS=$'\t' read -r version sha asset url <<< "$pin"
+          if [[ -z "$version" || -z "$sha" || -z "$asset" || -z "$url" ]]; then
+            echo "WASI SDK pin is incomplete." >&2
+            exit 1
+          fi
+          sdk_dir="build/${asset%.tar.gz}"
+          archive="build/cache/ghdl-wasm/$asset"
+          mkdir -p "$(dirname "$archive")"
+          if [[ ! -f "$archive" ]]; then
+            curl --fail --location --retry 3 --output "$archive.tmp" "$url"
+            mv "$archive.tmp" "$archive"
+          fi
+          printf '%s  %s\n' "$sha" "$archive" | sha256sum --check
+          if [[ ! -x "$sdk_dir/bin/clang" || ! -x "$sdk_dir/bin/wasm-ld" ||
+            ! -x "$sdk_dir/bin/llvm-ar" || ! -x "$sdk_dir/bin/llvm-strip" ]]; then
+            tar -xzf "$archive" -C build
+          fi
+          for tool in clang wasm-ld llvm-ar llvm-strip; do
+            if [[ ! -x "$sdk_dir/bin/$tool" ]]; then
+              printf 'Required WASI SDK tool is missing: %s/bin/%s\n' "$sdk_dir" "$tool" >&2
+              exit 1
+            fi
+          done
+
+      - id: ghdl-build
+        name: GHDL WASM と native 版をビルド
+        run: |
+          timing_dir="$GITHUB_WORKSPACE/build/timings"
+          mkdir -p "$timing_dir"
+          printf 'nproc='
+          nproc
+          free -g
+          LC_ALL=C JOBS="$(nproc)" /usr/bin/time -v -o "$timing_dir/ghdl.time.log" scripts/build-ghdl-wasm.sh
+
+      - name: GHDL build resource summary
+        if: always()
+        env:
+          CACHE_HIT: ${{ steps.ghdl-cache-restore.outputs.cache-hit }}
+        run: |
+          log="$GITHUB_WORKSPACE/build/timings/ghdl.time.log"
+          wall="$(sed -n 's/^[[:space:]]*Elapsed (wall clock) time (h:mm:ss or m:ss): //p' "$log" 2>/dev/null | tail -n 1)"
+          rss="$(sed -n 's/^[[:space:]]*Maximum resident set size (kbytes): //p' "$log" 2>/dev/null | tail -n 1)"
+          if [[ -z "$wall" || -z "$rss" ]]; then
+            echo "Missing or incomplete time log: $log" >&2
+            exit 1
+          fi
+          {
+            echo '### GHDL build resources'
+            printf 'Build input cache restore: %s\n\n' "${CACHE_HIT:-miss}"
+            printf '| Build | Wall time | Max RSS (KiB) |\n|---|---:|---:|\n| GHDL WASM and native | %s | %s |\n' "$wall" "$rss"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - id: ghdl-tests
+        name: WASM/native VHDL 合成を比較
+        run: node --test tests/synth/ghdl-wasm.test.mjs
+
+      - name: GHDL build inputs cache を保存
+        if: steps.ghdl-cache-restore.outputs.cache-hit != 'true' && steps.ghdl-build.outcome == 'success' && steps.ghdl-tests.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/cache/ghdl-wasm/
+            build/cache/ghdl-host-packages/
+            build/wasi-sdk-*
+          key: ghdl-wasm-ubuntu-26.04-${{ steps.ghdl-key.outputs.ghdl }}-${{ steps.ghdl-key.outputs.wasi }}-${{ hashFiles('scripts/build-ghdl-wasm.sh', 'scripts/ghdl-wasm/**', 'patches/ghdl/**') }}
+
+      - name: 成果物の SHA-256 を記録
+        if: always()
+        run: |
+          hash_tree() {
+            local job="$1"
+            local path="$2"
+            local result line digest file
+            if [[ -d "$path" ]]; then
+              result="$(find "$path" -type f -print 2>/dev/null | LC_ALL=C sort | xargs -r sha256sum 2>/dev/null)" || result=""
+              if [[ -n "$result" ]]; then
+                while IFS= read -r line; do
+                  digest="${line%% *}"
+                  file="${line#*  }"
+                  printf 'S8-SHA256 %s %s %s\n' "$job" "$digest" "$file"
+                done <<< "$result"
+                return 0
+              fi
+            fi
+            printf 'S8-SHA256 %s MISSING %s\n' "$job" "$path"
+          }
+          {
+            hash_tree ghdl build/ghdl-wasm
+            hash_tree ghdl build/ghdl-native
+          } | tee -a "$GITHUB_STEP_SUMMARY" || true
+
+      - name: GHDL WASM 成果物を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-ghdl-wasm-${{ github.run_id }}
+          path: |
+            build/ghdl-wasm/
+            build/ghdl-native/
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Summarize step timings
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_DISPLAY_NAME: GHDL WASM synthesis
+        run: |
+          step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
+            .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
+            select(.completed_at != null) |
+            [.number, .name, (if .started_at == null then "unknown" else ((.completed_at | fromdateiso8601) - (.started_at | fromdateiso8601)) end), .conclusion] |
+            @tsv
+          ' 2>/dev/null)" || step_lines=""
+          if [[ -n "$step_lines" ]]; then
+            {
+              printf '| # | Step | Seconds | Conclusion |\n|---:|---|---:|---|\n'
+              printf '%s\n' "$step_lines" | awk -F '\t' '{ printf "| %s | %s | %s | %s |\n", $1, $2, $3, $4 }'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  iverilog:
+    name: Icarus Verilog WASI build and comparison
+    needs: changes
+    if: needs.changes.outputs.build == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+          persist-credentials: false
+
+      - name: Icarus Verilog submodule を取得
+        run: |
+          git submodule update --init --depth 1 -- vendor/iverilog third_party/
+          git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: npm 依存を取得
+        run: npm ci
+
+      - name: ビルド依存を導入
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bison flex gperf
+
+      - id: iverilog-key
+        name: Icarus Verilog の cache key を作成
+        run: |
+          echo "iverilog=$(git rev-parse HEAD:vendor/iverilog)" >> "$GITHUB_OUTPUT"
+          wasi_pin="$(python3 .github/scripts/check-pins.py wasi-sdk-pin)"
+          echo "wasi=$(printf '%s' "$wasi_pin" | sha256sum | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+
+      - id: iverilog-cache-restore
+        name: Icarus Verilog build inputs を cache から復元
+        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/cache/wasi-sdk-*
+            build/wasi-sdk-*
+          key: iverilog-wasi-ubuntu-26.04-${{ steps.iverilog-key.outputs.iverilog }}-${{ steps.iverilog-key.outputs.wasi }}-${{ hashFiles('scripts/build-iverilog-wasm.sh', 'scripts/build-iverilog-info.py', 'patches/iverilog/**') }}
+
+      - id: iverilog-build
+        name: Icarus Verilog WASM と native 版をビルド
+        run: |
+          scripts/build-iverilog-wasm.sh
+          scripts/build-iverilog-wasm.sh --native
+
+      - id: iverilog-tests
+        name: Icarus Verilog WASM/native を比較
+        run: node --test tests/synth/iverilog-wasm.test.mjs
+
+      - name: Icarus Verilog のブラウザー用資材を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-iverilog-web-assets-${{ github.run_id }}
+          path: build/iverilog-wasm/output/*.wasm
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Icarus Verilog の比較用資材を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-iverilog-${{ github.run_id }}
+          path: |
+            build/iverilog-wasm/output/
+            build/iverilog-native/output/
+            build/iverilog-wasm/build-info.json
+            build/iverilog-native/build-info.json
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Icarus Verilog build inputs cache を保存
+        if: steps.iverilog-cache-restore.outputs.cache-hit != 'true' && steps.iverilog-build.outcome == 'success' && steps.iverilog-tests.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            build/cache/wasi-sdk-*
+            build/wasi-sdk-*
+          key: iverilog-wasi-ubuntu-26.04-${{ steps.iverilog-key.outputs.iverilog }}-${{ steps.iverilog-key.outputs.wasi }}-${{ hashFiles('scripts/build-iverilog-wasm.sh', 'scripts/build-iverilog-info.py', 'patches/iverilog/**') }}
+
+  surfer:
+    name: Surfer WASM build
+    needs: changes
+    if: needs.changes.outputs.build == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+          persist-credentials: false
+
+      - name: Surfer submodule を取得
+        run: git submodule update --init --depth 1 -- vendor/surfer
+
+      - id: surfer-key
+        name: Surfer Cargo cache key を作成
+        run: |
+          pin="$(python3 .github/scripts/check-pins.py surfer-tool-pins)"
+          rust="${pin%%$'\t'*}"
+          echo "rust=$rust" >> "$GITHUB_OUTPUT"
+
+      - id: surfer-cache-restore
+        name: Surfer Cargo cache を復元
+        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/
+            ~/.cargo/git/db/
+            build/surfer/target/
+          key: surfer-cargo-ubuntu-26.04-rust-${{ steps.surfer-key.outputs.rust }}-${{ hashFiles('vendor/surfer/Cargo.lock') }}-${{ hashFiles('patches/surfer/**') }}
+
+      - id: surfer-build
+        name: Surfer WASM をビルドし license を収集
+        run: scripts/build-surfer.sh
+
+      - name: Surfer artifact の SHA-256 を記録
+        run: |
+          find build/surfer/dist -type f -print0 | LC_ALL=C sort -z |
+            while IFS= read -r -d '' file; do
+              relative="${file#build/surfer/dist/}"
+              size="$(wc -c < "$file" | tr -d '[:space:]')"
+              digest="$(sha256sum -- "$file" | awk '{print $1}')"
+              printf 'S12-SHA256 %s %s %s\n' "$relative" "$size" "$digest"
+            done | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Surfer Cargo cache を保存
+        if: steps.surfer-cache-restore.outputs.cache-hit != 'true' && steps.surfer-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/
+            ~/.cargo/git/db/
+            build/surfer/target/
+          key: surfer-cargo-ubuntu-26.04-rust-${{ steps.surfer-key.outputs.rust }}-${{ hashFiles('vendor/surfer/Cargo.lock') }}-${{ hashFiles('patches/surfer/**') }}
+
+      - name: Surfer WASM artifact を保存
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-surfer-wasm-${{ github.run_id }}
+          path: build/surfer/dist/
+          retention-days: 1
+
+  pyodide-pack:
+    name: Pyodide gowin_pack (${{ matrix.suite }})
+    needs: [changes, nextpnr, nextpnr-compare, synth-native, ghdl, iverilog]
+    if: needs.changes.outputs.build == 'true' && needs.nextpnr.result == 'success' && needs.nextpnr-compare.result == 'success' && needs.synth-native.result == 'success' && needs.ghdl.result == 'success' && needs.iverilog.result == 'success'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [hdl, cpu]
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+          persist-credentials: false
+
+      - name: 固定した HDL ライブラリーを取得
+        run: |
+          git submodule update --init --depth 1 -- third_party/
+          git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv
+
+      - name: Python venv をインストール
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-venv
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+
+      - name: npm dependencies を取得
+        run: npm ci
+
+      - name: Yosys WASM と share を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-yosys-synth-${{ github.run_id }}
+          path: build/wasi/yosys
+
+      - name: Native Yosys の比較用資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-yosys-native-${{ github.run_id }}
+          path: build/native
+
+      - name: nextpnr artifacts を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-nextpnr-${{ github.run_id }}
+          path: build
+
+      - name: GHDL WASM 資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-ghdl-wasm-${{ github.run_id }}
+          path: build
+
+      - name: Icarus Verilog の比較用資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-iverilog-${{ github.run_id }}
+          path: build
+
+      - name: Icarus Verilog native 版の実行権限を設定
+        run: |
+          chmod +x build/iverilog-native/output/ivlpp build/iverilog-native/output/ivl build/iverilog-native/output/vvp
+          chmod +x build/native/yosys build/native/yosys-abc build/native/nextpnr/nextpnr-himbaechel-gowin
+          chmod +x build/ghdl-native/bin/ghdl
+
+      - id: formal-vhdl
+        name: VHDLとPSLの性質をGHDLとYosysで照合
+        if: matrix.suite == 'hdl'
+        run: node --test --test-concurrency=1 tests/synth/formal-vhdl.test.mjs tests/synth/ghdl-replay.test.mjs tests/synth/ghdl-lowered-replay.test.mjs tests/synth/formal-vhdl-lowered.test.mjs
+
+      - name: VHDL形式検証の入力・一覧・反例・CSVを保存
+        if: always() && steps.formal-vhdl.outcome != 'skipped'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-formal-vhdl-${{ github.run_id }}
+          path: build/S15/p1-vhdl-*/
+          if-no-files-found: error
+          retention-days: 7
+
+      - id: formal-replay
+        name: 元のVerilogでSAT反例を独立に再実行
+        if: matrix.suite == 'hdl'
+        run: node --test --test-concurrency=1 tests/synth/formal-replay.test.mjs
+
+      - name: 独立再実行の入力・VCD・ログ・CSVを保存
+        if: always() && steps.formal-replay.outcome != 'skipped'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-formal-replay-${{ github.run_id }}
+          path: build/S15/p1-replay-*/
+          if-no-files-found: error
+          retention-days: 7
+
+      - id: pack-cache-restore
+        name: Pyodide pack asset cache を復元
+        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/cache/pack/
+          key: pyodide-pack-ubuntu-26.04-${{ hashFiles('package.json', 'package-lock.json', 'requirements-nextpnr.txt', 'scripts/build-pack-assets.sh', 'scripts/build-pack-assets.py', '.github/scripts/check-pins.py') }}
+
+      - name: Native Apycula venv を作成
+        run: |
+          python3 -m venv build/deps/apycula-venv
+          build/deps/apycula-venv/bin/pip install --require-hashes -r requirements-nextpnr.txt
+
+      - id: pack-assets
+        name: Pyodide pack assets を検証
+        run: scripts/build-pack-assets.sh
+
+      - name: Pyodide pack asset cache を保存
+        if: steps.pack-cache-restore.outputs.cache-hit != 'true' && steps.pack-assets.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/cache/pack/
+          key: pyodide-pack-ubuntu-26.04-${{ hashFiles('package.json', 'package-lock.json', 'requirements-nextpnr.txt', 'scripts/build-pack-assets.sh', 'scripts/build-pack-assets.py', '.github/scripts/check-pins.py') }}
+
+      - id: pack-parity
+        name: Native / Pyodide gowin_pack parity
+        env:
+          PACK_SUITE: ${{ matrix.suite }}
+        run: |
+          if [[ "$PACK_SUITE" == cpu ]]; then
+            node --test --test-name-pattern '^pinned CPU libraries retain execution and classify all four board builds' tests/synth/gowin-pack.test.mjs
+          else
+            node --test --test-skip-pattern '^pinned CPU libraries retain execution and classify all four board builds' tests/synth/gowin-pack.test.mjs tests/synth/library-components.test.mjs tests/synth/yosys-parity.test.mjs tests/synth/library-measurements.test.mjs
+          fi
+
+      - name: 合成・配置配線・packの失敗した入力とログを保存
+        if: always() && steps.pack-parity.outcome == 'failure'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-library-flow-failure-${{ matrix.suite }}-${{ github.run_id }}
+          path: build/t5-library-flow-*/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Pyodide pack assets を保存
+        if: matrix.suite == 'hdl'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-pyodide-pack-${{ github.run_id }}
+          path: build/pack/
+          retention-days: 1
+
+      - name: Summarize step timings
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_DISPLAY_NAME: Pyodide gowin_pack (${{ matrix.suite }})
+        run: |
+          step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
+            .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
+            select(.completed_at != null) |
+            [.number, .name, (if .started_at == null then "unknown" else ((.completed_at | fromdateiso8601) - (.started_at | fromdateiso8601)) end), .conclusion] |
+            @tsv
+          ' 2>/dev/null)" || step_lines=""
+          if [[ -n "$step_lines" ]]; then
+            {
+              printf '| # | Step | Seconds | Conclusion |\n|---:|---|---:|---|\n'
+              printf '%s\n' "$step_lines" | awk -F '\t' '{ printf "| %s | %s | %s | %s |\n", $1, $2, $3, $4 }'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  sim:
+    name: Simulation shard ${{ matrix.shard }}
+    needs: build
+    if: needs.build.result == 'success'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 30
+    permissions:
+      actions: read
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+          persist-credentials: false
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: CI ビルド成果物を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-build-${{ github.run_id }}
+          path: build
+
+      - name: 仮想 USB シミュレーション
+        env:
+          SIM_SHARD: ${{ matrix.shard }}/3
+          WASM_BUILD_ROOT: build
+        run: node --test --test-concurrency=1 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=tap --test-reporter-destination=sim-shard.tap tests/sim/*.test.mjs
+
+      - name: シミュレーション結果を保存
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sim-shard-${{ matrix.shard }}
+          path: sim-shard.tap
+          if-no-files-found: ignore
+          retention-days: 1
+
+      - name: Summarize step timings
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_DISPLAY_NAME: Simulation shard ${{ matrix.shard }}
+        run: |
+          step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
+            .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
+            select(.completed_at != null) |
+            [.number, .name, (if .started_at == null then "unknown" else ((.completed_at | fromdateiso8601) - (.started_at | fromdateiso8601)) end), .conclusion] |
+            @tsv
+          ' 2>/dev/null)" || step_lines=""
+          if [[ -n "$step_lines" ]]; then
+            {
+              printf '| # | Step | Seconds | Conclusion |\n|---:|---|---:|---|\n'
+              printf '%s\n' "$step_lines" | awk -F '\t' '{ printf "| %s | %s | %s | %s |\n", $1, $2, $3, $4 }'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  sim-coverage:
+    name: Simulation shard coverage
+    needs: [build, sim]
+    if: always() && needs.build.result == 'success'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: シミュレーション結果を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: sim-shard-*
+          path: sim-results
+
+      - name: shard の網羅性を検査
+        run: python3 .github/scripts/check-sim-shards.py --reports-dir sim-results
+
+      - name: Summarize step timings
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_DISPLAY_NAME: Simulation shard coverage
+        run: |
+          step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
+            .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
+            select(.completed_at != null) |
+            [.number, .name, (if .started_at == null then "unknown" else ((.completed_at | fromdateiso8601) - (.started_at | fromdateiso8601)) end), .conclusion] |
+            @tsv
+          ' 2>/dev/null)" || step_lines=""
+          if [[ -n "$step_lines" ]]; then
+            {
+              printf '| # | Step | Seconds | Conclusion |\n|---:|---|---:|---|\n'
+              printf '%s\n' "$step_lines" | awk -F '\t' '{ printf "| %s | %s | %s | %s |\n", $1, $2, $3, $4 }'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  e2e:
+    name: Playwright E2E
+    needs: [changes, build, synth, synth-native, synth-compare, nextpnr, nextpnr-compare, ghdl, pyodide-pack, surfer]
+    if: needs.changes.outputs.build == 'true' && needs.build.result == 'success' && needs.synth.result == 'success' && needs.synth-native.result == 'success' && needs.synth-compare.result == 'success' && needs.nextpnr.result == 'success' && needs.nextpnr-compare.result == 'success' && needs.ghdl.result == 'success' && needs.pyodide-pack.result == 'success' && needs.surfer.result == 'success'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 30
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Web 配布物の組立に必要な submodule を取得
+        run: |
+          git submodule update --init --depth 1 -- vendor/zstd third_party/
+          git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv
+
+      - name: Node.js を設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: npm 依存を取得
+        run: npm ci
+
+      - name: Chromium をインストール
+        run: npx playwright install --with-deps chromium
+
+      - name: CI ビルド成果物を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-build-${{ github.run_id }}
+          path: build
+
+      - name: Surfer WASM 資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-surfer-wasm-${{ github.run_id }}
+          path: build/surfer/dist
+
+      - name: WASI Yosys 成果物を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-yosys-synth-${{ github.run_id }}
+          path: build/wasi/yosys
+
+      - name: Native Yosys 成果物を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-yosys-native-${{ github.run_id }}
+          path: build/native
+
+      - name: Native Yosys の実行権限を復元
+        run: chmod +x build/native/yosys build/native/yosys-abc
+
+      - name: Icarus Verilog の比較用資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-iverilog-${{ github.run_id }}
+          path: build
+
+      - name: nextpnr 成果物を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-nextpnr-${{ github.run_id }}
+          path: build
+
+      - name: Native nextpnr の実行権限を復元
+        run: chmod +x build/native/nextpnr/nextpnr-himbaechel-gowin
+
+      - name: WASI decoder のブラウザー用資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-decoder-web-assets-${{ github.run_id }}
+          path: build/wasi/decoders
+
+      - name: GHDL WASM 資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-ghdl-wasm-${{ github.run_id }}
+          path: build
+
+      - name: Native GHDL の実行権限を復元
+        run: chmod +x build/ghdl-native/bin/ghdl
+
+      - name: Icarus Verilog WASM 資材を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-iverilog-web-assets-${{ github.run_id }}
+          path: build/iverilog-wasm/output
+
+      - name: Pyodide pack assets を取得
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ci-pyodide-pack-${{ github.run_id }}
+          path: build/pack
+
+      - name: Native Apycula venv を作成
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-venv
+          python3 -m venv build/deps/apycula-venv
+          build/deps/apycula-venv/bin/pip install --require-hashes -r requirements-nextpnr.txt
+
+      - name: Playwright E2E
+        env:
+          BUILD_ROOT: build
+          BUILD_INFO_CHECK: artifacts
+        run: npx playwright test
+
+      - name: E2E 失敗資料を保存
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: gogo-fpga-web-test-failures-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Summarize step timings
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_DISPLAY_NAME: Playwright E2E
+        run: |
+          step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
+            .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
+            select(.completed_at != null) |
+            [.number, .name, (if .started_at == null then "unknown" else ((.completed_at | fromdateiso8601) - (.started_at | fromdateiso8601)) end), .conclusion] |
+            @tsv
+          ' 2>/dev/null)" || step_lines=""
+          if [[ -n "$step_lines" ]]; then
+            {
+              printf '| # | Step | Seconds | Conclusion |\n|---:|---|---:|---|\n'
+              printf '%s\n' "$step_lines" | awk -F '\t' '{ printf "| %s | %s | %s | %s |\n", $1, $2, $3, $4 }'
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
+          fi

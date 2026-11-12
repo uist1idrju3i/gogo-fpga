@@ -1,0 +1,22 @@
+{
+  "revision": "c41e5c53d99eff9c604ffe8dec274e49f0189a61",
+  "archive_version": "v0.1.0-t6p0.c41e5c5",
+  "library_entries": 22,
+  "unique_library_assets": 107,
+  "catalog_sha256": "2df56365ba336356587bd0e611dab5894bca6dd10fb5bf8861f9efbaa6e2d91c",
+  "web_files": 705,
+  "source_files": 59865,
+  "source_snapshot_files": 469,
+  "source_gitlinks": 41,
+  "checks": [
+    "Git-free source archive and safe member paths",
+    "Library revision pins and .gitcommit files",
+    "Every root snapshot file and direct submodule gitlink matches the recorded Git revision",
+    "Catalog and every declared source/license asset byte-identical in root, Git-free regeneration, source-built dist, and Web ZIP",
+    "Exact NOTICE/LICENSE/README/third-party notices and Surfer/root licenses in distribution",
+    "All synth/pack/Icarus/Surfer distribution bytes identical to Web ZIP",
+    "Every dist file byte-identical to Web ZIP and every source archive file byte-identical to extracted source",
+    "Every Web ZIP member smaller than 25 MiB"
+  ],
+  "cached_inputs": "Previously verified native/WASM binaries and npm dependencies reused for Git-free Web assembly; compilers were not rebuilt from this archive."
+}

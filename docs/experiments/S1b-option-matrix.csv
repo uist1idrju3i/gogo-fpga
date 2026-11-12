@@ -1,0 +1,1244 @@
+phase,record_type,candidate,status,repeat,case,elapsed_ms,build_wall_s,build_peak_rss_kib,link_wall_s,link_peak_rss_kib,wasm_bytes,wasm_gzip_bytes,wasm_sha256,mjs_bytes,mjs_gzip_bytes,mjs_sha256,link_line,details
+preflight,build,B,invalid-opt-lines,,,,1:29.25,243952,0:37.58,213900,2280887,634803,16c1560ec4ef45fbc45d7a958c4a9a3c6920c4f473768d4356c18cb0e8a43348,99393,27380,9005540841199936d9f983124e7a890e3661bd21f250b11e580346e8e7c0df27,"/usr/bin/time -v -o <repo>/build/s1b/B/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -O3 -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/B/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz","Preflight rejected: upstream ENABLE_OPTIM=ON injected -O3, producing two optimization levels; disabled for matrix build. Flag evidence: build/s1b/preflight-B-duplicate-O3/libftdi-build/src/CMakeFiles/ftdi1-static.dir/flags.make:9: 1 (expected 1) C_FLAGS = -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions   -Wall
+build/s1b/preflight-B-duplicate-O3/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/flags.make:9: 2 (expected 1) CXX_FLAGS = -O3 -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -std=gnu++17
+build/s1b/preflight-B-duplicate-O3/zlib-build/CMakeFiles/zlibstatic.dir/flags.make:9: 1 (expected 1) C_FLAGS = -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions
+build/s1b/preflight-B-duplicate-O3/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt:1: 2 (expected 1) /usr/bin/time -v -o <repo>/build/s1b/B/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -O3 -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/B/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz
+build/s1b/preflight-B-duplicate-O3/libusb-build/Makefile:253: 0 (expected 0) AM_CFLAGS = -std=gnu11  -Wall -Wextra -Wshadow -Wunused -Wwrite-strings -Werror=format-security -Werror=implicit-function-declaration -Werror=implicit-int -Werror=init-self -Werror=missing-prototypes -Werror=strict-prototypes -Werror=undef -Werror=uninitialized
+build/s1b/preflight-B-duplicate-O3/libusb-build/Makefile:255: 0 (expected 0) AM_CXXFLAGS = -std=gnu++11  -Wall -Wextra -Wshadow -Wunused -Wwrite-strings -Werror=format-security -Werror=implicit-function-declaration -Werror=implicit-int -Werror=init-self -Werror=missing-prototypes -Werror=strict-prototypes -Werror=undef -Werror=uninitialized -Wmissing-declarations
+build/s1b/preflight-B-duplicate-O3/libusb-build/Makefile:265: 1 (expected 1) CFLAGS = -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions
+build/s1b/preflight-B-duplicate-O3/libusb-build/Makefile:272: 1 (expected 1) CXXFLAGS = -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions"
+matrix,build,B,pass,,,,1:28.60,243188,0:36.81,213284,2280887,634803,16c1560ec4ef45fbc45d7a958c4a9a3c6920c4f473768d4356c18cb0e8a43348,99393,27380,9005540841199936d9f983124e7a890e3661bd21f250b11e580346e8e7c0df27,"/usr/bin/time -v -o <repo>/build/s1b/B/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/B/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/B-command.txt; exact link: build/s1b/B/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,B,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,B,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,B,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,B,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,B,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,O2,pass,,,,1:04.19,232408,0:13.20,161768,2067038,693219,ee21d5386608b30e861de04adbf3cfcb56fd4a6b37ba33c6377b06f1f22e0d59,99424,27385,f4618777a40adfefc69074b7b9caf7ce3c09fa45b75ce96259f0f9d6de9e3963,"/usr/bin/time -v -o <repo>/build/s1b/O2/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -O2 -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/O2/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/O2-command.txt; exact link: build/s1b/O2/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,O2,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,O2,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,O2,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,O2,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,O2,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,O3,pass,,,,1:14.04,262836,0:19.30,262836,2040830,695566,b4a9ea0142dac9823d0b68921e6c6eabb22a1e1f11afc64011d0ab49843e935f,99393,27380,9005540841199936d9f983124e7a890e3661bd21f250b11e580346e8e7c0df27,"/usr/bin/time -v -o <repo>/build/s1b/O3/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -O3 -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/O3/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/O3-command.txt; exact link: build/s1b/O3/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,O3,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,O3,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,O3,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,O3,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,O3,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,Oz,pass,,,,1:05.83,300528,0:14.87,300528,1016751,362895,3ccf777eb368bf22b3647ab8d644d74516fc04011be4f94041d3ba264066c841,99318,27361,d4a426eb2db5b2ddf23c0171fdd5197779a8852f1a7466f82b6a49c5116c033f,"/usr/bin/time -v -o <repo>/build/s1b/Oz/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Oz -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/Oz/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/Oz-command.txt; exact link: build/s1b/Oz/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,Oz,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,Oz,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,Oz,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,Oz,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,Oz,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,LTOL,pass,,,,1:37.38,512316,0:49.33,512316,1655776,578959,b5f93ae140d0809d563e47d37b81a0141c757ffc684de7ea1f1000bb8d9bd26e,100160,27559,478bcc4aa73ea67749bce53ce373db2fe520d5369b55a4d6a579a29d6cce8d05,"/usr/bin/time -v -o <repo>/build/s1b/LTOL/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -flto -flto -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/LTOL/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/LTOL-command.txt; exact link: build/s1b/LTOL/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,LTOL,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,LTOL,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,LTOL,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,LTOL,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,LTOL,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,LTOA,pass,,,,1:40.15,529500,0:24.25,529500,1639787,574484,4fb4849ef3cb60c4d5098fa828004ae11c39ec21b704124abd84b8a0bcb48dd8,98956,27296,f66be852ed33c8245fe781d900a7124186a6d3cd611a81849e1019ae080d8d44,"/usr/bin/time -v -o <repo>/build/s1b/LTOA/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -flto -flto -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/LTOA/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/LTOA-command.txt; exact link: build/s1b/LTOA/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,LTOA,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,LTOA,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,LTOA,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,LTOA,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,LTOA,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,EHX,pass,,,,1:27.97,243824,0:37.56,212944,2283028,634227,88ae4d50bc7e4863c84aaca5762da45e54d777ed803fbf52be523e13a23b06aa,99273,27348,9849108742b223473f392387d210931ce6e13e66a8d8a3e6bf11df8683f22166,"/usr/bin/time -v -o <repo>/build/s1b/EHX/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=0 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/EHX/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/EHX-command.txt; exact link: build/s1b/EHX/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,EHX,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,EHX,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,EHX,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,EHX,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,EHX,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,MG,pass,,,,1:36.52,243436,0:39.39,214168,2280903,634758,0aa6dfa3163a54901c08819b4d59a6c6c4f84888ea48d4faac2fffd53c7751ff,102534,27862,e1b4fe50c2070ae6be713af1aa2e0af2bebac77235e6664991b3cf212ecc518a,"/usr/bin/time -v -o <repo>/build/s1b/MG/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=16777216 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -s ALLOW_MEMORY_GROWTH=1 -s MAXIMUM_MEMORY=268435456 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/MG/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/MG-command.txt; exact link: build/s1b/MG/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,MG,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,MG,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,MG,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,MG,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,MG,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,M64,pass,,,,1:26.63,243696,0:36.75,213608,2280919,634722,e0f07f9fb226b742fc0de14c6ec71214021422637f4d99868304fb4d98cd10cd,99395,27380,55f2d6f498139937e89af232f54445dcdff4ef9d46f12365848b383671f99d25,"/usr/bin/time -v -o <repo>/build/s1b/M64/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=67108864 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/M64/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/M64-command.txt; exact link: build/s1b/M64/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,M64,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,M64,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,M64,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,M64,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,M64,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,DL,pass,,,,1:26.27,244204,0:36.98,214764,2288235,637397,2322a00088123f902bc1d2b3d2d8453433c594fa0beb4798d9ffa0da356104c7,99393,27380,9005540841199936d9f983124e7a890e3661bd21f250b11e580346e8e7c0df27,"/usr/bin/time -v -o <repo>/build/s1b/DL/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=dlmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/DL/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/DL-command.txt; exact link: build/s1b/DL/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,DL,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,DL,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,DL,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,DL,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,DL,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,MI,pass,,,,1:26.79,243692,0:37.27,211676,2343084,663501,aa68212c8a06bac7e9a90b2a264ee580fc0725bf6e9d7acf962483e5f2c20fea,100795,27655,caacef080ee2661e1ec4426ebabafec3160d2e75e4a7f67380e5a0cfe913b13c,"/usr/bin/time -v -o <repo>/build/s1b/MI/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=mimalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/MI/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/MI-command.txt; exact link: build/s1b/MI/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,MI,fail,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs; exit=1; log=build/s1b/MI/matrix-gate-1.log
+matrix,build,CL,pass,,,,1:29.47,243308,0:38.34,212992,2280903,634756,f7bf99ee397d12251d12df69994a80501d9f8d6ff4c4804931682c7a8a0d2232,46658,18771,348897a689375e8ff1316f721f2e4d3eb2ee7408112c3960a0374f98d18c64e5,"/usr/bin/time -v -o <repo>/build/s1b/CL/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 --closure 1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/CL/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/CL-command.txt; exact link: build/s1b/CL/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,CL,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,CL,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,CL,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,CL,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,CL,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,EC,fail,,,,0:55.07,243824,,,,,,,,,,"command: build/s1b/timing/EC-command.txt; t disabled
+Gowin support enabled
+Xilinx support disabled
+Lattice support disabled
+Anlogic Cable support disabled
+CH347 support disabled
+cmsis_dap v1 support disabled
+cmsis_dap v2 support disabled
+DFU support disabled
+dirtyJtag support disabled
+ESP32S3 support disabled
+Gowin GWU2X support disabled
+JLink support disabled
+Remote bitbang client support disabled
+Xilinx Platform Cable USB (XCPU) support disabled
+Xilinx Virtual Client support disabled
+Xilinx Virtual Server support disabled
+-- Configuring done
+-- Generating done
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    CMAKE_C_FLAGS_RELEASE
+
+
+-- Build files have been written to: <repo>/build/s1b/EC/openFPGALoader-build
++ emmake cmake --build <repo>/build/s1b/EC/openFPGALoader-build --parallel 2
+emmake: ""cmake --build <repo>/build/s1b/EC/openFPGALoader-build --parallel 2"" in ""<repo>""
+[  4%] Building CXX object CMakeFiles/openFPGALoader.dir/src/common.cpp.o
+[  8%] Building spiOverJtag_xc6slx100fgg484.bit.gz
+[ 12%] Building spiOverJtag_xc6slx45csg324.bit.gz
+[ 16%] Building spiOverJtag_10cl025256.rbf.gz
+[ 20%] Building spiOverJtag_5ce223.rbf.gz
+[ 24%] Building spiOverJtag_ep4ce2217.rbf.gz
+[ 24%] Built target bit
+[ 28%] Building CXX object CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o
+[ 32%] Building CXX object CMakeFiles/openFPGALoader.dir/src/device.cpp.o
+[ 36%] Building CXX object CMakeFiles/openFPGALoader.dir/src/display.cpp.o
+[ 40%] Building CXX object CMakeFiles/openFPGALoader.dir/src/main.cpp.o
+[ 44%] Building CXX object CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o
+[ 48%] Building CXX object CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o
+[ 52%] Building CXX object CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o
+[ 56%] Building CXX object CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o
+[ 60%] Building CXX object CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o
+[ 64%] Building CXX object CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o
+[ 68%] Building CXX object CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o
+[ 72%] Building CXX object CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o
+[ 76%] Building CXX object CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o
+[ 80%] Building CXX object CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o
+[ 84%] Building CXX object CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o
+[ 88%] Building CXX object CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o
+[ 92%] Building CXX object CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o
+[ 96%] Building CXX object CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o
+[100%] Linking CXX executable openFPGALoader.mjs
+em++: error: EVAL_CTORS is not compatible with ASYNCIFY
+gmake[2]: *** [CMakeFiles/openFPGALoader.dir/build.make:385: openFPGALoader.mjs] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:85: CMakeFiles/openFPGALoader.dir/all] Error 2
+gmake: *** [Makefile:136: all] Error 2
+"
+matrix,build,TD2,pass,,,,1:36.82,243700,0:47.00,211316,2280919,634722,ae094f748e171f78fdc00b0579f2b94fef73c144f06aa4c6b89adca1a7a0f7f2,98825,27157,641a04e31513b8855a9c4901eef3a46816c74935e147d08cdc2e6807a1d7eaf1,"/usr/bin/time -v -o <repo>/build/s1b/TD2/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=2 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/TD2/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/TD2-command.txt; exact link: build/s1b/TD2/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,TD2,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,TD2,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,TD2,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,TD2,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,TD2,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,DE0,pass,,,,1:29.47,243828,0:37.75,213588,2280919,634722,65982a67a4ede26f4c89be892690884dbf08d3c95cde45c7696ffd94ec26e2d3,98953,27230,4a4fa77cc39f05bde27c360d1d47b15b254a867135b16958d7308e0cd661a41c,"/usr/bin/time -v -o <repo>/build/s1b/DE0/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -s DYNAMIC_EXECUTION=0 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/DE0/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/DE0-command.txt; exact link: build/s1b/DE0/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,DE0,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,DE0,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,DE0,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,DE0,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,DE0,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,ST1M,pass,,,,1:29.50,243204,0:38.10,214064,2280921,634895,c1b852e2a36b9c24a9697e8a7edc000cbef9a4b7563deaba681d678bc7bb7619,99395,27380,928191595852e3565ee169478681b1f4da9b7b664df0884299a94a4083154059,"/usr/bin/time -v -o <repo>/build/s1b/ST1M/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -s STACK_SIZE=1048576 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/ST1M/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/ST1M-command.txt; exact link: build/s1b/ST1M/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,ST1M,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,ST1M,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,ST1M,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,ST1M,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,ST1M,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,build,P2P,pass,,,,1:31.25,244212,0:39.16,222440,2282039,634399,192d1311fbadd485e17634302ecd7bafe837ca44f32044f602a28b787fc69350,100523,27608,2629a29afa5ccad393d9972c0244ab52babde2e8a23764d7244838aa536746e0,"/usr/bin/time -v -o <repo>/build/s1b/P2P/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -s PROXY_TO_PTHREAD=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/P2P/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/P2P-command.txt; exact link: build/s1b/P2P/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,P2P,fail,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs; exit=1; log=build/s1b/P2P/matrix-gate-1.log
+matrix,build,SIMD,pass,,,,1:29.85,243056,0:37.25,212232,2285634,629848,45b30bdc1daa94afda002b368e2e8d7a0ccd229af2a6d7838290e5f28dd854c8,99393,27380,9005540841199936d9f983124e7a890e3661bd21f250b11e580346e8e7c0df27,"/usr/bin/time -v -o <repo>/build/s1b/SIMD/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -msimd128 -msimd128 -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/SIMD/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/SIMD-command.txt; exact link: build/s1b/SIMD/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+matrix,gate,SIMD,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,SIMD,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,SIMD,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,SIMD,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,gate,SIMD,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+matrix,speed,B,pass,1,tangnano1k-sram,133.572,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,1,tangnano1k-sram,149.053,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,1,tangnano1k-sram,153.473,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,1,tangnano1k-sram,194.405,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,1,tangnano1k-sram,133.904,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,1,tangnano1k-sram,127.355,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,1,tangnano1k-sram,158.037,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,1,tangnano1k-sram,148.309,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,1,tangnano1k-sram,154.422,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,1,tangnano1k-sram,151.800,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,1,tangnano1k-sram,131.806,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,1,tangnano1k-sram,134.133,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,1,tangnano1k-sram,133.226,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,1,tangnano1k-sram,136.225,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,1,tangnano1k-sram,128.431,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,1,tangnano1k-flash,1368.523,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,1,tangnano1k-flash,1380.260,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,1,tangnano1k-flash,1388.019,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,1,tangnano1k-flash,1451.303,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,1,tangnano1k-flash,1359.027,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,1,tangnano1k-flash,1366.390,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,1,tangnano1k-flash,1363.769,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,1,tangnano1k-flash,1440.565,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,1,tangnano1k-flash,1364.798,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,1,tangnano1k-flash,1409.765,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,1,tangnano1k-flash,1360.838,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,1,tangnano1k-flash,1401.981,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,1,tangnano1k-flash,1372.652,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,1,tangnano1k-flash,1359.916,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,1,tangnano1k-flash,1364.182,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,1,tangnano4k-sram,204.842,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,1,tangnano4k-sram,219.955,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,1,tangnano4k-sram,232.167,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,1,tangnano4k-sram,246.464,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,1,tangnano4k-sram,180.221,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,1,tangnano4k-sram,180.437,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,1,tangnano4k-sram,198.301,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,1,tangnano4k-sram,185.973,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,1,tangnano4k-sram,184.885,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,1,tangnano4k-sram,190.450,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,1,tangnano4k-sram,178.357,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,1,tangnano4k-sram,179.846,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,1,tangnano4k-sram,210.632,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,1,tangnano4k-sram,182.156,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,1,tangnano4k-sram,186.212,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,1,tangnano4k-flash,1671.553,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,1,tangnano4k-flash,1712.683,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,1,tangnano4k-flash,1655.798,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,1,tangnano4k-flash,1714.182,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,1,tangnano4k-flash,1644.962,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,1,tangnano4k-flash,1658.192,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,1,tangnano4k-flash,1648.781,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,1,tangnano4k-flash,1765.861,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,1,tangnano4k-flash,1717.538,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,1,tangnano4k-flash,1770.482,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,1,tangnano4k-flash,1707.187,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,1,tangnano4k-flash,1783.139,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,1,tangnano4k-flash,1792.172,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,1,tangnano4k-flash,1665.022,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,1,tangnano4k-flash,1703.609,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,1,tangnano9k-sram,250.440,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,1,tangnano9k-sram,264.310,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,1,tangnano9k-sram,261.829,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,1,tangnano9k-sram,312.097,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,1,tangnano9k-sram,243.349,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,1,tangnano9k-sram,247.202,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,1,tangnano9k-sram,268.030,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,1,tangnano9k-sram,253.085,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,1,tangnano9k-sram,254.263,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,1,tangnano9k-sram,251.435,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,1,tangnano9k-sram,258.014,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,1,tangnano9k-sram,251.871,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,1,tangnano9k-sram,254.570,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,1,tangnano9k-sram,249.257,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,1,tangnano9k-sram,248.641,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,1,tangnano9k-flash,1988.002,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,1,tangnano9k-flash,1979.224,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,1,tangnano9k-flash,1992.493,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,1,tangnano9k-flash,2057.739,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,1,tangnano9k-flash,1963.357,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,1,tangnano9k-flash,1990.516,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,1,tangnano9k-flash,1968.470,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,1,tangnano9k-flash,2174.977,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,1,tangnano9k-flash,2006.316,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,1,tangnano9k-flash,1947.978,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,1,tangnano9k-flash,1943.634,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,1,tangnano9k-flash,1957.626,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,1,tangnano9k-flash,1982.098,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,1,tangnano9k-flash,1946.861,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,1,tangnano9k-flash,1951.606,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,1,tangnano20k-sram,427.987,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,1,tangnano20k-sram,437.447,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,1,tangnano20k-sram,433.606,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,1,tangnano20k-sram,475.069,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,1,tangnano20k-sram,433.738,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,1,tangnano20k-sram,424.918,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,1,tangnano20k-sram,481.384,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,1,tangnano20k-sram,479.772,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,1,tangnano20k-sram,434.105,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,1,tangnano20k-sram,432.016,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,1,tangnano20k-sram,435.408,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,1,tangnano20k-sram,432.113,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,1,tangnano20k-sram,425.192,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,1,tangnano20k-sram,425.085,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,1,tangnano20k-sram,421.102,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,1,tangnano20k-flash,685.181,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,1,tangnano20k-flash,720.335,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,1,tangnano20k-flash,686.049,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,1,tangnano20k-flash,750.696,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,1,tangnano20k-flash,666.568,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,1,tangnano20k-flash,667.416,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,1,tangnano20k-flash,740.077,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,1,tangnano20k-flash,778.245,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,1,tangnano20k-flash,723.736,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,1,tangnano20k-flash,696.496,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,1,tangnano20k-flash,662.129,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,1,tangnano20k-flash,669.378,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,1,tangnano20k-flash,667.816,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,1,tangnano20k-flash,674.743,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,1,tangnano20k-flash,667.675,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,1,instantiate,74.228,,,,,,,,,,,,module import and instantiate
+matrix,speed,O2,pass,1,instantiate,89.495,,,,,,,,,,,,module import and instantiate
+matrix,speed,O3,pass,1,instantiate,93.609,,,,,,,,,,,,module import and instantiate
+matrix,speed,Oz,pass,1,instantiate,134.786,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOL,pass,1,instantiate,74.286,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOA,pass,1,instantiate,73.350,,,,,,,,,,,,module import and instantiate
+matrix,speed,EHX,pass,1,instantiate,80.192,,,,,,,,,,,,module import and instantiate
+matrix,speed,MG,pass,1,instantiate,83.720,,,,,,,,,,,,module import and instantiate
+matrix,speed,M64,pass,1,instantiate,90.364,,,,,,,,,,,,module import and instantiate
+matrix,speed,DL,pass,1,instantiate,85.651,,,,,,,,,,,,module import and instantiate
+matrix,speed,CL,pass,1,instantiate,81.206,,,,,,,,,,,,module import and instantiate
+matrix,speed,TD2,pass,1,instantiate,91.342,,,,,,,,,,,,module import and instantiate
+matrix,speed,DE0,pass,1,instantiate,85.818,,,,,,,,,,,,module import and instantiate
+matrix,speed,ST1M,pass,1,instantiate,79.780,,,,,,,,,,,,module import and instantiate
+matrix,speed,SIMD,pass,1,instantiate,83.326,,,,,,,,,,,,module import and instantiate
+matrix,speed,B,pass,2,tangnano1k-sram,136.182,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,2,tangnano1k-sram,144.193,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,2,tangnano1k-sram,141.707,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,2,tangnano1k-sram,182.688,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,2,tangnano1k-sram,123.869,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,2,tangnano1k-sram,127.914,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,2,tangnano1k-sram,128.299,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,2,tangnano1k-sram,131.890,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,2,tangnano1k-sram,127.373,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,2,tangnano1k-sram,136.509,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,2,tangnano1k-sram,127.583,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,2,tangnano1k-sram,128.155,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,2,tangnano1k-sram,127.359,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,2,tangnano1k-sram,126.671,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,2,tangnano1k-sram,126.049,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,2,tangnano1k-flash,1372.096,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,2,tangnano1k-flash,1391.938,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,2,tangnano1k-flash,1397.002,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,2,tangnano1k-flash,1422.918,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,2,tangnano1k-flash,1366.822,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,2,tangnano1k-flash,1360.000,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,2,tangnano1k-flash,1367.960,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,2,tangnano1k-flash,1400.319,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,2,tangnano1k-flash,1382.972,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,2,tangnano1k-flash,1367.111,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,2,tangnano1k-flash,1357.053,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,2,tangnano1k-flash,1367.165,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,2,tangnano1k-flash,1373.547,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,2,tangnano1k-flash,1370.273,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,2,tangnano1k-flash,1362.300,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,2,tangnano4k-sram,193.099,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,2,tangnano4k-sram,209.085,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,2,tangnano4k-sram,195.798,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,2,tangnano4k-sram,241.597,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,2,tangnano4k-sram,175.850,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,2,tangnano4k-sram,177.925,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,2,tangnano4k-sram,180.897,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,2,tangnano4k-sram,194.560,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,2,tangnano4k-sram,182.608,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,2,tangnano4k-sram,187.744,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,2,tangnano4k-sram,175.366,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,2,tangnano4k-sram,179.680,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,2,tangnano4k-sram,177.199,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,2,tangnano4k-sram,173.039,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,2,tangnano4k-sram,182.779,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,2,tangnano4k-flash,1672.659,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,2,tangnano4k-flash,1647.653,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,2,tangnano4k-flash,1656.933,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,2,tangnano4k-flash,1770.177,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,2,tangnano4k-flash,1648.915,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,2,tangnano4k-flash,1630.977,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,2,tangnano4k-flash,1648.860,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,2,tangnano4k-flash,1766.294,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,2,tangnano4k-flash,1707.801,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,2,tangnano4k-flash,1657.741,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,2,tangnano4k-flash,1657.844,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,2,tangnano4k-flash,1668.559,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,2,tangnano4k-flash,1670.043,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,2,tangnano4k-flash,1696.197,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,2,tangnano4k-flash,1640.477,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,2,tangnano9k-sram,288.670,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,2,tangnano9k-sram,273.155,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,2,tangnano9k-sram,263.999,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,2,tangnano9k-sram,317.535,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,2,tangnano9k-sram,274.676,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,2,tangnano9k-sram,275.482,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,2,tangnano9k-sram,279.686,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,2,tangnano9k-sram,265.563,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,2,tangnano9k-sram,319.517,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,2,tangnano9k-sram,324.928,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,2,tangnano9k-sram,277.730,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,2,tangnano9k-sram,283.437,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,2,tangnano9k-sram,286.813,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,2,tangnano9k-sram,252.591,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,2,tangnano9k-sram,321.072,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,2,tangnano9k-flash,1936.787,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,2,tangnano9k-flash,1915.777,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,2,tangnano9k-flash,1927.396,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,2,tangnano9k-flash,1990.551,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,2,tangnano9k-flash,1980.498,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,2,tangnano9k-flash,2032.758,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,2,tangnano9k-flash,1930.499,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,2,tangnano9k-flash,2140.121,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,2,tangnano9k-flash,1933.464,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,2,tangnano9k-flash,1934.761,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,2,tangnano9k-flash,1957.098,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,2,tangnano9k-flash,1959.023,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,2,tangnano9k-flash,1986.999,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,2,tangnano9k-flash,1948.336,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,2,tangnano9k-flash,1941.056,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,2,tangnano20k-sram,424.409,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,2,tangnano20k-sram,449.686,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,2,tangnano20k-sram,484.072,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,2,tangnano20k-sram,481.637,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,2,tangnano20k-sram,419.911,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,2,tangnano20k-sram,420.681,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,2,tangnano20k-sram,430.816,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,2,tangnano20k-sram,428.700,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,2,tangnano20k-sram,418.448,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,2,tangnano20k-sram,427.838,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,2,tangnano20k-sram,422.630,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,2,tangnano20k-sram,426.507,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,2,tangnano20k-sram,450.848,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,2,tangnano20k-sram,462.859,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,2,tangnano20k-sram,417.899,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,2,tangnano20k-flash,696.695,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,2,tangnano20k-flash,663.816,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,2,tangnano20k-flash,656.156,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,2,tangnano20k-flash,712.353,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,2,tangnano20k-flash,657.837,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,2,tangnano20k-flash,695.783,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,2,tangnano20k-flash,699.031,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,2,tangnano20k-flash,779.385,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,2,tangnano20k-flash,660.864,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,2,tangnano20k-flash,658.704,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,2,tangnano20k-flash,647.551,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,2,tangnano20k-flash,669.237,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,2,tangnano20k-flash,669.753,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,2,tangnano20k-flash,742.241,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,2,tangnano20k-flash,661.149,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,2,instantiate,76.688,,,,,,,,,,,,module import and instantiate
+matrix,speed,O2,pass,2,instantiate,94.010,,,,,,,,,,,,module import and instantiate
+matrix,speed,O3,pass,2,instantiate,97.562,,,,,,,,,,,,module import and instantiate
+matrix,speed,Oz,pass,2,instantiate,137.200,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOL,pass,2,instantiate,73.044,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOA,pass,2,instantiate,77.785,,,,,,,,,,,,module import and instantiate
+matrix,speed,EHX,pass,2,instantiate,81.825,,,,,,,,,,,,module import and instantiate
+matrix,speed,MG,pass,2,instantiate,78.599,,,,,,,,,,,,module import and instantiate
+matrix,speed,M64,pass,2,instantiate,76.176,,,,,,,,,,,,module import and instantiate
+matrix,speed,DL,pass,2,instantiate,80.040,,,,,,,,,,,,module import and instantiate
+matrix,speed,CL,pass,2,instantiate,74.213,,,,,,,,,,,,module import and instantiate
+matrix,speed,TD2,pass,2,instantiate,76.526,,,,,,,,,,,,module import and instantiate
+matrix,speed,DE0,pass,2,instantiate,83.276,,,,,,,,,,,,module import and instantiate
+matrix,speed,ST1M,pass,2,instantiate,77.265,,,,,,,,,,,,module import and instantiate
+matrix,speed,SIMD,pass,2,instantiate,80.827,,,,,,,,,,,,module import and instantiate
+matrix,speed,B,pass,3,tangnano1k-sram,126.125,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,3,tangnano1k-sram,139.980,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,3,tangnano1k-sram,148.075,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,3,tangnano1k-sram,183.505,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,3,tangnano1k-sram,126.325,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,3,tangnano1k-sram,128.486,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,3,tangnano1k-sram,128.815,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,3,tangnano1k-sram,126.624,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,3,tangnano1k-sram,132.952,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,3,tangnano1k-sram,131.172,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,3,tangnano1k-sram,124.496,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,3,tangnano1k-sram,128.541,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,3,tangnano1k-sram,142.598,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,3,tangnano1k-sram,133.511,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,3,tangnano1k-sram,152.759,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,3,tangnano1k-flash,1369.497,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,3,tangnano1k-flash,1373.818,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,3,tangnano1k-flash,1379.062,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,3,tangnano1k-flash,1429.675,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,3,tangnano1k-flash,1372.497,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,3,tangnano1k-flash,1359.246,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,3,tangnano1k-flash,1360.302,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,3,tangnano1k-flash,1392.866,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,3,tangnano1k-flash,1627.850,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,3,tangnano1k-flash,1404.017,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,3,tangnano1k-flash,1513.995,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,3,tangnano1k-flash,1667.521,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,3,tangnano1k-flash,1642.899,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,3,tangnano1k-flash,1407.438,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,3,tangnano1k-flash,1487.294,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,3,tangnano4k-sram,228.834,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,3,tangnano4k-sram,236.347,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,3,tangnano4k-sram,207.851,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,3,tangnano4k-sram,246.610,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,3,tangnano4k-sram,332.281,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,3,tangnano4k-sram,306.867,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,3,tangnano4k-sram,372.541,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,3,tangnano4k-sram,385.475,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,3,tangnano4k-sram,390.468,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,3,tangnano4k-sram,383.903,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,3,tangnano4k-sram,282.887,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,3,tangnano4k-sram,212.743,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,3,tangnano4k-sram,240.619,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,3,tangnano4k-sram,379.673,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,3,tangnano4k-sram,201.836,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,3,tangnano4k-flash,2188.427,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,3,tangnano4k-flash,1737.837,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,3,tangnano4k-flash,2196.367,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,3,tangnano4k-flash,1958.754,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,3,tangnano4k-flash,1647.419,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,3,tangnano4k-flash,1651.054,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,3,tangnano4k-flash,1716.099,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,3,tangnano4k-flash,1766.859,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,3,tangnano4k-flash,1643.504,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,3,tangnano4k-flash,1674.615,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,3,tangnano4k-flash,1641.688,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,3,tangnano4k-flash,1642.013,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,3,tangnano4k-flash,1746.111,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,3,tangnano4k-flash,1642.881,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,3,tangnano4k-flash,1674.568,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,3,tangnano9k-sram,266.378,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,3,tangnano9k-sram,263.467,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,3,tangnano9k-sram,267.602,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,3,tangnano9k-sram,331.397,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,3,tangnano9k-sram,294.645,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,3,tangnano9k-sram,266.863,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,3,tangnano9k-sram,262.033,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,3,tangnano9k-sram,257.518,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,3,tangnano9k-sram,249.544,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,3,tangnano9k-sram,266.509,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,3,tangnano9k-sram,252.060,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,3,tangnano9k-sram,252.782,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,3,tangnano9k-sram,251.483,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,3,tangnano9k-sram,266.558,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,3,tangnano9k-sram,252.257,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,3,tangnano9k-flash,1957.900,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,3,tangnano9k-flash,2012.076,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,3,tangnano9k-flash,1955.229,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,3,tangnano9k-flash,2014.714,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,3,tangnano9k-flash,1984.961,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,3,tangnano9k-flash,1952.821,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,3,tangnano9k-flash,1955.502,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,3,tangnano9k-flash,2175.328,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,3,tangnano9k-flash,1947.436,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,3,tangnano9k-flash,2008.716,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,3,tangnano9k-flash,1947.808,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,3,tangnano9k-flash,2000.187,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,3,tangnano9k-flash,2040.370,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,3,tangnano9k-flash,1956.936,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,3,tangnano9k-flash,2216.369,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,3,tangnano20k-sram,458.654,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,3,tangnano20k-sram,420.743,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,3,tangnano20k-sram,424.815,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,3,tangnano20k-sram,473.839,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,3,tangnano20k-sram,410.896,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,3,tangnano20k-sram,419.354,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,3,tangnano20k-sram,428.159,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,3,tangnano20k-sram,421.488,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,3,tangnano20k-sram,433.309,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,3,tangnano20k-sram,408.275,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,3,tangnano20k-sram,453.817,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,3,tangnano20k-sram,459.221,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,3,tangnano20k-sram,412.981,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,3,tangnano20k-sram,425.348,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,3,tangnano20k-sram,431.077,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,3,tangnano20k-flash,655.113,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,3,tangnano20k-flash,666.507,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,3,tangnano20k-flash,728.840,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,3,tangnano20k-flash,833.493,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,3,tangnano20k-flash,971.806,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,3,tangnano20k-flash,1220.916,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,3,tangnano20k-flash,909.099,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,3,tangnano20k-flash,921.628,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,3,tangnano20k-flash,733.089,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,3,tangnano20k-flash,837.131,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,3,tangnano20k-flash,799.726,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,3,tangnano20k-flash,758.161,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,3,tangnano20k-flash,1095.871,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,3,tangnano20k-flash,1209.106,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,3,tangnano20k-flash,962.784,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,3,instantiate,90.322,,,,,,,,,,,,module import and instantiate
+matrix,speed,O2,pass,3,instantiate,102.668,,,,,,,,,,,,module import and instantiate
+matrix,speed,O3,pass,3,instantiate,103.814,,,,,,,,,,,,module import and instantiate
+matrix,speed,Oz,pass,3,instantiate,171.195,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOL,pass,3,instantiate,96.953,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOA,pass,3,instantiate,84.110,,,,,,,,,,,,module import and instantiate
+matrix,speed,EHX,pass,3,instantiate,91.505,,,,,,,,,,,,module import and instantiate
+matrix,speed,MG,pass,3,instantiate,75.503,,,,,,,,,,,,module import and instantiate
+matrix,speed,M64,pass,3,instantiate,82.695,,,,,,,,,,,,module import and instantiate
+matrix,speed,DL,pass,3,instantiate,81.707,,,,,,,,,,,,module import and instantiate
+matrix,speed,CL,pass,3,instantiate,76.744,,,,,,,,,,,,module import and instantiate
+matrix,speed,TD2,pass,3,instantiate,93.151,,,,,,,,,,,,module import and instantiate
+matrix,speed,DE0,pass,3,instantiate,74.312,,,,,,,,,,,,module import and instantiate
+matrix,speed,ST1M,pass,3,instantiate,76.487,,,,,,,,,,,,module import and instantiate
+matrix,speed,SIMD,pass,3,instantiate,73.950,,,,,,,,,,,,module import and instantiate
+matrix,speed,B,pass,4,tangnano1k-sram,147.317,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,4,tangnano1k-sram,147.676,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,4,tangnano1k-sram,144.342,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,4,tangnano1k-sram,191.316,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,4,tangnano1k-sram,122.945,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,4,tangnano1k-sram,127.143,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,4,tangnano1k-sram,131.263,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,4,tangnano1k-sram,126.664,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,4,tangnano1k-sram,127.915,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,4,tangnano1k-sram,132.026,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,4,tangnano1k-sram,122.553,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,4,tangnano1k-sram,126.092,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,4,tangnano1k-sram,145.513,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,4,tangnano1k-sram,126.180,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,4,tangnano1k-sram,123.594,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,4,tangnano1k-flash,1376.713,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,4,tangnano1k-flash,1401.488,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,4,tangnano1k-flash,1387.613,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,4,tangnano1k-flash,1432.745,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,4,tangnano1k-flash,1373.643,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,4,tangnano1k-flash,1376.729,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,4,tangnano1k-flash,1370.959,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,4,tangnano1k-flash,1396.557,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,4,tangnano1k-flash,1373.062,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,4,tangnano1k-flash,1395.324,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,4,tangnano1k-flash,1365.435,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,4,tangnano1k-flash,1366.889,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,4,tangnano1k-flash,1373.888,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,4,tangnano1k-flash,1399.676,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,4,tangnano1k-flash,1370.358,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,4,tangnano4k-sram,188.664,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,4,tangnano4k-sram,225.160,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,4,tangnano4k-sram,193.069,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,4,tangnano4k-sram,255.680,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,4,tangnano4k-sram,174.085,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,4,tangnano4k-sram,180.341,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,4,tangnano4k-sram,175.975,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,4,tangnano4k-sram,194.477,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,4,tangnano4k-sram,185.888,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,4,tangnano4k-sram,176.794,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,4,tangnano4k-sram,187.106,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,4,tangnano4k-sram,177.418,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,4,tangnano4k-sram,186.577,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,4,tangnano4k-sram,192.153,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,4,tangnano4k-sram,212.611,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,4,tangnano4k-flash,1655.314,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,4,tangnano4k-flash,1656.116,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,4,tangnano4k-flash,1670.912,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,4,tangnano4k-flash,1766.824,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,4,tangnano4k-flash,1672.631,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,4,tangnano4k-flash,1655.181,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,4,tangnano4k-flash,1706.908,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,4,tangnano4k-flash,1759.955,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,4,tangnano4k-flash,1666.685,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,4,tangnano4k-flash,1641.696,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,4,tangnano4k-flash,1658.634,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,4,tangnano4k-flash,1649.090,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,4,tangnano4k-flash,1662.924,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,4,tangnano4k-flash,1690.433,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,4,tangnano4k-flash,1710.988,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,4,tangnano9k-sram,258.796,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,4,tangnano9k-sram,277.741,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,4,tangnano9k-sram,252.872,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,4,tangnano9k-sram,313.545,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,4,tangnano9k-sram,245.584,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,4,tangnano9k-sram,237.746,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,4,tangnano9k-sram,257.931,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,4,tangnano9k-sram,270.921,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,4,tangnano9k-sram,276.559,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,4,tangnano9k-sram,270.561,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,4,tangnano9k-sram,267.055,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,4,tangnano9k-sram,266.922,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,4,tangnano9k-sram,240.085,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,4,tangnano9k-sram,250.040,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,4,tangnano9k-sram,256.147,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,4,tangnano9k-flash,1942.753,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,4,tangnano9k-flash,1947.084,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,4,tangnano9k-flash,1952.679,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,4,tangnano9k-flash,2013.299,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,4,tangnano9k-flash,2000.301,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,4,tangnano9k-flash,1955.384,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,4,tangnano9k-flash,2001.747,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,4,tangnano9k-flash,2202.785,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,4,tangnano9k-flash,1981.368,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,4,tangnano9k-flash,1959.649,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,4,tangnano9k-flash,1975.677,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,4,tangnano9k-flash,1949.445,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,4,tangnano9k-flash,1991.568,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,4,tangnano9k-flash,1988.325,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,4,tangnano9k-flash,1987.826,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,4,tangnano20k-sram,462.982,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,4,tangnano20k-sram,461.523,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,4,tangnano20k-sram,505.130,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,4,tangnano20k-sram,526.864,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,4,tangnano20k-sram,423.972,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,4,tangnano20k-sram,432.380,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,4,tangnano20k-sram,442.079,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,4,tangnano20k-sram,429.242,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,4,tangnano20k-sram,426.238,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,4,tangnano20k-sram,426.514,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,4,tangnano20k-sram,419.192,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,4,tangnano20k-sram,426.309,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,4,tangnano20k-sram,422.950,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,4,tangnano20k-sram,472.582,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,4,tangnano20k-sram,434.196,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,4,tangnano20k-flash,672.575,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,4,tangnano20k-flash,668.701,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,4,tangnano20k-flash,683.598,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,4,tangnano20k-flash,742.331,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,4,tangnano20k-flash,693.604,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,4,tangnano20k-flash,660.910,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,4,tangnano20k-flash,780.021,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,4,tangnano20k-flash,847.168,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,4,tangnano20k-flash,728.234,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,4,tangnano20k-flash,747.021,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,4,tangnano20k-flash,736.721,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,4,tangnano20k-flash,706.669,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,4,tangnano20k-flash,701.497,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,4,tangnano20k-flash,735.360,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,4,tangnano20k-flash,673.321,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,4,instantiate,74.937,,,,,,,,,,,,module import and instantiate
+matrix,speed,O2,pass,4,instantiate,90.885,,,,,,,,,,,,module import and instantiate
+matrix,speed,O3,pass,4,instantiate,94.920,,,,,,,,,,,,module import and instantiate
+matrix,speed,Oz,pass,4,instantiate,134.240,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOL,pass,4,instantiate,72.913,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOA,pass,4,instantiate,76.453,,,,,,,,,,,,module import and instantiate
+matrix,speed,EHX,pass,4,instantiate,86.530,,,,,,,,,,,,module import and instantiate
+matrix,speed,MG,pass,4,instantiate,74.807,,,,,,,,,,,,module import and instantiate
+matrix,speed,M64,pass,4,instantiate,72.956,,,,,,,,,,,,module import and instantiate
+matrix,speed,DL,pass,4,instantiate,84.229,,,,,,,,,,,,module import and instantiate
+matrix,speed,CL,pass,4,instantiate,78.474,,,,,,,,,,,,module import and instantiate
+matrix,speed,TD2,pass,4,instantiate,82.262,,,,,,,,,,,,module import and instantiate
+matrix,speed,DE0,pass,4,instantiate,76.036,,,,,,,,,,,,module import and instantiate
+matrix,speed,ST1M,pass,4,instantiate,73.565,,,,,,,,,,,,module import and instantiate
+matrix,speed,SIMD,pass,4,instantiate,78.282,,,,,,,,,,,,module import and instantiate
+matrix,speed,B,pass,5,tangnano1k-sram,142.114,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,5,tangnano1k-sram,137.432,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,5,tangnano1k-sram,140.248,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,5,tangnano1k-sram,186.399,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,5,tangnano1k-sram,120.700,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,5,tangnano1k-sram,128.802,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,5,tangnano1k-sram,132.447,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,5,tangnano1k-sram,127.807,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,5,tangnano1k-sram,121.874,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,5,tangnano1k-sram,129.403,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,5,tangnano1k-sram,117.718,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,5,tangnano1k-sram,120.118,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,5,tangnano1k-sram,132.116,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,5,tangnano1k-sram,121.910,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,5,tangnano1k-sram,124.490,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,5,tangnano1k-flash,1397.455,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,5,tangnano1k-flash,1399.067,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,5,tangnano1k-flash,1380.754,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,5,tangnano1k-flash,1438.888,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,5,tangnano1k-flash,1386.693,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,5,tangnano1k-flash,1362.478,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,5,tangnano1k-flash,1371.100,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,5,tangnano1k-flash,1402.610,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,5,tangnano1k-flash,1391.547,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,5,tangnano1k-flash,1374.582,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,5,tangnano1k-flash,1426.753,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,5,tangnano1k-flash,1490.415,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,5,tangnano1k-flash,1491.232,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,5,tangnano1k-flash,1509.429,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,5,tangnano1k-flash,1420.104,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,5,tangnano4k-sram,213.362,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,5,tangnano4k-sram,231.150,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,5,tangnano4k-sram,226.837,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,5,tangnano4k-sram,265.209,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,5,tangnano4k-sram,206.388,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,5,tangnano4k-sram,195.606,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,5,tangnano4k-sram,222.325,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,5,tangnano4k-sram,235.807,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,5,tangnano4k-sram,214.963,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,5,tangnano4k-sram,191.577,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,5,tangnano4k-sram,180.699,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,5,tangnano4k-sram,183.142,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,5,tangnano4k-sram,172.819,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,5,tangnano4k-sram,181.637,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,5,tangnano4k-sram,185.182,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,5,tangnano4k-flash,1650.063,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,5,tangnano4k-flash,1649.936,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,5,tangnano4k-flash,1729.361,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,5,tangnano4k-flash,1705.878,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,5,tangnano4k-flash,1643.929,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,5,tangnano4k-flash,1657.364,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,5,tangnano4k-flash,1657.540,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,5,tangnano4k-flash,1753.502,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,5,tangnano4k-flash,1662.443,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,5,tangnano4k-flash,1656.835,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,5,tangnano4k-flash,1649.055,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,5,tangnano4k-flash,1649.084,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,5,tangnano4k-flash,1738.059,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,5,tangnano4k-flash,1665.489,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,5,tangnano4k-flash,1662.385,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,5,tangnano9k-sram,250.610,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,5,tangnano9k-sram,257.515,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,5,tangnano9k-sram,272.505,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,5,tangnano9k-sram,336.248,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,5,tangnano9k-sram,268.342,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,5,tangnano9k-sram,251.224,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,5,tangnano9k-sram,243.760,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,5,tangnano9k-sram,262.520,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,5,tangnano9k-sram,244.284,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,5,tangnano9k-sram,262.230,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,5,tangnano9k-sram,240.883,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,5,tangnano9k-sram,249.076,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,5,tangnano9k-sram,252.925,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,5,tangnano9k-sram,249.542,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,5,tangnano9k-sram,245.007,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,5,tangnano9k-flash,1938.919,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,5,tangnano9k-flash,1977.602,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,5,tangnano9k-flash,1950.236,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,5,tangnano9k-flash,2022.119,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,5,tangnano9k-flash,1965.318,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,5,tangnano9k-flash,1945.650,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,5,tangnano9k-flash,1987.387,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,5,tangnano9k-flash,2150.430,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,5,tangnano9k-flash,1970.494,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,5,tangnano9k-flash,2019.344,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,5,tangnano9k-flash,1948.600,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,5,tangnano9k-flash,2008.703,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,5,tangnano9k-flash,2049.795,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,5,tangnano9k-flash,1970.523,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,5,tangnano9k-flash,1959.267,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,5,tangnano20k-sram,482.568,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,5,tangnano20k-sram,440.977,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,5,tangnano20k-sram,429.170,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,5,tangnano20k-sram,489.935,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,5,tangnano20k-sram,419.146,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,5,tangnano20k-sram,418.724,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,5,tangnano20k-sram,450.229,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,5,tangnano20k-sram,448.070,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,5,tangnano20k-sram,431.633,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,5,tangnano20k-sram,426.996,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,5,tangnano20k-sram,445.986,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,5,tangnano20k-sram,489.317,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,5,tangnano20k-sram,446.090,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,5,tangnano20k-sram,431.859,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,5,tangnano20k-sram,444.444,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,5,tangnano20k-flash,704.211,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,5,tangnano20k-flash,663.317,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,5,tangnano20k-flash,672.679,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,5,tangnano20k-flash,735.321,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,5,tangnano20k-flash,731.716,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,5,tangnano20k-flash,701.143,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,5,tangnano20k-flash,690.736,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,5,tangnano20k-flash,814.705,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,5,tangnano20k-flash,673.154,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,5,tangnano20k-flash,668.548,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,5,tangnano20k-flash,671.451,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,5,tangnano20k-flash,710.851,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,5,tangnano20k-flash,745.218,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,5,tangnano20k-flash,697.673,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,5,tangnano20k-flash,682.019,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,5,instantiate,74.889,,,,,,,,,,,,module import and instantiate
+matrix,speed,O2,pass,5,instantiate,91.269,,,,,,,,,,,,module import and instantiate
+matrix,speed,O3,pass,5,instantiate,94.786,,,,,,,,,,,,module import and instantiate
+matrix,speed,Oz,pass,5,instantiate,145.224,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOL,pass,5,instantiate,75.284,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOA,pass,5,instantiate,73.402,,,,,,,,,,,,module import and instantiate
+matrix,speed,EHX,pass,5,instantiate,82.110,,,,,,,,,,,,module import and instantiate
+matrix,speed,MG,pass,5,instantiate,83.056,,,,,,,,,,,,module import and instantiate
+matrix,speed,M64,pass,5,instantiate,76.266,,,,,,,,,,,,module import and instantiate
+matrix,speed,DL,pass,5,instantiate,79.693,,,,,,,,,,,,module import and instantiate
+matrix,speed,CL,pass,5,instantiate,75.377,,,,,,,,,,,,module import and instantiate
+matrix,speed,TD2,pass,5,instantiate,79.854,,,,,,,,,,,,module import and instantiate
+matrix,speed,DE0,pass,5,instantiate,87.388,,,,,,,,,,,,module import and instantiate
+matrix,speed,ST1M,pass,5,instantiate,80.396,,,,,,,,,,,,module import and instantiate
+matrix,speed,SIMD,pass,5,instantiate,76.932,,,,,,,,,,,,module import and instantiate
+matrix,speed,B,pass,6,tangnano1k-sram,127.514,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,6,tangnano1k-sram,152.936,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,6,tangnano1k-sram,144.402,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,6,tangnano1k-sram,194.096,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,6,tangnano1k-sram,125.492,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,6,tangnano1k-sram,124.222,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,6,tangnano1k-sram,132.646,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,6,tangnano1k-sram,126.660,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,6,tangnano1k-sram,143.259,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,6,tangnano1k-sram,156.890,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,6,tangnano1k-sram,147.058,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,6,tangnano1k-sram,148.377,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,6,tangnano1k-sram,136.139,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,6,tangnano1k-sram,125.131,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,6,tangnano1k-sram,126.578,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,6,tangnano1k-flash,1439.900,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,6,tangnano1k-flash,1380.752,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,6,tangnano1k-flash,1381.238,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,6,tangnano1k-flash,1498.154,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,6,tangnano1k-flash,1360.191,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,6,tangnano1k-flash,1355.949,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,6,tangnano1k-flash,1383.294,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,6,tangnano1k-flash,1438.534,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,6,tangnano1k-flash,1368.873,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,6,tangnano1k-flash,1378.798,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,6,tangnano1k-flash,1365.060,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,6,tangnano1k-flash,1396.889,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,6,tangnano1k-flash,1364.861,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,6,tangnano1k-flash,1376.008,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,6,tangnano1k-flash,1378.280,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,6,tangnano4k-sram,181.983,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,6,tangnano4k-sram,218.090,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,6,tangnano4k-sram,215.789,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,6,tangnano4k-sram,280.631,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,6,tangnano4k-sram,180.471,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,6,tangnano4k-sram,178.385,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,6,tangnano4k-sram,179.722,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,6,tangnano4k-sram,191.227,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,6,tangnano4k-sram,178.889,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,6,tangnano4k-sram,181.308,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,6,tangnano4k-sram,178.134,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,6,tangnano4k-sram,186.118,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,6,tangnano4k-sram,176.205,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,6,tangnano4k-sram,182.219,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,6,tangnano4k-sram,194.275,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,6,tangnano4k-flash,1652.256,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,6,tangnano4k-flash,1693.238,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,6,tangnano4k-flash,1666.299,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,6,tangnano4k-flash,1714.451,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,6,tangnano4k-flash,1658.077,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,6,tangnano4k-flash,1666.133,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,6,tangnano4k-flash,1645.767,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,6,tangnano4k-flash,1751.373,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,6,tangnano4k-flash,1700.174,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,6,tangnano4k-flash,1659.679,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,6,tangnano4k-flash,1661.678,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,6,tangnano4k-flash,1701.890,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,6,tangnano4k-flash,1665.403,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,6,tangnano4k-flash,1676.481,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,6,tangnano4k-flash,1685.274,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,6,tangnano9k-sram,267.387,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,6,tangnano9k-sram,272.655,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,6,tangnano9k-sram,263.213,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,6,tangnano9k-sram,308.697,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,6,tangnano9k-sram,265.317,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,6,tangnano9k-sram,245.618,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,6,tangnano9k-sram,256.433,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,6,tangnano9k-sram,251.569,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,6,tangnano9k-sram,248.010,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,6,tangnano9k-sram,264.526,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,6,tangnano9k-sram,247.279,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,6,tangnano9k-sram,266.445,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,6,tangnano9k-sram,258.614,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,6,tangnano9k-sram,247.380,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,6,tangnano9k-sram,259.323,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,6,tangnano9k-flash,2076.090,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,6,tangnano9k-flash,1964.253,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,6,tangnano9k-flash,1971.070,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,6,tangnano9k-flash,2076.706,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,6,tangnano9k-flash,1956.221,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,6,tangnano9k-flash,1957.868,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,6,tangnano9k-flash,1965.241,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,6,tangnano9k-flash,2143.809,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,6,tangnano9k-flash,1970.636,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,6,tangnano9k-flash,1950.607,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,6,tangnano9k-flash,1989.473,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,6,tangnano9k-flash,2028.473,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,6,tangnano9k-flash,1998.803,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,6,tangnano9k-flash,1981.518,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,6,tangnano9k-flash,2017.531,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,6,tangnano20k-sram,430.673,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,6,tangnano20k-sram,432.883,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,6,tangnano20k-sram,433.008,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,6,tangnano20k-sram,465.895,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,6,tangnano20k-sram,416.757,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,6,tangnano20k-sram,421.777,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,6,tangnano20k-sram,440.719,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,6,tangnano20k-sram,437.623,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,6,tangnano20k-sram,478.464,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,6,tangnano20k-sram,440.340,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,6,tangnano20k-sram,439.346,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,6,tangnano20k-sram,437.404,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,6,tangnano20k-sram,439.506,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,6,tangnano20k-sram,433.793,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,6,tangnano20k-sram,424.980,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,6,tangnano20k-flash,691.936,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,6,tangnano20k-flash,674.873,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,6,tangnano20k-flash,726.119,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,6,tangnano20k-flash,774.417,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,6,tangnano20k-flash,685.267,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,6,tangnano20k-flash,681.088,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,6,tangnano20k-flash,668.206,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,6,tangnano20k-flash,799.533,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,6,tangnano20k-flash,665.392,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,6,tangnano20k-flash,713.939,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,6,tangnano20k-flash,718.418,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,6,tangnano20k-flash,662.181,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,6,tangnano20k-flash,685.244,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,6,tangnano20k-flash,664.977,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,6,tangnano20k-flash,716.359,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,6,instantiate,81.023,,,,,,,,,,,,module import and instantiate
+matrix,speed,O2,pass,6,instantiate,92.862,,,,,,,,,,,,module import and instantiate
+matrix,speed,O3,pass,6,instantiate,96.954,,,,,,,,,,,,module import and instantiate
+matrix,speed,Oz,pass,6,instantiate,145.842,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOL,pass,6,instantiate,75.337,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOA,pass,6,instantiate,72.717,,,,,,,,,,,,module import and instantiate
+matrix,speed,EHX,pass,6,instantiate,82.094,,,,,,,,,,,,module import and instantiate
+matrix,speed,MG,pass,6,instantiate,98.362,,,,,,,,,,,,module import and instantiate
+matrix,speed,M64,pass,6,instantiate,74.924,,,,,,,,,,,,module import and instantiate
+matrix,speed,DL,pass,6,instantiate,81.775,,,,,,,,,,,,module import and instantiate
+matrix,speed,CL,pass,6,instantiate,72.918,,,,,,,,,,,,module import and instantiate
+matrix,speed,TD2,pass,6,instantiate,79.866,,,,,,,,,,,,module import and instantiate
+matrix,speed,DE0,pass,6,instantiate,90.931,,,,,,,,,,,,module import and instantiate
+matrix,speed,ST1M,pass,6,instantiate,75.374,,,,,,,,,,,,module import and instantiate
+matrix,speed,SIMD,pass,6,instantiate,79.325,,,,,,,,,,,,module import and instantiate
+matrix,speed,B,pass,7,tangnano1k-sram,142.569,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,7,tangnano1k-sram,173.481,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,7,tangnano1k-sram,165.004,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,7,tangnano1k-sram,204.128,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,7,tangnano1k-sram,126.119,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,7,tangnano1k-sram,143.560,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,7,tangnano1k-sram,140.304,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,7,tangnano1k-sram,132.264,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,7,tangnano1k-sram,132.413,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,7,tangnano1k-sram,131.201,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,7,tangnano1k-sram,126.039,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,7,tangnano1k-sram,127.369,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,7,tangnano1k-sram,133.187,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,7,tangnano1k-sram,125.415,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,7,tangnano1k-sram,128.455,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,7,tangnano1k-flash,1372.363,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,7,tangnano1k-flash,1394.075,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,7,tangnano1k-flash,1411.347,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,7,tangnano1k-flash,1431.947,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,7,tangnano1k-flash,1352.920,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,7,tangnano1k-flash,1363.761,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,7,tangnano1k-flash,1394.515,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,7,tangnano1k-flash,1438.329,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,7,tangnano1k-flash,1405.434,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,7,tangnano1k-flash,1419.057,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,7,tangnano1k-flash,1386.701,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,7,tangnano1k-flash,1360.149,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,7,tangnano1k-flash,1367.676,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,7,tangnano1k-flash,1373.330,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,7,tangnano1k-flash,1393.929,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,7,tangnano4k-sram,177.653,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,7,tangnano4k-sram,194.082,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,7,tangnano4k-sram,194.644,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,7,tangnano4k-sram,246.206,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,7,tangnano4k-sram,175.554,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,7,tangnano4k-sram,187.222,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,7,tangnano4k-sram,181.515,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,7,tangnano4k-sram,205.901,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,7,tangnano4k-sram,172.754,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,7,tangnano4k-sram,196.378,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,7,tangnano4k-sram,192.511,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,7,tangnano4k-sram,188.261,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,7,tangnano4k-sram,180.337,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,7,tangnano4k-sram,176.807,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,7,tangnano4k-sram,184.342,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,7,tangnano4k-flash,1649.764,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,7,tangnano4k-flash,1672.781,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,7,tangnano4k-flash,1655.116,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,7,tangnano4k-flash,1734.209,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,7,tangnano4k-flash,1676.974,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,7,tangnano4k-flash,1653.244,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,7,tangnano4k-flash,1665.319,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,7,tangnano4k-flash,1803.656,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,7,tangnano4k-flash,1648.286,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,7,tangnano4k-flash,1665.784,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,7,tangnano4k-flash,1655.527,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,7,tangnano4k-flash,1655.057,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,7,tangnano4k-flash,1668.854,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,7,tangnano4k-flash,1641.141,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,7,tangnano4k-flash,1683.945,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,7,tangnano9k-sram,247.399,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,7,tangnano9k-sram,268.707,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,7,tangnano9k-sram,260.657,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,7,tangnano9k-sram,324.427,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,7,tangnano9k-sram,245.693,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,7,tangnano9k-sram,248.638,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,7,tangnano9k-sram,275.897,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,7,tangnano9k-sram,243.828,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,7,tangnano9k-sram,266.641,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,7,tangnano9k-sram,252.511,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,7,tangnano9k-sram,245.841,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,7,tangnano9k-sram,266.268,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,7,tangnano9k-sram,241.124,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,7,tangnano9k-sram,282.634,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,7,tangnano9k-sram,284.424,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,7,tangnano9k-flash,1996.603,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,7,tangnano9k-flash,1959.906,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,7,tangnano9k-flash,2006.396,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,7,tangnano9k-flash,2025.173,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,7,tangnano9k-flash,1990.559,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,7,tangnano9k-flash,2028.798,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,7,tangnano9k-flash,1958.995,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,7,tangnano9k-flash,2137.201,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,7,tangnano9k-flash,1986.143,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,7,tangnano9k-flash,1945.196,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,7,tangnano9k-flash,1958.136,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,7,tangnano9k-flash,1959.013,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,7,tangnano9k-flash,1968.342,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,7,tangnano9k-flash,1953.315,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,7,tangnano9k-flash,1974.252,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,7,tangnano20k-sram,440.772,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,7,tangnano20k-sram,447.828,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,7,tangnano20k-sram,437.716,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,7,tangnano20k-sram,483.325,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,7,tangnano20k-sram,454.312,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,7,tangnano20k-sram,459.436,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,7,tangnano20k-sram,449.148,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,7,tangnano20k-sram,445.882,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,7,tangnano20k-sram,422.717,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,7,tangnano20k-sram,423.898,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,7,tangnano20k-sram,416.353,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,7,tangnano20k-sram,431.952,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,7,tangnano20k-sram,430.793,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,7,tangnano20k-sram,440.851,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,7,tangnano20k-sram,434.426,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,7,tangnano20k-flash,717.425,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O2,pass,7,tangnano20k-flash,711.748,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,O3,pass,7,tangnano20k-flash,658.255,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,Oz,pass,7,tangnano20k-flash,724.364,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOL,pass,7,tangnano20k-flash,673.792,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,LTOA,pass,7,tangnano20k-flash,658.488,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,EHX,pass,7,tangnano20k-flash,697.603,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,MG,pass,7,tangnano20k-flash,800.723,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,M64,pass,7,tangnano20k-flash,719.460,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DL,pass,7,tangnano20k-flash,663.575,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,CL,pass,7,tangnano20k-flash,654.622,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,TD2,pass,7,tangnano20k-flash,677.496,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,DE0,pass,7,tangnano20k-flash,696.559,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,ST1M,pass,7,tangnano20k-flash,678.203,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,SIMD,pass,7,tangnano20k-flash,681.335,,,,,,,,,,,,module import/instantiate and callMain
+matrix,speed,B,pass,7,instantiate,76.927,,,,,,,,,,,,module import and instantiate
+matrix,speed,O2,pass,7,instantiate,107.035,,,,,,,,,,,,module import and instantiate
+matrix,speed,O3,pass,7,instantiate,101.087,,,,,,,,,,,,module import and instantiate
+matrix,speed,Oz,pass,7,instantiate,147.179,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOL,pass,7,instantiate,83.737,,,,,,,,,,,,module import and instantiate
+matrix,speed,LTOA,pass,7,instantiate,87.847,,,,,,,,,,,,module import and instantiate
+matrix,speed,EHX,pass,7,instantiate,79.962,,,,,,,,,,,,module import and instantiate
+matrix,speed,MG,pass,7,instantiate,76.374,,,,,,,,,,,,module import and instantiate
+matrix,speed,M64,pass,7,instantiate,77.326,,,,,,,,,,,,module import and instantiate
+matrix,speed,DL,pass,7,instantiate,80.809,,,,,,,,,,,,module import and instantiate
+matrix,speed,CL,pass,7,instantiate,78.050,,,,,,,,,,,,module import and instantiate
+matrix,speed,TD2,pass,7,instantiate,76.089,,,,,,,,,,,,module import and instantiate
+matrix,speed,DE0,pass,7,instantiate,76.161,,,,,,,,,,,,module import and instantiate
+matrix,speed,ST1M,pass,7,instantiate,74.606,,,,,,,,,,,,module import and instantiate
+matrix,speed,SIMD,pass,7,instantiate,79.749,,,,,,,,,,,,module import and instantiate
+compare,build,C,pass,,,,1:28.30,243312,0:37.47,212556,2280887,634803,47f3a5d878a0f20794459bfcc7e4473ef74f2316a944474ade6155467c729309,99393,27380,9005540841199936d9f983124e7a890e3661bd21f250b11e580346e8e7c0df27,"/usr/bin/time -v -o <repo>/build/s1b/C/openFPGALoader-build/link-time.txt <repo>/build/emsdk-6.0.13/upstream/emscripten/em++ -Os -ffile-prefix-map=<repo>=/src -ffile-prefix-map=<repo>/build/s1b=/build -pthread -fwasm-exceptions -pthread -lembind -s STRICT=1 -s INVOKE_RUN=0 -s EXIT_RUNTIME=1 -s MALLOC=emmalloc -s INITIAL_MEMORY=33554432 -s EXPORTED_RUNTIME_METHODS=FS,stackAlloc,stringToUTF8OnStack,ccall,callMain -s EXPORTED_FUNCTIONS=_main,_fflush -s MODULARIZE=1 -s EXPORT_NAME=instantiate -s EXPORT_ES6=1 -s ENVIRONMENT=worker,node -s TEXTDECODER=1 -s WASM_LEGACY_EXCEPTIONS=1 -fwasm-exceptions -s JSPI=1 CMakeFiles/openFPGALoader.dir/src/common.cpp.o CMakeFiles/openFPGALoader.dir/src/configBitstreamParser.cpp.o CMakeFiles/openFPGALoader.dir/src/device.cpp.o CMakeFiles/openFPGALoader.dir/src/display.cpp.o CMakeFiles/openFPGALoader.dir/src/main.cpp.o CMakeFiles/openFPGALoader.dir/src/progressBar.cpp.o CMakeFiles/openFPGALoader.dir/src/rawParser.cpp.o CMakeFiles/openFPGALoader.dir/src/bpiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/spiFlash.cpp.o CMakeFiles/openFPGALoader.dir/src/flashInterface.cpp.o CMakeFiles/openFPGALoader.dir/src/jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ch552_jtag.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagBitbang.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdiJtagMPSSE.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdipp_mpsse.cpp.o CMakeFiles/openFPGALoader.dir/src/ftdispi.cpp.o CMakeFiles/openFPGALoader.dir/src/gowin.cpp.o CMakeFiles/openFPGALoader.dir/src/fsparser.cpp.o CMakeFiles/openFPGALoader.dir/src/libusb_ll.cpp.o -o openFPGALoader.mjs   -L<repo>/build/s1b/C/prefix/lib  -lusb-1.0 -lftdi1 -lusb-1.0 -lz -lftdi1 -lz",command: build/s1b/timing/C-command.txt; exact link: build/s1b/C/openFPGALoader-build/CMakeFiles/openFPGALoader.dir/link.txt
+compare,gate,B,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+compare,gate,B,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+compare,gate,B,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+compare,gate,B,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+compare,gate,B,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+compare,gate,C,pass,1,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+compare,gate,C,pass,2,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+compare,gate,C,pass,3,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+compare,gate,C,pass,4,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+compare,gate,C,pass,5,,,,,,,,,,,,,,timeout 300s; command: node --test tests/sim/detect.test.mjs tests/sim/program.test.mjs
+compare,speed,B,pass,1,tangnano1k-sram,133.631,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,1,tangnano1k-sram,127.100,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,1,tangnano1k-flash,1368.667,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,1,tangnano1k-flash,1373.577,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,1,tangnano4k-sram,177.997,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,1,tangnano4k-sram,183.382,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,1,tangnano4k-flash,1694.907,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,1,tangnano4k-flash,1648.741,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,1,tangnano9k-sram,265.437,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,1,tangnano9k-sram,252.841,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,1,tangnano9k-flash,1959.345,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,1,tangnano9k-flash,1993.873,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,1,tangnano20k-sram,427.443,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,1,tangnano20k-sram,418.037,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,1,tangnano20k-flash,685.705,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,1,tangnano20k-flash,684.994,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,1,instantiate,75.189,,,,,,,,,,,,module import and instantiate
+compare,speed,C,pass,1,instantiate,85.392,,,,,,,,,,,,module import and instantiate
+compare,speed,B,pass,2,tangnano1k-sram,125.712,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,2,tangnano1k-sram,129.282,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,2,tangnano1k-flash,1368.726,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,2,tangnano1k-flash,1378.496,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,2,tangnano4k-sram,188.438,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,2,tangnano4k-sram,187.205,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,2,tangnano4k-flash,1662.112,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,2,tangnano4k-flash,1648.577,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,2,tangnano9k-sram,278.623,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,2,tangnano9k-sram,283.179,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,2,tangnano9k-flash,1964.863,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,2,tangnano9k-flash,1971.565,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,2,tangnano20k-sram,432.592,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,2,tangnano20k-sram,422.101,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,2,tangnano20k-flash,765.802,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,2,tangnano20k-flash,693.991,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,2,instantiate,79.303,,,,,,,,,,,,module import and instantiate
+compare,speed,C,pass,2,instantiate,74.773,,,,,,,,,,,,module import and instantiate
+compare,speed,B,pass,3,tangnano1k-sram,126.550,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,3,tangnano1k-sram,124.689,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,3,tangnano1k-flash,1370.424,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,3,tangnano1k-flash,1358.538,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,3,tangnano4k-sram,180.167,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,3,tangnano4k-sram,189.196,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,3,tangnano4k-flash,1705.419,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,3,tangnano4k-flash,1687.304,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,3,tangnano9k-sram,250.518,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,3,tangnano9k-sram,257.369,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,3,tangnano9k-flash,1945.155,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,3,tangnano9k-flash,2027.708,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,3,tangnano20k-sram,438.987,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,3,tangnano20k-sram,425.239,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,3,tangnano20k-flash,685.147,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,3,tangnano20k-flash,694.155,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,3,instantiate,75.706,,,,,,,,,,,,module import and instantiate
+compare,speed,C,pass,3,instantiate,80.090,,,,,,,,,,,,module import and instantiate
+compare,speed,B,pass,4,tangnano1k-sram,126.871,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,4,tangnano1k-sram,129.115,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,4,tangnano1k-flash,1369.094,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,4,tangnano1k-flash,1381.717,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,4,tangnano4k-sram,314.689,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,4,tangnano4k-sram,323.927,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,4,tangnano4k-flash,1922.905,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,4,tangnano4k-flash,1965.015,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,4,tangnano9k-sram,301.736,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,4,tangnano9k-sram,511.578,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,4,tangnano9k-flash,2184.952,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,4,tangnano9k-flash,2806.939,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,4,tangnano20k-sram,867.345,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,4,tangnano20k-sram,865.497,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,4,tangnano20k-flash,935.374,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,4,tangnano20k-flash,1156.152,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,4,instantiate,157.873,,,,,,,,,,,,module import and instantiate
+compare,speed,C,pass,4,instantiate,135.292,,,,,,,,,,,,module import and instantiate
+compare,speed,B,pass,5,tangnano1k-sram,195.680,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,5,tangnano1k-sram,160.362,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,5,tangnano1k-flash,1418.946,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,5,tangnano1k-flash,1386.317,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,5,tangnano4k-sram,194.507,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,5,tangnano4k-sram,190.873,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,5,tangnano4k-flash,1657.964,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,5,tangnano4k-flash,1800.098,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,5,tangnano9k-sram,390.769,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,5,tangnano9k-sram,411.936,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,5,tangnano9k-flash,2362.550,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,5,tangnano9k-flash,2323.505,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,5,tangnano20k-sram,718.412,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,5,tangnano20k-sram,547.806,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,5,tangnano20k-flash,1013.305,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,5,tangnano20k-flash,812.889,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,5,instantiate,93.569,,,,,,,,,,,,module import and instantiate
+compare,speed,C,pass,5,instantiate,85.379,,,,,,,,,,,,module import and instantiate
+compare,speed,B,pass,6,tangnano1k-sram,139.453,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,6,tangnano1k-sram,130.557,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,6,tangnano1k-flash,1514.377,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,6,tangnano1k-flash,1592.221,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,6,tangnano4k-sram,396.139,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,6,tangnano4k-sram,216.374,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,6,tangnano4k-flash,1895.266,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,6,tangnano4k-flash,1856.050,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,6,tangnano9k-sram,386.203,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,6,tangnano9k-sram,716.103,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,6,tangnano9k-flash,2684.375,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,6,tangnano9k-flash,2074.246,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,6,tangnano20k-sram,470.422,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,6,tangnano20k-sram,438.412,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,6,tangnano20k-flash,684.691,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,6,tangnano20k-flash,688.482,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,6,instantiate,80.866,,,,,,,,,,,,module import and instantiate
+compare,speed,C,pass,6,instantiate,80.696,,,,,,,,,,,,module import and instantiate
+compare,speed,B,pass,7,tangnano1k-sram,145.233,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,7,tangnano1k-sram,134.787,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,7,tangnano1k-flash,1382.392,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,7,tangnano1k-flash,1384.958,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,7,tangnano4k-sram,203.416,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,7,tangnano4k-sram,185.368,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,7,tangnano4k-flash,1672.939,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,7,tangnano4k-flash,1685.083,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,7,tangnano9k-sram,283.396,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,7,tangnano9k-sram,298.111,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,7,tangnano9k-flash,2013.904,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,7,tangnano9k-flash,1991.111,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,7,tangnano20k-sram,433.057,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,7,tangnano20k-sram,456.906,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,7,tangnano20k-flash,766.458,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,C,pass,7,tangnano20k-flash,737.718,,,,,,,,,,,,module import/instantiate and callMain
+compare,speed,B,pass,7,instantiate,75.216,,,,,,,,,,,,module import and instantiate
+compare,speed,C,pass,7,instantiate,74.095,,,,,,,,,,,,module import and instantiate

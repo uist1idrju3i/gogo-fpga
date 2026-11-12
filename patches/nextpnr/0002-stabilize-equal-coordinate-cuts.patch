@@ -1,0 +1,11 @@
+--- a/common/place/placer_heap.cc
++++ b/common/place/placer_heap.cc
+@@ -1901,7 +1901,7 @@
+             for (auto &cell : cut_cells) {
+                 total_cells += p->chain_size.count(cell->name) ? p->chain_size.at(cell->name) : 1;
+             }
+-            std::sort(cut_cells.begin(), cut_cells.end(), [&](const CellInfo *a, const CellInfo *b) {
++            std::stable_sort(cut_cells.begin(), cut_cells.end(), [&](const CellInfo *a, const CellInfo *b) {
+                 return dir ? (p->cell_locs.at(a->name).rawy < p->cell_locs.at(b->name).rawy)
+                            : (p->cell_locs.at(a->name).rawx < p->cell_locs.at(b->name).rawx);
+             });

@@ -1,0 +1,11 @@
+--- a/common/route/router1.cc
++++ b/common/route/router1.cc
+@@ -49,7 +49,7 @@
+ 
+     unsigned int hash() const
+     {
+-        std::size_t seed = std::hash<NetInfo *>()(net_info);
++        unsigned int seed = net_info->name.hash();
+         seed ^= user_idx.hash() + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+         seed ^= std::hash<int>()(phys_idx) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+         return seed;

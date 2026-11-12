@@ -1,0 +1,101 @@
+{
+  "repo_notes": [
+    {
+      "content": "午後のFPGA は、ブラウザー上で VHDL と Verilog の編集から FPGA への書き込みまで行う開発環境を目指します。対象は Tang Nano 1K・4K・9K・20K です。T0 では旧書き込みアプリから書き込み部を移植しました。対応状況は README.md を参照してください。"
+    },
+    {
+      "content": "Wiki は日本語で書いてください。コード、識別子、ファイル名、コマンド、Emscripten の設定名は英語のまま記載します。README.md、RESEARCH.md、docs/ の文書も日本語です。"
+    },
+    {
+      "content": "vendor/ 配下（openFPGALoader、libusb、libftdi、zlib、emsdk、yomiyasu）は shallow submodule で取り込んだ外部コードで、編集していません。将来追加する HDL ライブラリーと CPU コアも、pin を固定した shallow submodule として参照し、ライセンスを記録します。scripts/build-wasm.sh、.gitmodules、RESEARCH.md を根拠にしてください。"
+    },
+    {
+      "content": "確認済みの事実と未確認事項を区別してください。書き込み部は tests/sim/fake-webusb.mjs の仮想の FT2232・GOWIN TAP・NOR フラッシュ、Node のテスト（tests/sim/）、Playwright（tests/e2e/）で確かめます。実機の Tang Nano では試していません。仮想デバイスで測った時間を実機の値のように書かないでください。"
+    },
+    {
+      "content": "現在の書き込み部の流れです。scripts/build-wasm.sh が libusb・libftdi・zlib・openFPGALoader を JSPI + pthread + -fwasm-exceptions + -Os でビルドし、build-info.json を作ります。scripts/build-web.sh が web/ と WASM を public_html/ にまとめ、build-info.json と照合します。画面（web/app.js）は .fs の IDCODE を確認してから navigator.usb.requestDevice を呼び出す実装です。各実行では、新しい Worker（web/worker.js）と WASM のインスタンスを作成し、callMain に引数を渡します。引数は web/lib/build-args.mjs が作り、適用条件は web/lib/options.mjs が決めます。"
+    }
+  ],
+  "pages": [
+    {
+      "title": "概要とプロジェクトの目的",
+      "purpose": "対象ボード、Web IDE の目標、T0 で移植済みの機能、今後の段階を説明する",
+      "page_notes": [
+        { "content": "README.md と RESEARCH.md の「目的と対象ボード」を主な根拠にしてください。現時点で実装済みなのは書き込み部だけです。" }
+      ]
+    },
+    {
+      "title": "リポジトリ構成と開発ルール",
+      "purpose": "ディレクトリ構成、AGENTS.md の作業規約（main の保護、日本語、JIS X 0213、外部 submodule、fail closed の検査）、Codex と Claude Code 向けのスキルリンクを説明する",
+      "parent": "概要とプロジェクトの目的",
+      "page_notes": [
+        { "content": "AGENTS.md、CLAUDE.md、.agents/skills/、.claude/skills/、.github/workflows/agent-docs.yml を根拠にしてください。" }
+      ]
+    },
+    {
+      "title": "WASM のビルド",
+      "purpose": "書き込み部の依存固定、Emscripten の版、build-wasm.sh の手順、build-info.json による照合を説明する。合成系の WASM 化は後続段階であることを明記する",
+      "page_notes": [
+        { "content": "scripts/build-wasm.sh、scripts/build-info.py、scripts/build-web.sh、.gitmodules、RESEARCH.md の「書き込み部から引き継ぐ知見」を根拠にしてください。" }
+      ]
+    },
+    {
+      "title": "Emscripten のビルドオプションの選定",
+      "purpose": "Emscripten の比較項目と実験計画を説明し、書き込み部と将来の合成系で必要な構成を分ける",
+      "parent": "WASM のビルド",
+      "page_notes": [
+        { "content": "RESEARCH.md の「Emscripten のオプション」と docs/experiments/README.md を根拠にしてください。T0 では合成系のオプション比較をまだ実施していません。" }
+      ]
+    },
+    {
+      "title": "Web 画面と Worker",
+      "purpose": "T0 の書き込み画面の流れと、将来追加する IDE 画面の設計を区別して説明する",
+      "parent": "概要とプロジェクトの目的",
+      "page_notes": [
+        { "content": "現在の書き込み部は web/index.html、web/app.js、web/worker.js、web/lib/、web/serve.py を根拠にしてください。IDE の画面設計は docs/research/editor-and-ai.md を参照してください。" }
+      ]
+    },
+    {
+      "title": "高度な設定と openFPGALoader のオプション",
+      "purpose": "書き込み部で使う openFPGALoader の操作とオプションを説明する",
+      "parent": "Web 画面と Worker",
+      "page_notes": [
+        { "content": "web/lib/options.mjs、web/lib/build-args.mjs、RESEARCH.md の「書き込み部から引き継ぐ知見」を根拠にしてください。upstream の行番号は RESEARCH.md の引用に従ってください。" }
+      ]
+    },
+    {
+      "title": "仮想 USB によるテスト",
+      "purpose": "仮想 FT2232/MPSSE、GOWIN TAP、NOR フラッシュ、故障の注入、負の対照、テストの層を説明する",
+      "parent": "概要とプロジェクトの目的",
+      "page_notes": [
+        { "content": "tests/sim/、tests/web/、tests/e2e/、tests/fixtures/、.agents/skills/fake-usb/SKILL.md、docs/experiments/README.md を根拠にしてください。実機では試していないことを明記してください。" }
+      ]
+    },
+    {
+      "title": "調査記録の読み方",
+      "purpose": "RESEARCH.md、docs/research/、docs/experiments/ の構成、実験記録の方法、未確認事項を説明する",
+      "parent": "概要とプロジェクトの目的",
+      "page_notes": [
+        { "content": "RESEARCH.md の 7 章の一覧と docs/research/、docs/experiments/README.md、.agents/skills/experiment-record/ を根拠にしてください。実施していない実験を結果として記載しないでください。" }
+      ]
+    },
+    {
+      "title": "ライセンス",
+      "purpose": "書き込み部と将来追加するツール、HDL ライブラリーのライセンスと配布時の義務を説明する",
+      "parent": "概要とプロジェクトの目的",
+      "page_notes": [
+        { "content": "RESEARCH.md の「ライセンス」と THIRD_PARTY_NOTICES.md を根拠にしてください。" }
+      ]
+    },
+    {
+      "title": "CI と依存関係の監視",
+      "purpose": "build、lint、agent-docs、固定版の更新確認の各 workflow が検査する内容と、Dependabot が週次で確認する依存を説明する",
+      "parent": "リポジトリ構成と開発ルール",
+      "page_notes": [
+        {
+          "content": ".github/workflows/build.yml は変更 path を判定してから build します。emsdk と fixture の cache を条件付きで使い、build artifact は 3 つの simulator shard と Playwright に共有します。sim-coverage が TAP report の失敗と網羅性を検査し、週次 schedule は cache を使わない cold build です。.github/workflows/lint.yml は workflow、shell、依存 pin、zizmor、shard coverage checker を対象にします。.github/workflows/agent-docs.yml は文書とスキルリンクを検査します。.github/workflows/pins-check.yml は固定バージョンの更新時に Issue を開く workflow です。.github/dependabot.yml は branch を追う submodule、GitHub Actions、npm、pip を週次で確認します。pin checker が検査するファイルを基準にし、pin の二重管理を避けてください。"
+        }
+      ]
+    }
+  ]
+}

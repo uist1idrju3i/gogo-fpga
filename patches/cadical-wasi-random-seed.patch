@@ -1,0 +1,27 @@
+--- a/src/random.cpp
++++ b/src/random.cpp
+@@ -1,1 +1,13 @@
+-#include "internal.hpp"
++#include "internal.hpp"
++
++#ifdef __wasi__
++#include <cstdio>
++#include <cstdlib>
++
++namespace CaDiCaL {
++Random::Random () : state (1) {
++  fputs ("CaDiCaL: machine-dependent random seeding is unavailable on WASI\n", stderr);
++  abort ();
++}
++} // namespace CaDiCaL
++#else
+@@ -204,4 +216,5 @@
+-#endif
+-}
+-
+-} // namespace CaDiCaL
++#endif
++}
++
++} // namespace CaDiCaL
++#endif

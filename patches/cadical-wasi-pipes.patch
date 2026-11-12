@@ -1,0 +1,35 @@
+--- a/src/file.cpp
++++ b/src/file.cpp
+@@ -161,6 +161,11 @@
+ FILE * File::open_pipe (Internal * internal,
+                         const char * fmt, const char * path,
+                         const char * mode) {
++#ifdef __wasi__
++  (void) internal, (void) fmt, (void) path, (void) mode;
++  fputs ("CaDiCaL: external pipe commands are unavailable on WASI\n", stderr);
++  abort ();
++#else
+ #ifdef QUIET
+   (void) internal;
+ #endif
+@@ -180,6 +185,7 @@
+   FILE * res = popen (cmd, mode);
+   delete [] cmd;
+   return res;
++#endif
+ }
+ 
+ FILE * File::read_pipe (Internal * internal,
+@@ -269,7 +275,12 @@
+   }
+   if (close_file == 2) {
+     VERBOSE (1, "closing pipe command on '%s'", name ());
++#ifdef __wasi__
++    fputs ("CaDiCaL: closing external pipes is unavailable on WASI\n", stderr);
++    abort ();
++#else
+     pclose (file);
++#endif
+   }
+ 
+   file = 0;     // mark as closed

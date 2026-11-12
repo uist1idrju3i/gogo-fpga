@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="午後のFPGA" />
+    <meta name="keywords" content="FPGA,TangNano1K,TangNano4K,TangNano9K,TangNano20K" />
+    <meta name="robots" content="index,follow" />
+    <title>午後のFPGA</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <main class="ide-page">
+      <form id="program-form" class="ide-form">
+        <header class="ide-header">
+          <div class="brand">
+            <p class="eyebrow">午後のFPGA</p>
+            <h1>午後のFPGA</h1>
+            <p class="project-title">プロジェクト: <strong id="project-name">読み込み中</strong></p>
+            <div class="project-toolbar">
+              <label for="project-select">
+                <span>切り替え</span>
+                <select id="project-select" aria-label="プロジェクトを切り替える"></select>
+              </label>
+              <button id="new-project-button" type="button" class="secondary">
+                新しいプロジェクト
+              </button>
+            </div>
+            <p id="project-action-status" role="status" aria-live="polite"></p>
+            <details id="licenses" class="license-information">
+              <summary>ライセンス</summary>
+              <p>使用するツールと依存ライブラリーの許諾条件を確認できます。</p>
+              <ul>
+                <li><a href="./THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener">第三者のライセンス一覧</a></li>
+                <li><a href="./licenses/iverilog-COPYING" target="_blank" rel="noopener">Icarus Verilog（GPL-2.0-or-later）</a></li>
+                <li><a href="./licenses/surfer-LICENSE-EUPL-1.2.txt" target="_blank" rel="noopener">Surfer（EUPL-1.2）</a></li>
+                <li><a href="./surfer/licenses/THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener">Surfer の依存ライブラリー</a></li>
+              </ul>
+            </details>
+          </div>
+          <div class="header-controls">
+            <label class="board-picker" for="board-select">
+              <span>ボード</span>
+              <select id="board-select" name="board" required></select>
+            </label>
+            <label id="vhdl-standard-control" class="board-picker" for="vhdl-standard" hidden>
+              <span>VHDL 標準</span>
+              <select id="vhdl-standard">
+                <option value="2008">2008</option>
+                <option value="2019">2019</option>
+              </select>
+            </label>
+            <div class="header-actions">
+              <div class="synthesis-control">
+                <button id="synthesis-button" type="button" disabled>
+                  合成・配置配線
+                </button>
+                <p id="synthesis-stage" role="status" aria-live="polite"></p>
+                <p id="synthesis-reason" class="synthesis-reason"></p>
+                <p id="synthesis-asset-size"></p>
+              </div>
+              <div class="synthesis-control">
+                <button id="simulation-button" type="button" disabled>シミュレーション</button>
+                <p id="simulation-status" role="status" aria-live="polite" data-outcome=""></p>
+                <p id="simulation-reason" class="simulation-reason"></p>
+              </div>
+              <div class="synthesis-control">
+                <button id="formal-button" type="button" disabled>形式検証</button>
+                <p id="formal-status" role="status" aria-live="polite" data-outcome=""></p>
+                <p id="formal-reason" class="simulation-reason"></p>
+              </div>
+              <button id="program-button" type="submit" disabled>書き込む</button>
+              <button
+                id="toggle-files-pane"
+                class="mobile-pane-toggle"
+                type="button"
+                aria-label="ファイル一覧を開く"
+                aria-controls="files-pane"
+                aria-expanded="false"
+              >ファイル一覧</button>
+              <button
+                id="toggle-board-pane"
+                class="mobile-pane-toggle"
+                type="button"
+                aria-label="ボードと書き込みを開く"
+                aria-controls="board-pane"
+                aria-expanded="false"
+              >ボードと書き込み</button>
+            </div>
+          </div>
+          <section class="support-status" aria-labelledby="support-heading">
+            <h2 id="support-heading">ブラウザーの確認</h2>
+            <p id="support-status" role="status" aria-live="polite">
+              ブラウザーの機能を確認します。
+            </p>
+          </section>
+        </header>
+
+        <div class="ide-layout">
+          <aside id="files-pane" class="ide-sidebar files-pane" aria-labelledby="files-heading">
+            <div class="pane-heading">
+              <h2 id="files-heading">ファイル</h2>
+              <span id="project-status" role="status" aria-live="polite">プロジェクトを読み込み中です。</span>
+              <button
+                id="close-files-pane"
+                class="pane-close"
+                type="button"
+                aria-label="ファイルペインを閉じる"
+              >閉じる</button>
+            </div>
+            <ul id="file-list" class="file-list" aria-label="プロジェクトのファイル"></ul>
+            <p id="fs-file-info" class="fs-file-info" role="status" aria-live="polite" hidden></p>
+            <div class="file-actions">
+              <button id="add-file-button" type="button">ファイル追加</button>
+              <button id="rename-file-button" type="button" class="secondary" disabled>名前変更</button>
+              <button id="delete-file-button" type="button" class="secondary danger" disabled>削除</button>
+            </div>
+            <details id="library-selector" class="library-selector">
+              <summary>HDL ライブラリー・CPU</summary>
+              <p data-library-status role="status" aria-live="polite">固定版のカタログを読み込みます。</p>
+              <ul data-library-list class="library-list" aria-label="ライブラリーと CPU の候補"></ul>
+            </details>
+            <section class="simulation-settings" aria-labelledby="simulation-settings-heading">
+              <h3 id="simulation-settings-heading">シミュレーション設定</h3>
+              <label class="field" for="simulation-top">
+                <span>トップモジュール</span>
+                <input id="simulation-top" type="text" value="top_tb" />
+              </label>
+              <fieldset>
+                <legend>対象 Verilog ファイル</legend>
+                <div id="simulation-files"></div>
+              </fieldset>
+              <label class="field" for="simulation-time-limit">
+                <span>時間上限（秒）</span>
+                <input id="simulation-time-limit" type="number" min="1" max="120" value="10" />
+              </label>
+            </section>
+            <section class="simulation-settings" aria-labelledby="formal-settings-heading">
+              <h3 id="formal-settings-heading">形式検証設定</h3>
+              <label class="field" for="formal-engine">
+                <span>エンジン</span>
+                <select id="formal-engine">
+                  <option value="yosys-sat">Yosys SAT</option>
+                  <option value="smtbmc">SBY / SMTBMC</option>
+                </select>
+              </label>
+              <label class="field" for="formal-solver" id="formal-solver-field">
+                <span>ソルバー</span>
+                <select id="formal-solver"></select>
+              </label>
+              <label class="field" for="formal-mode">
+                <span>モード</span>
+                <select id="formal-mode">
+                  <option value="bmc">bmc（境界付き）</option>
+                  <option value="prove">prove（証明）</option>
+                  <option value="cover">cover（到達性）</option>
+                </select>
+              </label>
+              <label class="field" for="formal-depth">
+                <span>深さ</span>
+                <input id="formal-depth" type="number" min="1" max="1000" value="20" />
+              </label>
+              <label class="field" for="formal-timeout">
+                <span>時間上限（秒）</span>
+                <input id="formal-timeout" type="number" min="1" max="300" value="30" />
+              </label>
+              <label class="field" for="formal-top">
+                <span>トップモジュール</span>
+                <input id="formal-top" type="text" value="top" />
+              </label>
+              <label class="field" for="formal-clock">
+                <span>クロック（空欄なら組合せのみ）</span>
+                <input id="formal-clock" type="text" placeholder="clk" />
+              </label>
+              <label class="field" for="formal-edge">
+                <span>クロック極性</span>
+                <select id="formal-edge">
+                  <option value="posedge">posedge</option>
+                  <option value="negedge">negedge</option>
+                </select>
+              </label>
+              <fieldset>
+                <legend>対象 Verilog ファイル</legend>
+                <div id="formal-files"></div>
+              </fieldset>
+              <p id="formal-files-note" class="simulation-reason"></p>
+            </section>
+            <div class="project-archive-actions">
+              <button id="export-project-button" type="button" class="secondary">
+                zip で書き出す
+              </button>
+              <button id="import-project-button" type="button" class="secondary">
+                zip から読み込む
+              </button>
+              <input id="project-zip-input" type="file" accept=".zip,application/zip" hidden />
+            </div>
+          </aside>
+
+          <section class="editor-pane" aria-labelledby="editor-heading">
+            <div class="editor-heading">
+              <h2 id="editor-heading">エディター</h2>
+              <span>変更はこのブラウザーの OPFS に保存されます。</span>
+            </div>
+            <div id="editor-tabs" class="editor-tabs" role="tablist" aria-label="開いているファイル"></div>
+            <div
+              id="editor-mount"
+              class="editor-mount"
+              aria-label="HDL ソースの編集"
+            ></div>
+            <div class="bottom-pane">
+              <div class="bottom-tabs" role="tablist" aria-label="下部パネル">
+                <button
+                  id="bottom-tab-log"
+                  type="button"
+                  role="tab"
+                  data-bottom-tab="log"
+                  aria-selected="true"
+                  aria-controls="bottom-panel-log"
+                >ログ</button>
+                <button
+                  id="bottom-tab-problems"
+                  type="button"
+                  role="tab"
+                  data-bottom-tab="problems"
+                  aria-selected="false"
+                  aria-controls="bottom-panel-problems"
+                  tabindex="-1"
+                >問題</button>
+                <button
+                  id="bottom-tab-artifacts"
+                  type="button"
+                  role="tab"
+                  data-bottom-tab="artifacts"
+                  aria-selected="false"
+                  aria-controls="bottom-panel-artifacts"
+                  tabindex="-1"
+                >成果物</button>
+                <button
+                  id="bottom-tab-waveform"
+                  type="button"
+                  role="tab"
+                  data-bottom-tab="waveform"
+                  aria-selected="false"
+                  aria-controls="bottom-panel-waveform"
+                  tabindex="-1"
+                >波形</button>
+              </div>
+              <section
+                id="bottom-panel-log"
+                class="bottom-panel"
+                role="tabpanel"
+                data-bottom-panel="log"
+                aria-labelledby="bottom-tab-log"
+              >
+                <pre id="program-log" class="program-log" aria-live="polite"></pre>
+              </section>
+              <section
+                id="bottom-panel-problems"
+                class="bottom-panel"
+                role="tabpanel"
+                data-bottom-panel="problems"
+                aria-labelledby="bottom-tab-problems"
+                hidden
+              >
+                <p id="problem-empty">問題はありません</p>
+                <ul id="problem-list" class="problem-list"></ul>
+              </section>
+              <section
+                id="bottom-panel-artifacts"
+                class="bottom-panel"
+                role="tabpanel"
+                data-bottom-panel="artifacts"
+                aria-labelledby="bottom-tab-artifacts"
+                hidden
+              >
+                <p>成果物はまだありません。</p>
+                <p id="download-result" hidden>
+                  <a id="dump-download" download>読み出したデータを保存</a>
+                </p>
+                <p id="wave-download" hidden>
+                  <a id="wave-download-link" download="wave.vcd">wave.vcd を保存</a>
+                </p>
+              </section>
+              <section
+                id="bottom-panel-waveform"
+                class="bottom-panel waveform-panel"
+                role="tabpanel"
+                data-bottom-panel="waveform"
+                aria-labelledby="bottom-tab-waveform"
+                hidden
+              >
+                <label id="waveform-file-field" class="field" for="waveform-file" hidden>
+                  <span>表示・保存する VCD</span>
+                  <select id="waveform-file"></select>
+                </label>
+                <p id="waveform-status" role="status" aria-live="polite"></p>
+                <div id="surfer-mount"></div>
+              </section>
+            </div>
+          </section>
+
+          <aside id="board-pane" class="ide-sidebar board-pane" aria-labelledby="board-heading">
+            <section class="board-information" aria-labelledby="board-heading">
+              <div class="pane-heading">
+                <h2 id="board-heading">ボード情報</h2>
+                <button
+                  id="close-board-pane"
+                  class="pane-close"
+                  type="button"
+                  aria-label="書き込みペインを閉じる"
+                >閉じる</button>
+              </div>
+              <dl>
+                <dt>FPGA</dt>
+                <dd id="board-fpga">—</dd>
+                <dt>IDCODE</dt>
+                <dd id="board-idcode">—</dd>
+                <dt>書き込み先</dt>
+                <dd id="board-target">SRAM</dd>
+              </dl>
+              <p
+                id="board-constraint-warning"
+                class="caution"
+                role="status"
+                aria-live="polite"
+                hidden
+              ></p>
+            </section>
+
+            <section class="writer-controls" aria-labelledby="writer-heading">
+              <h2 id="writer-heading">書き込み</h2>
+              <label class="field" for="fs-source">
+                <span>ビットストリームの場所</span>
+                <select id="fs-source"></select>
+              </label>
+              <label id="local-fs-field" class="field" for="bitstream-file">
+                <span>ビットストリーム (.fs)</span>
+                <input
+                  id="bitstream-file"
+                  name="bitstream"
+                  type="file"
+                  accept=".fs,text/plain"
+                  required
+                />
+              </label>
+
+              <fieldset id="target-options" class="target-options">
+                <legend>書き込み先</legend>
+                <label>
+                  <input type="radio" name="target" value="sram" checked />
+                  <span>SRAM：電源を切ると消える</span>
+                </label>
+                <label>
+                  <input type="radio" name="target" value="flash" />
+                  <span>フラッシュ：電源を切っても残る</span>
+                </label>
+              </fieldset>
+
+              <p id="flash-write-warning" class="caution" hidden>
+                フラッシュへの書き込みは既存の内容を消去します。対象のボードとファイルを確認してください。
+              </p>
+              <p id="flash-erase-warning" class="caution" hidden>
+                フラッシュの内容がすべて消えます。対象のボードを確認してください。
+              </p>
+
+              <details id="advanced-settings" class="advanced-settings">
+                <summary>高度な設定</summary>
+                <fieldset class="advanced-group" id="operation-options">
+                  <legend>操作</legend>
+                  <label>
+                    <input type="radio" name="operation" value="write" checked />
+                    <span>書き込み</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="operation" value="dump" />
+                    <span>フラッシュの読み出し</span>
+                  </label>
+                  <p id="dump-operation-reason" class="field-reason"></p>
+                  <p id="dump-operation-hint" class="field-hint" hidden>
+                    読み出し前に SRAM 上のデザインを停止し、処理後にフラッシュから再ロードします。
+                  </p>
+                  <label>
+                    <input type="radio" name="operation" value="erase" />
+                    <span>フラッシュ全体の消去</span>
+                  </label>
+                  <p id="erase-operation-reason" class="field-reason"></p>
+                  <p id="erase-operation-hint" class="field-hint" hidden>
+                    消去前に SRAM 上のデザインを停止し、処理後にフラッシュから再ロードします。
+                  </p>
+                </fieldset>
+
+                <fieldset class="advanced-group" id="flash-type-options">
+                  <legend>フラッシュの種類</legend>
+                  <label>
+                    <input type="radio" name="flash-type" value="internal" checked />
+                    <span>内蔵フラッシュ</span>
+                  </label>
+                  <p id="internal-flash-reason" class="field-reason"></p>
+                  <label>
+                    <input type="radio" name="flash-type" value="external" />
+                    <span>外付けフラッシュ</span>
+                  </label>
+                  <p id="external-flash-reason" class="field-reason"></p>
+                </fieldset>
+
+                <label class="option-row">
+                  <input id="verify-option" type="checkbox" />
+                  <span>書き込み後に検証する (--verify)</span>
+                </label>
+                <p id="verify-reason" class="field-reason"></p>
+
+                <label class="field" for="offset-option">
+                  <span>オフセット (バイト)</span>
+                  <input id="offset-option" type="text" inputmode="numeric" value="0" />
+                </label>
+                <button id="offset-reset" type="button" class="secondary" hidden>
+                  オフセットを 0 に戻す
+                </button>
+                <p id="offset-reason" class="field-reason"></p>
+
+                <label class="option-row">
+                  <input id="unprotect-option" type="checkbox" />
+                  <span>保護を解除して書き込む (--unprotect-flash)</span>
+                </label>
+                <p class="warning-text">
+                  保護状態を変更します。必要な場合だけ選択してください。
+                </p>
+                <p id="unprotect-reason" class="field-reason"></p>
+
+                <label class="field" for="frequency-option">
+                  <span>JTAG 周波数 (--freq)</span>
+                  <select id="frequency-option">
+                    <option value="default">既定 (6 MHz)</option>
+                    <option value="1000000">1 MHz</option>
+                    <option value="2500000">2.5 MHz</option>
+                    <option value="3000000">3 MHz</option>
+                    <option value="10000000">10 MHz</option>
+                  </select>
+                </label>
+                <p class="field-hint">
+                  フラッシュ操作中は openFPGALoader が周波数を切り替えます。
+                </p>
+
+                <label class="option-row">
+                  <input id="reset-option" type="checkbox" />
+                  <span>操作後にリセットする (-r)</span>
+                </label>
+                <p class="warning-text">
+                  SRAM 書き込み後にリセットすると、フラッシュのイメージが読み込まれます。
+                </p>
+                <p id="reset-reason" class="field-reason"></p>
+
+                <label class="field" for="verbosity-option">
+                  <span>ログ</span>
+                  <select id="verbosity-option">
+                    <option value="default">既定</option>
+                    <option value="verbose">詳細 (-v)</option>
+                    <option value="debug">デバッグ (--verbose-level 2)</option>
+                  </select>
+                </label>
+
+                <label class="field" for="mcufw-file">
+                  <span>4K MCU ファームウェア (--mcufw)</span>
+                  <input id="mcufw-file" type="file" />
+                </label>
+                <p id="mcufw-reason" class="field-reason"></p>
+
+                <label class="field" for="user-flash-file">
+                  <span>9K ユーザー フラッシュ (--user-flash)</span>
+                  <input id="user-flash-file" type="file" />
+                </label>
+                <p id="user-flash-reason" class="field-reason"></p>
+
+                <label class="option-row">
+                  <input id="protect-option" type="checkbox" disabled />
+                  <span>フラッシュを保護する (--protect-flash)</span>
+                </label>
+                <p id="protect-reason" class="field-reason"></p>
+
+                <fieldset class="advanced-group" id="dump-size-options">
+                  <legend>読み出すサイズ</legend>
+                  <label>
+                    <input type="radio" name="dump-size" value="all" checked />
+                    <span>フラッシュ全体</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="dump-size" value="custom" />
+                    <span>バイト数を指定</span>
+                  </label>
+                  <label class="field" for="dump-size-bytes">
+                    <span>読み出すバイト数</span>
+                    <input id="dump-size-bytes" type="text" inputmode="numeric" value="" />
+                  </label>
+                  <p id="dump-size-reason" class="field-reason"></p>
+                </fieldset>
+              </details>
+
+              <ul id="validation-errors" class="validation-errors" aria-live="polite" hidden></ul>
+              <h3 class="command-heading">実行するコマンド</h3>
+              <pre class="command"><code id="command-preview"></code></pre>
+
+              <section
+                id="run-panel"
+                class="panel run-panel"
+                aria-labelledby="run-heading"
+                hidden
+              >
+                <h3 id="run-heading">処理結果</h3>
+                <p id="result-status" role="status" aria-live="polite"></p>
+                <label class="progress-label" for="progress-bar">進捗</label>
+                <progress id="progress-bar" max="100" value="0">0%</progress>
+              </section>
+            </section>
+          </aside>
+        </div>
+      </form>
+
+      <dialog id="file-dialog" aria-labelledby="file-dialog-heading">
+        <h2 id="file-dialog-heading">ファイルを追加</h2>
+        <label class="field" for="file-path-input">
+          <span>相対パス</span>
+          <input id="file-path-input" type="text" autocomplete="off" />
+        </label>
+        <label id="file-upload-field" class="field" for="file-content-input" hidden>
+          <span>.fs または .bin ファイルを選ぶ</span>
+          <input id="file-content-input" type="file" accept=".fs,.bin,application/octet-stream" />
+        </label>
+        <p id="file-path-error" role="status" aria-live="polite"></p>
+        <div class="dialog-actions">
+          <button id="file-path-cancel" type="button" class="secondary">キャンセル</button>
+          <button id="file-path-save" type="button">追加する</button>
+        </div>
+      </dialog>
+
+      <dialog id="new-project-dialog" aria-labelledby="new-project-heading">
+        <h2 id="new-project-heading">新しいプロジェクト</h2>
+        <label class="field" for="new-project-name">
+          <span>プロジェクト名</span>
+          <input id="new-project-name" type="text" autocomplete="off" />
+        </label>
+        <label class="field" for="new-project-board">
+          <span>ボード</span>
+          <select id="new-project-board"></select>
+        </label>
+        <label class="field" for="new-project-language">
+          <span>HDL</span>
+          <select id="new-project-language">
+            <option value="verilog">Verilog</option>
+            <option value="vhdl">VHDL</option>
+          </select>
+        </label>
+        <label id="new-project-standard-field" class="field" for="new-project-standard" hidden>
+          <span>VHDL 標準</span>
+          <select id="new-project-standard">
+            <option value="2008">2008</option>
+            <option value="2019">2019</option>
+          </select>
+        </label>
+        <p id="new-project-error" role="status" aria-live="polite"></p>
+        <div class="dialog-actions">
+          <button id="new-project-cancel" type="button" class="secondary">キャンセル</button>
+          <button id="new-project-create" type="button">作成する</button>
+        </div>
+      </dialog>
+
+      <dialog id="idcode-dialog" aria-labelledby="idcode-heading">
+        <h2 id="idcode-heading">IDCODE を確認してください</h2>
+        <p id="idcode-warning"></p>
+        <p>対象が正しいことを確認してから続行してください。</p>
+        <div class="dialog-actions">
+          <button id="idcode-cancel" type="button" class="secondary">キャンセル</button>
+          <button id="idcode-continue" type="button">続行する</button>
+        </div>
+      </dialog>
+
+      <dialog id="erase-dialog" aria-labelledby="erase-heading">
+        <h2 id="erase-heading">フラッシュ全体を消去しますか</h2>
+        <p id="erase-warning"></p>
+        <div class="dialog-actions">
+          <button id="erase-cancel" type="button" class="secondary">キャンセル</button>
+          <button id="erase-confirm" type="button" class="danger">消去する</button>
+        </div>
+      </dialog>
+    </main>
+  </body>
+</html>

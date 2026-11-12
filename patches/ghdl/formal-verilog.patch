@@ -1,0 +1,63 @@
+# Derived from GHDL, Copyright (C) 2021-2026 Tristan Gingold.
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Explicit formal output preserves upstream property gates for Yosys.
+--- netlists-disp_verilog.ads
++++ netlists-disp_verilog.ads
+@@ -19,3 +19,5 @@
+ package Netlists.Disp_Verilog is
++   Flag_Formal : Boolean := False;
++
+    procedure Disp_Verilog (M : Module);
+ end Netlists.Disp_Verilog;
+--- netlists-disp_verilog.adb
++++ netlists-disp_verilog.adb
+@@ -19,3 +19,4 @@
+ with Outputs; use Outputs;
+ with Types_Utils; use Types_Utils;
++with Name_Table;
+ with Files_Map;
+@@ -746,6 +747,44 @@
+       Loc : constant Location_Type := Locations.Get_Location (Inst);
+       Id : constant Module_Id := Get_Id (Imod);
+    begin
++      if Flag_Formal
++        and then Id in Id_Assert | Id_Assume | Id_Cover | Id_Assert_Cover
++      then
++         if Loc = No_Location then
++            raise Internal_Error;
++         end if;
++         declare
++            File : Name_Id;
++            Line : Positive;
++            Col : Natural;
++         begin
++            Files_Map.Location_To_Position (Loc, File, Line, Col);
++            Wr ("  (* src = """);
++            for C of Name_Table.Image (File) loop
++               if C = '"' or else C = '\' then
++                  Wr ('\');
++               end if;
++               Wr (C);
++            end loop;
++            Wr (':');
++            Wr_Uns32 (Uns32 (Line));
++            Wr ('.');
++            Wr_Uns32 (Uns32 (Col));
++            Wr ('-');
++            Wr_Uns32 (Uns32 (Line));
++            Wr ('.');
++            Wr_Uns32 (Uns32 (Col));
++            Wr_Line (""" *)");
++         end;
++         case Id is
++            when Id_Assert => Wr ("  \$assert ");
++            when Id_Assume => Wr ("  \$assume ");
++            when Id_Cover | Id_Assert_Cover => Wr ("  \$cover ");
++            when others => raise Internal_Error;
++         end case;
++         Disp_Template ("\l0 (.A(\i0), .EN(1'b1));" & NL, Inst);
++         return;
++      end if;
+       if Loc /= No_Location then
+          declare
+             File : Name_Id;

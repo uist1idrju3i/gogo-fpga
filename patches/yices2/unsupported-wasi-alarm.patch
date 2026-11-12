@@ -1,0 +1,50 @@
+--- a/src/utils/timeout.c
++++ b/src/utils/timeout.c
+@@ -228,1 +228,35 @@
+-#else /* !defined(THREAD_SAFE) */
++#else /* !defined(THREAD_SAFE) */
++
++#if defined(__wasi__)
++
++#include <stdio.h>
++#include <stdlib.h>
++
++static _Noreturn void unsupported_wasi_timeout(void) {
++  fputs("Yices: WASI alarms are unsupported; use a host worker deadline\n", stderr);
++  exit(YICES_EXIT_USAGE);
++}
++
++timeout_t *init_timeout(void) {
++  unsupported_wasi_timeout();
++}
++
++void start_timeout(timeout_t *timeout, uint32_t delay, timeout_handler_t handler, void *param) {
++  (void) timeout;
++  (void) delay;
++  (void) handler;
++  (void) param;
++  unsupported_wasi_timeout();
++}
++
++void clear_timeout(timeout_t *timeout) {
++  (void) timeout;
++  unsupported_wasi_timeout();
++}
++
++void delete_timeout(timeout_t *timeout) {
++  (void) timeout;
++  unsupported_wasi_timeout();
++}
++
++#else
+@@ -329,4 +329,6 @@
+-  the_timeout.state = TIMEOUT_NOT_READY;
+-}
+-
+-#endif /* defined(THREAD_SAFE) */
++  the_timeout.state = TIMEOUT_NOT_READY;
++}
++
++#endif /* defined(__wasi__) */
++
++#endif /* defined(THREAD_SAFE) */
