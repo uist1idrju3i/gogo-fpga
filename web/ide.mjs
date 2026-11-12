@@ -696,7 +696,8 @@ export function initializeIde({
         return;
       }
       frame.contentWindow.postMessage(
-        { command: "LoadUrl", url: vcdObjectUrl },
+        { type: "toolchain:surfer-load-data", command: "InjectMessage",
+          message: JSON.stringify({ LoadFromData: [Array.from(vcd.bytes), "Clear"] }) },
         location.origin,
       );
     } catch {
@@ -1161,9 +1162,11 @@ export function initializeIde({
     try {
       await store.save(project, fileContents);
       setProjectStatus("保存しました。");
+      return true;
     } catch (error) {
       setProjectStatus("プロジェクトを保存できません。");
       appendProjectLog(`プロジェクト保存エラー: ${error.message}`);
+      return false;
     }
   }
 
@@ -1846,4 +1849,10 @@ export function initializeIde({
   synthesisButton.addEventListener("click", () => void runProjectBuild());
   boardSelect.addEventListener("change", updateSynthesisControls);
   void initializeProject();
+  return {
+    async flushPendingSave() {
+      await flushPendingSave();
+      if (await pendingSave === false) throw new Error("project_save_failed");
+    },
+  };
 }

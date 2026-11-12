@@ -2,8 +2,9 @@ import { waves_loaded } from "./surfer/surfer.js";
 
 let watching = false;
 
-window.addEventListener("message", ({ data, origin }) => {
-  if (origin !== location.origin || data?.command !== "LoadUrl" || watching) return;
+window.addEventListener("message", ({ data, origin, source }) => {
+  if (origin !== location.origin || source !== window.parent ||
+      data?.type !== "toolchain:surfer-load-data" || data?.command !== "InjectMessage" || watching) return;
   watching = true;
   void (async () => {
     const deadline = Date.now() + 30_000;

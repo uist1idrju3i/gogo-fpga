@@ -99,6 +99,10 @@ if ! grep -Eq '^/\*' "$public_html/_headers" ||
   printf 'COOP/COEP headers must cover the /surfer/* route.\n' >&2
   exit 1
 fi
+if ! grep -Fxq "  Content-Security-Policy: connect-src 'self' https://openrouter.ai; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'self'" "$public_html/_headers"; then
+  printf 'The distribution must restrict connections to self and OpenRouter.\n' >&2
+  exit 1
+fi
 python3 "$root/scripts/check-dist-size.py" "$public_html"
 
 printf 'Assembled web app in %s from %s\n' "$public_html" "$artifacts"

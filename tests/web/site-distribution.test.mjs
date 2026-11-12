@@ -30,6 +30,9 @@ test("public_html is generated output with the same isolation policy as the sour
   assert.match(headers, /^\/\*\n/m);
   assert.match(headers, /Cross-Origin-Opener-Policy: same-origin/);
   assert.match(headers, /Cross-Origin-Embedder-Policy: require-corp/);
+  const policy = "connect-src 'self' https://openrouter.ai; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'self'";
+  assert.deepEqual(headers.split("\n").filter((line) => line.includes("Content-Security-Policy:")), [`  Content-Security-Policy: ${policy}`]);
+  assert.ok(read("web/serve.py").includes(`self.send_header("Content-Security-Policy", "${policy}")`));
 });
 
 test("package metadata identifies the unified product", () => {

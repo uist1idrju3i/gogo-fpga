@@ -16,6 +16,7 @@ import { writeTerminalText } from "./lib/terminal-output.mjs";
 import { initializeIde } from "./ide.mjs";
 import { createDesignWorkflow } from "./lib/workflow-ui.mjs";
 import { initializeWorkspaceUI } from "./lib/workspace-ui.mjs";
+import { initializeOpenRouterUI } from "./lib/openrouter-ui.mjs";
 
 const form = document.querySelector("#program-form");
 const boardSelect = document.querySelector("#board-select");
@@ -705,7 +706,7 @@ form.addEventListener("submit", async (event) => {
 
 updateForm();
 initialize();
-initializeIde({
+const ide = initializeIde({
   workflow,
   form,
   boardSelect,
@@ -725,4 +726,9 @@ initializeIde({
   },
   canStartSimulation: () => !activeWorker && !synthesisBuildRunning,
   canChangeLibraries: () => !activeWorker,
+});
+initializeOpenRouterUI({
+  panel: document.querySelector("#right-panel-ai"),
+  showPanel: () => workspace.showTab("ai"),
+  flushPendingSave: () => ide.flushPendingSave(),
 });
