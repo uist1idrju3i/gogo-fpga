@@ -1,0 +1,22 @@
+{
+  "artifacts": {
+    "openFPGALoader.mjs": "f66be852ed33c8245fe781d900a7124186a6d3cd611a81849e1019ae080d8d44",
+    "openFPGALoader.wasm": "61c4943252821a0d1405133c11690b7718fb5af28c86bf102e926ccba780a642"
+  },
+  "async_mode": "jspi",
+  "build_script_sha256": "32e9738361aa6879b652962dd879cb8929503989a0761237a292d407faf35fe2",
+  "emcc_version": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.13 (e13ee988ce3d87a738dd8f3661d02223308c412a)",
+  "submodule_shas": {
+    "vendor/emsdk": "35659964bc2762fffec0d257997fb61475f765b7",
+    "vendor/iverilog": "dfeee909ed9f20b4870dd93423156c0170c0e1ff",
+    "vendor/libftdi": "92d657bcb543a9622947d984d4a8e725fb680e8c",
+    "vendor/libusb": "87a55632db62c9bdc58cd31d3ccfa673f1bb017f",
+    "vendor/openFPGALoader": "befbab4f646207dbaf1daf8b144dd980ad283dd5",
+    "vendor/surfer": "bd749b1f786c1c62cd67893ca71346cbe6983915",
+    "vendor/yomiyasu": "552c12c472ddfb79e2ee7a15219847782686a945",
+    "vendor/yosys": "28ba3cb926fe376fa05ebfc1b921747d011d4557",
+    "vendor/zlib": "da607da739fa6047df13e66a2af6b8bec7c2a498"
+  },
+  "variant": "C",
+  "zstd_version": "1.5.7"
+}

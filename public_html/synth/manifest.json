@@ -1,0 +1,77 @@
+{
+  "assets": [
+    {
+      "compressed_sha256": "16a3b8e07c1342ffcfd561c4e2798e217564e72f2a8f26233a1e695bc5329317",
+      "compressed_size": 427552,
+      "encoding": "zstd",
+      "path": "chipdb/chipdb-GW1N-9C.bin",
+      "sha256": "eb6d5a3483485ff8796af44cf4fbc27bb56780cc5ac9080eb49aac47b544c467",
+      "size": 12842337
+    },
+    {
+      "compressed_sha256": "e772d4e23ba576e867324a12b3adff63c1d58130de7a411fa623a4211e590c16",
+      "compressed_size": 418303,
+      "encoding": "zstd",
+      "path": "chipdb/chipdb-GW1NS-4.bin",
+      "sha256": "556e78cbfd3153d0998231e05707b42c4215f8ca125c8d408ea61ac80f84f6d1",
+      "size": 10192846
+    },
+    {
+      "compressed_sha256": "ee58507c0f7c173882a9f3dbff818b0dddfb9d392851267f37da1126763945df",
+      "compressed_size": 267827,
+      "encoding": "zstd",
+      "path": "chipdb/chipdb-GW1NZ-1.bin",
+      "sha256": "b3575174c846dd2d79745630f55b07adf9120ee8b6a80147ab65e0b4d07675f4",
+      "size": 5922384
+    },
+    {
+      "compressed_sha256": "3271cd7e002e395be45b6f0d0362434c3fdeb10721e18477cec1239db760542d",
+      "compressed_size": 522942,
+      "encoding": "zstd",
+      "path": "chipdb/chipdb-GW2A-18C.bin",
+      "sha256": "47b5695929d7eb29517ecf9007fe6dd810e932665e450519251c3cd77a88d040",
+      "size": 17493739
+    },
+    {
+      "compressed_sha256": "b3a29742938d13f2c2f24276f85103ce66acc4346c6356e248ba30a3aa6ba0e8",
+      "compressed_size": 510807,
+      "encoding": "zstd",
+      "path": "ghdl-synth.wasm",
+      "sha256": "a0bd7fe303e7531d606aac5181ee67bb1ee6ce88fce2360947a7d5e1399c85e8",
+      "size": 2002690
+    },
+    {
+      "compressed_sha256": "a8f99b0cf038d01bcc37078188eef86739b59f10f0999527ad07a7098b898f76",
+      "compressed_size": 218323,
+      "encoding": "zstd",
+      "path": "libraries.tar",
+      "sha256": "5f08af4dd4ecb42959faf2286b1dba0055ae0b6642c906e60e3688b7ecd04e07",
+      "size": 3901440
+    },
+    {
+      "compressed_sha256": "b82d79330a21a5deeaf70026d496b5967e96cbf6a72075df15e2db5edcfa95cf",
+      "compressed_size": 4167730,
+      "encoding": "zstd",
+      "path": "nextpnr-himbaechel-gowin.wasm",
+      "sha256": "2c813d9653546e39f5af1a34d59f73c40bfc94cceb265acad157fbc6e06412bb",
+      "size": 27884826
+    },
+    {
+      "compressed_sha256": "8e5064b14c23570f75929d9fc25be6250bf85649dfa1967e58ee83e06018d5c1",
+      "compressed_size": 482855,
+      "encoding": "zstd",
+      "path": "yosys-share.tar",
+      "sha256": "2458187ec88af6b6b6d4ff3069ff1021c02815cdae88955184d3e194a9c94bec",
+      "size": 10567680
+    },
+    {
+      "compressed_sha256": "2449beacc39c67c8ea338864258125678f267bf506b37cb4888a9c6e1cb9fe0f",
+      "compressed_size": 7156916,
+      "encoding": "zstd",
+      "path": "yosys.wasm",
+      "sha256": "11ee003141aa7c05b8413f77f44e7a1e54c124a66bb338ff38fd47028387b5c3",
+      "size": 35038277
+    }
+  ],
+  "format_version": 1
+}
