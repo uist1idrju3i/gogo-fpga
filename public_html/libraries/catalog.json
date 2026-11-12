@@ -1,0 +1,1544 @@
+{
+  "formatVersion": 1,
+  "entries": [
+    {
+      "id": "colibri",
+      "label": "Colibri",
+      "kind": "library",
+      "language": "vhdl",
+      "submodule": "third_party/colibri",
+      "license": {
+        "expression": "CERN-OHL-W-2.0",
+        "files": [
+          {
+            "path": "LICENSES/CERN-OHL-W-2.0.txt",
+            "asset": "colibri/LICENSES/CERN-OHL-W-2.0.txt",
+            "size": 14529,
+            "sha256": "c1432111d0aeefc9d1ced8105d2d4ed07d5dcb1fd43abb5d4616c4f9ef96e08f"
+          },
+          {
+            "path": "LICENSES/Apache-2.0.txt",
+            "asset": "colibri/LICENSES/Apache-2.0.txt",
+            "size": 10280,
+            "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff"
+          },
+          {
+            "path": "LICENSES/CC-BY-SA-4.0.txt",
+            "asset": "colibri/LICENSES/CC-BY-SA-4.0.txt",
+            "size": 18375,
+            "sha256": "cde7883b9050a1104f4ac19a1572aafd6e5d7323b68351aaf51fbf4beba54966"
+          }
+        ],
+        "note": "RTL、文書、メタデータはファイルごとに条件が異なります。選択したファイルの SPDX 表記も保持します。"
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "counter",
+          "label": "剰余カウンター",
+          "parameters": {
+            "g_MODULO": "10",
+            "g_COUNTER_WIDTH": "4"
+          },
+          "sources": [
+            {
+              "path": "src/common/utils.vhdl",
+              "language": "vhdl",
+              "library": "colibri",
+              "asset": "colibri/src/common/utils.vhdl",
+              "size": 16027,
+              "sha256": "7aca8e6d3b7771233eba9df5e5cda6bec1bb9639c20502f5ffb48be8c5f7d84a"
+            },
+            {
+              "path": "src/common/counter.vhdl",
+              "language": "vhdl",
+              "library": "colibri",
+              "asset": "colibri/src/common/counter.vhdl",
+              "size": 1845,
+              "sha256": "45eec185d30f13ef3aa81391ee5992c90bd44b7d8e083af1f7085b44efbc5c24"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://gitlab.cern.ch/colibri/colibri.git",
+        "revision": "3fa784121ccea86d9e65b2e0dc08d2a3327f5f2f"
+      }
+    },
+    {
+      "id": "open-logic",
+      "label": "Open Logic",
+      "kind": "library",
+      "language": "vhdl",
+      "submodule": "third_party/open-logic",
+      "license": {
+        "expression": "LicenseRef-PSI-HDL-1.0",
+        "files": [
+          {
+            "path": "License.txt",
+            "asset": "open-logic/License.txt",
+            "size": 2357,
+            "sha256": "43811b85032a4f4f7a6568b8de11d5e5abd5721ae12dcb1ed43e288f6876132c"
+          }
+        ],
+        "note": "PSI HDL Library License 1.0。GNU Library GPL v2 以降を基に、FPGA 等の生成物への例外を含みます。"
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "gray",
+          "label": "Gray 符号と論理関数",
+          "sources": [
+            {
+              "path": "src/base/vhdl/olo_base_pkg_array.vhd",
+              "language": "vhdl",
+              "library": "olo",
+              "asset": "open-logic/src/base/vhdl/olo_base_pkg_array.vhd",
+              "size": 7441,
+              "sha256": "5481df24f6c0e81329b7146cb22f56b323bdcac36080f20556a8067bafaa744d"
+            },
+            {
+              "path": "src/base/vhdl/olo_base_pkg_math.vhd",
+              "language": "vhdl",
+              "library": "olo",
+              "asset": "open-logic/src/base/vhdl/olo_base_pkg_math.vhd",
+              "size": 19780,
+              "sha256": "8d290756411f13717d9de16aba61a2dc087f2d28d67f9f649521758cb14d1e3f"
+            },
+            {
+              "path": "src/base/vhdl/olo_base_pkg_logic.vhd",
+              "language": "vhdl",
+              "library": "olo",
+              "asset": "open-logic/src/base/vhdl/olo_base_pkg_logic.vhd",
+              "size": 14713,
+              "sha256": "35c5f76feed55686f8b80edd227c65ed48c94afebeed56f4a3b0a3c022d9d030"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/open-logic/open-logic.git",
+        "revision": "d9f123aae1c6022288782668067311f9794da0a2"
+      }
+    },
+    {
+      "id": "hdl-modules",
+      "label": "hdl-modules",
+      "kind": "library",
+      "language": "vhdl",
+      "submodule": "third_party/hdl-modules",
+      "license": {
+        "expression": "BSD-3-Clause",
+        "files": [
+          {
+            "path": "license.txt",
+            "asset": "hdl-modules/license.txt",
+            "size": 1471,
+            "sha256": "52b7032949ef9eafe851a286633cfca04b839410bff643575fd5f508110210f1"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "handshake-pipeline",
+          "label": "ハンドシェイク・パイプライン",
+          "parameters": {
+            "data_width": "8",
+            "full_throughput": "true",
+            "pipeline_control_signals": "true",
+            "pipeline_data_signals": "true"
+          },
+          "sources": [
+            {
+              "path": "modules/common/src/handshake_pipeline.vhd",
+              "language": "vhdl",
+              "library": "common",
+              "asset": "hdl-modules/modules/common/src/handshake_pipeline.vhd",
+              "size": 11233,
+              "sha256": "7cdd87e3a4299d8d352d1594b875f61b7a5a8f8766d57ffd7434f9273a089b27"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/hdl-modules/hdl-modules.git",
+        "revision": "8142d3a1d878651811427e609293946e699c5cb7"
+      }
+    },
+    {
+      "id": "verilog-axis",
+      "label": "verilog-axis",
+      "kind": "library",
+      "language": "verilog",
+      "submodule": "third_party/verilog-axis",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          {
+            "path": "COPYING",
+            "asset": "verilog-axis/COPYING",
+            "size": 1062,
+            "sha256": "8ea57f95365e9b16a5b516f422b71269183a1ae53bab5878ae6d69039e58fe77"
+          }
+        ]
+      },
+      "deprecated": true,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "register",
+          "label": "AXI Stream レジスター",
+          "sources": [
+            {
+              "path": "rtl/axis_register.v",
+              "language": "verilog",
+              "asset": "verilog-axis/rtl/axis_register.v",
+              "size": 10298,
+              "sha256": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "parameters": {
+            "DATA_WIDTH": "8",
+            "REG_TYPE": "2"
+          },
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/alexforencich/verilog-axis.git",
+        "revision": "48ff7a7e2ef782cf778d47910cf85835c64b1bce"
+      }
+    },
+    {
+      "id": "verilog-uart",
+      "label": "verilog-uart",
+      "kind": "library",
+      "language": "verilog",
+      "submodule": "third_party/verilog-uart",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          {
+            "path": "COPYING",
+            "asset": "verilog-uart/COPYING",
+            "size": 1064,
+            "sha256": "e976f1560229f2e4259c993745637435e2d8f969c91bf73651443aea4438d142"
+          }
+        ]
+      },
+      "deprecated": true,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "uart",
+          "label": "UART 送受信",
+          "sources": [
+            {
+              "path": "rtl/uart_tx.v",
+              "language": "verilog",
+              "asset": "verilog-uart/rtl/uart_tx.v",
+              "size": 3077,
+              "sha256": "e9559ddebf124f8fbface06bf7091296baa78c7acab95a36b40a919663349d34"
+            },
+            {
+              "path": "rtl/uart_rx.v",
+              "language": "verilog",
+              "asset": "verilog-uart/rtl/uart_rx.v",
+              "size": 3989,
+              "sha256": "e686104e5ff2d25fa1504e8d08259cef508f2ec9c9e8cfa63364f3fcb39b9f5c"
+            },
+            {
+              "path": "rtl/uart.v",
+              "language": "verilog",
+              "asset": "verilog-uart/rtl/uart.v",
+              "size": 2770,
+              "sha256": "4f91abcd67ff180afadbad06c3b44d33c9f1d69bfaeae3b5696be112efae35c9"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "parameters": {
+            "DATA_WIDTH": "8"
+          },
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/alexforencich/verilog-uart.git",
+        "revision": "1b867e53af738e4a8bc7c839ca2f1c07f40382dc"
+      }
+    },
+    {
+      "id": "libfpga",
+      "label": "libfpga",
+      "kind": "library",
+      "language": "verilog",
+      "submodule": "third_party/libfpga",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "libfpga/LICENSE",
+            "size": 1078,
+            "sha256": "0f7aca80a4b4458e329156a7851a22b5d85a6287fe75fec102ab1254869c6fe0"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "gray",
+          "label": "2進数と Gray 符号の変換",
+          "sources": [
+            {
+              "path": "rtl/math/lfpga_gray.v",
+              "language": "verilog",
+              "asset": "libfpga/rtl/math/lfpga_gray.v",
+              "size": 851,
+              "sha256": "16605a301680abd2eed512e4b8f17d739a614290376e61ce3a1f1acb3c502abe"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/libfpga/libfpga.git",
+        "revision": "a4ef4a3fa4ac1de6aa485baf3efc56f14a6df704"
+      }
+    },
+    {
+      "id": "serv",
+      "label": "SERV",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/serv",
+      "license": {
+        "expression": "ISC",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "serv/LICENSE",
+            "size": 740,
+            "sha256": "d9a1bd691f04280a8369a4aa69b6be20c0e2ee6d164a17ad8a8ef49da8ea0ea9"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "rv32i",
+          "label": "RV32I・CSR なし",
+          "parameters": {
+            "WITH_CSR": "0",
+            "COMPRESSED": "0",
+            "ALIGN": "0",
+            "MDU": "0",
+            "W": "1",
+            "RESET_PC": "0"
+          },
+          "sources": [
+            {
+              "path": "rtl/serv_bufreg.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_bufreg.v",
+              "size": 2692,
+              "sha256": "76404174ec92c6cf68e0042798dede84d77c5e454c7f428afc7b9f612a3c52d4"
+            },
+            {
+              "path": "rtl/serv_bufreg2.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_bufreg2.v",
+              "size": 3491,
+              "sha256": "6586c95a64a064ff6f4d001996d33f15e0f6d452e01ebb4da6120db06ddd0a51"
+            },
+            {
+              "path": "rtl/serv_alu.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_alu.v",
+              "size": 2063,
+              "sha256": "2e0c31b5b992618e514083aacf10cb38c2229b68b3b1e93d6663104f32143332"
+            },
+            {
+              "path": "rtl/serv_csr.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_csr.v",
+              "size": 4789,
+              "sha256": "2dd7167ed44817d921318a5d463281b43820c25e476039a604e95948be567e62"
+            },
+            {
+              "path": "rtl/serv_ctrl.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_ctrl.v",
+              "size": 3446,
+              "sha256": "eb198ba7594f918da2784f9b6f8c82de1b95e3ffdd3383f2f533872999e9dab5"
+            },
+            {
+              "path": "rtl/serv_decode.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_decode.v",
+              "size": 12954,
+              "sha256": "eac5b2097ebd1f4587d2aa27aba130897d057dd8a28ba678edce0f2a3c9f640a"
+            },
+            {
+              "path": "rtl/serv_immdec.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_immdec.v",
+              "size": 5990,
+              "sha256": "80ec5a265194eb40f3413742fc9da0a23ed78f8bdf5add3e58b45fa1850b2bd5"
+            },
+            {
+              "path": "rtl/serv_mem_if.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_mem_if.v",
+              "size": 1498,
+              "sha256": "a4fbd74579447710ed43e81dd80b4ea9415da0a3425a447f29446f9bd7a9aa6f"
+            },
+            {
+              "path": "rtl/serv_rf_if.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_rf_if.v",
+              "size": 4258,
+              "sha256": "63fd0d2ec2f89201b20690c467ebbcae964a85b4570254a95154f832cf0dcb2e"
+            },
+            {
+              "path": "rtl/serv_rf_ram_if.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_rf_ram_if.v",
+              "size": 4568,
+              "sha256": "abb39b6bdf4d335bd2f90f75ddb1a410500a1a51a3e9f170453cb491d98d8697"
+            },
+            {
+              "path": "rtl/serv_rf_ram.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_rf_ram.v",
+              "size": 1365,
+              "sha256": "779ad3243dfa648f276240d260ff4ac1a1e83cc1364afb93d40c586905ce4338"
+            },
+            {
+              "path": "rtl/serv_state.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_state.v",
+              "size": 8699,
+              "sha256": "f7f981a28ed92243d812b3e6d723a77ec9278c7690eb4a530edc136aed5319b3"
+            },
+            {
+              "path": "rtl/serv_debug.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_debug.v",
+              "size": 12293,
+              "sha256": "815a6b0da1a49d41faa72edd8f397f89ec79334b292b94991f60002b0776082f"
+            },
+            {
+              "path": "rtl/serv_top.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_top.v",
+              "size": 18387,
+              "sha256": "c35b88bed5732309069203b2d04421622eaae108d5bf5daef3de273daf43388e"
+            },
+            {
+              "path": "rtl/serv_rf_top.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_rf_top.v",
+              "size": 6820,
+              "sha256": "89faedf7530c34305bfbffd261732d95016bf5627f10b7bbafaa8e1fd6cd49c9"
+            },
+            {
+              "path": "rtl/serv_aligner.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_aligner.v",
+              "size": 2470,
+              "sha256": "adeff8f442db6c93f48e551721146b40c398ab14dcb5b22339746329e7a24f3b"
+            },
+            {
+              "path": "rtl/serv_compdec.v",
+              "language": "verilog",
+              "asset": "serv/rtl/serv_compdec.v",
+              "size": 8547,
+              "sha256": "b1799ad9c5f10756fc336788d4bf871c5a6d4181c2f62568fad1b3bbe86504ae"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/olofk/serv.git",
+        "revision": "f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8"
+      }
+    },
+    {
+      "id": "picorv32",
+      "label": "PicoRV32",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/picorv32",
+      "license": {
+        "expression": "ISC",
+        "files": [
+          {
+            "path": "COPYING",
+            "asset": "picorv32/COPYING",
+            "size": 777,
+            "sha256": "041ebc727233e5bf096dd41260cbb81014d3d29ca007a15f3b1807d4e9ff288e"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "rv32e",
+          "label": "RV32E・単一ポートのレジスター",
+          "parameters": {
+            "ENABLE_COUNTERS": "0",
+            "ENABLE_COUNTERS64": "0",
+            "ENABLE_REGS_16_31": "0",
+            "ENABLE_REGS_DUALPORT": "0",
+            "PROGADDR_RESET": "0",
+            "ENABLE_PCPI": "0",
+            "ENABLE_MUL": "0",
+            "ENABLE_FAST_MUL": "0",
+            "ENABLE_DIV": "0",
+            "ENABLE_IRQ": "0",
+            "ENABLE_TRACE": "0"
+          },
+          "sources": [
+            {
+              "path": "picorv32.v",
+              "language": "verilog",
+              "asset": "picorv32/picorv32.v",
+              "size": 94657,
+              "sha256": "0836050971b3c6cdd28ac3b1e5719a67fb645161912bef1e472e63995ceb0622"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/YosysHQ/picorv32.git",
+        "revision": "ef203c2b0a3fb793280f5114941416c425c5b461"
+      }
+    },
+    {
+      "id": "neorv32",
+      "label": "NEORV32",
+      "kind": "cpu",
+      "language": "vhdl",
+      "submodule": "third_party/neorv32",
+      "license": {
+        "expression": "BSD-3-Clause",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "neorv32/LICENSE",
+            "size": 1565,
+            "sha256": "df32b2e5bc4d28b3ba8421e5e6acf578032f110cc4b4c0aa3ae36e022f878312"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "rv32e",
+          "label": "RV32E・CPU 単体",
+          "sources": [
+            {
+              "path": "rtl/core/neorv32_package.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_package.vhd",
+              "size": 78871,
+              "sha256": "10f74fe35dede65267414ed83aabe2d300a3421aefff8491da8e0d0a572bcca7"
+            },
+            {
+              "path": "rtl/core/neorv32_prim.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_prim.vhd",
+              "size": 19302,
+              "sha256": "2aa574538aaecbd9b502818fb73d2e78abfe16d040c7396662755725731ab1a5"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu.vhd",
+              "size": 32613,
+              "sha256": "77e44b422b07b6d827479bd44dc4240feaab38ed0adc1dab53f33a44a2504917"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_alu.vhd",
+              "size": 17440,
+              "sha256": "e1cbe0044f470c78dd3c83003d62c3487d8ddcaa72fe05b2f41b50712cfe8cb4"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_bitmanip.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_alu_bitmanip.vhd",
+              "size": 27495,
+              "sha256": "02f59104a768a6317e7a12872d9e6ca76961679bb4f807dd38ccf8662174d4a7"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_cfu.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_alu_cfu.vhd",
+              "size": 9708,
+              "sha256": "83d442fce2e8f4ba5cc87f70dfbcfa7e501bd81c57ba3d19558b066a35e02b59"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_cond.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_alu_cond.vhd",
+              "size": 2233,
+              "sha256": "47874dce2f222a3d526e179f0bbadab0a5cc8a25879be6029813d580c39aaec6"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_crypto.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_alu_crypto.vhd",
+              "size": 22902,
+              "sha256": "4e3989e94ec1669ca37844e444c0dc9be868b4dcd6ba37fff9ea729667f2546d"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_fpu.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_alu_fpu.vhd",
+              "size": 118813,
+              "sha256": "632d93286e9714e6e2616e1ed5c0e2c29cf2588d137c1f25206559223b7943fd"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_muldiv.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_alu_muldiv.vhd",
+              "size": 12505,
+              "sha256": "fedd9a1f750b1f7c18f732290a9e6a79ff638b992e4171ab64f9c93ab5eefcbe"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_alu_shifter.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_alu_shifter.vhd",
+              "size": 5893,
+              "sha256": "94213127a23b31e301b35e93f9a43d4b70adb6c553e31dadcfddfd6fabbcf050"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_control.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_control.vhd",
+              "size": 75517,
+              "sha256": "d476c4b577c6523979645dca69707e30b5f0b8ae6e8c8fb72c3223d5f808fe21"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_counters.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_counters.vhd",
+              "size": 12190,
+              "sha256": "fbb85384911d6f29025c5c904bcd038df1e740989b0f1cd953ae3595e6fc6084"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_decompressor.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_decompressor.vhd",
+              "size": 24371,
+              "sha256": "f30761a981cab7bae0156d990bcb43f46094753f02644fb27494137023c1c206"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_frontend.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_frontend.vhd",
+              "size": 11667,
+              "sha256": "5a6e1681ad160980b820ab05498e59ce85a902c9e8c298fd0b295fbdfcdfb43d"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_hwtrig.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_hwtrig.vhd",
+              "size": 9799,
+              "sha256": "ddec6f31be354f1028be5db0b8b8867299623abfe00a068d1ba1c3f1a28ef15c"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_lsu.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_lsu.vhd",
+              "size": 8529,
+              "sha256": "5db91374038ab7c677ee24991f086203dfa7d5ae99583a10665faf9af5b84666"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_pmp.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_pmp.vhd",
+              "size": 15630,
+              "sha256": "aa812d40a8f0fc3598d36a6da9ecd1bf109c99dd693351aac0b6e7e190e61a9c"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_regfile.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_regfile.vhd",
+              "size": 8510,
+              "sha256": "3ab615409ca5f0ed99c60daabda6dec0fac6ef06cb5140da183199c82ab07247"
+            },
+            {
+              "path": "rtl/core/neorv32_cpu_trace.vhd",
+              "language": "vhdl",
+              "library": "neorv32",
+              "asset": "neorv32/rtl/core/neorv32_cpu_trace.vhd",
+              "size": 46219,
+              "sha256": "4bb86223d40efe7406b1f00eaae38c85797fdbcf09640b22914cecf971ed69a1"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "parameters": {
+            "BOOT_ADDR": "0",
+            "RISCV_ISA_E": "true",
+            "RISCV_ISA_C": "false",
+            "RISCV_ISA_M": "false",
+            "TRACE_PORT_EN": "false",
+            "TRACE_SIMLOG_EN": "false"
+          },
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/stnolting/neorv32.git",
+        "revision": "84743cdbeefccb531f836d66933c8478f1d9bf71"
+      }
+    },
+    {
+      "id": "hazard3",
+      "label": "Hazard3",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/hazard3",
+      "license": {
+        "expression": "Apache-2.0",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "hazard3/LICENSE",
+            "size": 11357,
+            "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "rv32e",
+          "label": "RV32E・AHB5 単一ポート",
+          "sources": [
+            {
+              "path": "hdl/hazard3_core.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_core.v",
+              "size": 55122,
+              "sha256": "6bd75985884c9cca0153c94a19e5c5540dc36900c9d4b8200a761641cb544864"
+            },
+            {
+              "path": "hdl/hazard3_cpu_1port.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_cpu_1port.v",
+              "size": 11011,
+              "sha256": "31697f3730326f4e679fc64887ae0034a10fb620129463d584bfbf23252c34f5"
+            },
+            {
+              "path": "hdl/arith/hazard3_alu.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/arith/hazard3_alu.v",
+              "size": 9002,
+              "sha256": "41ce9cc63b0e70841656b62b4179103d29cc4e91d5507e80e7d69b4d43e6177f"
+            },
+            {
+              "path": "hdl/arith/hazard3_branchcmp.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/arith/hazard3_branchcmp.v",
+              "size": 1436,
+              "sha256": "8bd4a431d0d1d4fabb4ab7c7b7a85c05698477e083412abb0d45e2f36bf2411b"
+            },
+            {
+              "path": "hdl/arith/hazard3_mul_fast.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/arith/hazard3_mul_fast.v",
+              "size": 4164,
+              "sha256": "3ee0eca1db78071d08d4bedaf5b25d6bd193bc761d3a5a0afd70515ccea5a9bb"
+            },
+            {
+              "path": "hdl/arith/hazard3_muldiv_seq.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/arith/hazard3_muldiv_seq.v",
+              "size": 9387,
+              "sha256": "5e9cd9f939aede0fc1e767436df603b18fddebd57cbcee2831b0d5bf74e380d6"
+            },
+            {
+              "path": "hdl/arith/hazard3_onehot_encode.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/arith/hazard3_onehot_encode.v",
+              "size": 812,
+              "sha256": "be599236007909aa47da934129af2ce0cc27fd195f2f4dbbb0eb3a2e31c752d6"
+            },
+            {
+              "path": "hdl/arith/hazard3_onehot_priority.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/arith/hazard3_onehot_priority.v",
+              "size": 911,
+              "sha256": "355d6516cb8da6b4da69d227a0d609121fb0dfc6d04582c00d7b4286108f1084"
+            },
+            {
+              "path": "hdl/arith/hazard3_onehot_priority_dynamic.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/arith/hazard3_onehot_priority_dynamic.v",
+              "size": 2515,
+              "sha256": "52bb7595980d83540a9d3f72bc24ed7a564ba3fa7b01715b2add94636afd80b5"
+            },
+            {
+              "path": "hdl/arith/hazard3_priority_encode.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/arith/hazard3_priority_encode.v",
+              "size": 964,
+              "sha256": "40e97539f9b74111d5169d80417e1f286d3f088fb668513fdc7e03ae09a30fc7"
+            },
+            {
+              "path": "hdl/arith/hazard3_shift_barrel.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/arith/hazard3_shift_barrel.v",
+              "size": 1914,
+              "sha256": "60e9275389fe4f9e5df333bd7d3744a7161a9023ccacef106122e0e2e8f65a14"
+            },
+            {
+              "path": "hdl/hazard3_csr.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_csr.v",
+              "size": 56601,
+              "sha256": "7d415cbe92c6c034f162cf78e370cf4449f00eb36fde6e7220e5e0db010284a2"
+            },
+            {
+              "path": "hdl/hazard3_decode.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_decode.v",
+              "size": 33615,
+              "sha256": "76c7c6f842824aabe6c1ddac2a046092c3cda2505e19c261953b438ba0491ca8"
+            },
+            {
+              "path": "hdl/hazard3_frontend.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_frontend.v",
+              "size": 35561,
+              "sha256": "a1c63b595743c20ab6165bdfcc2eee985ad2e3f069d7aee8a244a47d4e55c524"
+            },
+            {
+              "path": "hdl/hazard3_instr_decompress.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_instr_decompress.v",
+              "size": 16500,
+              "sha256": "6b9e35d93e72f7caf9c4d73eceb331f0c7a4ec672f0e1325c629e440eca21319"
+            },
+            {
+              "path": "hdl/hazard3_irq_ctrl.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_irq_ctrl.v",
+              "size": 10459,
+              "sha256": "bab40d33b371faafa518e2c43d2b92dd07f813d353234cd999d4d80324db6bc4"
+            },
+            {
+              "path": "hdl/hazard3_pmp.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_pmp.v",
+              "size": 12220,
+              "sha256": "5ecd50932873f25c8d5c192bbb04da475508701188649e50a1511a9d3c191ec3"
+            },
+            {
+              "path": "hdl/hazard3_power_ctrl.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_power_ctrl.v",
+              "size": 5776,
+              "sha256": "4bacfc8cb45d0e82058b7c035a65dc7d0b833e4bae1e2f0764db89501f66b744"
+            },
+            {
+              "path": "hdl/hazard3_regfile_1w2r.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_regfile_1w2r.v",
+              "size": 2179,
+              "sha256": "b34eb529ce5d486a9b8e8b91a6da448200d2838375dc0f07ae33ace38809c038"
+            },
+            {
+              "path": "hdl/hazard3_triggers.v",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_triggers.v",
+              "size": 17867,
+              "sha256": "cc034af5a55e12f0015be33a64337f8723c8b899af9afeda65e85411194d3174"
+            },
+            {
+              "path": "hdl/hazard3_config.vh",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_config.vh",
+              "size": 11504,
+              "sha256": "97fe2ce66d7575c0e298946a046a2a38417dccbbbff438689fde08253c0ec593"
+            },
+            {
+              "path": "hdl/hazard3_config_inst.vh",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_config_inst.vh",
+              "size": 2416,
+              "sha256": "2a828e076587b4358b4ffd9b6741a01fb4ffd4729b0708e5b523e3b66146b3d4"
+            },
+            {
+              "path": "hdl/hazard3_csr_addr.vh",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_csr_addr.vh",
+              "size": 9735,
+              "sha256": "2a534cd55887da990657538bed7d4ca4d25390fc69fd5a167c21dfac4ea72153"
+            },
+            {
+              "path": "hdl/hazard3_ops.vh",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_ops.vh",
+              "size": 4149,
+              "sha256": "d08330fcecc9c4a3bc398206f87a9dccafa4340253811f7163a384133263222f"
+            },
+            {
+              "path": "hdl/hazard3_width_const.vh",
+              "language": "verilog",
+              "asset": "hazard3/hdl/hazard3_width_const.vh",
+              "size": 813,
+              "sha256": "f5e473a0fa29b880736b395b5f5b3985ff435a80dddeeb4c07976996f57b73a4"
+            },
+            {
+              "path": "hdl/rv_opcodes.vh",
+              "language": "verilog",
+              "asset": "hazard3/hdl/rv_opcodes.vh",
+              "size": 14673,
+              "sha256": "9274adcd08b245fa5c8db615c6e1d7188d408973ca0374478702a58d076ce1ae"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [
+            "hdl"
+          ],
+          "parameters": {
+            "RESET_VECTOR": "0",
+            "MTVEC_INIT": "0",
+            "EXTENSION_A": "0",
+            "EXTENSION_C": "0",
+            "EXTENSION_E": "1",
+            "EXTENSION_M": "0",
+            "DEBUG_SUPPORT": "0",
+            "NUM_IRQS": "1"
+          },
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/Wren6991/Hazard3.git",
+        "revision": "8af992930f71a69b0e06c38734c1094f41a05ca0"
+      }
+    },
+    {
+      "id": "vexriscv",
+      "label": "VexRiscv",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/vexriscv",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "vexriscv/LICENSE",
+            "size": 1108,
+            "sha256": "8f25018489d6fe0dec34a352314c38dc146247b7de65735790f4398a92afa84b"
+          },
+          {
+            "path": "pythondata_cpu_vexriscv/verilog/ext/VexRiscv/LICENSE",
+            "asset": "vexriscv/pythondata_cpu_vexriscv/verilog/ext/VexRiscv/LICENSE",
+            "size": 1079,
+            "sha256": "230178ba3f6cb6cf94ec301a9208fa6870e62c1ed83f20543f059622c3619760",
+            "provenance": [
+              {
+                "path": "pythondata_cpu_vexriscv/verilog/ext/VexRiscv",
+                "url": "https://github.com/SpinalHDL/VexRiscv.git",
+                "revision": "b6118e5cc2a33323425df6455697139021d50c72"
+              }
+            ]
+          }
+        ],
+        "note": "生成済み RTL 配布元の原文と、同配布元が固定する生成元サブモジュールの原文を保持します。生成済み RTL の再生成は検証の範囲外です。"
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "min",
+          "label": "Min・生成済み RTL",
+          "sources": [
+            {
+              "path": "pythondata_cpu_vexriscv/verilog/VexRiscv_Min.v",
+              "language": "verilog",
+              "asset": "vexriscv/pythondata_cpu_vexriscv/verilog/VexRiscv_Min.v",
+              "size": 198950,
+              "sha256": "758874a989724fe2b92a5413b43265c9a5129638fee9d7358fcd6724992b598f"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "parameters": {},
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/litex-hub/pythondata-cpu-vexriscv.git",
+        "revision": "642ecfed1c84460555d6d803d660cc60cfc1ecb6"
+      }
+    },
+    {
+      "id": "verilog-axi",
+      "label": "verilog-axi",
+      "kind": "library",
+      "language": "verilog",
+      "submodule": "third_party/verilog-axi",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          {
+            "path": "COPYING",
+            "asset": "verilog-axi/COPYING",
+            "size": 1057,
+            "sha256": "ba81481b2d63a33e0dce336d9e736130709549feeaf6cd424b34beba712baa50"
+          }
+        ]
+      },
+      "deprecated": true,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "read-register",
+          "label": "AXI Lite 読み出しレジスター",
+          "sources": [
+            {
+              "path": "rtl/axil_register_rd.v",
+              "language": "verilog",
+              "asset": "verilog-axi/rtl/axil_register_rd.v",
+              "size": 11801,
+              "sha256": "ae1a35af8be25b3fa0f2245ce0ca33287f566279ea5bcf04d822d417ffa5f463"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "parameters": {
+            "DATA_WIDTH": "8",
+            "ADDR_WIDTH": "8",
+            "AR_REG_TYPE": "2",
+            "R_REG_TYPE": "2"
+          },
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/alexforencich/verilog-axi.git",
+        "revision": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      }
+    },
+    {
+      "id": "verilog-ethernet",
+      "label": "verilog-ethernet",
+      "kind": "library",
+      "language": "verilog",
+      "submodule": "third_party/verilog-ethernet",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          {
+            "path": "COPYING",
+            "asset": "verilog-ethernet/COPYING",
+            "size": 1062,
+            "sha256": "8ea57f95365e9b16a5b516f422b71269183a1ae53bab5878ae6d69039e58fe77"
+          }
+        ]
+      },
+      "deprecated": true,
+      "status": "available",
+      "reason": "表示中の代表部品と設定は4ボードで仮想検証済みです。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "crc",
+          "label": "CRC-16 計算",
+          "sources": [
+            {
+              "path": "rtl/lfsr.v",
+              "language": "verilog",
+              "asset": "verilog-ethernet/rtl/lfsr.v",
+              "size": 16327,
+              "sha256": "5502c8203b0dfc7246c1a2de93e60c199ded3c1d7840b106350d714f72a9a079"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {},
+          "parameters": {
+            "LFSR_WIDTH": "16",
+            "LFSR_POLY": "16'h1021",
+            "LFSR_CONFIG": "GALOIS",
+            "DATA_WIDTH": "8",
+            "STYLE": "LOOP"
+          },
+          "boards": {
+            "tangnano1k": "confirmed",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/alexforencich/verilog-ethernet.git",
+        "revision": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      }
+    },
+    {
+      "id": "darkriscv",
+      "label": "DarkRISCV",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/darkriscv",
+      "license": {
+        "expression": "BSD-3-Clause",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "darkriscv/LICENSE",
+            "size": 1517,
+            "sha256": "3c44e0a14c097e8713e0796234c11bef79bd64a9dfc576c1eaf4a13c93638028"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "available",
+      "reason": "固定構成の代表回路は4K・9K・20Kで確認済みです。1Kは容量超過です。実機は本リポジトリでは試していません。",
+      "components": [
+        {
+          "id": "rv32i",
+          "label": "RV32I・3 段パイプライン",
+          "sources": [
+            {
+              "path": "rtl/config.vh",
+              "language": "verilog",
+              "asset": "darkriscv/rtl/config.vh",
+              "size": 19617,
+              "sha256": "5871d964cbd6fc050680776e840026b80863616834dabdb55e78245d46b8566e"
+            },
+            {
+              "path": "rtl/darkriscv.v",
+              "language": "verilog",
+              "asset": "darkriscv/rtl/darkriscv.v",
+              "size": 36214,
+              "sha256": "46d57b15cc42c0458e02500a2a30371cd4e7979970c27afd9d47c40d1fa8c1a0"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [
+            "rtl"
+          ],
+          "parameters": {
+            "CPTR": "0"
+          },
+          "defines": {},
+          "boards": {
+            "tangnano1k": "capacity-exceeded",
+            "tangnano4k": "confirmed",
+            "tangnano9k": "confirmed",
+            "tangnano20k": "confirmed"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/darklife/darkriscv.git",
+        "revision": "955511961f139c54d3385063cd9bf40f4dddadd8"
+      }
+    },
+    {
+      "id": "femtorv",
+      "label": "FemtoRV",
+      "kind": "cpu",
+      "language": "verilog",
+      "submodule": "third_party/femtorv",
+      "license": {
+        "expression": "BSD-3-Clause",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "femtorv/LICENSE",
+            "size": 1518,
+            "sha256": "dae852f7354066fe13901a60a49ac4f7e45b9ae16fec901e12e24218da0ea999"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "frontend-unsupported",
+      "reason": "固定版のQuarkはIcarus 13.0で宣言前のinstr参照を解決できません。nativeとWASMで同じ解析エラーを確認しました。",
+      "components": [
+        {
+          "id": "quark",
+          "label": "Quark・RV32I",
+          "parameters": {
+            "RESET_ADDR": "0",
+            "ADDR_WIDTH": "12"
+          },
+          "sources": [
+            {
+              "path": "FemtoRV/RTL/PROCESSOR/femtorv32_quark.v",
+              "language": "verilog",
+              "asset": "femtorv/FemtoRV/RTL/PROCESSOR/femtorv32_quark.v",
+              "size": 16374,
+              "sha256": "182e6d13bf5ab165b6eefaa22ae8d6a24ea45db6dd2dbd57dcfc5e81932097b7"
+            }
+          ],
+          "data": [],
+          "dependencies": [],
+          "includeDirectories": [],
+          "defines": {
+            "NRV_COUNTER_WIDTH": "8"
+          },
+          "boards": {
+            "tangnano1k": "frontend-unsupported",
+            "tangnano4k": "frontend-unsupported",
+            "tangnano9k": "frontend-unsupported",
+            "tangnano20k": "frontend-unsupported"
+          }
+        }
+      ],
+      "source": {
+        "url": "https://github.com/BrunoLevy/learn-fpga.git",
+        "revision": "f5ada24ae6cca67d99889daec2c4ee44a6e59417"
+      }
+    },
+    {
+      "id": "ibex",
+      "label": "Ibex",
+      "kind": "cpu",
+      "language": "systemverilog",
+      "submodule": "third_party/ibex",
+      "license": {
+        "expression": "Apache-2.0",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "ibex/LICENSE",
+            "size": 11358,
+            "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+          },
+          {
+            "path": "NOTICE",
+            "asset": "ibex/NOTICE",
+            "size": 544,
+            "sha256": "21b2cb02046e122bfb3671adb532f1a237110864ac060ae434b8228fd3f13d9d"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "SystemVerilog は現段階の対象外です。",
+      "components": [],
+      "source": {
+        "url": "https://github.com/lowRISC/ibex.git",
+        "revision": "f4515520c0045bb8ef1e72d46ed82499a6ac5f18"
+      }
+    },
+    {
+      "id": "cv32e40p",
+      "label": "CV32E40P",
+      "kind": "cpu",
+      "language": "systemverilog",
+      "submodule": "third_party/cv32e40p",
+      "license": {
+        "expression": "SHL-0.51 OR Apache-2.0",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "cv32e40p/LICENSE",
+            "size": 10329,
+            "sha256": "6527a46225891b976fa94f634f6ee0cd22e1c7129d6f11c5c98c997627625fc7"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "SystemVerilog は現段階の対象外です。",
+      "components": [],
+      "source": {
+        "url": "https://github.com/openhwfoundation/cv32e40p.git",
+        "revision": "b353438ff469c030c89f6804f3b24a2852880e8b"
+      }
+    },
+    {
+      "id": "vexiiriscv",
+      "label": "VexiiRiscv",
+      "kind": "cpu",
+      "language": "scala",
+      "submodule": "third_party/vexiiriscv",
+      "license": {
+        "expression": "MIT",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "vexiiriscv/LICENSE",
+            "size": 1066,
+            "sha256": "c47753101c83aaf26e12bd6fd57b5624db11d25fb8a4c307af9e912e0775c986"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "Scala からの生成が必要です。固定した生成済み RTL は未提供です。",
+      "components": [],
+      "source": {
+        "url": "https://github.com/SpinalHDL/VexiiRiscv.git",
+        "revision": "9f70315deb3390b283995c5b8f1bd38215ecf52b"
+      }
+    },
+    {
+      "id": "osvvm",
+      "label": "OSVVM",
+      "kind": "verification",
+      "language": "vhdl",
+      "submodule": "third_party/osvvm",
+      "license": {
+        "expression": "Apache-2.0",
+        "files": [
+          {
+            "path": "LICENSE.md",
+            "asset": "osvvm/LICENSE.md",
+            "size": 10571,
+            "sha256": "0c5e2bf896eccff640498e158d5d1965569a1d8907f5adb4064544c69abc7681"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "VHDL の検証用です。VHDL シミュレーションは未提供です。",
+      "components": [],
+      "source": {
+        "url": "https://github.com/OSVVM/OSVVM.git",
+        "revision": "716d751566b4fb6479f69c38cc01790744c911b7"
+      }
+    },
+    {
+      "id": "uvvm",
+      "label": "UVVM",
+      "kind": "verification",
+      "language": "vhdl",
+      "submodule": "third_party/uvvm",
+      "license": {
+        "expression": "Apache-2.0",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "uvvm/LICENSE",
+            "size": 10173,
+            "sha256": "0cec06e0e55fbc3dc5cee4fca9b607f66cb8f4e4dbcf3b3c013594dd156732e9"
+          }
+        ]
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "VHDL の検証用です。VHDL シミュレーションは未提供です。",
+      "components": [],
+      "source": {
+        "url": "https://github.com/UVVM/UVVM.git",
+        "revision": "825072572dbf2d6079c9ca07a55964271b724664"
+      }
+    },
+    {
+      "id": "vunit",
+      "label": "VUnit",
+      "kind": "verification",
+      "language": "vhdl",
+      "submodule": "third_party/vunit",
+      "license": {
+        "expression": "MPL-2.0",
+        "files": [
+          {
+            "path": "LICENSE.rst",
+            "asset": "vunit/LICENSE.rst",
+            "size": 589,
+            "sha256": "6a18889856e2584a0b40f643b1a75bbb2d69c3c77324d1b5b8bc986a7e271534"
+          }
+        ],
+        "note": "HDL と Python 等は MPL-2.0 です。図版のフォントは別の条件です。"
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "VHDL の検証用です。VHDL シミュレーションは未提供です。",
+      "components": [],
+      "source": {
+        "url": "https://github.com/VUnit/vunit.git",
+        "revision": "6c2f49f0ec4c4e2a84013a987901c8fce848c654"
+      }
+    },
+    {
+      "id": "taxi",
+      "label": "Taxi",
+      "kind": "library",
+      "language": "systemverilog",
+      "submodule": "third_party/taxi",
+      "license": {
+        "expression": "CERN-OHL-S-2.0",
+        "files": [
+          {
+            "path": "LICENSE",
+            "asset": "taxi/LICENSE",
+            "size": 13419,
+            "sha256": "253ad3f89603e728abfa60c36fbcaf8225cf55c1eab12725f19fb3d74d647f3a"
+          }
+        ],
+        "note": "有償ライセンスもありますが、別途契約が必要です。自動で有償ライセンスを適用しません。"
+      },
+      "deprecated": false,
+      "status": "unsupported",
+      "reason": "SystemVerilog は現段階の対象外です。",
+      "components": [],
+      "source": {
+        "url": "https://github.com/fpganinja/taxi.git",
+        "revision": "cc70b270b910d369ab1ad7b3855e76399fd461f1"
+      }
+    }
+  ]
+}
