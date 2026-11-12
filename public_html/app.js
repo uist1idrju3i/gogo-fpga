@@ -14,6 +14,8 @@ import {
 import { parseProgress } from "./lib/parse-progress.mjs";
 import { writeTerminalText } from "./lib/terminal-output.mjs";
 import { initializeIde } from "./ide.mjs";
+import { createDesignWorkflow } from "./lib/workflow-ui.mjs";
+import { initializeWorkspaceUI } from "./lib/workspace-ui.mjs";
 
 const form = document.querySelector("#program-form");
 const boardSelect = document.querySelector("#board-select");
@@ -67,6 +69,44 @@ let verifySelection = defaultOptions().verify;
 let terminalState = { text: "" };
 let downloadUrl = null;
 let projectFsSource = null;
+let validationAttempted = false;
+const workspace = initializeWorkspaceUI(BOARDS);
+const workflow = createDesignWorkflow(() => {
+  updateForm();
+  document.dispatchEvent(new Event("toolchain:flow-change"));
+});
+
+function renderWorkflow() {
+  const view = workflow.view;
+  document.querySelectorAll("[data-workflow-step]").forEach((element, index) => {
+    element.textContent = view.steps[index];
+    element.dataset.status = view.steps[index];
+  });
+  const synthesis = document.querySelector("#synthesis-button");
+  const writing = ["built", "writing", "written", "write_failed"].includes(view.state) && !view.stale;
+  synthesis.classList.toggle("secondary", writing);
+  synthesis.textContent = writing ? "合成し直す" : view.primary;
+  programButton.classList.toggle("secondary", !writing);
+  programButton.classList.toggle("workflow-primary-write", writing);
+  workspace.syncPrimary(writing);
+  workspace.updateWelcome(view);
+  if (view.stage !== null) document.querySelector("#synthesis-stage").textContent = view.stage;
+  document.querySelector("#build-summary-freshness").textContent = view.stale ? "前回の結果です（古い）。合成し直してください。" : "";
+  if (view.state === "writing") {
+    programButton.textContent = "書き込み中";
+    synthesis.disabled = true;
+    programButton.disabled = true;
+  }
+  document.querySelector("#workflow-guidance").textContent = view.stale
+    ? "編集により成果物が古くなりました。書き込む前に合成し直してください。"
+    : writing ? "必要に応じて検証し、ボードを接続して書き込んでください。"
+    : "HDLを編集して、合成・配置配線を実行してください。";
+  if (!view.stale && selectedFsSource() && fileIdcodeReady &&
+      !fsIdcodeMatchesBoard(selectedFileIdcode, getBoard(boardSelect.value))) {
+    document.querySelector("#workflow-guidance").textContent =
+      "選択したファイルのIDCODEをボードと照合できません。対応するファイルかボードを選んでください。";
+  }
+}
 
 for (const board of BOARDS) {
   const option = document.createElement("option");
@@ -239,7 +279,7 @@ function updateForm() {
     item.textContent = error;
     validationErrors.append(item);
   }
-  validationErrors.hidden = errors.length === 0;
+  validationErrors.hidden = !validationAttempted || errors.length === 0;
 
   try {
     commandPreview.textContent = formatCommand(buildArgs({
@@ -260,12 +300,16 @@ function updateForm() {
     synthesisBuildRunning ||
     activeWorker !== null ||
     !fileIdcodeReady ||
-    errors.length > 0;
+    errors.length > 0 ||
+    (options.operation === "write" && (!workflow.canWrite() ||
+      !fsIdcodeMatchesBoard(selectedFileIdcode, board)));
+  renderWorkflow();
 }
 
 function setResult(text, succeeded = false) {
   resultStatus.textContent = text;
   resultStatus.dataset.result = succeeded ? "success" : "failure";
+  if (workflow.state === "writing") workflow.send(succeeded ? "write_succeeded" : "write_errored");
 }
 
 function requestDeviceResult() {
@@ -476,6 +520,8 @@ function finishRun(
 }
 
 async function startRun(board, options, file, fileIdcode) {
+  const revision = workflow.revision;
+  const sourceVersion = fileReadVersion;
   let deviceResultPromise;
   if (options.operation === "erase") {
     const confirmation = await confirmErase(board);
@@ -494,6 +540,10 @@ async function startRun(board, options, file, fileIdcode) {
   }
 
   const deviceResult = await deviceResultPromise;
+  if (options.operation === "write" && (revision !== workflow.revision ||
+      sourceVersion !== fileReadVersion || workflow.stale || workflow.state !== "writing")) {
+    throw new Error("設計またはファイルが変更されたため書き込みを中止しました。");
+  }
   if (deviceResult.error) {
     showRunPanel(options.operation);
     const message = deviceResult.error.name === "NotFoundError"
@@ -611,6 +661,8 @@ offsetResetButton.addEventListener("click", () => {
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
+  validationAttempted = true;
+  updateForm();
   if (!supportAvailable || activeWorker !== null || !fileIdcodeReady) return;
 
   const board = getBoard(boardSelect.value);
@@ -625,6 +677,12 @@ form.addEventListener("submit", async (event) => {
   }
 
   programButton.disabled = true;
+  if (options.operation === "write") {
+    if (!workflow.canWrite() || !fsIdcodeMatchesBoard(selectedFileIdcode, board)) return;
+    if (workflow.send("write_requested", {
+      uploaded_fs_selected: Boolean(file), board_idcode_matches: true,
+    }) !== "writing") return;
+  }
   try {
     await startRun(board, options, file, selectedFileIdcode);
   } catch (error) {
@@ -648,6 +706,7 @@ form.addEventListener("submit", async (event) => {
 updateForm();
 initialize();
 initializeIde({
+  workflow,
   form,
   boardSelect,
   programLog,

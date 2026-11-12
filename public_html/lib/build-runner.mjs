@@ -22,6 +22,8 @@ function request(worker, message, callbacks, operation) {
     };
     const onMessage = ({ data }) => {
       if (data?.type === "stage") callbacks.onStage?.(data.stage);
+      else if (data?.type === "progress") callbacks.onProgress?.(data.progress);
+      else if (data?.type === "tools_ready") callbacks.onToolsReady?.();
       else if (data?.type === "log") callbacks.onLog?.(data);
       else if (data?.type === "error") {
         cleanup();

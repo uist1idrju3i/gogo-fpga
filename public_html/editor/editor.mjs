@@ -156,6 +156,12 @@ export function createHdlEditor(
       view.dispatch({ effects: readOnlyCompartment.reconfigure(readOnlyExtension(readOnly)) });
     },
     setDiagnostics: setEditorDiagnostics,
+    revealLocation(line = 1, column = 1) {
+      const target = view.state.doc.line(Math.min(view.state.doc.lines, Math.max(1, Number.isInteger(line) ? line : 1)));
+      const anchor = target.from + Math.min(target.length, Math.max(0, Number.isInteger(column) ? column - 1 : 0));
+      view.dispatch({ selection: { anchor }, effects: EditorView.scrollIntoView(anchor, { y: "center" }) });
+      view.focus();
+    },
     focus() {
       view.focus();
     },
