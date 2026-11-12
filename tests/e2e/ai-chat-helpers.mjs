@@ -27,6 +27,7 @@ export async function prepareChat(page, { reply = "説明です。", status = 20
   if ((page.viewportSize()?.width ?? 1280) <= 640) await page.locator("#toggle-board-pane").click();
   await page.locator("#right-tab-ai").click(); await page.locator("#ai-connect").click();
   await expect(page.locator("#ai-auth-status")).toContainText("接続済み");
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
   return requests;
 }
 
