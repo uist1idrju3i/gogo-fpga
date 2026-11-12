@@ -164,8 +164,10 @@ export function initializeWorkspaceUI(boards) {
   return {
     syncPrimary(writing) {
       const program = document.querySelector("#program-button");
-      primary.append(writing ? program : buildButton);
-      secondary.append(writing ? buildButton : program);
+      const primaryButton = writing ? program : buildButton;
+      const secondaryButton = writing ? buildButton : program;
+      if (primaryButton.parentElement !== primary) primary.append(primaryButton);
+      if (secondaryButton.parentElement !== secondary) secondary.append(secondaryButton);
     },
     updateWelcome(view) {
       document.querySelector("#welcome-built").checked = !view.stale && ["built", "writing", "written", "write_failed"].includes(view.state);

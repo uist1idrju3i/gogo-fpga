@@ -81,7 +81,10 @@ for (const board of BOARDS) {
     assert.ok(fsIdcodeMatchesBoard(expectedIdcode, board));
     let coldBuildResponses;
     for (let repeat = 0; repeat < 5; repeat += 1) {
-      if (repeat > 0) await expect(page.locator("#program-button")).toBeEnabled();
+      if (repeat > 0) {
+        await expect(page.locator("#program-button")).toBeEnabled();
+        await page.locator("#right-tab-write").click();
+      }
       await page.locator("#synthesis-button").click();
       await expect(page.locator("#synthesis-button")).toHaveText("中止");
       await expect(page.locator("#program-button")).toBeDisabled();
