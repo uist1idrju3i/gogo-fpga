@@ -180,7 +180,7 @@ JSPI/pthread の基準 B（`-Os`、LTO なし、legacy の wasm 例外、固定 
 
 | 部品 | ライセンス | 配布で必要なこと |
 |---|---|---|
-| openFPGALoader | Apache-2.0 | [LICENSE](../../LICENSE)、[NOTICE](../../NOTICE)、[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) を同梱 |
+| openFPGALoader | Apache-2.0 | [上流LICENSE](https://github.com/trabucayre/openFPGALoader/blob/befbab4f646207dbaf1daf8b144dd980ad283dd5/LICENSE)、[NOTICE](../../NOTICE)、[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) を同梱 |
 | libusb | LGPL-2.1-or-later | 静的リンク。ソースと再リンク方法を [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) に記載 |
 | libftdi | LGPL-2.1（ライブラリ部分） | 同上 |
 | zlib | zlib | [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) に記載 |
