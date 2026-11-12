@@ -1,0 +1,56 @@
+{
+  "assets": [
+    {
+      "compressed_sha256": "b251e8b5a34ac7ff492d64c08dee400fe82647e4425d66d6fe7d3fb7e5856005",
+      "compressed_size": 22724,
+      "encoding": "zstd",
+      "path": "pyodide/pyodide-lock.json",
+      "sha256": "5dc2fc119108bc148c7457dc86e7675b5c87e1cafd420b9c34c1eaef7b36c010",
+      "size": 119077
+    },
+    {
+      "path": "pyodide/pyodide.asm.mjs",
+      "sha256": "f7cdc8ece80678ceb712f8e65ebe6d3a83203a180c399865f49612a051693635",
+      "size": 1250344
+    },
+    {
+      "compressed_sha256": "fd5bc2f1b13b8be8174285f14bf603813575d7bafec16d9144f889792642d06f",
+      "compressed_size": 2890689,
+      "encoding": "zstd",
+      "path": "pyodide/pyodide.asm.wasm",
+      "sha256": "cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6",
+      "size": 9598218
+    },
+    {
+      "path": "pyodide/pyodide.mjs",
+      "sha256": "6f1d60f7bf529beb300f0f47983c921d3982363640ba20af0e38efdddbc66109",
+      "size": 17931
+    },
+    {
+      "path": "pyodide/python_stdlib.zip",
+      "sha256": "fa1957e5777068fc4f7437f96d860ae2fbe9c19732ba06c84e004ec16dd7dd7a",
+      "size": 2545637
+    },
+    {
+      "path": "wheels/apycula-0.35-py3-none-any.whl",
+      "sha256": "6495d1c7cdc3cf6ac0a74bf7246932e96e5af84e24c17c1fef7296ebe7ed82fe",
+      "size": 4281385
+    },
+    {
+      "path": "wheels/micropip-0.11.1-py3-none-any.whl",
+      "sha256": "e2d52886594fd4cd0d0847110a1c34ae0134d3a970eb4496d3b5eb31ee2d8af6",
+      "size": 115486
+    },
+    {
+      "path": "wheels/msgspec-0.20.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
+      "sha256": "2a4075cee8afc2c0424c63ae1a9b0655e727478df7fa2eb78f86f846fc5fb4bd",
+      "size": 132538
+    },
+    {
+      "path": "wheels/numpy-2.4.6-cp314-cp314-pyemscripten_2026_0_wasm32.whl",
+      "sha256": "a292c1f5d7d8a2208cd5e94fc467604c131cabcd2fc14fed6eefde121e7fabdf",
+      "size": 2960568
+    }
+  ],
+  "format_version": 1
+}
