@@ -125,17 +125,6 @@ if [[ "$CARGO_HOME" != /* ]]; then
 fi
 export CARGO_TARGET_DIR="$target_dir"
 export CARGO_INCREMENTAL=0
-if [[ -z "${SOURCE_DATE_EPOCH:-}" ]]; then
-  if git -C "$root" rev-parse --verify HEAD >/dev/null 2>&1; then
-    SOURCE_DATE_EPOCH="$(git -C "$root" log -1 --format=%ct)"
-  elif [[ -s "$root/RELEASE-SOURCE.json" ]]; then
-    SOURCE_DATE_EPOCH="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["source_date_epoch"])' "$root/RELEASE-SOURCE.json")"
-  else
-    printf 'SOURCE_DATE_EPOCH is required outside a git checkout.\n' >&2
-    exit 1
-  fi
-fi
-export SOURCE_DATE_EPOCH
 export RUSTFLAGS="--cfg=web_sys_unstable_apis --remap-path-prefix=$source_dir=/surfer --remap-path-prefix=$CARGO_HOME=/cargo --remap-path-prefix=$rust_sysroot=/rust"
 
 surfer_commit="bd749b1f786c1c62cd67893ca71346cbe6983915"
@@ -171,10 +160,17 @@ if [[ "$checked_out_commit" != "$surfer_commit" ]]; then
   printf 'vendor/surfer is not at the pinned commit.\n' >&2
   exit 1
 fi
+metadata="$(python3 "$root/scripts/surfer-build-metadata.py" \
+  --source "$root/vendor/surfer" --commit "$surfer_commit")"
+IFS=$'\t' read -r SOURCE_DATE_EPOCH VERGEN_BUILD_DATE <<< "$metadata"
+export SOURCE_DATE_EPOCH VERGEN_BUILD_DATE
+export VERGEN_GIT_DESCRIBE="$surfer_commit"
+printf 'SURFER_SOURCE_METADATA commit=%s epoch=%s date=%s\n' \
+  "$VERGEN_GIT_DESCRIBE" "$SOURCE_DATE_EPOCH" "$VERGEN_BUILD_DATE"
 rm -rf -- "$source_dir"
 mkdir -p "$source_dir"
 cp -a "$root/vendor/surfer/." "$source_dir/"
-rm -f "$source_dir/.git" "$source_dir/f128/.git" "$source_dir/instruction-decoder/.git"
+rm -rf -- "$source_dir/.git" "$source_dir/f128/.git" "$source_dir/instruction-decoder/.git"
 
 patches=("$root"/patches/surfer/*.patch)
 if [[ ${#patches[@]} -ne 1 || ! -s "${patches[0]}" ]]; then

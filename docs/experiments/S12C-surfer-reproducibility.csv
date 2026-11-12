@@ -1,0 +1,37 @@
+run_id,variant,repeat,metric,value,unit,valid,note
+43226933480,before-ci,1,wasm_sha256,103eaa9ab3b197d820a37d4645c5c196abc6aee082eb4b703abffdacd173df67,sha256,true,7b69d65
+43226933480,before-ci,1,html_sha256,6850f6dbc97f21c30ff8772e2dc12ac64c4a4b4c03a0f0bd2eb08947a4bdf582,sha256,true,7b69d65
+43231312841,before-ci,2,wasm_sha256,89eb6196f0528217a663b22a56bcb4c9ac1bf2a1bce92fea6a587fe70e9e9511,sha256,true,519634d
+43231312841,before-ci,2,html_sha256,82b072b63f3c0fa2e6e8d52a475ca4658b44f1c4f20fab308dae35586ad35fcb,sha256,true,519634d
+S12C,before,1,VERGEN_GIT_DESCRIBE,f2ec4df,text,true,2026-11-12
+S12C,before,1,VERGEN_BUILD_DATE,2026-11-12,text,true,2026-11-12
+S12C,fixed,1,VERGEN_GIT_DESCRIBE,bd749b1f786c1c62cd67893ca71346cbe6983915,text,true,2026-11-12
+S12C,fixed,1,VERGEN_BUILD_DATE,2026-04-27,text,true,2026-11-12
+S12C,before,2,VERGEN_GIT_DESCRIBE,13e25b5,text,true,2026-11-13
+S12C,before,2,VERGEN_BUILD_DATE,2026-11-13,text,true,2026-11-13
+S12C,fixed,2,VERGEN_GIT_DESCRIBE,bd749b1f786c1c62cd67893ca71346cbe6983915,text,true,2026-11-13
+S12C,fixed,2,VERGEN_BUILD_DATE,2026-04-27,text,true,2026-11-13
+S12C,before,3,VERGEN_GIT_DESCRIBE,ff6f677,text,true,2026-11-14
+S12C,before,3,VERGEN_BUILD_DATE,2026-11-14,text,true,2026-11-14
+S12C,fixed,3,VERGEN_GIT_DESCRIBE,bd749b1f786c1c62cd67893ca71346cbe6983915,text,true,2026-11-14
+S12C,fixed,3,VERGEN_BUILD_DATE,2026-04-27,text,true,2026-11-14
+S12C,before,4,VERGEN_GIT_DESCRIBE,7f45cb1,text,true,2026-11-15
+S12C,before,4,VERGEN_BUILD_DATE,2026-11-15,text,true,2026-11-15
+S12C,fixed,4,VERGEN_GIT_DESCRIBE,bd749b1f786c1c62cd67893ca71346cbe6983915,text,true,2026-11-15
+S12C,fixed,4,VERGEN_BUILD_DATE,2026-04-27,text,true,2026-11-15
+S12C,before,5,VERGEN_GIT_DESCRIBE,07ec3a8,text,true,2026-11-16
+S12C,before,5,VERGEN_BUILD_DATE,2026-11-16,text,true,2026-11-16
+S12C,fixed,5,VERGEN_GIT_DESCRIBE,bd749b1f786c1c62cd67893ca71346cbe6983915,text,true,2026-11-16
+S12C,fixed,5,VERGEN_BUILD_DATE,2026-04-27,text,true,2026-11-16
+S12C,clean-a,1,wasm_sha256,2815da8beb253221d957c5e6626c6cec4865466ff2b9ea14f759e36fdf1c9cc7,sha256,true,empty target
+S12C,clean-a,1,html_sha256,3d3f19ee748041056c58786effbe8635cc2cdb4a3d34cff871b904f57dff0d81,sha256,true,empty target
+S12C,clean-a,1,wasm_size,12867178,bytes,true,empty target
+S12C,clean-a,1,html_size,5827,bytes,true,empty target
+S12C,clean-a,1,trunk_build_seconds,468,s,true,empty target
+S12C,clean-a,1,total_build_seconds,470,s,true,empty target
+S12C,clean-b,2,wasm_sha256,2815da8beb253221d957c5e6626c6cec4865466ff2b9ea14f759e36fdf1c9cc7,sha256,true,empty target and conflicting inherited metadata
+S12C,clean-b,2,html_sha256,3d3f19ee748041056c58786effbe8635cc2cdb4a3d34cff871b904f57dff0d81,sha256,true,empty target and conflicting inherited metadata
+S12C,clean-b,2,wasm_size,12867178,bytes,true,empty target
+S12C,clean-b,2,html_size,5827,bytes,true,empty target
+S12C,clean-b,2,trunk_build_seconds,467,s,true,empty target
+S12C,clean-b,2,total_build_seconds,470,s,true,empty target

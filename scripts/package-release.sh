@@ -341,6 +341,8 @@ if [[ "$surfer_pin" != "$(git -C "$root/vendor/surfer" rev-parse HEAD)" ]]; then
   exit 1
 fi
 printf '%s\n' "$surfer_pin" > "$source_root/vendor/surfer/.gitcommit"
+git -C "$root/vendor/surfer" show -s --format=%ct "$surfer_pin" \
+  > "$source_root/vendor/surfer/.gitcommit-timestamp"
 git -C "$root/vendor/surfer" submodule update --init --depth 1 -- "${surfer_nested_submodules[@]}"
 for path in "${surfer_nested_submodules[@]}"; do
   tree_line="$(git -C "$root/vendor/surfer" ls-tree HEAD -- "$path")"
@@ -400,6 +402,7 @@ done
 
 source_required_files=(
   "$source_root/scripts/build-surfer.sh"
+  "$source_root/scripts/surfer-build-metadata.py"
   "$source_root/scripts/collect-surfer-licenses.py"
   "$source_root/scripts/build-iverilog-wasm.sh"
   "$source_root/scripts/build-iverilog-info.py"
