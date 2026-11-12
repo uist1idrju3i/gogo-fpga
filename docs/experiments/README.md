@@ -6,6 +6,11 @@
 
 | 記録 | 内容 | 状態 |
 |---|---|---|
+| [S0 WASMビルド](S0-wasm-build.md) | 旧書き込みアプリのビルドと仮想USB検出 | 当時の記録。書き込みと実機は対象外 |
+| [S1a 書き込みシミュレーション](S1a-program-sim.md) | 仮想GOWINでの書き込みと故障注入 | 当時の記録。実機では未確認 |
+| [S1b WASMオプション行列](S1b-option-matrix.md) | 旧書き込みアプリのビルド候補比較 | 完了。後続の既定値選定はS7を参照 |
+| [S2 CI環境差の診断](S2-ci-sim-environment.md) | ローカルとCIの書き込み検証の差 | 完了。実機では未確認 |
+| [S3 CI速度改善](S3-ci-speed.md) | 旧書き込みアプリのworkflow比較 | 当時の基準と測定・採否を保持 |
 | [S15 追加候補と原本SMTBMC/SBYの接続](S15-extra-solver-smtbmc.md) | Bitwuzlaの実help、Boolectorの終了10/20、native起動先の検査 | 両候補でSMTBMC各8条件・SBY各6条件の予備比較。初期の別native起動は除外。正式反復は後続の独立監査へ記録。製品認定は残件 |
 | [S15 追加候補の独立監査と反復](S15-extra-formal-audit.md) | SMTBMC/SBY全列とhelp・実code・実構文エラーの監査 | 正式5回・A/A 2回の全420行・全列監査。改変20件とZIP全38,413ファイルの復元後監査も成功。製品では無効 |
 | [S15 SBY子workerの停止と輸送の対照](S15-sby-controls.md) | 実ソルバーのstdin待機、全worker停止、delta改変とroot競合、非対応オプション | 正式5回・A/A 2回、全161行14列・966出力・707 workerを独立監査。ZIPからの全件復元も成功 |
