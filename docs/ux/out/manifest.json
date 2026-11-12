@@ -2,6 +2,22 @@
   "schema_version": 1,
   "artifacts": [
     {
+      "path": "gogo-fpga.ai_chat.scxml",
+      "sha256": "65fa91deaf9ceda6ba152627eb3a0766255ea26a9ce720399f310ac43e01f4d1"
+    },
+    {
+      "path": "gogo-fpga.ai_chat.statechart.mmd",
+      "sha256": "7c2c481a69b59b62a8bf034bac78b5b7bd96e63ce37b9dcde0289a6faa45e3b4"
+    },
+    {
+      "path": "gogo-fpga.ai_chat.statechart.puml",
+      "sha256": "2cb93a6ef79c3cf819a3d4a09b0242dc85aa06388f199b3afb1c3442d30e95e0"
+    },
+    {
+      "path": "gogo-fpga.ai_chat.xstate.json",
+      "sha256": "3ce7c536b853caa51515ef8ed9ff02c163eb3f98549b8d104c3cb5092aa65c20"
+    },
+    {
       "path": "gogo-fpga.ai_connection.scxml",
       "sha256": "795e442fad6256b311b255b654237b68201541e7db35c5e770d0bd413e396656"
     },
@@ -99,7 +115,7 @@
     },
     {
       "path": "gogo-fpga.stories.json",
-      "sha256": "73da367dbdcf124cec1d9f779d4f7dafd62d24ab24d4eb857ef4584766a60065"
+      "sha256": "fe5e78f5c275c4319040ee1e7a3550793a6a84587e36984b2c89bbccc9ce43fb"
     },
     {
       "path": "gogo-fpga.wbs.puml",

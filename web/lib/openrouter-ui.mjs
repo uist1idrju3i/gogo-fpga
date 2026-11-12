@@ -19,7 +19,7 @@ const ERROR_TEXT = {
 export function initializeOpenRouterUI({ panel, showPanel, flushPendingSave }) {
   panel.innerHTML = `<h3>OpenRouter に接続する</h3>
     <p>送信先は openrouter.ai だけです。送るファイルやログは、送信前に自分で選びます。利用料は自分の OpenRouter の残高から支払います。</p>
-    <p>チャット機能は今後追加します。現在は接続の設定だけで、設計データは送信しません。</p>
+    <p>相談文と資料は送信内容の確認後に送ります。会話とモデル名はこのタブだけで保持します。</p>
     <p id="ai-auth-status" role="status" aria-live="polite"></p>
     <p id="ai-auth-error" role="alert" hidden></p>
     <button id="ai-connect" type="button">OpenRouter で接続する</button>
@@ -49,6 +49,7 @@ export function initializeOpenRouterUI({ panel, showPanel, flushPendingSave }) {
     disconnectNote.hidden = !connected;
     if (!busy) persist.checked = keys.persisted;
     for (const control of [connect, disconnect, persist]) control.disabled = busy;
+    panel.dispatchEvent(new Event("toolchain:ai-auth-change"));
   }
   async function run(operation) {
     busy = true;
@@ -94,4 +95,5 @@ export function initializeOpenRouterUI({ panel, showPanel, flushPendingSave }) {
       await keys.restore();
     }
   });
+  return { getKey: () => keys.key };
 }

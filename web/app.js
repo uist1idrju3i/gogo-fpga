@@ -17,6 +17,7 @@ import { initializeIde } from "./ide.mjs";
 import { createDesignWorkflow } from "./lib/workflow-ui.mjs";
 import { initializeWorkspaceUI } from "./lib/workspace-ui.mjs";
 import { initializeOpenRouterUI } from "./lib/openrouter-ui.mjs";
+import { createProposalEditor, initializeAiChatUI } from "./lib/ai-chat-ui.bundle.mjs";
 
 const form = document.querySelector("#program-form");
 const boardSelect = document.querySelector("#board-select");
@@ -727,8 +728,13 @@ const ide = initializeIde({
   canStartSimulation: () => !activeWorker && !synthesisBuildRunning,
   canChangeLibraries: () => !activeWorker,
 });
-initializeOpenRouterUI({
+const aiAuth = initializeOpenRouterUI({
   panel: document.querySelector("#right-panel-ai"),
   showPanel: () => workspace.showTab("ai"),
   flushPendingSave: () => ide.flushPendingSave(),
+});
+initializeAiChatUI({ panel: document.querySelector("#right-panel-ai"), getKey: aiAuth.getKey,
+  workspace: { getContext: ide.aiContext, isBusy: ide.aiBusy },
+  revisions: createProposalEditor({ getWorkspace: ide.aiContext, isBusy: ide.aiBusy, saveRevision: ide.saveAiRevision }),
+  showPanel: () => workspace.showTab("ai"),
 });

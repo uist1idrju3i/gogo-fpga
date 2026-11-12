@@ -68,6 +68,9 @@ export function initializeWorkspaceUI(boards) {
   selectTab("board");
 
   const actions = document.querySelector(".header-actions");
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty("--mobile-action-bar-height", `${actions.getBoundingClientRect().height}px`);
+  }).observe(actions, { box: "border-box" });
   const primary = document.createElement("div");
   primary.id = "primary-action";
   const secondary = document.createElement("div");

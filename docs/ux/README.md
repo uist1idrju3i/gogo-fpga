@@ -21,10 +21,12 @@ docker run --rm --user "$(id -u):$(id -g)" \
   --workspace /workspace --out docs/ux/out
 ```
 
-[UX検査結果](out/ux-report.md)のverdictがpassで、failとunknownがともに0であることを確認します。これは宣言した規則への適合であり、画面の使いやすさや実機の安全性を保証するものではありません。画像を使うvision reviewは助言であり、契約や検査の判定を書き換えません。今回はvision reviewも画面変更も行っていません。
+[UX検査結果](out/ux-report.md)のverdictがpassで、failとunknownがともに0であることを確認します。これは宣言した規則への適合であり、画面の使いやすさや実機の安全性を保証するものではありません。画像を使うvision reviewは助言であり、契約や検査の判定を書き換えません。vision reviewは行っていません。契約の検査と各実装段階の画面確認は別に扱います。
 
 ## 状態遷移の実装
 
-`web/lib/design-flow.mjs`は`design_flow`の純粋な遷移関数です。`transitionDesignFlow(state, event, context)`が次の状態名を返します。guardはcontextの各名前に真偽値を渡し、明示したtrueだけを許可します。`&&`は両条件がtrueの場合だけ成立し、複数候補は契約の順序で選びます。未定義のeventや不成立のguardでは状態を保ち、不正な状態名では例外を返します。actionsやentryの副作用は実行せず、UIへの接続もまだ行いません。
+`web/lib/design-flow.mjs`は`design_flow`の純粋な遷移関数です。`transitionDesignFlow(state, event, context)`が次の状態名を返します。guardはcontextの各名前に真偽値を渡し、明示したtrueだけを許可します。`&&`は両条件がtrueの場合だけ成立し、複数候補は契約の順序で選びます。未定義のeventや不成立のguardでは状態を保ち、不正な状態名では例外を返します。この関数はactionsやentryの副作用を実行せず、UIからは`web/lib/workflow-ui.mjs`を経由して呼びます。
 
 `node --test tests/web/design-flow.test.mjs`は生成したXState投影を読み、全状態・event・target・guard・actionと全guardの組み合わせを照合します。古い成果物を表すstaleからは、write_requestedでもwritingへ進みません。
+
+`web/lib/ai-chat-flow.mjs` は `ai_chat` の遷移を扱います。本文の確認前や、確認を取り消した後には送信へ進みません。`tests/web/ai-chat-flow.test.mjs` で生成した投影と照合します。受信が正常に完了するまで変更提案を作らず、適用の可否は送信時のファイルの SHA-256 と作業中の処理も確かめて決めます。

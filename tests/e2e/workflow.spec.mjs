@@ -166,7 +166,7 @@ test("right tabs contain verification settings, keyboard navigation and idle AI 
   await page.locator("#right-tab-verify").focus();
   await page.keyboard.press("ArrowRight");
   await expect(page.locator("#right-tab-ai")).toBeFocused();
-  await expect(page.locator("#right-panel-ai")).toContainText("設計データは送信しません");
+  await expect(page.locator("#right-panel-ai")).toContainText("相談や資料は送信しません");
   await expect(page.locator("#ai-connect")).toBeVisible();
   expect(external).toEqual([]);
   await page.setViewportSize({ width: 390, height: 900 });

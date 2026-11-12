@@ -1,13 +1,13 @@
 # UX report: gogo-fpga
 
-**verdict: pass** (pass 30, fail 0, unknown 0)
+**verdict: pass** (pass 36, fail 0, unknown 0)
 
 ## Elements
 
 - personas: 3
 - jobs: 8
 - journeys: 3 (17 stages)
-- statecharts: 2
+- statecharts: 3
 - surfaces: 5
 
 ## Top ODI opportunities
@@ -66,6 +66,12 @@
 - [pass] `statechart.ai_connection.no_dead_end`
 - [pass] `statechart.ai_connection.deterministic`
 - [pass] `statechart.ai_connection.state_surface_declared`
+- [pass] `statechart.ai_chat.single_initial` — initial states: ['composing']
+- [pass] `statechart.ai_chat.states_defined`
+- [pass] `statechart.ai_chat.reachability`
+- [pass] `statechart.ai_chat.no_dead_end`
+- [pass] `statechart.ai_chat.deterministic`
+- [pass] `statechart.ai_chat.state_surface_declared`
 - [pass] `journey.first_session.surfaces_declared`
 - [pass] `journey.first_session.pain_points_recorded`
 - [pass] `journey.daily_work.surfaces_declared`

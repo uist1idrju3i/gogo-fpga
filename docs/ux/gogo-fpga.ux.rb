@@ -171,6 +171,33 @@ UX.design "gogo-fpga" do
     on :connected, :disconnect_requested, to: :disconnected, actions: %w[erase_key]
   end
 
+  statechart :ai_chat do
+    state :composing, initial: true, surface: :web_app, description: "相談文と送る資料を選ぶ"
+    state :previewing, surface: :web_app, description: "実際に送る JSON と宛先を確認する"
+    state :sending, surface: :openrouter, description: "確認済みの本文を送信する"
+    state :streaming, surface: :openrouter, description: "応答を受信する。停止できる"
+    state :proposal_review, surface: :web_app, description: "差分をファイルごとに採否判断する"
+    state :failed, surface: :web_app, description: "送信または受信の失敗を表示する"
+    on :composing, :preview_requested, to: :previewing, guard: "context_valid"
+    on :previewing, :send_requested, to: :sending, guard: "connected && preview_current"
+    on :previewing, :inputs_changed, to: :composing
+    on :sending, :chunk_received, to: :streaming
+    on :streaming, :chunk_received, to: :streaming
+    %i[sending streaming].each do |s|
+      on s, :response_completed, to: :proposal_review
+      on s, :send_failed, to: :failed
+      on s, :stop_requested, to: :composing
+    end
+    %i[proposal_review failed].each do |s|
+      on s, :preview_requested, to: :previewing, guard: "context_valid"
+      on s, :inputs_changed, to: :composing
+    end
+    %i[composing previewing sending streaming proposal_review failed].each do |s|
+      on s, :clear_requested, to: :composing
+      on s, :disconnected, to: :composing
+    end
+  end
+
   surface :web_app, layer: :web_ui, name: "午後のFPGA の画面"
   surface :tool_workers, layer: :web_ui, name: "Web Worker 上の合成・検証ツール"
   surface :project_store, layer: :web_ui, name: "OPFS のプロジェクト保存"

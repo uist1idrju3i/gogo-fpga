@@ -1,5 +1,9 @@
 {
   "artifacts": {
+    "gogo-fpga.ai_chat.scxml": "65fa91deaf9ceda6ba152627eb3a0766255ea26a9ce720399f310ac43e01f4d1",
+    "gogo-fpga.ai_chat.statechart.mmd": "7c2c481a69b59b62a8bf034bac78b5b7bd96e63ce37b9dcde0289a6faa45e3b4",
+    "gogo-fpga.ai_chat.statechart.puml": "2cb93a6ef79c3cf819a3d4a09b0242dc85aa06388f199b3afb1c3442d30e95e0",
+    "gogo-fpga.ai_chat.xstate.json": "3ce7c536b853caa51515ef8ed9ff02c163eb3f98549b8d104c3cb5092aa65c20",
     "gogo-fpga.ai_connection.scxml": "795e442fad6256b311b255b654237b68201541e7db35c5e770d0bd413e396656",
     "gogo-fpga.ai_connection.statechart.mmd": "dcc5bb0edd1d9705fe6d1fa5722f7b917458d66a9e684c813afb4883fb657cb9",
     "gogo-fpga.ai_connection.statechart.puml": "ec54a66da700dde268de4544d1f09c4cb8597e83fd1647b421a33301cb366fa3",
@@ -24,13 +28,13 @@
     "gogo-fpga.first_session.sequence.puml": "a9e5ac44c96369ba4aa7ceaae2b22302b961e5d0c0eaed731644f9a12950f53a",
     "gogo-fpga.mindmap.mmd": "bfdade939c5207d5c1591981140b822f17adc5f9aeef977c00510451e7dc4763",
     "gogo-fpga.odi.csv": "318e5e5eaf486c33d267b830de8f3872c757b2fc4e61518bd403463e115ecb28",
-    "gogo-fpga.stories.json": "73da367dbdcf124cec1d9f779d4f7dafd62d24ab24d4eb857ef4584766a60065",
+    "gogo-fpga.stories.json": "fe5e78f5c275c4319040ee1e7a3550793a6a84587e36984b2c89bbccc9ce43fb",
     "gogo-fpga.wbs.puml": "871dd8592a15d301f62ac7a92211b8869d5c32c4035a7c363696f39e13338704",
     "gogo-fpga.wireframe.puml": "665a92cf8b32c30ada7469796f5134968ded8a3892f6074e11cf19695844eec9",
-    "manifest.json": "997233d765ea29936abfcccca24c35028d9332f32932f90da823bad6e10bfbb4"
+    "manifest.json": "9658cefa71e44c6666b0b2b76f1a5a8a5e7c67f0e08775811130366d141caf0f"
   },
   "authority": "none",
-  "contract_sha256": "sha256:7cc94f8d17da9378d3ce0105038fcf18530ed2d53bd659c47b77dcb6bb0c8c13",
+  "contract_sha256": "sha256:c217b70927517346eedcf736bf80e2b002c054f8a6064fcacb8728c29bc8b1ca",
   "imports": [],
   "schema_version": 1,
   "system": "ux-creator"

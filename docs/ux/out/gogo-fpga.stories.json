@@ -21,6 +21,7 @@
         "auth_failed",
         "build_failed",
         "built",
+        "composing",
         "connected",
         "default",
         "disconnected",
@@ -28,8 +29,11 @@
         "empty-state",
         "error",
         "exchanging",
+        "failed",
         "loading",
         "loading_tools",
+        "previewing",
+        "proposal_review",
         "stale",
         "write_failed",
         "written"
@@ -38,11 +42,15 @@
         "auth_failed",
         "build_failed",
         "built",
+        "composing",
         "connected",
         "disconnected",
         "editing",
         "exchanging",
+        "failed",
         "loading_tools",
+        "previewing",
+        "proposal_review",
         "stale",
         "write_failed",
         "written"
@@ -147,10 +155,14 @@
         "default",
         "empty-state",
         "error",
-        "idle"
+        "idle",
+        "sending",
+        "streaming"
       ],
       "states": [
-        "authorizing"
+        "authorizing",
+        "sending",
+        "streaming"
       ],
       "surface": "openrouter",
       "title": "gogo-fpga/openrouter",

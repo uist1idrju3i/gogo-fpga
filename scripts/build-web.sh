@@ -74,6 +74,7 @@ python3 "$root/scripts/build-library-assets.py" --output "$public_html/libraries
 node_modules/.bin/esbuild web/editor/editor.mjs --bundle --minify --format=esm --outfile="$public_html/editor/editor.bundle.mjs"
 node_modules/.bin/esbuild web/lib/project-zip.mjs --bundle --minify --format=esm --outfile="$public_html/lib/project-zip.bundle.mjs"
 node_modules/.bin/esbuild web/lib/project-store.mjs --bundle --minify --format=esm --outfile="$public_html/lib/project-store.mjs"
+node_modules/.bin/esbuild web/lib/ai-chat-ui.mjs --bundle --minify --format=esm --outfile="$public_html/lib/ai-chat-ui.bundle.mjs"
 cp "$artifacts/openFPGALoader.mjs" "$public_html/openFPGALoader.mjs"
 cp "$artifacts/openFPGALoader.wasm" "$public_html/openFPGALoader.wasm"
 cp "$artifacts/build-info.json" "$public_html/build-info.json"
@@ -93,6 +94,7 @@ cp "$build_root/iverilog-wasm/output/"*.wasm "$public_html/iverilog/"
 cp "$root/THIRD_PARTY_NOTICES.md" "$public_html/THIRD_PARTY_NOTICES.md"
 mkdir -p "$public_html/licenses"
 cp -R "$root/licenses/." "$public_html/licenses/"
+cp "$root/node_modules/diff/LICENSE" "$public_html/licenses/jsdiff-LICENSE"
 if ! grep -Eq '^/\*' "$public_html/_headers" ||
   ! grep -Eq 'Cross-Origin-Opener-Policy: same-origin' "$public_html/_headers" ||
   ! grep -Eq 'Cross-Origin-Embedder-Policy: require-corp' "$public_html/_headers"; then
