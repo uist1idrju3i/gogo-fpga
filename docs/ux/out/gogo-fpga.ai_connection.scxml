@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" initial="disconnected" datamodel="python">
+  <state id="disconnected">
+    <transition event="connect_requested" target="authorizing" cond="consent_given">
+      <log label="action" expr="'store_verifier'"/>
+    </transition>
+  </state>
+  <state id="authorizing">
+    <transition event="callback_received" target="exchanging"/>
+    <transition event="auth_denied" target="auth_failed"/>
+  </state>
+  <state id="exchanging">
+    <onentry>
+      <log label="action" expr="'verify_state'"/>
+    </onentry>
+    <transition event="key_received" target="connected">
+      <log label="action" expr="'discard_verifier'"/>
+    </transition>
+    <transition event="exchange_failed" target="auth_failed"/>
+  </state>
+  <state id="connected">
+    <transition event="disconnect_requested" target="disconnected">
+      <log label="action" expr="'erase_key'"/>
+    </transition>
+  </state>
+  <state id="auth_failed">
+    <transition event="connect_requested" target="authorizing" cond="consent_given"/>
+  </state>
+</scxml>

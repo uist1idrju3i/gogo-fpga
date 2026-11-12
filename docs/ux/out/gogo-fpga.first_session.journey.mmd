@@ -1,0 +1,14 @@
+journey
+    title first_session — gogo-fpga
+    section arrive
+        support_check (jobs first_blink): 3: first_timer
+    section choose_board
+        board_select (jobs first_blink, assign_pins): 3: first_timer
+    section start_template
+        template_open (jobs first_blink): 4: first_timer
+    section first_build
+        tool_download, build_progress (jobs first_blink, iterate_design): 2: first_timer
+    section connect_board
+        usb_permission (jobs flash_safely): 2: first_timer
+    section first_write
+        write_progress, write_result (jobs first_blink, flash_safely): 5: first_timer

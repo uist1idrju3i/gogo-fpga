@@ -1,0 +1,28 @@
+@startuml
+title first_session — sequence
+actor "first_timer" as U
+participant "web_app" as S_0
+participant "tool_workers" as S_1
+participant "tang_nano" as S_2
+== arrive (onboard) ==
+U -> S_0 : support_check
+note right of U : emotion 3/5 — pain: 対応ブラウザーかどうかがすぐにわからない
+== choose_board (onboard) ==
+U -> S_0 : board_select
+note right of U : emotion 3/5 — pain: ボードの型番と名前の対応がわからない
+== start_template (onboard) ==
+U -> S_0 : template_open
+note right of U : emotion 4/5
+== first_build (use) ==
+U -> S_0 : tool_download, build_progress
+U -> S_1 : tool_download, build_progress
+note right of U : emotion 2/5 — pain: 初回に約 79 MB を読み込む, どこまで進んだかわからない
+== connect_board (use) ==
+U -> S_0 : usb_permission
+U -> S_2 : usb_permission
+note right of U : emotion 2/5 — pain: WebUSB の許可ダイアログの意味がわからない, ドライバーの差し替えが要る OS がある
+== first_write (use) ==
+U -> S_0 : write_progress, write_result
+U -> S_2 : write_progress, write_result
+note right of U : emotion 5/5
+@enduml

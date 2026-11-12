@@ -1,0 +1,1060 @@
+{
+  "cmf": null,
+  "content": [],
+  "controls": [
+    {
+      "bg": "#0B57B0",
+      "fg": "#FFFFFF",
+      "height_mm": 8.0,
+      "id": "primary_action",
+      "kind": "button",
+      "large_text": false,
+      "surface": "web_app",
+      "touchpoint": "build_progress",
+      "width_mm": 12.0
+    },
+    {
+      "bg": "#1E6B34",
+      "fg": "#FFFFFF",
+      "height_mm": 8.0,
+      "id": "write_action",
+      "kind": "button",
+      "large_text": false,
+      "surface": "web_app",
+      "touchpoint": "write_progress",
+      "width_mm": 12.0
+    },
+    {
+      "bg": "#FFFFFF",
+      "fg": "#0B57B0",
+      "height_mm": 8.0,
+      "id": "secondary_action",
+      "kind": "button",
+      "large_text": false,
+      "surface": "web_app",
+      "touchpoint": "sim_run",
+      "width_mm": 10.0
+    },
+    {
+      "bg": "#0B57B0",
+      "fg": "#FFFFFF",
+      "height_mm": 8.0,
+      "id": "ai_send",
+      "kind": "button",
+      "large_text": false,
+      "surface": "web_app",
+      "touchpoint": "ai_chat",
+      "width_mm": 10.0
+    },
+    {
+      "bg": "#FFFFFF",
+      "fg": "#8A1C1C",
+      "height_mm": null,
+      "id": "problem_link",
+      "kind": "link",
+      "large_text": false,
+      "surface": "web_app",
+      "touchpoint": "problem_list",
+      "width_mm": null
+    }
+  ],
+  "core_experience": "\u30d6\u30e9\u30a6\u30b6\u30fc\u3092\u958b\u304f\u3060\u3051\u3067\u3001\u66f8\u3044\u305f\u56de\u8def\u304c\u624b\u5143\u306e Tang Nano \u3067\u52d5\u304f",
+  "feedback": [
+    {
+      "description": "\u53d6\u5f97\u6e08\u307f / \u5168\u4f53\u306e MB \u3068\u5de5\u7a0b\u540d\u3092\u51fa\u3059\u30022 \u56de\u76ee\u4ee5\u964d\u306f\u30ad\u30e3\u30c3\u30b7\u30e5\u6e08\u307f\u3068\u8868\u793a",
+      "id": "download_progress",
+      "latency_ms": 100,
+      "modality": "visual",
+      "progress_indicator": true,
+      "surface": "web_app",
+      "trigger": "build_requested"
+    },
+    {
+      "description": "\u5408\u6210\u30fb\u914d\u7f6e\u914d\u7dda\u30fbpack \u306e\u5de5\u7a0b\u8868\u793a\u3068\u7d4c\u904e\u6642\u9593",
+      "id": "stage_progress",
+      "latency_ms": 100,
+      "modality": "visual",
+      "progress_indicator": true,
+      "surface": "web_app",
+      "trigger": "tools_ready"
+    },
+    {
+      "description": "\u53e4\u3044\u6210\u679c\u7269\u306f\u66f8\u304d\u8fbc\u307e\u305a\u3001\u5408\u6210\u3057\u76f4\u3059\u30dc\u30bf\u30f3\u3092\u793a\u3059",
+      "id": "rebuild_needed",
+      "latency_ms": 100,
+      "modality": "text",
+      "progress_indicator": false,
+      "surface": "web_app",
+      "trigger": "write_requested"
+    },
+    {
+      "description": "\u8cc7\u6e90\u4f7f\u7528\u7387\u30fb\u6700\u5927\u5468\u6ce2\u6570\u30fb\u8b66\u544a\u6570\u3092\u8981\u7d04\u30ab\u30fc\u30c9\u3067\u51fa\u3059",
+      "id": "build_summary",
+      "latency_ms": 200,
+      "modality": "visual",
+      "progress_indicator": false,
+      "surface": "web_app",
+      "trigger": "build_succeeded"
+    },
+    {
+      "description": "\u554f\u984c\u306e\u4e00\u89a7\u3092\u958b\u304d\u3001\u30d5\u30a1\u30a4\u30eb\u3068\u884c\u3078\u79fb\u308b\u30ea\u30f3\u30af\u3092\u51fa\u3059",
+      "id": "problems_open",
+      "latency_ms": 200,
+      "modality": "text",
+      "progress_indicator": false,
+      "surface": "web_app",
+      "trigger": "build_errored"
+    },
+    {
+      "description": "\u6210\u679c\u7269\u306b\u300c\u53e4\u3044\u300d\u5370\u3092\u4ed8\u3051\u3001\u66f8\u304d\u8fbc\u307f\u30dc\u30bf\u30f3\u3092\u5408\u6210\u3057\u76f4\u3057\u3078\u5909\u3048\u308b",
+      "id": "stale_notice",
+      "latency_ms": 100,
+      "modality": "visual",
+      "progress_indicator": false,
+      "surface": "web_app",
+      "trigger": "source_edited"
+    },
+    {
+      "description": "\u6d88\u53bb\u30fb\u66f8\u304d\u8fbc\u307f\u30fb\u78ba\u8a8d\u306e\u9032\u6357\u3068\u7d4c\u904e\u6642\u9593",
+      "id": "write_progress",
+      "latency_ms": 100,
+      "modality": "visual",
+      "progress_indicator": true,
+      "surface": "web_app",
+      "trigger": "write_requested"
+    },
+    {
+      "description": "SRAM / \u30d5\u30e9\u30c3\u30b7\u30e5\u3001\u30dc\u30fc\u30c9\u3001\u30d5\u30a1\u30a4\u30eb\u3001\u6642\u523b\u3092\u66f8\u3044\u305f\u7d50\u679c",
+      "id": "write_result",
+      "latency_ms": 200,
+      "modality": "text",
+      "progress_indicator": false,
+      "surface": "web_app",
+      "trigger": "write_succeeded"
+    },
+    {
+      "description": "IDCODE \u4e0d\u4e00\u81f4\u30fb\u63a5\u7d9a\u5207\u308c\u30fb\u30ed\u30b0\u306e FAIL \u306a\u3069\u539f\u56e0\u5225\u306e\u6b21\u306e\u64cd\u4f5c",
+      "id": "write_hint",
+      "latency_ms": 200,
+      "modality": "text",
+      "progress_indicator": false,
+      "surface": "web_app",
+      "trigger": "write_errored"
+    },
+    {
+      "description": "OpenRouter \u304b\u3089\u623b\u3063\u305f\u76f4\u5f8c\u306b\u63a5\u7d9a\u4e2d\u3092\u8868\u793a",
+      "id": "ai_exchange",
+      "latency_ms": 100,
+      "modality": "visual",
+      "progress_indicator": true,
+      "surface": "web_app",
+      "trigger": "callback_received"
+    },
+    {
+      "description": "\u63a5\u7d9a\u6e08\u307f\u3068\u9375\u306e\u4fdd\u5b58\u5148\u3001OpenRouter \u306e\u9375\u306e\u8a2d\u5b9a\u3078\u306e\u30ea\u30f3\u30af",
+      "id": "ai_connected",
+      "latency_ms": 200,
+      "modality": "text",
+      "progress_indicator": false,
+      "surface": "web_app",
+      "trigger": "key_received"
+    },
+    {
+      "description": "\u671f\u9650\u5207\u308c\u30fb\u4f7f\u7528\u6e08\u307f\u30fbstate \u4e0d\u4e00\u81f4\u3092\u533a\u5225\u3057\u3066\u518d\u8a66\u884c\u3092\u6848\u5185",
+      "id": "ai_failed",
+      "latency_ms": 200,
+      "modality": "text",
+      "progress_indicator": false,
+      "surface": "web_app",
+      "trigger": "exchange_failed"
+    }
+  ],
+  "implementation_spec": [
+    "CodeMirror 6",
+    "Web Worker \u4e0a\u306e WASM \u30c4\u30fc\u30eb",
+    "OPFS",
+    "WebUSB",
+    "OpenRouter OAuth PKCE"
+  ],
+  "imports": [],
+  "jobs": [
+    {
+      "emotional": "\u81ea\u5206\u306b\u3082\u3067\u304d\u305f\u3068\u3044\u3046\u624b\u5fdc\u3048",
+      "functional": "\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8\u304b\u3089\u6700\u521d\u306e\u66f8\u304d\u8fbc\u307f\u307e\u3067\u3092 10 \u5206\u4ee5\u5185\u306b\u7d42\u3048\u308b",
+      "id": "first_blink",
+      "importance": 9,
+      "satisfaction": 3,
+      "social": "\u52d5\u3044\u305f\u30dc\u30fc\u30c9\u3092\u4eba\u306b\u898b\u305b\u3089\u308c\u308b"
+    },
+    {
+      "emotional": "\u884c\u304d\u8a70\u307e\u3089\u305a\u306b\u6b21\u306e\u4e00\u624b\u304c\u308f\u304b\u308b\u5b89\u5fc3",
+      "functional": "\u5408\u6210\u30fb\u914d\u7f6e\u914d\u7dda\u30fb\u66f8\u304d\u8fbc\u307f\u306e\u5931\u6557\u306e\u539f\u56e0\u306e\u884c\u3068\u76f4\u3057\u65b9\u3092\u77e5\u308b",
+      "id": "understand_errors",
+      "importance": 9,
+      "satisfaction": 3,
+      "social": "\u8cea\u554f\u3059\u308b\u3068\u304d\u306b\u72b6\u6cc1\u3092\u6b63\u78ba\u306b\u4f1d\u3048\u3089\u308c\u308b"
+    },
+    {
+      "emotional": "\u5f85\u305f\u3055\u308c\u305a\u306b\u96c6\u4e2d\u304c\u7d9a\u304f",
+      "functional": "\u7de8\u96c6\u304b\u3089\u5408\u6210\u30fb\u66f8\u304d\u8fbc\u307f\u307e\u3067\u3092\u5c11\u306a\u3044\u64cd\u4f5c\u3067\u7e70\u308a\u8fd4\u3059",
+      "id": "iterate_design",
+      "importance": 8,
+      "satisfaction": 4,
+      "social": "\u4f5c\u696d\u306e\u901f\u3055\u3067\u5468\u308a\u306b\u9045\u308c\u306a\u3044"
+    },
+    {
+      "emotional": "\u30dc\u30fc\u30c9\u3092\u58ca\u3055\u306a\u3044\u304b\u3068\u3044\u3046\u4e0d\u5b89\u304c\u306a\u3044",
+      "functional": "\u8a2d\u8a08\u306e\u4fe1\u53f7\u3092\u30dc\u30fc\u30c9\u306e\u30d4\u30f3\u306b\u6b63\u3057\u304f\u5272\u308a\u5f53\u3066\u308b",
+      "id": "assign_pins",
+      "importance": 8,
+      "satisfaction": 4,
+      "social": "\u914d\u7dda\u56f3\u3068\u4e00\u81f4\u3057\u305f\u8a2d\u8a08\u3092\u5171\u6709\u3067\u304d\u308b"
+    },
+    {
+      "emotional": "\u6210\u529f\u3057\u305f\u3068\u4fe1\u3058\u3066\u3088\u3044\u3068\u3044\u3046\u78ba\u4fe1",
+      "functional": "SRAM \u304b\u30d5\u30e9\u30c3\u30b7\u30e5\u304b\u3092\u9078\u3073\u3001\u66f8\u304d\u8fbc\u307f\u306e\u6210\u5426\u3092\u78ba\u5b9f\u306b\u77e5\u308b",
+      "id": "flash_safely",
+      "importance": 8,
+      "satisfaction": 4,
+      "social": "\u52d5\u304b\u306a\u3044\u539f\u56e0\u3092\u66f8\u304d\u8fbc\u307f\u306e\u305b\u3044\u306b\u3057\u306a\u304f\u3066\u6e08\u3080"
+    },
+    {
+      "emotional": "\u5b9f\u6a5f\u3067\u60a9\u3080\u524d\u306b\u9593\u9055\u3044\u3092\u898b\u3064\u3051\u3089\u308c\u308b\u4f59\u88d5",
+      "functional": "\u30b7\u30df\u30e5\u30ec\u30fc\u30b7\u30e7\u30f3\u3068\u5f62\u5f0f\u691c\u8a3c\u3067\u66f8\u304d\u8fbc\u3080\u524d\u306b\u52d5\u4f5c\u3092\u78ba\u304b\u3081\u308b",
+      "id": "verify_before_write",
+      "importance": 6,
+      "satisfaction": 4,
+      "social": "\u691c\u8a3c\u3057\u305f\u8a2d\u8a08\u3068\u3057\u3066\u63d0\u51fa\u3067\u304d\u308b"
+    },
+    {
+      "emotional": "\u9589\u3058\u3066\u3082\u6d88\u3048\u306a\u3044\u3068\u3044\u3046\u5b89\u5fc3",
+      "functional": "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u3092\u5931\u308f\u305a\u306b\u4fdd\u5b58\u3057\u3001ZIP \u3067\u53d7\u3051\u6e21\u3059",
+      "id": "keep_projects",
+      "importance": 7,
+      "satisfaction": 5,
+      "social": "\u8ab2\u984c\u3084\u4f5c\u54c1\u3092\u4ed6\u306e\u4eba\u3068\u4ea4\u63db\u3067\u304d\u308b"
+    },
+    {
+      "emotional": "\u77e5\u3089\u306a\u3044\u3053\u3068\u3092\u6c17\u8efd\u306b\u805e\u3051\u308b\u5fc3\u5f37\u3055\u3068\u3001\u52dd\u624b\u306b\u66f8\u304d\u63db\u3048\u3089\u308c\u306a\u3044\u5b89\u5fc3",
+      "functional": "AI \u306b\u8a2d\u8a08\u3084\u30a8\u30e9\u30fc\u3092\u76f8\u8ac7\u3057\u3001\u5909\u66f4\u3092\u5dee\u5206\u3067\u78ba\u304b\u3081\u3066\u53d6\u308a\u8fbc\u3080",
+      "id": "ask_ai",
+      "importance": 7,
+      "satisfaction": 2,
+      "social": "\u3069\u3053\u3092 AI \u306b\u983c\u3063\u305f\u304b\u3092\u8aac\u660e\u3067\u304d\u308b"
+    }
+  ],
+  "journeys": [
+    {
+      "id": "first_session",
+      "persona": "first_timer",
+      "stages": [
+        {
+          "emotion": 3,
+          "id": "arrive",
+          "jobs": [
+            "first_blink"
+          ],
+          "kind": "onboard",
+          "pain_points": [
+            "\u5bfe\u5fdc\u30d6\u30e9\u30a6\u30b6\u30fc\u304b\u3069\u3046\u304b\u304c\u3059\u3050\u306b\u308f\u304b\u3089\u306a\u3044"
+          ],
+          "surfaces": [
+            "web_app"
+          ],
+          "touchpoints": [
+            "support_check"
+          ]
+        },
+        {
+          "emotion": 3,
+          "id": "choose_board",
+          "jobs": [
+            "first_blink",
+            "assign_pins"
+          ],
+          "kind": "onboard",
+          "pain_points": [
+            "\u30dc\u30fc\u30c9\u306e\u578b\u756a\u3068\u540d\u524d\u306e\u5bfe\u5fdc\u304c\u308f\u304b\u3089\u306a\u3044"
+          ],
+          "surfaces": [
+            "web_app"
+          ],
+          "touchpoints": [
+            "board_select"
+          ]
+        },
+        {
+          "emotion": 4,
+          "id": "start_template",
+          "jobs": [
+            "first_blink"
+          ],
+          "kind": "onboard",
+          "pain_points": [],
+          "surfaces": [
+            "web_app"
+          ],
+          "touchpoints": [
+            "template_open"
+          ]
+        },
+        {
+          "emotion": 2,
+          "id": "first_build",
+          "jobs": [
+            "first_blink",
+            "iterate_design"
+          ],
+          "kind": "use",
+          "pain_points": [
+            "\u521d\u56de\u306b\u7d04 79 MB \u3092\u8aad\u307f\u8fbc\u3080",
+            "\u3069\u3053\u307e\u3067\u9032\u3093\u3060\u304b\u308f\u304b\u3089\u306a\u3044"
+          ],
+          "surfaces": [
+            "web_app",
+            "tool_workers"
+          ],
+          "touchpoints": [
+            "tool_download",
+            "build_progress"
+          ]
+        },
+        {
+          "emotion": 2,
+          "id": "connect_board",
+          "jobs": [
+            "flash_safely"
+          ],
+          "kind": "use",
+          "pain_points": [
+            "WebUSB \u306e\u8a31\u53ef\u30c0\u30a4\u30a2\u30ed\u30b0\u306e\u610f\u5473\u304c\u308f\u304b\u3089\u306a\u3044",
+            "\u30c9\u30e9\u30a4\u30d0\u30fc\u306e\u5dee\u3057\u66ff\u3048\u304c\u8981\u308b OS \u304c\u3042\u308b"
+          ],
+          "surfaces": [
+            "web_app",
+            "tang_nano"
+          ],
+          "touchpoints": [
+            "usb_permission"
+          ]
+        },
+        {
+          "emotion": 5,
+          "id": "first_write",
+          "jobs": [
+            "first_blink",
+            "flash_safely"
+          ],
+          "kind": "use",
+          "pain_points": [],
+          "surfaces": [
+            "web_app",
+            "tang_nano"
+          ],
+          "touchpoints": [
+            "write_progress",
+            "write_result"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "daily_work",
+      "persona": "maker",
+      "stages": [
+        {
+          "emotion": 4,
+          "id": "reopen",
+          "jobs": [
+            "keep_projects"
+          ],
+          "kind": "use",
+          "pain_points": [],
+          "surfaces": [
+            "web_app",
+            "project_store"
+          ],
+          "touchpoints": [
+            "project_list",
+            "save_status"
+          ]
+        },
+        {
+          "emotion": 4,
+          "id": "edit",
+          "jobs": [
+            "iterate_design",
+            "assign_pins"
+          ],
+          "kind": "use",
+          "pain_points": [
+            "\u30d4\u30f3\u5272\u308a\u5f53\u3066\u3068\u30b3\u30fc\u30c9\u304c\u5225\u306e\u5834\u6240\u306b\u3042\u308b"
+          ],
+          "surfaces": [
+            "web_app"
+          ],
+          "touchpoints": [
+            "editor",
+            "pin_table"
+          ]
+        },
+        {
+          "emotion": 3,
+          "id": "build",
+          "jobs": [
+            "iterate_design"
+          ],
+          "kind": "use",
+          "pain_points": [],
+          "surfaces": [
+            "web_app",
+            "tool_workers"
+          ],
+          "touchpoints": [
+            "build_progress",
+            "build_summary"
+          ]
+        },
+        {
+          "emotion": 2,
+          "id": "fix_errors",
+          "jobs": [
+            "understand_errors"
+          ],
+          "kind": "recover",
+          "pain_points": [
+            "\u30ed\u30b0\u304c\u9577\u304f\u3001\u554f\u984c\u306e\u884c\u3078\u79fb\u308c\u306a\u3044",
+            "\u53e4\u3044\u6210\u679c\u7269\u3092\u66f8\u304d\u8fbc\u3093\u3067\u3057\u307e\u3046"
+          ],
+          "surfaces": [
+            "web_app"
+          ],
+          "touchpoints": [
+            "problem_list",
+            "editor"
+          ]
+        },
+        {
+          "emotion": 3,
+          "id": "verify",
+          "jobs": [
+            "verify_before_write"
+          ],
+          "kind": "use",
+          "pain_points": [
+            "\u8a2d\u5b9a\u304c\u5de6\u306e\u5217\u306e\u5965\u306b\u3042\u308a\u898b\u3064\u3051\u306b\u304f\u3044"
+          ],
+          "surfaces": [
+            "web_app",
+            "tool_workers"
+          ],
+          "touchpoints": [
+            "sim_run",
+            "waveform",
+            "formal_run"
+          ]
+        },
+        {
+          "emotion": 4,
+          "id": "write",
+          "jobs": [
+            "flash_safely",
+            "iterate_design"
+          ],
+          "kind": "use",
+          "pain_points": [],
+          "surfaces": [
+            "web_app",
+            "tang_nano"
+          ],
+          "touchpoints": [
+            "write_progress",
+            "write_result"
+          ]
+        },
+        {
+          "emotion": 4,
+          "id": "share",
+          "jobs": [
+            "keep_projects"
+          ],
+          "kind": "exit",
+          "pain_points": [],
+          "surfaces": [
+            "web_app",
+            "project_store"
+          ],
+          "touchpoints": [
+            "zip_export"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai_help",
+      "persona": "learner",
+      "stages": [
+        {
+          "emotion": 3,
+          "id": "connect_ai",
+          "jobs": [
+            "ask_ai"
+          ],
+          "kind": "onboard",
+          "pain_points": [
+            "\u4f55\u304c\u5916\u90e8\u3078\u9001\u3089\u308c\u308b\u306e\u304b\u4e0d\u5b89",
+            "\u9375\u304c\u3069\u3053\u306b\u4fdd\u5b58\u3055\u308c\u308b\u306e\u304b\u4e0d\u5b89"
+          ],
+          "surfaces": [
+            "web_app",
+            "openrouter"
+          ],
+          "touchpoints": [
+            "ai_consent",
+            "openrouter_auth"
+          ]
+        },
+        {
+          "emotion": 4,
+          "id": "ask",
+          "jobs": [
+            "ask_ai",
+            "understand_errors"
+          ],
+          "kind": "use",
+          "pain_points": [],
+          "surfaces": [
+            "web_app",
+            "openrouter"
+          ],
+          "touchpoints": [
+            "ai_context_preview",
+            "ai_chat"
+          ]
+        },
+        {
+          "emotion": 4,
+          "id": "review_change",
+          "jobs": [
+            "ask_ai",
+            "iterate_design"
+          ],
+          "kind": "use",
+          "pain_points": [
+            "\u63d0\u6848\u304c\u8907\u6570\u30d5\u30a1\u30a4\u30eb\u306b\u307e\u305f\u304c\u308b\u3068\u5168\u4f53\u304c\u898b\u3048\u306a\u3044"
+          ],
+          "surfaces": [
+            "web_app"
+          ],
+          "touchpoints": [
+            "ai_diff"
+          ]
+        },
+        {
+          "emotion": 4,
+          "id": "disconnect",
+          "jobs": [
+            "ask_ai"
+          ],
+          "kind": "exit",
+          "pain_points": [],
+          "surfaces": [
+            "web_app"
+          ],
+          "touchpoints": [
+            "ai_disconnect"
+          ]
+        }
+      ]
+    }
+  ],
+  "loops": [
+    {
+      "cadence": "moment",
+      "id": "edit_build_write",
+      "reward": "\u30dc\u30fc\u30c9\u306e LED \u304c\u8a2d\u8a08\u3069\u304a\u308a\u306b\u52d5\u304f",
+      "steps": [
+        "source_edited",
+        "build_requested",
+        "build_succeeded",
+        "write_requested",
+        "write_succeeded"
+      ]
+    },
+    {
+      "cadence": "moment",
+      "id": "fix_loop",
+      "reward": "\u554f\u984c\u306e\u4e00\u89a7\u304c\u7a7a\u306b\u306a\u308b",
+      "steps": [
+        "build_errored",
+        "source_edited",
+        "build_requested",
+        "build_succeeded"
+      ]
+    }
+  ],
+  "oobe": null,
+  "personas": [
+    {
+      "context": "Tang Nano \u3092\u8cb7\u3063\u305f\u3070\u304b\u308a\u3002Windows \u304b Chromebook \u306e Chrome",
+      "goals": [
+        "\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb\u306a\u3057\u3067 L \u30c1\u30ab\u3092\u66f8\u304d\u8fbc\u3080",
+        "\u4f55\u304c\u8d77\u304d\u3066\u3044\u308b\u304b\u3092\u7406\u89e3\u3059\u308b"
+      ],
+      "id": "first_timer",
+      "name": "\u521d\u3081\u3066 FPGA \u3092\u89e6\u308b\u4eba",
+      "pains": [
+        "\u30c4\u30fc\u30eb\u306e\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb\u3068\u8a2d\u5b9a",
+        "\u521d\u56de\u306e\u5927\u304d\u306a\u8aad\u307f\u8fbc\u307f",
+        "\u82f1\u8a9e\u306e\u30a8\u30e9\u30fc\u304c\u8aad\u3081\u306a\u3044"
+      ]
+    },
+    {
+      "context": "\u7ba1\u7406\u3055\u308c\u305f\u7aef\u672b\u3067\u30bd\u30d5\u30c8\u3092\u5165\u308c\u3089\u308c\u306a\u3044\u3002\u6642\u9593\u304c\u9650\u3089\u308c\u3066\u3044\u308b",
+      "goals": [
+        "\u914d\u3089\u308c\u305f\u8ab2\u984c\u3092\u958b\u3044\u3066\u52d5\u304b\u3059",
+        "\u30b7\u30df\u30e5\u30ec\u30fc\u30b7\u30e7\u30f3\u3067\u78ba\u304b\u3081\u3066\u304b\u3089\u63d0\u51fa\u3059\u308b"
+      ],
+      "id": "learner",
+      "name": "\u6388\u696d\u3084\u6f14\u7fd2\u3067\u4f7f\u3046\u5b66\u751f",
+      "pains": [
+        "\u7aef\u672b\u3054\u3068\u306e\u74b0\u5883\u5dee",
+        "\u4fdd\u5b58\u3057\u305f\u5834\u6240\u304c\u308f\u304b\u3089\u306a\u3044",
+        "\u30d4\u30f3\u5272\u308a\u5f53\u3066\u306e\u9593\u9055\u3044"
+      ]
+    },
+    {
+      "context": "\u81ea\u4f5c CPU \u3084\u5468\u8fba\u56de\u8def\u3092\u4f5c\u308b\u3002\u30ad\u30fc\u30dc\u30fc\u30c9\u4e2d\u5fc3",
+      "goals": [
+        "\u7de8\u96c6\u304b\u3089\u66f8\u304d\u8fbc\u307f\u307e\u3067\u3092\u77ed\u304f\u7e70\u308a\u8fd4\u3059",
+        "\u8cc7\u6e90\u4f7f\u7528\u7387\u3068\u30bf\u30a4\u30df\u30f3\u30b0\u3092\u898b\u308b"
+      ],
+      "id": "maker",
+      "name": "Gowin IDE \u3092\u4f7f\u3063\u3066\u304d\u305f\u4eba",
+      "pains": [
+        "IDE \u306e\u91cd\u3055\u3068\u30e9\u30a4\u30bb\u30f3\u30b9",
+        "\u30ed\u30b0\u306e\u4e2d\u304b\u3089\u554f\u984c\u3092\u63a2\u3059\u624b\u9593"
+      ]
+    }
+  ],
+  "product": {
+    "description": "",
+    "name": "gogo-fpga",
+    "surfaces": [
+      {
+        "id": "web_app",
+        "layer": "web_ui",
+        "name": "\u5348\u5f8c\u306eFPGA \u306e\u753b\u9762",
+        "notes": ""
+      },
+      {
+        "id": "tool_workers",
+        "layer": "web_ui",
+        "name": "Web Worker \u4e0a\u306e\u5408\u6210\u30fb\u691c\u8a3c\u30c4\u30fc\u30eb",
+        "notes": ""
+      },
+      {
+        "id": "project_store",
+        "layer": "web_ui",
+        "name": "OPFS \u306e\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u4fdd\u5b58",
+        "notes": ""
+      },
+      {
+        "id": "tang_nano",
+        "layer": "hardware",
+        "name": "Tang Nano 1K/4K/9K/20K\uff08WebUSB\uff09",
+        "notes": ""
+      },
+      {
+        "id": "openrouter",
+        "layer": "cloud_backend",
+        "name": "OpenRouter\uff08\u8a8d\u53ef\u3068 AI\uff09",
+        "notes": ""
+      }
+    ]
+  },
+  "qcd": {
+    "cost": "low",
+    "delivery": "normal",
+    "quality": "high",
+    "rationale": "\u6700\u521d\u306e\u66f8\u304d\u8fbc\u307f\u3068\u5931\u6557\u304b\u3089\u306e\u56de\u5fa9\u3092\u6700\u512a\u5148\u306b\u3057\u3001AI \u306f\u5229\u7528\u8005\u304c\u9078\u3093\u3060\u3068\u304d\u3060\u3051\u4f7f\u3046"
+  },
+  "schema_version": 1,
+  "service_blueprint": {
+    "backstage": [
+      "yosys_ghdl",
+      "nextpnr",
+      "gowin_pack",
+      "icarus",
+      "surfer",
+      "sby",
+      "openfpgaloader",
+      "opfs"
+    ],
+    "frontstage": [
+      "editor",
+      "board_select",
+      "build_summary",
+      "problem_list",
+      "waveform",
+      "write_panel",
+      "ai_panel"
+    ],
+    "support_processes": [
+      "ci_build",
+      "cloudflare_pages",
+      "openrouter_api"
+    ]
+  },
+  "statecharts": [
+    {
+      "id": "design_flow",
+      "states": [
+        {
+          "description": "\u7de8\u96c6\u4e2d\u3002\u6210\u679c\u7269\u306a\u3057\u3001\u307e\u305f\u306f\u6700\u65b0",
+          "entry": [],
+          "exit": [],
+          "final": false,
+          "id": "editing",
+          "initial": true,
+          "surface": "web_app"
+        },
+        {
+          "description": "\u5408\u6210\u30c4\u30fc\u30eb\u3092\u53d6\u5f97\u4e2d\u3002\u9032\u6357\u3068\u6b8b\u91cf\u3092\u8868\u793a",
+          "entry": [
+            "show_download_progress"
+          ],
+          "exit": [],
+          "final": false,
+          "id": "loading_tools",
+          "initial": false,
+          "surface": "web_app"
+        },
+        {
+          "description": "\u5408\u6210\u30fb\u914d\u7f6e\u914d\u7dda\u30fbpack \u3092\u5b9f\u884c\u4e2d\u3002\u5de5\u7a0b\u3054\u3068\u306b\u9032\u6357",
+          "entry": [
+            "show_stage_progress"
+          ],
+          "exit": [],
+          "final": false,
+          "id": "building",
+          "initial": false,
+          "surface": "tool_workers"
+        },
+        {
+          "description": "\u30d3\u30c3\u30c8\u30b9\u30c8\u30ea\u30fc\u30e0\u304c\u3042\u308a\u3001\u4eca\u306e\u7248\u3068\u4e00\u81f4\u3059\u308b",
+          "entry": [
+            "show_build_summary"
+          ],
+          "exit": [],
+          "final": false,
+          "id": "built",
+          "initial": false,
+          "surface": "web_app"
+        },
+        {
+          "description": "\u5931\u6557\u3002\u554f\u984c\u306e\u4e00\u89a7\u3092\u958b\u304d\u3001\u5148\u982d\u306e\u884c\u3078\u79fb\u308c\u308b",
+          "entry": [
+            "open_problem_list"
+          ],
+          "exit": [],
+          "final": false,
+          "id": "build_failed",
+          "initial": false,
+          "surface": "web_app"
+        },
+        {
+          "description": "\u5408\u6210\u5f8c\u306b\u7de8\u96c6\u3057\u305f\u3002\u66f8\u304d\u8fbc\u3080\u524d\u306b\u5408\u6210\u3057\u76f4\u3059\u3088\u3046\u6848\u5185",
+          "entry": [
+            "mark_artifacts_stale"
+          ],
+          "exit": [],
+          "final": false,
+          "id": "stale",
+          "initial": false,
+          "surface": "web_app"
+        },
+        {
+          "description": "\u66f8\u304d\u8fbc\u307f\u4e2d\u3002\u6d88\u53bb\u30fb\u66f8\u304d\u8fbc\u307f\u30fb\u78ba\u8a8d\u306e\u9032\u6357",
+          "entry": [
+            "show_write_progress"
+          ],
+          "exit": [],
+          "final": false,
+          "id": "writing",
+          "initial": false,
+          "surface": "tang_nano"
+        },
+        {
+          "description": "\u66f8\u304d\u8fbc\u307f\u6210\u529f\uff08\u7d42\u4e86\u30b3\u30fc\u30c9\u3068\u30ed\u30b0\u306e\u4e21\u65b9\u3067\u5224\u5b9a\uff09",
+          "entry": [
+            "show_write_result"
+          ],
+          "exit": [],
+          "final": false,
+          "id": "written",
+          "initial": false,
+          "surface": "web_app"
+        },
+        {
+          "description": "\u66f8\u304d\u8fbc\u307f\u5931\u6557\u3002\u539f\u56e0\u306e\u5019\u88dc\u3068\u6b21\u306e\u64cd\u4f5c\u3092\u8868\u793a",
+          "entry": [
+            "show_write_hint"
+          ],
+          "exit": [],
+          "final": false,
+          "id": "write_failed",
+          "initial": false,
+          "surface": "web_app"
+        }
+      ],
+      "transitions": [
+        {
+          "actions": [],
+          "event": "build_requested",
+          "from": "editing",
+          "guard": "tools_not_cached",
+          "to": "loading_tools"
+        },
+        {
+          "actions": [],
+          "event": "build_requested",
+          "from": "editing",
+          "guard": "tools_cached",
+          "to": "building"
+        },
+        {
+          "actions": [],
+          "event": "tools_ready",
+          "from": "loading_tools",
+          "guard": "",
+          "to": "building"
+        },
+        {
+          "actions": [],
+          "event": "download_failed",
+          "from": "loading_tools",
+          "guard": "",
+          "to": "build_failed"
+        },
+        {
+          "actions": [],
+          "event": "build_succeeded",
+          "from": "building",
+          "guard": "",
+          "to": "built"
+        },
+        {
+          "actions": [],
+          "event": "build_errored",
+          "from": "building",
+          "guard": "",
+          "to": "build_failed"
+        },
+        {
+          "actions": [],
+          "event": "source_edited",
+          "from": "build_failed",
+          "guard": "",
+          "to": "editing"
+        },
+        {
+          "actions": [],
+          "event": "build_requested",
+          "from": "build_failed",
+          "guard": "tools_cached",
+          "to": "building"
+        },
+        {
+          "actions": [],
+          "event": "build_cancelled",
+          "from": "building",
+          "guard": "",
+          "to": "editing"
+        },
+        {
+          "actions": [],
+          "event": "write_requested",
+          "from": "editing",
+          "guard": "uploaded_fs_selected && board_idcode_matches",
+          "to": "writing"
+        },
+        {
+          "actions": [
+            "explain_rebuild_needed"
+          ],
+          "event": "write_requested",
+          "from": "stale",
+          "guard": "",
+          "to": "stale"
+        },
+        {
+          "actions": [],
+          "event": "source_edited",
+          "from": "built",
+          "guard": "",
+          "to": "stale"
+        },
+        {
+          "actions": [],
+          "event": "build_requested",
+          "from": "stale",
+          "guard": "",
+          "to": "building"
+        },
+        {
+          "actions": [],
+          "event": "write_requested",
+          "from": "built",
+          "guard": "board_idcode_matches",
+          "to": "writing"
+        },
+        {
+          "actions": [],
+          "event": "write_succeeded",
+          "from": "writing",
+          "guard": "",
+          "to": "written"
+        },
+        {
+          "actions": [],
+          "event": "write_errored",
+          "from": "writing",
+          "guard": "",
+          "to": "write_failed"
+        },
+        {
+          "actions": [],
+          "event": "write_requested",
+          "from": "write_failed",
+          "guard": "",
+          "to": "writing"
+        },
+        {
+          "actions": [],
+          "event": "source_edited",
+          "from": "written",
+          "guard": "",
+          "to": "stale"
+        },
+        {
+          "actions": [],
+          "event": "write_requested",
+          "from": "written",
+          "guard": "",
+          "to": "writing"
+        }
+      ]
+    },
+    {
+      "id": "ai_connection",
+      "states": [
+        {
+          "description": "\u672a\u63a5\u7d9a\u3002\u9001\u308b\u5185\u5bb9\u3068\u4fdd\u5b58\u5148\u3092\u8aac\u660e",
+          "entry": [],
+          "exit": [],
+          "final": false,
+          "id": "disconnected",
+          "initial": true,
+          "surface": "web_app"
+        },
+        {
+          "description": "OpenRouter \u306e\u8a8d\u53ef\u753b\u9762\uff08\u540c\u3058\u30bf\u30d6\u3067\u79fb\u52d5\uff09",
+          "entry": [],
+          "exit": [],
+          "final": false,
+          "id": "authorizing",
+          "initial": false,
+          "surface": "openrouter"
+        },
+        {
+          "description": "state \u3092\u7167\u5408\u3057\u3001code \u3092\u9375\u306b\u4ea4\u63db\u4e2d",
+          "entry": [
+            "verify_state"
+          ],
+          "exit": [],
+          "final": false,
+          "id": "exchanging",
+          "initial": false,
+          "surface": "web_app"
+        },
+        {
+          "description": "\u63a5\u7d9a\u6e08\u307f\u3002\u9375\u306e\u4fdd\u5b58\u5148\uff08\u30bf\u30d6\u306e\u307f / \u3053\u306e\u7aef\u672b\uff09\u3092\u8868\u793a",
+          "entry": [],
+          "exit": [],
+          "final": false,
+          "id": "connected",
+          "initial": false,
+          "surface": "web_app"
+        },
+        {
+          "description": "\u62d2\u5426\u30fb\u671f\u9650\u5207\u308c\u30fbstate \u4e0d\u4e00\u81f4\u3002\u7406\u7531\u3068\u518d\u8a66\u884c",
+          "entry": [],
+          "exit": [],
+          "final": false,
+          "id": "auth_failed",
+          "initial": false,
+          "surface": "web_app"
+        }
+      ],
+      "transitions": [
+        {
+          "actions": [
+            "store_verifier"
+          ],
+          "event": "connect_requested",
+          "from": "disconnected",
+          "guard": "consent_given",
+          "to": "authorizing"
+        },
+        {
+          "actions": [],
+          "event": "callback_received",
+          "from": "authorizing",
+          "guard": "",
+          "to": "exchanging"
+        },
+        {
+          "actions": [],
+          "event": "auth_denied",
+          "from": "authorizing",
+          "guard": "",
+          "to": "auth_failed"
+        },
+        {
+          "actions": [
+            "discard_verifier"
+          ],
+          "event": "key_received",
+          "from": "exchanging",
+          "guard": "",
+          "to": "connected"
+        },
+        {
+          "actions": [],
+          "event": "exchange_failed",
+          "from": "exchanging",
+          "guard": "",
+          "to": "auth_failed"
+        },
+        {
+          "actions": [],
+          "event": "connect_requested",
+          "from": "auth_failed",
+          "guard": "consent_given",
+          "to": "authorizing"
+        },
+        {
+          "actions": [
+            "erase_key"
+          ],
+          "event": "disconnect_requested",
+          "from": "connected",
+          "guard": "",
+          "to": "disconnected"
+        }
+      ]
+    }
+  ],
+  "system": "ux-creator"
+}

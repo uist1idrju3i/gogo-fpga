@@ -1,0 +1,29 @@
+flowchart LR
+    subgraph edit_build_write ["edit_build_write (moment)"]
+        edit_build_write_start(["start"])
+        edit_build_write_0["source_edited"]
+        edit_build_write_start --> edit_build_write_0
+        edit_build_write_1["build_requested"]
+        edit_build_write_0 --> edit_build_write_1
+        edit_build_write_2["build_succeeded"]
+        edit_build_write_1 --> edit_build_write_2
+        edit_build_write_3["write_requested"]
+        edit_build_write_2 --> edit_build_write_3
+        edit_build_write_4["write_succeeded"]
+        edit_build_write_3 --> edit_build_write_4
+        edit_build_write_reward[["ボードの LED が設計どおりに動く"]]
+        edit_build_write_4 --> edit_build_write_reward
+    end
+    subgraph fix_loop ["fix_loop (moment)"]
+        fix_loop_start(["start"])
+        fix_loop_0["build_errored"]
+        fix_loop_start --> fix_loop_0
+        fix_loop_1["source_edited"]
+        fix_loop_0 --> fix_loop_1
+        fix_loop_2["build_requested"]
+        fix_loop_1 --> fix_loop_2
+        fix_loop_3["build_succeeded"]
+        fix_loop_2 --> fix_loop_3
+        fix_loop_reward[["問題の一覧が空になる"]]
+        fix_loop_3 --> fix_loop_reward
+    end

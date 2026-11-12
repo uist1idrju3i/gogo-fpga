@@ -1,0 +1,59 @@
+@startwbs
+* gogo-fpga
+** web_app (web_ui)
+*** ai_chat
+*** ai_consent
+*** ai_context_preview
+*** ai_diff
+*** ai_disconnect
+*** board_select
+*** build_progress
+*** build_summary
+*** editor
+*** formal_run
+*** openrouter_auth
+*** pin_table
+*** problem_list
+*** project_list
+*** save_status
+*** sim_run
+*** support_check
+*** template_open
+*** tool_download
+*** usb_permission
+*** waveform
+*** write_progress
+*** write_result
+*** zip_export
+*** control: primary_action
+*** control: write_action
+*** control: secondary_action
+*** control: ai_send
+*** control: problem_link
+** tool_workers (web_ui)
+*** build_progress
+*** build_summary
+*** formal_run
+*** sim_run
+*** tool_download
+*** waveform
+** project_store (web_ui)
+*** project_list
+*** save_status
+*** zip_export
+** tang_nano (hardware)
+*** usb_permission
+*** write_progress
+*** write_result
+** openrouter (cloud_backend)
+*** ai_chat
+*** ai_consent
+*** ai_context_preview
+*** openrouter_auth
+** Implementation spec
+*** CodeMirror 6
+*** Web Worker 上の WASM ツール
+*** OPFS
+*** WebUSB
+*** OpenRouter OAuth PKCE
+@endwbs

@@ -1,0 +1,97 @@
+@startsalt
+title gogo-fpga — wireframe skeleton
+{
+{+
+  午後のFPGA の画面 (web_ui)
+  {
+    [ ] ai_chat
+    [ ] ai_consent
+    [ ] ai_context_preview
+    [ ] ai_diff
+    [ ] ai_disconnect
+    [ ] board_select
+    [ ] build_progress
+    [ ] build_summary
+    [ ] editor
+    [ ] formal_run
+    [ ] openrouter_auth
+    [ ] pin_table
+    [ ] problem_list
+    [ ] project_list
+    [ ] save_status
+    [ ] sim_run
+    [ ] support_check
+    [ ] template_open
+    [ ] tool_download
+    [ ] usb_permission
+    [ ] waveform
+    [ ] write_progress
+    [ ] write_result
+    [ ] zip_export
+    "arrive"
+    "ask"
+    "build"
+    "choose_board"
+    "connect_ai"
+    "connect_board"
+    "disconnect"
+    "edit"
+    "first_build"
+    "first_write"
+    "fix_errors"
+    "reopen"
+    "review_change"
+    "share"
+    "start_template"
+    "verify"
+    "write"
+  }
+}
+{+
+  Web Worker 上の合成・検証ツール (web_ui)
+  {
+    [ ] build_progress
+    [ ] build_summary
+    [ ] formal_run
+    [ ] sim_run
+    [ ] tool_download
+    [ ] waveform
+    "build"
+    "first_build"
+    "verify"
+  }
+}
+{+
+  OPFS のプロジェクト保存 (web_ui)
+  {
+    [ ] project_list
+    [ ] save_status
+    [ ] zip_export
+    "reopen"
+    "share"
+  }
+}
+{+
+  Tang Nano 1K/4K/9K/20K（WebUSB） (hardware)
+  {
+    [ ] usb_permission
+    [ ] write_progress
+    [ ] write_result
+    "connect_board"
+    "first_write"
+    "write"
+  }
+}
+{+
+  OpenRouter（認可と AI） (cloud_backend)
+  {
+    [ ] ai_chat
+    [ ] ai_consent
+    [ ] ai_context_preview
+    [ ] openrouter_auth
+    "ask"
+    "connect_ai"
+  }
+}
+}
+@endsalt

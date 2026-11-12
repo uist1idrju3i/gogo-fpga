@@ -1,0 +1,67 @@
+[
+  {
+    "emotion": 4,
+    "jobs": [
+      "keep_projects"
+    ],
+    "pain_points": [],
+    "stage": "reopen"
+  },
+  {
+    "emotion": 4,
+    "jobs": [
+      "iterate_design",
+      "assign_pins"
+    ],
+    "pain_points": [
+      "\u30d4\u30f3\u5272\u308a\u5f53\u3066\u3068\u30b3\u30fc\u30c9\u304c\u5225\u306e\u5834\u6240\u306b\u3042\u308b"
+    ],
+    "stage": "edit"
+  },
+  {
+    "emotion": 3,
+    "jobs": [
+      "iterate_design"
+    ],
+    "pain_points": [],
+    "stage": "build"
+  },
+  {
+    "emotion": 2,
+    "jobs": [
+      "understand_errors"
+    ],
+    "pain_points": [
+      "\u30ed\u30b0\u304c\u9577\u304f\u3001\u554f\u984c\u306e\u884c\u3078\u79fb\u308c\u306a\u3044",
+      "\u53e4\u3044\u6210\u679c\u7269\u3092\u66f8\u304d\u8fbc\u3093\u3067\u3057\u307e\u3046"
+    ],
+    "stage": "fix_errors"
+  },
+  {
+    "emotion": 3,
+    "jobs": [
+      "verify_before_write"
+    ],
+    "pain_points": [
+      "\u8a2d\u5b9a\u304c\u5de6\u306e\u5217\u306e\u5965\u306b\u3042\u308a\u898b\u3064\u3051\u306b\u304f\u3044"
+    ],
+    "stage": "verify"
+  },
+  {
+    "emotion": 4,
+    "jobs": [
+      "flash_safely",
+      "iterate_design"
+    ],
+    "pain_points": [],
+    "stage": "write"
+  },
+  {
+    "emotion": 4,
+    "jobs": [
+      "keep_projects"
+    ],
+    "pain_points": [],
+    "stage": "share"
+  }
+]

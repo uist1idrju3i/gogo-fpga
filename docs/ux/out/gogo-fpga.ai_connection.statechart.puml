@@ -1,0 +1,11 @@
+@startuml
+title ai_connection
+[*] --> disconnected
+disconnected --> authorizing : connect_requested [consent_given] / store_verifier
+authorizing --> exchanging : callback_received
+authorizing --> auth_failed : auth_denied
+exchanging --> connected : key_received / discard_verifier
+exchanging --> auth_failed : exchange_failed
+auth_failed --> authorizing : connect_requested [consent_given]
+connected --> disconnected : disconnect_requested / erase_key
+@enduml

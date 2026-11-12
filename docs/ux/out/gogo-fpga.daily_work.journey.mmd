@@ -1,0 +1,16 @@
+journey
+    title daily_work — gogo-fpga
+    section reopen
+        project_list, save_status (jobs keep_projects): 4: maker
+    section edit
+        editor, pin_table (jobs iterate_design, assign_pins): 4: maker
+    section build
+        build_progress, build_summary (jobs iterate_design): 3: maker
+    section fix_errors
+        problem_list, editor (jobs understand_errors): 2: maker
+    section verify
+        sim_run, waveform, formal_run (jobs verify_before_write): 3: maker
+    section write
+        write_progress, write_result (jobs flash_safely, iterate_design): 4: maker
+    section share
+        zip_export (jobs keep_projects): 4: maker
