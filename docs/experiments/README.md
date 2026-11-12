@@ -6,6 +6,7 @@
 
 | 記録 | 内容 | 状態 |
 |---|---|---|
+| [S8B Pyodide parityのCI分割](S8B-pyodide-parity-shards.md) | 旧CIの60分中止とdarkriscv/9K nativeの5回再現 | 調査完了。HDL/CPU分割後のCIは確認中 |
 | [S0 WASMビルド](S0-wasm-build.md) | 旧書き込みアプリのビルドと仮想USB検出 | 当時の記録。書き込みと実機は対象外 |
 | [S1a 書き込みシミュレーション](S1a-program-sim.md) | 仮想GOWINでの書き込みと故障注入 | 当時の記録。実機では未確認 |
 | [S1b WASMオプション行列](S1b-option-matrix.md) | 旧書き込みアプリのビルド候補比較 | 完了。後続の既定値選定はS7を参照 |

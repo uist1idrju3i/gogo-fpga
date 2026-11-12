@@ -1369,11 +1369,15 @@ jobs:
           retention-days: 1
 
   pyodide-pack:
-    name: Pyodide gowin_pack
+    name: Pyodide gowin_pack (${{ matrix.suite }})
     needs: [changes, nextpnr, nextpnr-compare, synth-native, ghdl, iverilog]
     if: needs.changes.outputs.build == 'true' && needs.nextpnr.result == 'success' && needs.nextpnr-compare.result == 'success' && needs.synth-native.result == 'success' && needs.ghdl.result == 'success' && needs.iverilog.result == 'success'
     runs-on: ubuntu-26.04
     timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [hdl, cpu]
     permissions:
       actions: read
       contents: read
@@ -1440,6 +1444,7 @@ jobs:
 
       - id: formal-vhdl
         name: VHDLとPSLの性質をGHDLとYosysで照合
+        if: matrix.suite == 'hdl'
         run: node --test --test-concurrency=1 tests/synth/formal-vhdl.test.mjs tests/synth/ghdl-replay.test.mjs tests/synth/ghdl-lowered-replay.test.mjs tests/synth/formal-vhdl-lowered.test.mjs
 
       - name: VHDL形式検証の入力・一覧・反例・CSVを保存
@@ -1453,6 +1458,7 @@ jobs:
 
       - id: formal-replay
         name: 元のVerilogでSAT反例を独立に再実行
+        if: matrix.suite == 'hdl'
         run: node --test --test-concurrency=1 tests/synth/formal-replay.test.mjs
 
       - name: 独立再実行の入力・VCD・ログ・CSVを保存
@@ -1490,18 +1496,26 @@ jobs:
 
       - id: pack-parity
         name: Native / Pyodide gowin_pack parity
-        run: node --test tests/synth/gowin-pack.test.mjs tests/synth/library-components.test.mjs tests/synth/yosys-parity.test.mjs tests/synth/library-measurements.test.mjs
+        env:
+          PACK_SUITE: ${{ matrix.suite }}
+        run: |
+          if [[ "$PACK_SUITE" == cpu ]]; then
+            node --test --test-name-pattern '^pinned CPU libraries retain execution and classify all four board builds' tests/synth/gowin-pack.test.mjs
+          else
+            node --test --test-skip-pattern '^pinned CPU libraries retain execution and classify all four board builds' tests/synth/gowin-pack.test.mjs tests/synth/library-components.test.mjs tests/synth/yosys-parity.test.mjs tests/synth/library-measurements.test.mjs
+          fi
 
       - name: 合成・配置配線・packの失敗した入力とログを保存
         if: always() && steps.pack-parity.outcome == 'failure'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: ci-library-flow-failure-${{ github.run_id }}
+          name: ci-library-flow-failure-${{ matrix.suite }}-${{ github.run_id }}
           path: build/t5-library-flow-*/
           if-no-files-found: error
           retention-days: 7
 
       - name: Pyodide pack assets を保存
+        if: matrix.suite == 'hdl'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ci-pyodide-pack-${{ github.run_id }}
@@ -1513,7 +1527,7 @@ jobs:
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-          JOB_DISPLAY_NAME: Pyodide gowin_pack
+          JOB_DISPLAY_NAME: Pyodide gowin_pack (${{ matrix.suite }})
         run: |
           step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
             .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
