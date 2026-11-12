@@ -1,6 +1,48 @@
 import { expect, test } from "@playwright/test";
 import { prepareChat, previewAndSend, projectFile, proposalReply, slowChat } from "./ai-chat-helpers.mjs";
 
+test("connection comes first, disconnected chat collapses, and mobile diffs scroll above the action bar", async ({ page }) => {
+  await prepareChat(page, { reply: proposalReply([{ path: "src/top.v", content: `module top; // ${"long line ".repeat(80)}\nendmodule\n` }]) });
+  expect(await page.locator("#ai-auth-status").evaluate((element) => Boolean(element.compareDocumentPosition(document.querySelector("#ai-chat")) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+  expect(await page.locator("#ai-disconnect").evaluate((element) => Boolean(element.compareDocumentPosition(document.querySelector("#ai-chat")) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.locator("#toggle-board-pane").click();
+  await previewAndSend(page);
+  const diff = page.locator(".ai-diff").first();
+  await expect(diff).not.toContainText("Index:");
+  await expect(diff).not.toContainText("====");
+  await expect(diff).toHaveCSS("white-space", "pre");
+  await expect(diff.locator(".ai-diff-added").first()).toContainText("+module top;");
+  await expect(diff.locator(".ai-diff-removed").first()).toContainText("-");
+  await expect(diff.locator(".ai-diff-hunk").first()).toContainText("@@");
+  for (const [selector, color] of [[".ai-diff-added", "rgb(220, 252, 231)"], [".ai-diff-removed", "rgb(254, 226, 226)"], [".ai-diff-hunk", "rgb(226, 232, 240)"]]) {
+    await expect(diff.locator(selector).first()).toHaveCSS("background-color", color);
+  }
+  expect(await diff.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true);
+  await diff.evaluate((element) => { element.scrollLeft = 200; });
+  expect(await diff.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+  await page.locator(".ai-proposal button").first().click();
+  await page.locator(".header-actions").evaluate((element) => { element.style.paddingTop = "90px"; });
+  await expect.poll(async () => {
+    const sheet = await page.locator("#board-pane").boundingBox(), bar = await page.locator(".header-actions").boundingBox();
+    return sheet.y + sheet.height <= bar.y;
+  }).toBe(true);
+  const apply = page.locator("#ai-apply-selected");
+  await apply.scrollIntoViewIfNeeded();
+  const button = await apply.boundingBox(), bar = await page.locator(".header-actions").boundingBox();
+  expect(button.y + button.height).toBeLessThanOrEqual(bar.y);
+  expect(await apply.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    return element.contains(document.elementFromPoint(bounds.x + bounds.width / 2, bounds.bottom - 2));
+  })).toBe(true);
+  await page.locator("#ai-disconnect").click();
+  await expect(page.locator("#ai-chat-status")).toHaveText("接続すると使えます");
+  await expect(page.locator("#ai-compose")).toBeHidden();
+  await expect(page.locator("#ai-history")).toBeHidden();
+  await expect(page.locator("#ai-clear")).toBeHidden();
+  await expect(page.locator("#ai-connect")).toBeVisible();
+});
+
 test("preview is inert, exposes exact bytes/history/headers, and every edit requires a new preview", async ({ page }) => {
   const requests = await prepareChat(page);
   await page.locator("#ai-prompt").fill("説明してください。");

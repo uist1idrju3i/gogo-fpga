@@ -23,8 +23,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   const root = document.createElement("section");
   root.id = "ai-chat";
   root.innerHTML = `<h3>AI に相談する</h3>
-    <p>送信先は openrouter.ai だけです。利用料は OpenRouter の残高から支払います。確認後に「送信する」を押すまで、相談や資料は送信しません。</p>
-    <div id="ai-chat-connection"></div>
+    <p id="ai-chat-intro">送信先は openrouter.ai だけです。利用料は OpenRouter の残高から支払います。確認後に「送信する」を押すまで、相談や資料は送信しません。</p>
     <p id="ai-chat-status" role="status" aria-live="polite"></p>
     <p id="ai-chat-error" role="alert" hidden></p>
     <fieldset id="ai-compose"><legend>相談文と資料</legend>
@@ -56,8 +55,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     <button id="ai-undo" type="button" class="secondary" hidden>元に戻す</button>
     <details id="ai-history"><summary>これまでの会話（このタブだけ）</summary><div id="ai-history-messages"></div></details>
     <button id="ai-clear" type="button" class="secondary">会話を消す</button>`;
-  for (const id of ["ai-auth-status", "ai-auth-error", "ai-connect"]) root.querySelector("#ai-chat-connection").append(panel.querySelector(`#${id}`));
-  panel.prepend(root);
+  panel.append(root);
   const q = (id) => root.querySelector(`#${id}`);
   const choices = { files: new Set(), logs: new Set(), problems: new Set() };
   let history = [], preview = null, proposals = [], snapshot = null, context;
@@ -67,7 +65,9 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   function busy() { return Boolean(controller); }
   function controls() {
     q("ai-compose").disabled = busy() || applying;
-    q("ai-compose").hidden = state === "previewing";
+    q("ai-compose").hidden = !getKey() || state === "previewing";
+    q("ai-chat-intro").hidden = !getKey();
+    q("ai-history").hidden = q("ai-clear").hidden = !getKey();
     q("ai-preview").hidden = state !== "previewing";
     q("ai-send").disabled = !getKey() || !preview || busy();
     q("ai-stop").hidden = !busy();
@@ -77,7 +77,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     q("ai-apply-selected").disabled = !accepted.size || busy() || applying || workspace.isBusy();
     q("ai-apply-reason").textContent = workspace.isBusy() ? ERRORS.busy : "";
     for (const button of q("ai-proposal-files").querySelectorAll("button")) button.disabled = busy() || applying || workspace.isBusy();
-    q("ai-chat-status").textContent = applying ? "変更を保存しています。" : ({ composing: getKey() ? "接続済み。相談文を入力できます。" : "未接続です。OpenRouter に接続すると送信できます。",
+    q("ai-chat-status").textContent = applying ? "変更を保存しています。" : ({ composing: getKey() ? "接続済み。相談文を入力できます。" : "接続すると使えます",
       previewing: "この本文と宛先を確認してから送信してください。", sending: "送信しています。", streaming: "応答を受信しています。", proposal_review: "応答を受信しました。変更は自動で適用されません。", failed: "送信または受信を完了できませんでした。" })[state];
   }
   function invalidate() {
@@ -143,7 +143,14 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       const card = document.createElement("article"), heading = document.createElement("h4"), reason = document.createElement("p"), diff = document.createElement("pre");
       const accept = document.createElement("button"), reject = document.createElement("button");
       card.className = "ai-proposal"; card.dataset.path = change.path;
-      heading.textContent = change.path; reason.textContent = change.reason; diff.textContent = diffs.get(change.path); diff.tabIndex = 0;
+      heading.textContent = change.path; reason.textContent = change.reason; diff.className = "ai-diff"; diff.tabIndex = 0;
+      for (const line of diffs.get(change.path).match(/[^\n]*\n|[^\n]+$/g) ?? []) {
+        const row = document.createElement("span");
+        row.className = line.startsWith("@@") ? "ai-diff-hunk"
+          : line.startsWith("+") && !line.startsWith("+++") ? "ai-diff-added"
+          : line.startsWith("-") && !line.startsWith("---") ? "ai-diff-removed" : "ai-diff-context";
+        row.textContent = line; diff.append(row);
+      }
       accept.type = reject.type = "button"; accept.textContent = "この変更を適用"; accept.setAttribute("aria-pressed", "false");
       reject.textContent = "却下"; reject.className = "secondary";
       accept.addEventListener("click", () => { accepted.add(change.path); card.dataset.decision = "accepted"; accept.setAttribute("aria-pressed", "true"); accept.textContent = "適用対象に選択済み"; controls(); });

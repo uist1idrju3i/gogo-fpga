@@ -12,6 +12,9 @@ test("proposal fences, unified diffs, malformed JSON and no proposal", () => {
   assert.equal(parsed.valid.length, 1);
   const diff = proposalDiff(parsed.valid[0], files);
   assert.match(diff, /-old\n\+new/); assert.match(diff, /@@/);
+  assert.doesNotMatch(diff, /^Index:|^=+$/m);
+  assert.match(diff, /^--- src\/top.v\t送信時\n\+\+\+ src\/top.v\t提案\n/);
+  assert.equal(proposalDiff(change("src/top.v", "old\n"), files).includes("@@"), false);
   assert.equal(validateProposals([change("src/new.vhd")], files).valid.length, 1);
 });
 test("malicious paths, generated constraints, libraries, binary, duplicates and limits are rejected", () => {

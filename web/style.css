@@ -1224,6 +1224,11 @@ button.secondary:not(.danger):hover:not(:disabled),
 #ai-chat textarea { resize: vertical; font: inherit; }
 #ai-chat #ai-preview-body { font: 0.8rem/1.5 monospace; }
 #ai-chat pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 24rem; overflow: auto; font-size: 0.8rem; }
+#ai-chat pre.ai-diff { white-space: pre; overflow-wrap: normal; font-family: monospace; background: #f8fafc; color: #1d2939; }
+.ai-diff span { display: block; width: max-content; min-width: 100%; }
+.ai-diff-added { background: #dcfce7; }
+.ai-diff-removed { background: #fee2e2; }
+.ai-diff-hunk { background: #e2e8f0; }
 #ai-chat fieldset { min-width: 0; margin: 0.5rem 0; }
 #ai-chat summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }
 #ai-chat .ai-context-option { display: flex; align-items: center; gap: 0.5rem; min-height: 44px; overflow-wrap: anywhere; }
@@ -1234,6 +1239,10 @@ button.secondary:not(.danger):hover:not(:disabled),
 .ai-proposal[data-decision="rejected"] pre { display: none; }
 .ai-proposal button + button { margin-inline-start: 0.5rem; }
 @media (prefers-color-scheme: dark) {
+  #ai-chat pre.ai-diff { background: #1d2939; color: #f2f4f7; }
+  .ai-diff-added { background: #14532d; }
+  .ai-diff-removed { background: #7f1d1d; }
+  .ai-diff-hunk { background: #344054; }
   #ai-chat-error, #ai-rejected-paths { color: #ffb4ab; }
   .ai-proposal[data-decision="accepted"] { border-inline-start-color: #9ec5ff; }
 }
@@ -1263,7 +1272,7 @@ button.secondary:not(.danger):hover:not(:disabled),
   .mobile-pane-toggle, .pane-close { display: none; }
 }
 @media (max-width: 820px) {
-  .ide-form { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
+  .ide-form { padding-bottom: calc(var(--mobile-action-bar-height, 5rem) + 1rem); }
   .ide-header { display: block; padding: 0.5rem; }
   .brand { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.5rem; }
   .brand h1 { font-size: 1rem; white-space: nowrap; }
@@ -1281,7 +1290,7 @@ button.secondary:not(.danger):hover:not(:disabled),
   #workflow-guidance { margin: 0.25rem 0; font-size: 0.75rem; }
   .ide-layout { display: block; padding: 0.3rem; }
   .ide-sidebar { display: none; }
-  .ide-sidebar[data-open="true"] { display: block; position: fixed; z-index: 100; inset: 0.5rem 0.5rem calc(5rem + env(safe-area-inset-bottom)); width: auto; overflow: auto; }
+  .ide-sidebar[data-open="true"] { display: block; position: fixed; z-index: 100; inset: 0.5rem 0.5rem calc(var(--mobile-action-bar-height, 5rem) + 0.5rem); width: auto; overflow: auto; padding-bottom: 1.5rem; scroll-padding-block: 1rem; }
   .pane-close { display: inline-block; min-height: 44px; }
   .editor-pane { min-height: 65dvh; }
   .editor-heading span { display: none; }

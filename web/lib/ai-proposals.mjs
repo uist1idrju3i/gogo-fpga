@@ -42,7 +42,7 @@ export function parseProposals(text, files) {
 }
 
 export function proposalDiff(change, files) {
-  return createTwoFilesPatch(change.path, change.path, files.get(change.path) ?? "", change.content, "送信時", "提案", { context: 3, timeout: 1000, maxEditLength: 20000 });
+  return createTwoFilesPatch(change.path, change.path, files.get(change.path) ?? "", change.content, "送信時", "提案", { context: 3, timeout: 1000, maxEditLength: 20000 })?.replace(/^Index:[^\n]*\n=+\n/, "");
 }
 async function digest(value) {
   if (value === undefined) return null;
