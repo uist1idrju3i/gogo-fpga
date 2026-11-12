@@ -262,10 +262,22 @@ function assertDistributionMatchesSources() {
 
   const generatedFileAllowlist = new Set([
     "editor/editor.bundle.mjs",
+    "lib/ai-chat-ui.bundle.mjs",
     "lib/decoders/xz-decoder.wasm",
     "lib/project-zip.bundle.mjs",
     "lib/decoders/zstd-decoder.wasm",
   ]);
+  const aiBundle = Buffer.from(buildSync({
+    absWorkingDir: repoRoot,
+    entryPoints: [resolve(webRoot, "lib/ai-chat-ui.mjs")],
+    bundle: true,
+    minify: true,
+    format: "esm",
+    write: false,
+  }).outputFiles[0].contents);
+  if (!aiBundle.equals(readFileSync(resolve(distRoot, "lib/ai-chat-ui.bundle.mjs")))) {
+    throw new Error("Playwright preflight: AI chat bundle differs from sources");
+  }
   const runtimeFiles = new Set([
     "build-info.json",
     "openFPGALoader.mjs",
@@ -279,6 +291,12 @@ function assertDistributionMatchesSources() {
     sourceRoot: resolve(repoRoot, "licenses"),
     distSubdir: "licenses",
   });
+  for (const path of assertCopiedFileMatches({
+    repoRoot,
+    distRoot,
+    sourcePath: resolve(repoRoot, "node_modules/diff/LICENSE"),
+    distPath: "licenses/jsdiff-LICENSE",
+  })) licensePaths.add(path);
   const surferPaths = assertCopiedTreeMatches({
     repoRoot,
     distRoot,
@@ -402,6 +420,19 @@ test("built distribution matches sources and the build-root WASM", () => {
     assert.throws(assertDistributionMatchesSources, /public_html\/lib\/project-store\.mjs differs/);
   } finally {
     writeFileSync(storePath, originalStore);
+  }
+  for (const [path, message] of [
+    ["lib/ai-chat-ui.bundle.mjs", /AI chat bundle differs from sources/],
+    ["licenses/jsdiff-LICENSE", /public_html\/licenses\/jsdiff-LICENSE differs/],
+  ]) {
+    const generatedPath = resolve(repoRoot, "public_html", path);
+    const original = readFileSync(generatedPath);
+    try {
+      writeFileSync(generatedPath, Buffer.concat([original, Buffer.from("\n")]));
+      assert.throws(assertDistributionMatchesSources, message);
+    } finally {
+      writeFileSync(generatedPath, original);
+    }
   }
   assert.equal(
     readFileSync(resolve(repoRoot, "web/_headers"), "utf8"),

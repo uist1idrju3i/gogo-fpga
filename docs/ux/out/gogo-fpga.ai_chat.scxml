@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" initial="composing" datamodel="python">
+  <state id="composing">
+    <transition event="preview_requested" target="previewing" cond="context_valid"/>
+    <transition event="clear_requested" target="composing"/>
+    <transition event="disconnected" target="composing"/>
+  </state>
+  <state id="previewing">
+    <transition event="send_requested" target="sending" cond="connected &amp;&amp; preview_current"/>
+    <transition event="inputs_changed" target="composing"/>
+    <transition event="clear_requested" target="composing"/>
+    <transition event="disconnected" target="composing"/>
+  </state>
+  <state id="sending">
+    <transition event="chunk_received" target="streaming"/>
+    <transition event="response_completed" target="proposal_review"/>
+    <transition event="send_failed" target="failed"/>
+    <transition event="stop_requested" target="composing"/>
+    <transition event="clear_requested" target="composing"/>
+    <transition event="disconnected" target="composing"/>
+  </state>
+  <state id="streaming">
+    <transition event="chunk_received" target="streaming"/>
+    <transition event="response_completed" target="proposal_review"/>
+    <transition event="send_failed" target="failed"/>
+    <transition event="stop_requested" target="composing"/>
+    <transition event="clear_requested" target="composing"/>
+    <transition event="disconnected" target="composing"/>
+  </state>
+  <state id="proposal_review">
+    <transition event="preview_requested" target="previewing" cond="context_valid"/>
+    <transition event="inputs_changed" target="composing"/>
+    <transition event="clear_requested" target="composing"/>
+    <transition event="disconnected" target="composing"/>
+  </state>
+  <state id="failed">
+    <transition event="preview_requested" target="previewing" cond="context_valid"/>
+    <transition event="inputs_changed" target="composing"/>
+    <transition event="clear_requested" target="composing"/>
+    <transition event="disconnected" target="composing"/>
+  </state>
+</scxml>

@@ -1,0 +1,101 @@
+{
+  "id": "ai_chat",
+  "initial": "composing",
+  "states": {
+    "composing": {
+      "description": "\u76f8\u8ac7\u6587\u3068\u9001\u308b\u8cc7\u6599\u3092\u9078\u3076",
+      "meta": {
+        "surface": "web_app"
+      },
+      "on": {
+        "clear_requested": "composing",
+        "disconnected": "composing",
+        "preview_requested": [
+          {
+            "guard": "context_valid",
+            "target": "previewing"
+          }
+        ]
+      }
+    },
+    "failed": {
+      "description": "\u9001\u4fe1\u307e\u305f\u306f\u53d7\u4fe1\u306e\u5931\u6557\u3092\u8868\u793a\u3059\u308b",
+      "meta": {
+        "surface": "web_app"
+      },
+      "on": {
+        "clear_requested": "composing",
+        "disconnected": "composing",
+        "inputs_changed": "composing",
+        "preview_requested": [
+          {
+            "guard": "context_valid",
+            "target": "previewing"
+          }
+        ]
+      }
+    },
+    "previewing": {
+      "description": "\u5b9f\u969b\u306b\u9001\u308b JSON \u3068\u5b9b\u5148\u3092\u78ba\u8a8d\u3059\u308b",
+      "meta": {
+        "surface": "web_app"
+      },
+      "on": {
+        "clear_requested": "composing",
+        "disconnected": "composing",
+        "inputs_changed": "composing",
+        "send_requested": [
+          {
+            "guard": "connected && preview_current",
+            "target": "sending"
+          }
+        ]
+      }
+    },
+    "proposal_review": {
+      "description": "\u5dee\u5206\u3092\u30d5\u30a1\u30a4\u30eb\u3054\u3068\u306b\u63a1\u5426\u5224\u65ad\u3059\u308b",
+      "meta": {
+        "surface": "web_app"
+      },
+      "on": {
+        "clear_requested": "composing",
+        "disconnected": "composing",
+        "inputs_changed": "composing",
+        "preview_requested": [
+          {
+            "guard": "context_valid",
+            "target": "previewing"
+          }
+        ]
+      }
+    },
+    "sending": {
+      "description": "\u78ba\u8a8d\u6e08\u307f\u306e\u672c\u6587\u3092\u9001\u4fe1\u3059\u308b",
+      "meta": {
+        "surface": "openrouter"
+      },
+      "on": {
+        "chunk_received": "streaming",
+        "clear_requested": "composing",
+        "disconnected": "composing",
+        "response_completed": "proposal_review",
+        "send_failed": "failed",
+        "stop_requested": "composing"
+      }
+    },
+    "streaming": {
+      "description": "\u5fdc\u7b54\u3092\u53d7\u4fe1\u3059\u308b\u3002\u505c\u6b62\u3067\u304d\u308b",
+      "meta": {
+        "surface": "openrouter"
+      },
+      "on": {
+        "chunk_received": "streaming",
+        "clear_requested": "composing",
+        "disconnected": "composing",
+        "response_completed": "proposal_review",
+        "send_failed": "failed",
+        "stop_requested": "composing"
+      }
+    }
+  }
+}

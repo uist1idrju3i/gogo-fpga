@@ -1,0 +1,30 @@
+stateDiagram-v2
+    state "ai_chat" as ai_chat
+    [*] --> composing
+    composing --> previewing : preview_requested [context_valid]
+    previewing --> sending : send_requested [connected && preview_current]
+    previewing --> composing : inputs_changed
+    sending --> streaming : chunk_received
+    streaming --> streaming : chunk_received
+    sending --> proposal_review : response_completed
+    sending --> failed : send_failed
+    sending --> composing : stop_requested
+    streaming --> proposal_review : response_completed
+    streaming --> failed : send_failed
+    streaming --> composing : stop_requested
+    proposal_review --> previewing : preview_requested [context_valid]
+    proposal_review --> composing : inputs_changed
+    failed --> previewing : preview_requested [context_valid]
+    failed --> composing : inputs_changed
+    composing --> composing : clear_requested
+    composing --> composing : disconnected
+    previewing --> composing : clear_requested
+    previewing --> composing : disconnected
+    sending --> composing : clear_requested
+    sending --> composing : disconnected
+    streaming --> composing : clear_requested
+    streaming --> composing : disconnected
+    proposal_review --> composing : clear_requested
+    proposal_review --> composing : disconnected
+    failed --> composing : clear_requested
+    failed --> composing : disconnected

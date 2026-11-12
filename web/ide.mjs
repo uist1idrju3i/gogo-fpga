@@ -13,6 +13,7 @@ import {
 import { createHdlEditor, languageForPath } from "./editor/editor.bundle.mjs";
 import { createBuildRunner } from "./lib/build-runner.mjs";
 import { parseToolDiagnostics } from "./lib/tool-diagnostics.mjs";
+import { selectableFiles } from "./lib/openrouter-chat.mjs";
 import { parseBuildSummary } from "./lib/build-summary.mjs";
 import { createSimRunner, vcdRootScopes } from "./lib/sim-runner.mjs";
 import { isLibraryPath } from "./lib/libraries.mjs";
@@ -195,8 +196,12 @@ export function initializeIde({
   let editor = null;
   let saveTimer = null;
   let pendingSave = Promise.resolve();
+  let projectSaveCount = 0;
   let fileDialogMode = "add";
   let projectSwitchVersion = 0;
+  let aiProjectVersion = 0;
+  let latestBuildLogs = new Map();
+  let currentProblems = [];
   const buildRunner = createBuildRunner();
   const simRunner = createSimRunner();
   const formalRunner = createFormalRunner();
@@ -230,6 +235,7 @@ export function initializeIde({
     renderFileList();
     updateSynthesisControls();
     onBuildStateChange(busy || buildRunning || simulationRunning);
+    notifyAiContext();
   }
 
   async function withWorkspaceChange(action) {
@@ -872,6 +878,8 @@ export function initializeIde({
     programLog.textContent = "";
     const diagnostics = [];
     const toolText = new Map();
+    latestBuildLogs = toolText;
+    notifyAiContext();
     try {
       await flushPendingSave();
       if (version !== buildVersion || project !== buildProject) return;
@@ -922,6 +930,7 @@ export function initializeIde({
             appendProjectLog(`[${tool} ${stream}] ${text}`);
             const prior = toolText.get(tool) ?? "";
             toolText.set(tool, prior + text);
+            notifyAiContext();
           },
         },
       );
@@ -1081,6 +1090,7 @@ export function initializeIde({
   }
 
   function renderProblems(diagnostics = []) {
+    currentProblems = diagnostics;
     problemList.replaceChildren();
     problemEmpty.hidden = diagnostics.length > 0;
     for (const diagnostic of diagnostics) {
@@ -1110,8 +1120,15 @@ export function initializeIde({
         editor?.revealLocation(line, diagnostic.column);
       });
       item.append(link);
+      const explain = document.createElement("button");
+      explain.type = "button";
+      explain.className = "secondary";
+      explain.textContent = "エラーを AI に説明してもらう";
+      explain.addEventListener("click", () => document.dispatchEvent(new CustomEvent("toolchain:ai-explain", { detail: { problem: diagnostic } })));
+      item.append(explain);
       problemList.append(item);
     }
+    notifyAiContext();
   }
 
   function editorDiagnostics(diagnostics) {
@@ -1146,12 +1163,14 @@ export function initializeIde({
       onBuildStateChange(libraryBusy);
     }
     if (designChanged) workflow.edit();
+    notifyAiContext();
     clearTimeout(saveTimer);
     setProjectStatus("変更を保存しています。");
     saveTimer = setTimeout(() => {
       saveTimer = null;
       pendingSave = saveProject();
     }, 500);
+    document.dispatchEvent(new Event("toolchain:ai-busy-change"));
   }
 
   async function saveProject() {
@@ -1159,6 +1178,8 @@ export function initializeIde({
     clearTimeout(saveTimer);
     saveTimer = null;
     project.board = boardSelect.value;
+    projectSaveCount++;
+    document.dispatchEvent(new Event("toolchain:ai-busy-change"));
     try {
       await store.save(project, fileContents);
       setProjectStatus("保存しました。");
@@ -1167,6 +1188,9 @@ export function initializeIde({
       setProjectStatus("プロジェクトを保存できません。");
       appendProjectLog(`プロジェクト保存エラー: ${error.message}`);
       return false;
+    } finally {
+      projectSaveCount--;
+      document.dispatchEvent(new Event("toolchain:ai-busy-change"));
     }
   }
 
@@ -1292,6 +1316,7 @@ export function initializeIde({
     renderFileList();
     renderFileTabs();
     updateEditor();
+    notifyAiContext();
   }
 
   function setPaneOpen(pane, button, open) {
@@ -1456,6 +1481,9 @@ export function initializeIde({
   }
 
   function activateProject(loaded) {
+    aiProjectVersion++;
+    latestBuildLogs = new Map();
+    currentProblems = [];
     document.querySelector("#build-summary").hidden = true;
     workflow.reset();
     buildVersion += 1;
@@ -1515,6 +1543,7 @@ export function initializeIde({
     boardSelect.dispatchEvent(new Event("change", { bubbles: true }));
     setProjectStatus("保存しました。");
     void librarySelector.refresh();
+    notifyAiContext();
   }
 
   async function openProject(name) {
@@ -1849,7 +1878,48 @@ export function initializeIde({
   synthesisButton.addEventListener("click", () => void runProjectBuild());
   boardSelect.addEventListener("change", updateSynthesisControls);
   void initializeProject();
+  function notifyAiContext() {
+    document.dispatchEvent(new Event("toolchain:ai-context-changed"));
+  }
+  function aiContext() {
+    if (!project) return null;
+    const files = new Map(fileContents);
+    for (const [path, content] of selectableFiles(files)) files.set(path, content);
+    return { projectId: `${project.name}:${aiProjectVersion}`, revision: workflow.revision,
+      project, files, activeFile: activeTab, logs: new Map(latestBuildLogs), problems: [...currentProblems] };
+  }
+  const aiBusy = () => !project || libraryBusy || saveTimer !== null || projectSaveCount > 0 || buildRunning || simulationRunning || formalRunning || workflow.state === "writing";
+  const explainBuild = document.createElement("button");
+  explainBuild.id = "ai-explain-build";
+  explainBuild.type = "button";
+  explainBuild.className = "secondary";
+  explainBuild.textContent = "ビルドエラーを AI に説明してもらう";
+  explainBuild.hidden = true;
+  problemList.before(explainBuild);
+  explainBuild.addEventListener("click", () => document.dispatchEvent(new CustomEvent("toolchain:ai-explain", { detail: { problem: currentProblems[0] } })));
+  document.addEventListener("toolchain:flow-change", () => { explainBuild.hidden = workflow.state !== "build_failed"; });
   return {
+    aiContext,
+    aiBusy,
+    async saveAiRevision(next, expected) {
+      if (aiBusy()) throw Object.assign(new Error("busy"), { code: "busy" });
+      const saved = await withWorkspaceChange(async () => {
+        await flushPendingSave();
+        if (await pendingSave === false) throw new Error("save_failed");
+        if (aiContext().projectId !== expected.projectId || workflow.revision !== expected.revision) throw Object.assign(new Error("changed"), { code: "changed" });
+        await store.save(next.project, next.files);
+        project = next.project;
+        fileContents = next.files;
+        openTabs = openTabs.filter((path) => fileContents.has(path));
+        if (!fileContents.has(activeTab)) activeTab = openTabs[0] ?? project.files.find(({ path }) => !isBinaryPath(path))?.path ?? null;
+        workflow.edit();
+        renderFileList(); renderFileTabs(); updateEditor(); renderFsSource(true); renderProblems();
+        setProjectStatus("AI の変更を保存しました。合成し直してください。");
+        notifyAiContext();
+        return true;
+      });
+      if (!saved) throw Object.assign(new Error("busy"), { code: "busy" });
+    },
     async flushPendingSave() {
       await flushPendingSave();
       if (await pendingSave === false) throw new Error("project_save_failed");
