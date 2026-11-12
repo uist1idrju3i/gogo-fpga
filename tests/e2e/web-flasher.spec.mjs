@@ -370,6 +370,7 @@ async function openSupportedPage(page) {
     "このブラウザーを利用できます。",
   );
   await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.locator("#right-tab-write").click();
 }
 
 test("built distribution matches sources and the build-root WASM", () => {
@@ -862,6 +863,7 @@ test("unsupported browser shows a message and keeps the button disabled", async 
 }) => {
   await stubPageUsb(page, true);
   await page.goto("/");
+  await page.locator("#right-tab-write").click();
 
   await expect(page.locator("#support-status")).toContainText(
     "このブラウザーでは操作できません。足りない機能：",

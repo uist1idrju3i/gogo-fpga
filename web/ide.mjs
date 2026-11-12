@@ -5,7 +5,7 @@ import {
   validatePath,
   validateProjectName,
 } from "./lib/project.mjs";
-import { createBlinkTemplate } from "./lib/templates.mjs";
+import { createBlinkTemplate, repairTemplateConstraints, TEMPLATE_PINS } from "./lib/templates.mjs";
 import {
   exportProjectZip,
   importProjectZip,
@@ -13,6 +13,7 @@ import {
 import { createHdlEditor, languageForPath } from "./editor/editor.bundle.mjs";
 import { createBuildRunner } from "./lib/build-runner.mjs";
 import { parseToolDiagnostics } from "./lib/tool-diagnostics.mjs";
+import { parseBuildSummary } from "./lib/build-summary.mjs";
 import { createSimRunner, vcdRootScopes } from "./lib/sim-runner.mjs";
 import { isLibraryPath } from "./lib/libraries.mjs";
 import { createLibrarySelector } from "./lib/library-selector.mjs";
@@ -215,6 +216,7 @@ export function initializeIde({
   let buildVersion = 0;
   let libraryBusy = false;
   const cachedBuilds = new Set();
+  const loadedTools = new Set();
   const toolKey = () => `${boardSelect.value}:${project?.vhdlStandard}:${project?.files.some(({ path }) => /\.(vhd|vhdl)$/i.test(path))}`;
 
   function setWorkspaceBusy(busy) {
@@ -297,8 +299,12 @@ export function initializeIde({
     const mismatch = findConstraintBoardMismatch(project);
     boardConstraintWarning.hidden = !mismatch;
     boardConstraintWarning.textContent = mismatch
-      ? `この制約ファイル（${mismatch.path}）は ${mismatch.boardName} 用です。ピン割り当ては T2 で編集できるようになります。`
+      ? `この制約ファイル（${mismatch.path}）は ${mismatch.boardName} 用です。選択したボードのピン割り当てを確認してください。`
       : "";
+    const canRepair = Boolean(mismatch && TEMPLATE_PINS[mismatch.boardId] && TEMPLATE_PINS[project?.board] && !fileContents.has(`constraints/${project.board}.cst`));
+    document.querySelector("#repair-constraints").hidden = !canRepair;
+    document.querySelector("#repair-constraints-hint").hidden = !canRepair;
+    document.querySelector("#repair-constraints").disabled = buildRunning || libraryBusy || workflow.state === "writing";
   }
 
   function setProjectStatus(message) {
@@ -306,6 +312,7 @@ export function initializeIde({
   }
 
   function setProjectActionStatus(message) {
+    projectActionStatus.dataset.outcome = "error";
     projectActionStatus.textContent = message;
   }
 
@@ -358,6 +365,7 @@ export function initializeIde({
     const supported = (hasVerilog || hasVhdl) && Boolean(board);
     synthesisButton.disabled = (!supported && !buildRunning) || simulationRunning || formalRunning || libraryBusy || workflow.state === "writing";
     synthesisReason.textContent = supported ? "" : "HDL プロジェクトを開いてください。";
+    document.querySelector("#welcome-start").disabled = !project || buildRunning || libraryBusy || simulationRunning || formalRunning || workflow.state === "writing";
     vhdlStandardControl.hidden = !hasVhdl;
     if (project) {
       project.vhdlStandard ??= "2008";
@@ -380,9 +388,9 @@ export function initializeIde({
           const size = manifest.assets
             .filter(({ path }) => paths.has(path))
             .reduce((total, asset) => total + asset.size, 0);
-          if (!buildRunning) synthesisAssetSize.textContent = cachedBuilds.has(toolKey())
-            ? "取得済み（キャッシュ）"
-            : `初回は約 ${(size / 1_000_000).toFixed(1)} MB を読み込みます`;
+          if (!buildRunning) synthesisAssetSize.textContent = loadedTools.has(toolKey())
+            ? `ツールは読み込み済み${cachedBuilds.has(toolKey()) ? " / 取得済み（キャッシュ）" : ""}`
+            : `ツール取得時は約 ${(size / 1_000_000).toFixed(1)} MB を読み込みます`;
         })
         .catch(() => {
           synthesisAssetSize.textContent = "合成資材の情報を読み込めません。";
@@ -936,6 +944,8 @@ export function initializeIde({
       workflow.warnings(diagnostics.some(({ severity }) => severity === "warning"));
       if (progressSeen && onlyCached) cachedBuilds.add(toolKey());
       else cachedBuilds.delete(toolKey());
+      loadedTools.add(toolKey());
+      renderBuildSummary(parseBuildSummary(toolText));
       renderProblems(editorResults);
       window.dispatchEvent(
         new CustomEvent("toolchain:diagnostics", { detail: editorResults }),
@@ -1049,6 +1059,26 @@ export function initializeIde({
     }
   }
 
+  function renderBuildSummary(summary) {
+    const metrics = document.querySelector("#build-summary-metrics");
+    metrics.replaceChildren();
+    const append = (label, value) => {
+      const term = document.createElement("dt");
+      const description = document.createElement("dd");
+      term.textContent = label;
+      description.textContent = value;
+      metrics.append(term, description);
+    };
+    const mainResources = summary.resources.filter(({ name }) => ["LUT4", "DFF", "BSRAM", "ALU"].includes(name));
+    for (const { name, used, available } of mainResources.length ? mainResources : summary.resources.slice(0, 4)) append(name, `${used} / ${available}`);
+    if (!summary.resources.length) append("リソース", "取得できませんでした");
+    for (const { name, mhz } of summary.clocks) append(`Fmax (${name})`, `${mhz.toFixed(2)} MHz`);
+    if (!summary.clocks.length) append("Fmax", "取得できませんでした");
+    append("警告", summary.warnings === null ? "取得できませんでした" : `${summary.warnings} 件`);
+    document.querySelector("#build-summary-problems").textContent = `問題を開く${summary.warnings === null ? "" : `（警告 ${summary.warnings} 件）`}`;
+    document.querySelector("#build-summary").hidden = false;
+  }
+
   function renderProblems(diagnostics = []) {
     problemList.replaceChildren();
     problemEmpty.hidden = diagnostics.length > 0;
@@ -1063,7 +1093,22 @@ export function initializeIde({
       const location = diagnostic.file
         ? `${diagnostic.file}:${diagnostic.line}${diagnostic.column ? `:${diagnostic.column}` : ""}: `
         : "";
-      item.textContent = `${severity}: ${location}${diagnostic.message}`;
+      item.append(document.createTextNode(`${severity}: ${location}${diagnostic.message} `));
+      const target = diagnostic.file && fileContents.has(diagnostic.file) && !isBinaryPath(diagnostic.file)
+        ? diagnostic.file : activeTab ?? project?.files.find(({ path }) => /\.(?:v|vhd|vhdl|sv|cst)$/.test(path))?.path;
+      const line = diagnostic.file === target && Number.isInteger(diagnostic.line) ? diagnostic.line
+        : Number.isInteger(diagnostic.from) && target === activeTab ? textForPath(target).slice(0, diagnostic.from).split("\n").length : 1;
+      const known = diagnostic.file === target && Number.isInteger(diagnostic.line) || diagnostic.file === undefined && Number.isInteger(diagnostic.from);
+      const link = document.createElement("a");
+      link.href = "#editor-mount";
+      link.textContent = target ? `${target}:${line} を開く${known ? "" : "（位置情報なし）"}` : "ソースファイルがありません";
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        document.dispatchEvent(new Event("toolchain:show-editor"));
+        if (target) openFile(target);
+        editor?.revealLocation(line, diagnostic.column);
+      });
+      item.append(link);
       problemList.append(item);
     }
   }
@@ -1408,6 +1453,7 @@ export function initializeIde({
   }
 
   function activateProject(loaded) {
+    document.querySelector("#build-summary").hidden = true;
     workflow.reset();
     buildVersion += 1;
     buildRunner.cancel();
@@ -1754,9 +1800,47 @@ export function initializeIde({
     }
   });
 
+  document.querySelector("#build-summary-problems").addEventListener("click", () => {
+    updateTabs("problems");
+    document.dispatchEvent(new Event("toolchain:show-editor"));
+    problemList.scrollIntoView({ block: "nearest" });
+  });
+  document.querySelector("#repair-constraints").addEventListener("click", () => {
+    if (!project || buildRunning || libraryBusy || workflow.state === "writing") return;
+    try {
+      const repaired = repairTemplateConstraints(project, fileContents);
+      project = repaired.project;
+      fileContents = repaired.files;
+      openTabs = openTabs.filter((path) => fileContents.has(path));
+      scheduleSave();
+      openFile(repaired.path);
+      updateBoardInformation();
+      renderFsSource(true);
+      projectActionStatus.dataset.outcome = "success";
+      projectActionStatus.textContent = "選択したボードの clk / led 用制約を生成しました。元の制約は .bak.txt に残しています。";
+    } catch (error) { projectActionStatus.dataset.outcome = "error"; projectActionStatus.textContent = error.message; }
+  });
+  document.addEventListener("toolchain:welcome-start", async ({ detail }) => {
+    if (!project || buildRunning || libraryBusy || simulationRunning || formalRunning || workflow.state === "writing") return;
+    try {
+      await flushPendingSave();
+      const created = createBlinkTemplate(detail.board, "verilog");
+      const names = await store.listProjects();
+      const base = `blink-${detail.board}`;
+      let name = base;
+      for (let number = 2; names.includes(name); number += 1) name = `${base}-${number}`;
+      created.project.name = name;
+      await store.save(created.project, created.files);
+      activateProject(created);
+      document.dispatchEvent(new Event("toolchain:show-editor"));
+      projectActionStatus.dataset.outcome = "success";
+      projectActionStatus.textContent = "Lチカのテンプレートを開きました。合成から進めてください。";
+    } catch (error) { projectActionStatus.dataset.outcome = "error"; projectActionStatus.textContent = error.message; }
+  });
   renderFsSource(true);
   document.addEventListener("toolchain:flow-change", () => {
     if (editor) updateEditor();
+    updateBoardInformation();
     updateSynthesisControls();
   });
   synthesisButton.addEventListener("click", () => void runProjectBuild());

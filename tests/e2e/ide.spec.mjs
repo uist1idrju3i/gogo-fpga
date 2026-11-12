@@ -10,7 +10,7 @@ async function openIde(page) {
   await page.goto("/");
   await expect(page.locator("#project-name")).toHaveText("blink");
   await expect(page.locator("#project-status")).toHaveText("保存しました。");
-  await expect(page.locator("#support-status")).toBeVisible();
+  await expect(page.locator("#support-status")).toHaveText("このブラウザーを利用できます。");
 }
 
 async function editAndWaitForSave(page) {
@@ -175,15 +175,14 @@ test("file paths are validated with Japanese feedback", async ({ page }) => {
 test("narrow layout opens and closes both side panes", async ({ page }) => {
   await page.setViewportSize({ width: 600, height: 900 });
   await openIde(page);
-  const boardPicker = await page.locator('label[for="board-select"]').boundingBox();
   const headerActions = await page.locator(".header-actions").boundingBox();
-  expect(headerActions.y).toBeGreaterThanOrEqual(boardPicker.y + boardPicker.height);
+  expect(headerActions.y + headerActions.height).toBe(900);
   await editAndWaitForSave(page);
 
   await expect(page.locator("#files-pane")).toBeHidden();
   await expect(page.locator("#toggle-files-pane")).toHaveText("ファイル一覧");
   await expect(page.locator("#toggle-files-pane")).toHaveAttribute("aria-expanded", "false");
-  await expect(page.locator("#toggle-board-pane")).toHaveText("ボードと書き込み");
+  await expect(page.locator("#toggle-board-pane")).toHaveText("設定");
   await expect(page.locator("#toggle-board-pane")).toHaveAttribute("aria-expanded", "false");
   await page.locator("#toggle-files-pane").click();
   await expect(page.locator("#files-pane")).toBeVisible();
@@ -241,7 +240,7 @@ test("board changes show and hide a mismatched constraint warning", async ({
   await expect(warning).toBeHidden();
   await page.locator("#board-select").selectOption("tangnano4k");
   await expect(warning).toHaveText(
-    "この制約ファイル（constraints/tangnano1k.cst）は Tang Nano 1K 用です。ピン割り当ては T2 で編集できるようになります。",
+    "この制約ファイル（constraints/tangnano1k.cst）は Tang Nano 1K 用です。選択したボードのピン割り当てを確認してください。",
   );
   await page.screenshot({
     path: resolve(screenshots, "ide-cst-mismatch.png"),

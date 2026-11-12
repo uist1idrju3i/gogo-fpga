@@ -8,6 +8,7 @@ const shots = resolve(process.env.U2_SCREENSHOT_DIR ?? "build/screenshots/u2a");
 mkdirSync(shots, { recursive: true });
 
 async function openProject(page, board = "tangnano9k") {
+  await page.addInitScript(() => localStorage.setItem("gogo-fpga.welcome.dismissed", "true"));
   await stubPageUsb(page);
   await page.goto("/");
   await expect(page.locator("#project-status")).toHaveText("保存しました。");
@@ -44,7 +45,14 @@ test("workflow uses real downloads, build, write, edits and cached rebuilds", as
   await expect(page.locator("#program-button")).toHaveCSS("background-color", "rgb(30, 107, 52)");
   await expect(page.locator("#synthesis-button")).toHaveClass(/secondary/);
   await expect(page.locator("[data-workflow-step]").nth(1)).toHaveText(/成功|警告/);
-  await page.screenshot({ path: resolve(shots, "u2a-built.png") });
+  await expect(page.locator("#build-summary")).toBeVisible();
+  await expect(page.locator("#build-summary-metrics")).toContainText("LUT4");
+  await expect(page.locator("#build-summary-metrics")).toContainText("MHz");
+  await expect(page.locator("#synthesis-asset-size")).toContainText("ツールは読み込み済み");
+  await page.screenshot({ path: resolve(shots, "u2b-built.png") });
+  await page.locator("#build-summary").screenshot({ path: resolve(shots, "u2b-summary.png") });
+  await page.locator("#build-summary-problems").click();
+  await expect(page.locator("#bottom-panel-problems")).toBeVisible();
   await page.keyboard.press("Control+Enter");
   await expect(page.locator("#result-status")).toHaveText("成功", { timeout: 30_000 });
   await expect(page.locator("[data-workflow-step]").nth(3)).toHaveText("成功");
@@ -58,7 +66,10 @@ test("workflow uses real downloads, build, write, edits and cached rebuilds", as
   await page.locator("#program-form").evaluate((form) => form.dispatchEvent(new Event("submit", { cancelable: true })));
   expect(workers).toBe(1);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: resolve(shots, "u2a-stale.png") });
+  await expect(page.locator("#synthesis-stage")).toHaveText("再合成が必要");
+  await expect(page.locator("#synthesis-asset-size")).toContainText("ツールは読み込み済み");
+  await expect(page.locator("#build-summary-freshness")).toContainText("古い");
+  await page.screenshot({ path: resolve(shots, "u2b-stale.png") });
   await page.locator("#synthesis-button").click();
   await expect(page.locator("#synthesis-stage")).toHaveText("ビルド完了", { timeout: 120_000 });
   await expect(page.locator("#synthesis-asset-size")).toContainText("取得済み（キャッシュ）");
@@ -109,6 +120,121 @@ test("a failed first download can be retried, and a new build can be cancelled",
   await expect(page.locator("#synthesis-stage")).toHaveText("ビルド完了", { timeout: 120_000 });
 });
 
+test("editing during the first build cancels it rather than exposing the old snapshot", async ({ page }) => {
+  test.setTimeout(180_000);
+  await openProject(page);
+  let packing = false;
+  let release;
+  const gate = new Promise((resolve) => { release = resolve; });
+  await page.route("**/pack/manifest.json", async (route) => {
+    packing = true;
+    await gate;
+    await route.continue();
+  });
+  await page.locator("#synthesis-button").click();
+  try {
+    await expect.poll(() => packing).toBe(true);
+    await page.locator(".cm-content").click();
+    await page.keyboard.press("Control+End");
+    await page.keyboard.type("\n// changed after the worker snapshot\n");
+  } finally { release(); }
+  await expect(page.locator("#synthesis-button")).toHaveText("合成・配置配線");
+  await expect(page.locator("#program-button")).toBeDisabled();
+  await expect(page.locator("#build-summary")).toBeHidden();
+  await expect(page.locator("#fs-source option[value^='build/']")).toHaveCount(0);
+});
+
+test("right tabs contain verification settings, keyboard navigation and a local-only AI placeholder", async ({ page }) => {
+  const external = [];
+  page.on("request", (request) => { if (!request.url().startsWith("http://127.0.0.1:") && /^https?:/.test(request.url())) external.push(request.url()); });
+  await openProject(page);
+  await expect(page.locator("#files-pane .simulation-settings")).toHaveCount(0);
+  await expect(page.locator("#primary-action button")).toHaveCount(1);
+  await expect(page.locator("#simulation-button")).toBeHidden();
+  await page.locator("#right-tab-verify").hover();
+  await expect(page.locator("#right-tab-verify")).toHaveCSS("background-color", "rgb(234, 240, 255)");
+  await expect(page.locator("#right-tab-verify")).toHaveCSS("color", "rgb(25, 65, 133)");
+  await page.locator("#right-tab-verify").click();
+  await expect(page.locator("#right-panel-verify #simulation-top")).toBeVisible();
+  await expect(page.locator("#right-panel-verify #simulation-files")).toBeVisible();
+  expect((await page.locator("#simulation-files input").first().boundingBox()).width).toBeLessThanOrEqual(32);
+  expect((await page.locator("#simulation-files label").first().boundingBox()).height).toBeLessThanOrEqual(66);
+  for (const id of ["simulation-button", "formal-button"]) {
+    const box = await page.locator(`#${id}`).boundingBox();
+    expect(box.height).toBeGreaterThanOrEqual(44);
+  }
+  await page.locator("#right-tab-verify").focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.locator("#right-tab-ai")).toBeFocused();
+  await expect(page.locator("#right-panel-ai")).toContainText("外部への通信やデータの送信は行いません");
+  expect(external).toEqual([]);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.locator("#toggle-board-pane").click();
+  await expect(page.locator("#board-pane")).toHaveAttribute("aria-modal", "true");
+  await expect(page.locator("#close-board-pane")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#board-pane")).toBeHidden();
+  await expect(page.locator("#toggle-board-pane")).toBeFocused();
+});
+
+test("first-visit guide selects an existing Lチカ template and remembers dismissal", async ({ page }) => {
+  await stubPageUsb(page);
+  await page.goto("/");
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await expect(page.locator("#welcome-card")).toBeVisible();
+  await expect(page.locator("#welcome-support")).toHaveText("このブラウザーを利用できます。");
+  await expect(page.locator("#welcome-card")).toContainText("LEDが点滅するか確かめる");
+  await page.locator("#welcome-board").selectOption("tangnano9k");
+  await page.locator("#welcome-start").hover();
+  await expect(page.locator("#welcome-start")).toHaveCSS("background-color", "rgb(234, 240, 255)");
+  await expect(page.locator("#welcome-start")).toHaveCSS("color", "rgb(25, 65, 133)");
+  await page.locator("#welcome-start").click();
+  await expect(page.locator("#project-name")).toHaveText("blink-tangnano9k");
+  await expect(page.locator("#file-list")).toContainText("tangnano9k.cst");
+  await page.screenshot({ path: resolve(shots, "u2b-first-visit.png") });
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.screenshot({ path: resolve(shots, "u2b-first-visit-390.png") });
+  const editor = await page.locator("#editor-mount").boundingBox();
+  expect(editor.y).toBeLessThan(430);
+  await page.locator("#welcome-details > summary").click();
+  await page.screenshot({ path: resolve(shots, "u2b-first-visit-expanded-390.png") });
+  await page.locator("#welcome-dismiss").click();
+  await page.reload();
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await expect(page.locator("#welcome-card")).toBeHidden();
+});
+
+test("constraint repair uses the selected board template and backs up the previous constraints", async ({ page }) => {
+  await openProject(page);
+  await page.locator("#board-select").selectOption("tangnano1k");
+  await expect(page.locator("#board-constraint-warning")).toContainText("Tang Nano 9K 用");
+  await page.locator("#repair-constraints").click();
+  await expect(page.locator("#board-constraint-warning")).toBeHidden();
+  await expect(page.locator("#file-list")).toContainText("constraints/tangnano1k.cst");
+  await expect(page.locator("#file-list")).toContainText("constraints/tangnano9k.cst.bak.txt");
+  await expect(page.locator(".cm-content")).toContainText('IO_LOC "clk" 47;');
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+});
+
+test("every problem links to its file and line, including a located warning", async ({ page }) => {
+  await openProject(page);
+  await page.evaluate(() => window.dispatchEvent(new CustomEvent("toolchain:diagnostics", { detail: [
+    { file: "src/top_tb.v", line: 3, column: 3, from: 0, to: 1, severity: "warning", message: "location test" },
+    { from: 1, to: 2, severity: "error", message: "range test" },
+    { file: null, from: 0, to: 0, severity: "warning", message: "unlocated tool warning" },
+  ] })));
+  await page.locator("#bottom-tab-problems").click();
+  await expect(page.locator("#problem-list li a")).toHaveCount(3);
+  await expect(page.locator("#problem-list li a").last()).toContainText("位置情報なし");
+  await page.locator("#problem-list li a").first().click();
+  await expect(page.locator(".editor-tab [role=tab][aria-selected=true]")).toHaveAttribute("title", "src/top_tb.v");
+  await expect(page.locator(".cm-content")).toBeFocused();
+  await page.keyboard.type("// at line 3 ");
+  await expect(page.locator(".cm-content")).toContainText("// at line 3");
+  const text = await page.locator(".cm-content").innerText();
+  expect(text.split("\n")[2]).toContain("// at line 3");
+});
+
 for (const board of BOARDS) {
   test(`workflow layout and focus targets: ${board.id}`, async ({ page }) => {
     await openProject(page, board.id);
@@ -116,7 +242,7 @@ for (const board of BOARDS) {
       await page.setViewportSize({ width, height: 900 });
       await expect(page.locator("#workflow-bar")).toContainText("編集");
       await expect(page.locator("#validation-errors")).toBeHidden();
-      for (const id of ["synthesis-button", "simulation-button", "formal-button", "program-button", "board-select"]) {
+      for (const id of ["synthesis-button"]) {
         const box = await page.locator(`#${id}`).boundingBox();
         expect(box.height).toBeGreaterThanOrEqual(44);
       }
@@ -127,7 +253,15 @@ for (const board of BOARDS) {
       await expect(page.locator("#synthesis-button")).toBeFocused();
       await expect(page.locator("#synthesis-button")).toHaveCSS("outline-style", "solid");
       await page.evaluate(() => window.scrollTo(0, 0));
-      await page.screenshot({ path: resolve(shots, `u2a-${board.id}-${width}.png`) });
+      await expect(page.locator("#primary-action button")).toHaveCount(1);
+      await expect(page.locator("[data-workflow-step]").first()).toHaveText("現在");
+      if (width === 390) {
+        const editor = await page.locator("#editor-mount").boundingBox();
+        expect(editor.y).toBeLessThan(350);
+        const action = await page.locator(".header-actions").boundingBox();
+        expect(action.y + action.height).toBe(900);
+      }
+      await page.screenshot({ path: resolve(shots, `u2b-${board.id}-${width}.png`) });
     }
   });
 }

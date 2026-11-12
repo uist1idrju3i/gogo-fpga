@@ -15,6 +15,7 @@ import { parseProgress } from "./lib/parse-progress.mjs";
 import { writeTerminalText } from "./lib/terminal-output.mjs";
 import { initializeIde } from "./ide.mjs";
 import { createDesignWorkflow } from "./lib/workflow-ui.mjs";
+import { initializeWorkspaceUI } from "./lib/workspace-ui.mjs";
 
 const form = document.querySelector("#program-form");
 const boardSelect = document.querySelector("#board-select");
@@ -69,6 +70,7 @@ let terminalState = { text: "" };
 let downloadUrl = null;
 let projectFsSource = null;
 let validationAttempted = false;
+const workspace = initializeWorkspaceUI(BOARDS);
 const workflow = createDesignWorkflow(() => {
   updateForm();
   document.dispatchEvent(new Event("toolchain:flow-change"));
@@ -86,6 +88,10 @@ function renderWorkflow() {
   synthesis.textContent = writing ? "合成し直す" : view.primary;
   programButton.classList.toggle("secondary", !writing);
   programButton.classList.toggle("workflow-primary-write", writing);
+  workspace.syncPrimary(writing);
+  workspace.updateWelcome(view);
+  if (view.stage !== null) document.querySelector("#synthesis-stage").textContent = view.stage;
+  document.querySelector("#build-summary-freshness").textContent = view.stale ? "前回の結果です（古い）。合成し直してください。" : "";
   if (view.state === "writing") {
     programButton.textContent = "書き込み中";
     synthesis.disabled = true;
