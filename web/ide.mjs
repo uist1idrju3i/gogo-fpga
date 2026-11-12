@@ -89,6 +89,7 @@ function readUiState(name, project) {
 }
 
 export function initializeIde({
+  workflow,
   form,
   boardSelect,
   programLog,
@@ -213,6 +214,8 @@ export function initializeIde({
   let simulationVersion = 0;
   let buildVersion = 0;
   let libraryBusy = false;
+  const cachedBuilds = new Set();
+  const toolKey = () => `${boardSelect.value}:${project?.vhdlStandard}:${project?.files.some(({ path }) => /\.(vhd|vhdl)$/i.test(path))}`;
 
   function setWorkspaceBusy(busy) {
     libraryBusy = busy;
@@ -353,7 +356,7 @@ export function initializeIde({
     const hasVhdl = (project?.files ?? []).some(({ path }) => /\.(?:vhd|vhdl)$/i.test(path));
     const board = BOARDS.find(({ id }) => id === boardSelect.value);
     const supported = (hasVerilog || hasVhdl) && Boolean(board);
-    synthesisButton.disabled = (!supported && !buildRunning) || simulationRunning || formalRunning || libraryBusy;
+    synthesisButton.disabled = (!supported && !buildRunning) || simulationRunning || formalRunning || libraryBusy || workflow.state === "writing";
     synthesisReason.textContent = supported ? "" : "HDL プロジェクトを開いてください。";
     vhdlStandardControl.hidden = !hasVhdl;
     if (project) {
@@ -377,8 +380,9 @@ export function initializeIde({
           const size = manifest.assets
             .filter(({ path }) => paths.has(path))
             .reduce((total, asset) => total + asset.size, 0);
-          synthesisAssetSize.textContent =
-            `初回は約 ${(size / 1_000_000).toFixed(1)} MB を読み込みます`;
+          if (!buildRunning) synthesisAssetSize.textContent = cachedBuilds.has(toolKey())
+            ? "取得済み（キャッシュ）"
+            : `初回は約 ${(size / 1_000_000).toFixed(1)} MB を読み込みます`;
         })
         .catch(() => {
           synthesisAssetSize.textContent = "合成資材の情報を読み込めません。";
@@ -412,7 +416,7 @@ export function initializeIde({
         project.simulation.files = [
           ...simulationFiles.querySelectorAll("input:checked"),
         ].map((element) => element.value);
-        scheduleSave();
+        scheduleSave(false);
       });
       label.append(input, document.createTextNode(path));
       simulationFiles.append(label);
@@ -523,7 +527,7 @@ export function initializeIde({
         project.formal.files = [
           ...formalFiles.querySelectorAll("input:checked"),
         ].map((element) => element.value);
-        scheduleSave();
+        scheduleSave(false);
         renderFormalSettings();
       });
       label.append(input, document.createTextNode(path));
@@ -577,7 +581,7 @@ export function initializeIde({
     project.formal.top = formalTop.value.trim();
     project.formal.clock = formalClock.value.trim() || null;
     project.formal.edge = formalEdge.value;
-    scheduleSave();
+    scheduleSave(false);
   }
 
   function ensureSurferFrame() {
@@ -713,6 +717,7 @@ export function initializeIde({
     onSimulationStateChange(true);
     updateSynthesisControls();
     simulationStatus.dataset.outcome = "running";
+    workflow.verify("実行中");
     simulationStatus.textContent = "シミュレーションを実行しています。";
     programLog.textContent = "";
     const hasVhdl = project.files.some(({ path }) => /\.(?:vhd|vhdl)$/i.test(path));
@@ -738,6 +743,7 @@ export function initializeIde({
         new CustomEvent("toolchain:diagnostics", { detail: editorResults }),
       );
       simulationStatus.dataset.outcome = result.outcome;
+      workflow.verify(result.outcome === "ok" ? "成功" : result.outcome === "stopped" ? "警告" : "失敗");
       simulationStatus.textContent = {
         ok: "シミュレーションが完了しました。",
         failed: "シミュレーションに失敗しました。",
@@ -749,6 +755,7 @@ export function initializeIde({
       if (version !== simulationVersion) return;
       simulationStatus.dataset.outcome = "failed";
       simulationStatus.textContent = "シミュレーションに失敗しました。";
+      workflow.verify("失敗");
       appendProjectLog(`シミュレーションエラー: ${error.message}`);
     } finally {
       if (version === simulationVersion) {
@@ -777,6 +784,7 @@ export function initializeIde({
     formalRunning = true;
     updateSynthesisControls();
     formalStatus.dataset.outcome = "running";
+    workflow.verify("実行中");
     formalStatus.textContent = "形式検証を実行しています。";
     programLog.textContent = "";
     renderProblems();
@@ -798,6 +806,7 @@ export function initializeIde({
           ? "ok"
           : "failed";
       formalStatus.textContent = outcome.message ? `${kindLabel}（${outcome.message}）` : kindLabel;
+      workflow.verify(formalStatus.dataset.outcome === "ok" ? "成功" : "失敗");
       if (outcome.inventory?.counts) {
         const { assert, assume, cover } = outcome.inventory.counts;
         appendProjectLog(
@@ -819,6 +828,7 @@ export function initializeIde({
       if (version !== formalVersion) return;
       formalStatus.dataset.outcome = "failed";
       formalStatus.textContent = "形式検証に失敗しました。";
+      workflow.verify("失敗");
       appendProjectLog(`形式検証エラー: ${error.message}`);
     } finally {
       if (version === formalVersion) {
@@ -831,10 +841,18 @@ export function initializeIde({
   async function runProjectBuild() {
     if (libraryBusy || simulationRunning || formalRunning) return;
     if (buildRunning) {
+      buildVersion += 1;
       buildRunner.cancel();
+      buildRunning = false;
+      workflow.send("tools_ready");
+      workflow.send("build_cancelled");
+      synthesisStage.textContent = "中止しました";
+      onBuildStateChange(libraryBusy);
+      updateSynthesisControls();
       return;
     }
     if (!project) return;
+    workflow.rebuild(cachedBuilds.has(toolKey()));
     const buildProject = project;
     const version = ++buildVersion;
     buildRunning = true;
@@ -851,6 +869,8 @@ export function initializeIde({
       const input = await prepareProjectInputs(buildProject, fileContents);
       if (version !== buildVersion || project !== buildProject) return;
       const files = input.files;
+      let onlyCached = true;
+      let progressSeen = false;
       const result = await buildRunner.build(
         {
           board: input.project.board,
@@ -861,6 +881,17 @@ export function initializeIde({
           defines: input.defines,
         },
         {
+          onToolsReady: () => {
+            if (version === buildVersion) workflow.send("tools_ready");
+          },
+          onProgress: ({ path, loaded, total, cached }) => {
+            if (version !== buildVersion) return;
+            progressSeen = true;
+            if (!cached) onlyCached = false;
+            synthesisAssetSize.textContent = cached
+              ? `取得済み（キャッシュ）: ${path}`
+              : `ツール取得: ${path} ${(loaded / 1_000_000).toFixed(1)} / ${(total / 1_000_000).toFixed(1)} MB`;
+          },
           onStage: (stage) => {
             const hasVhdl = files.some(({ path }) => /\.(?:vhd|vhdl)$/i.test(path));
             const labels = [
@@ -897,8 +928,14 @@ export function initializeIde({
         fileContents.set(file.path, file.bytes);
       }
       await saveProject();
+      if (version !== buildVersion || project !== buildProject) return;
       renderFileList();
       renderFsSource(true, "build/top.fs");
+      workflow.send("tools_ready");
+      workflow.send("build_succeeded");
+      workflow.warnings(diagnostics.some(({ severity }) => severity === "warning"));
+      if (progressSeen && onlyCached) cachedBuilds.add(toolKey());
+      else cachedBuilds.delete(toolKey());
       renderProblems(editorResults);
       window.dispatchEvent(
         new CustomEvent("toolchain:diagnostics", { detail: editorResults }),
@@ -919,6 +956,7 @@ export function initializeIde({
     } catch (error) {
       if (version !== buildVersion || project !== buildProject) return;
       if (error.name !== "AbortError") {
+        workflow.send(workflow.state === "loading_tools" ? "download_failed" : "build_errored");
         for (const [tool, text] of toolText) {
           diagnostics.push(...parseToolDiagnostics(tool, text));
         }
@@ -958,6 +996,8 @@ export function initializeIde({
         appendProjectLog(`ビルドエラー: ${error.message}`);
         synthesisStage.textContent = "ビルド失敗";
       } else {
+        workflow.send("tools_ready");
+        workflow.send("build_cancelled");
         synthesisStage.textContent = "中止しました";
       }
     } finally {
@@ -1049,8 +1089,17 @@ export function initializeIde({
     });
   }
 
-  function scheduleSave() {
+  function scheduleSave(designChanged = true) {
     if (!project) return;
+    if (buildRunning) {
+      buildVersion += 1;
+      buildRunner.cancel();
+      buildRunning = false;
+      workflow.send("tools_ready");
+      workflow.send("build_cancelled");
+      onBuildStateChange(libraryBusy);
+    }
+    if (designChanged) workflow.edit();
     clearTimeout(saveTimer);
     setProjectStatus("変更を保存しています。");
     saveTimer = setTimeout(() => {
@@ -1101,7 +1150,7 @@ export function initializeIde({
   function updateEditor() {
     if (!editor) return;
     editor.setLanguage(activeTab ? languageForPath(activeTab) : "plain");
-    editor.setReadOnly(libraryBusy || !activeTab || isLibraryPath(activeTab));
+    editor.setReadOnly(libraryBusy || workflow.state === "writing" || !activeTab || isLibraryPath(activeTab));
     editor.setText(activeTab ? textForPath(activeTab) : "");
     saveUiState();
   }
@@ -1318,8 +1367,8 @@ export function initializeIde({
     updateEditor();
     updateSynthesisControls();
     renderFsSource(true);
-    await refreshProjectSwitcher();
     scheduleSave();
+    await refreshProjectSwitcher();
   }
 
   function deleteSelectedFile() {
@@ -1359,6 +1408,7 @@ export function initializeIde({
   }
 
   function activateProject(loaded) {
+    workflow.reset();
     buildVersion += 1;
     buildRunner.cancel();
     buildRunning = false;
@@ -1379,6 +1429,9 @@ export function initializeIde({
     project = loaded.project;
     project.vhdlStandard ??= "2008";
     fileContents = loaded.files;
+    if (project.files.some(({ path }) => path.startsWith("build/") && path.endsWith(".fs"))) {
+      workflow.restoreArtifact();
+    }
     projectName.textContent = project.name;
     boardSelect.value = project.board;
     const savedState = readUiState(project.name, project);
@@ -1646,7 +1699,7 @@ export function initializeIde({
   simulationTop.addEventListener("input", () => {
     if (!project) return;
     project.simulation.top = simulationTop.value;
-    scheduleSave();
+    scheduleSave(false);
     updateSimulationControls();
   });
   simulationTimeLimit.addEventListener("change", () => {
@@ -1654,7 +1707,7 @@ export function initializeIde({
     const value = Number(simulationTimeLimit.value);
     if (Number.isInteger(value) && value >= 1 && value <= 120) {
       project.simulation.timeLimitSeconds = value;
-      scheduleSave();
+      scheduleSave(false);
     }
     updateSimulationControls();
   });
@@ -1686,6 +1739,12 @@ export function initializeIde({
     updateTabs("artifacts");
   });
   document.addEventListener("keydown", (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+      event.preventDefault();
+      const primary = !programButton.classList.contains("secondary") ? programButton : synthesisButton;
+      if (!primary.disabled) primary.click();
+      return;
+    }
     if (
       (event.ctrlKey || event.metaKey) &&
       event.key.toLowerCase() === "s"
@@ -1696,6 +1755,10 @@ export function initializeIde({
   });
 
   renderFsSource(true);
+  document.addEventListener("toolchain:flow-change", () => {
+    if (editor) updateEditor();
+    updateSynthesisControls();
+  });
   synthesisButton.addEventListener("click", () => void runProjectBuild());
   boardSelect.addEventListener("change", updateSynthesisControls);
   void initializeProject();

@@ -16,7 +16,6 @@
       <form id="program-form" class="ide-form">
         <header class="ide-header">
           <div class="brand">
-            <p class="eyebrow">午後のFPGA</p>
             <h1>午後のFPGA</h1>
             <p class="project-title">プロジェクト: <strong id="project-name">読み込み中</strong></p>
             <div class="project-toolbar">
@@ -59,22 +58,22 @@
                 </button>
                 <p id="synthesis-stage" role="status" aria-live="polite"></p>
                 <p id="synthesis-reason" class="synthesis-reason"></p>
-                <p id="synthesis-asset-size"></p>
+                <p id="synthesis-asset-size" role="status" aria-live="polite" aria-atomic="true"></p>
               </div>
               <div class="synthesis-control">
-                <button id="simulation-button" type="button" disabled>シミュレーション</button>
+                <button id="simulation-button" class="secondary" type="button" disabled>シミュレーション</button>
                 <p id="simulation-status" role="status" aria-live="polite" data-outcome=""></p>
                 <p id="simulation-reason" class="simulation-reason"></p>
               </div>
               <div class="synthesis-control">
-                <button id="formal-button" type="button" disabled>形式検証</button>
+                <button id="formal-button" class="secondary" type="button" disabled>形式検証</button>
                 <p id="formal-status" role="status" aria-live="polite" data-outcome=""></p>
                 <p id="formal-reason" class="simulation-reason"></p>
               </div>
               <button id="program-button" type="submit" disabled>書き込む</button>
               <button
                 id="toggle-files-pane"
-                class="mobile-pane-toggle"
+                class="mobile-pane-toggle secondary"
                 type="button"
                 aria-label="ファイル一覧を開く"
                 aria-controls="files-pane"
@@ -82,7 +81,7 @@
               >ファイル一覧</button>
               <button
                 id="toggle-board-pane"
-                class="mobile-pane-toggle"
+                class="mobile-pane-toggle secondary"
                 type="button"
                 aria-label="ボードと書き込みを開く"
                 aria-controls="board-pane"
@@ -90,6 +89,13 @@
               >ボードと書き込み</button>
             </div>
           </div>
+          <ol id="workflow-bar" aria-label="設計の手順" aria-live="polite" aria-atomic="true">
+            <li>編集 <span data-workflow-step>未実行</span></li>
+            <li>合成 <span data-workflow-step>未実行</span></li>
+            <li>検証 <span data-workflow-step>未実行</span></li>
+            <li>書き込み <span data-workflow-step>未実行</span></li>
+          </ol>
+          <p id="workflow-guidance" role="status" aria-live="polite">HDLを編集して、合成・配置配線を実行してください。</p>
           <section class="support-status" aria-labelledby="support-heading">
             <h2 id="support-heading">ブラウザーの確認</h2>
             <p id="support-status" role="status" aria-live="polite">

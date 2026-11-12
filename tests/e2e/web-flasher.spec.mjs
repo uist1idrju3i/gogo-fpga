@@ -585,7 +585,7 @@ test("DONE never set is reported as failure despite exit zero", async ({ page })
   });
 });
 
-test("IDCODE mismatch requires confirmation and cancel stops the run", async ({
+test("IDCODE mismatch disables writing without requesting a device", async ({
   page,
 }) => {
   let workerRequests = 0;
@@ -597,24 +597,14 @@ test("IDCODE mismatch requires confirmation and cancel stops the run", async ({
   await openSupportedPage(page);
   await page.locator("#board-select").selectOption("tangnano1k");
   await page.locator("#bitstream-file").setInputFiles(fixture);
-  await page.getByRole("button", { name: "書き込む" }).click();
-
-  const dialog = page.locator("#idcode-dialog");
-  await expect(dialog).toBeVisible();
-  await expect(dialog).toContainText("一致しません");
-  await expect(dialog).toContainText("0x0100681b");
-  await expect(dialog).toContainText("0x0100481b");
-  await expect(dialog).toContainText("生の値 0x1100481b");
-  await expect(dialog.locator("#idcode-warning")).toHaveText(
-    "Tang Nano 1K の IDCODE 0x0100681b と、ファイルの IDCODE 0x0100481b（生の値 0x1100481b）は一致しません。",
-  );
+  await expect(page.getByRole("button", { name: "書き込む" })).toBeDisabled();
+  await expect(page.locator("#workflow-guidance")).toContainText("IDCODE");
+  await expect(page.locator("#idcode-dialog")).toBeHidden();
   await expect(page.locator("#run-panel")).toBeHidden();
   await page.screenshot({
     path: resolve(screenshots, "mismatch-warning.png"),
     fullPage: false,
   });
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeHidden();
   await expect(page.locator("#run-panel")).toBeHidden();
   await expect(page.locator("#support-status")).toHaveText(
     "このブラウザーを利用できます。",
@@ -623,7 +613,7 @@ test("IDCODE mismatch requires confirmation and cancel stops the run", async ({
   expect(workerRequests).toBe(0);
 });
 
-test("IDCODE mismatch confirmation requests a device after Continue", async ({
+test("programmatic submission cannot bypass an IDCODE mismatch", async ({
   page,
 }) => {
   let workerRequests = 0;
@@ -635,20 +625,11 @@ test("IDCODE mismatch confirmation requests a device after Continue", async ({
   await openSupportedPage(page);
   await page.locator("#board-select").selectOption("tangnano1k");
   await page.locator("#bitstream-file").setInputFiles(fixture);
-  await page.getByRole("button", { name: "書き込む" }).click();
-
-  const dialog = page.locator("#idcode-dialog");
-  await expect(dialog).toBeVisible();
+  await page.locator("#program-form").evaluate((form) => form.dispatchEvent(new Event("submit", { cancelable: true })));
+  await expect(page.locator("#idcode-dialog")).toBeHidden();
   expect(await page.evaluate(() => window.__usbRequestCount ?? 0)).toBe(0);
-  await dialog.getByRole("button", { name: "続行する" }).click();
-
-  await expect(page.locator("#result-status")).toHaveText("成功", {
-    timeout: 30_000,
-  });
-  expect(await page.evaluate(() => window.__usbRequestOptions.filters)).toEqual([
-    { vendorId: 0x0403, productId: 0x6010 },
-  ]);
-  expect(workerRequests).toBe(1);
+  await expect(page.locator("#program-button")).toBeDisabled();
+  expect(workerRequests).toBe(0);
 });
 
 test("20K flash programming succeeds with verification", async ({ page }) => {
@@ -866,6 +847,9 @@ test("invalid external-flash offset blocks the write", async ({ page }) => {
   await page.locator("#advanced-settings summary").click();
   await page.locator('input[name="flash-type"][value="external"]').check();
   await page.locator("#offset-option").fill("0x400000");
+  await expect(page.locator("#validation-errors")).toBeHidden();
+  await page.locator("#program-form").evaluate((form) => form.dispatchEvent(new Event("submit", { cancelable: true })));
+  await expect(page.locator("#validation-errors")).toBeVisible();
   await expect(page.locator("#validation-errors")).toContainText(
     "フラッシュ容量を超えています",
   );
@@ -906,7 +890,7 @@ async function createTemplateProject(page, name, board, language = "verilog") {
   await expect(page.locator("#project-status")).toHaveText("保存しました。");
 }
 
-async function uploadProjectBitstream(page, fixturePath, board) {
+async function uploadProjectBitstream(page, fixturePath, board, writable = true) {
   const path = `artifacts/${board}.fs`;
   await expect(page.locator("#use-bitstream-button")).toHaveCount(0);
   await page.locator("#add-file-button").click();
@@ -920,9 +904,11 @@ async function uploadProjectBitstream(page, fixturePath, board) {
   await expect(page.locator("#project-status")).toHaveText("保存しました。", {
     timeout: 10_000,
   });
-  await expect(page.getByRole("button", { name: "書き込む" })).toBeEnabled({
-    timeout: 10_000,
-  });
+  if (writable) {
+    await expect(page.getByRole("button", { name: "書き込む" })).toBeEnabled({ timeout: 10_000 });
+  } else {
+    await expect(page.getByRole("button", { name: "書き込む" })).toBeDisabled();
+  }
 }
 
 for (const { board, idcode } of templateWriteCases) {
@@ -959,11 +945,10 @@ test("a project .fs for another board is rejected by IDCODE validation", async (
   });
   await openSupportedPage(page);
   await createTemplateProject(page, "wrong-board", "tangnano1k");
-  await uploadProjectBitstream(page, fixture, "tangnano9k");
-  await page.getByRole("button", { name: "書き込む" }).click();
-
-  await expect(page.locator("#idcode-dialog")).toBeVisible();
-  await expect(page.locator("#idcode-dialog")).toContainText("一致しません");
+  await uploadProjectBitstream(page, fixture, "tangnano9k", false);
+  await expect(page.getByRole("button", { name: "書き込む" })).toBeDisabled();
+  await expect(page.locator("#workflow-guidance")).toContainText("IDCODE");
+  await expect(page.locator("#idcode-dialog")).toBeHidden();
   expect(workerRequests).toBe(0);
 });
 

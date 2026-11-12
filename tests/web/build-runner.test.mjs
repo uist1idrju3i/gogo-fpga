@@ -35,6 +35,8 @@ class FakeWorker {
 }
 
 function successfulBuild(worker) {
+  worker.emit({ type: "progress", progress: { path: "yosys.wasm", loaded: 4, total: 8, cached: false } });
+  worker.emit({ type: "tools_ready" });
   worker.emit({ type: "stage", stage: "synth" });
   worker.emit({
     type: "log",
@@ -58,6 +60,8 @@ test("build runner combines tool outputs and reuses its pack worker", async () =
   let packWorkerCount = 0;
   const stages = [];
   const logs = [];
+  const progress = [];
+  let ready = 0;
   const runner = createBuildRunner({
     createBuildWorker: () => {
       buildWorkerCount += 1;
@@ -82,6 +86,8 @@ test("build runner combines tool outputs and reuses its pack worker", async () =
     {
       onStage: (stage) => stages.push(stage),
       onLog: (log) => logs.push(log),
+      onProgress: (value) => progress.push(value),
+      onToolsReady: () => { ready += 1; },
     },
   );
   const second = await runner.build({ board: "tangnano1k", top: "top", files: [] });
@@ -98,6 +104,8 @@ test("build runner combines tool outputs and reuses its pack worker", async () =
     gowin_pack: 50,
   });
   assert.deepEqual(stages, ["synth", "pack"]);
+  assert.deepEqual(progress, [{ path: "yosys.wasm", loaded: 4, total: 8, cached: false }]);
+  assert.equal(ready, 1);
   assert.equal(logs[0].text, "synthesized");
   assert.equal(second.files.at(-1).path, "build/top.fs");
   assert.equal(buildWorkerCount, 2);

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { createHash } from "node:crypto";
 
 import {
   createVerifiedAssetLoader,
@@ -7,6 +8,34 @@ import {
 } from "../../web/lib/verified-assets.mjs";
 
 const digest = "a".repeat(64);
+test("verified downloads report actual byte progress and verified cache hits", async (t) => {
+  const bytes = Uint8Array.of(1, 2, 3, 4);
+  const sha256 = createHash("sha256").update(bytes).digest("hex");
+  const assets = new Map([["tool.wasm", { path: "tool.wasm", size: bytes.length, sha256 }]]);
+  const progress = [];
+  let requests = 0;
+  t.mock.method(globalThis, "fetch", async () => { requests += 1; return new Response(bytes); });
+  const loader = createVerifiedAssetLoader({
+    baseURL: new URL("https://example.test/tools/"), cacheName: "test", cacheRaw: true,
+    onProgress: (value) => progress.push(value),
+  });
+  assert.deepEqual(await loader.fetchVerifiedAsset(assets, "tool.wasm", null), bytes);
+  assert.deepEqual(progress[0], { path: "tool.wasm", loaded: 0, total: 4, cached: false });
+  assert.equal(progress.at(-1).loaded, 4);
+  progress.length = 0;
+  assert.deepEqual(await loader.fetchVerifiedAsset(assets, "tool.wasm", {
+    match: async () => new Response(bytes),
+  }), bytes);
+  assert.equal(requests, 1);
+  assert.deepEqual(progress, [{ path: "tool.wasm", loaded: 4, total: 4, cached: true }]);
+});
+
+test("download progress does not bypass missing-file and integrity failures", async (t) => {
+  t.mock.method(globalThis, "fetch", async () => new Response(Uint8Array.of(0)));
+  const loader = createVerifiedAssetLoader({ baseURL: new URL("https://example.test/"), cacheName: "test" });
+  await assert.rejects(loader.fetchVerifiedAsset(new Map(), "missing", null), /missing from manifest/);
+  await assert.rejects(loader.fetchVerifiedAsset(new Map([["bad", { size: 2, sha256: digest }]]), "bad", null), /size mismatch/);
+});
 const legacyAsset = {
   path: "yosys.wasm",
   size: 10,
