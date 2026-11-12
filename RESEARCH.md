@@ -65,6 +65,10 @@ Surfer WASM build tools:
 | wasm-bindgen-cli | 0.2.118 | `00b519c9fc2d6e087265da1a00f29160bfcc6a823993482bc2e691910287427b` | `https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.118/wasm-bindgen-0.2.118-x86_64-unknown-linux-musl.tar.gz` |
 | binaryen | version_123 | `e959f2170af4c20c552e9de3a0253704d6a9d2766e8fdb88e4d6ac4bae9388fe` | `https://github.com/WebAssembly/binaryen/releases/download/version_123/binaryen-version_123-x86_64-linux.tar.gz` |
 
+Surfer の版と日付は午後のFPGA の HEAD ではなく、Surfer の pin とその commit 日時から作ります。
+コピーした source が親の Git を参照していた問題と再現ビルドの条件は
+[S12C](docs/experiments/S12C-surfer-reproducibility.md)に記録します。
+
 libftdi は `developer.intra2net.com` に Dependabot が接続できないため、`.gitmodules` の URL と branch から upstream 先端を調べ、「固定版の更新確認」ワークフローで監視します。
 
 ## 3. ツールの WASM 化方針
@@ -179,6 +183,7 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 | [書き込み部の移植とビルド選定](docs/research/flasher-integration.md) | 移植元の原典、JSPIとWebUSB、S7の選定とhash照合、asyncifyの失敗と未確認範囲 |
 | [GHDL WASM の調査と合成の検証](docs/research/ghdl-wasm.md) | Ada API、VHDL の合成、最適化と配布・ライセンスの記録 |
 | [リポジトリー統合と配信の確認事項](docs/research/repository-consolidation.md) | 正規リポジトリー、旧参照の例外、第三者license、Cloudflareの記録と未確認の設定 |
+| [Surfer の再現ビルド](docs/experiments/S12C-surfer-reproducibility.md) | 親の Git metadata の混入、pin 由来の版・日付、clean build の比較 |
 | [書き込み部の初期調査記録](docs/research/flasher-history.md) | 旧書き込みアプリの最終版におけるIDCODE・ビルド・仮想USBの記録 |
 | [ブラウザー内ビルドと静的配信の調査](docs/research/browser-build-and-delivery.md) | S4、圧縮資材の復号、配信量と配信先の比較 |
 | [OSS の FPGA 開発環境と HDL ライブラリーの広域調査](docs/research/oss-survey.md) | ブラウザーで動く HDL ツールの先行例、HDL のツール、形式検証のソルバー、HDL ライブラリーと CPU コア（2026-10-26） |

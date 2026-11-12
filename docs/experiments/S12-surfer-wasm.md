@@ -27,6 +27,10 @@ Surfer v0.7.0 を upstream source から `wasm32-unknown-unknown` 向けにビ�
 
 ## build 環境と再現性
 
+追記（2026-11-12）: この比較は同一の午後のFPGA revision に限ります。
+親の revision が違う場合には版表示が変わっていました。
+原因と修正後の比較は [S12C](S12C-surfer-reproducibility.md)を参照してください。
+
 実行環境は Linux x86_64、kernel 7.0.0-42-generic、12 CPU threads、約 30 GiB memory です。Surfer submodule は v0.7.0 の peeled commit、nested submodules は f128 `e60de395f0d6454c1dc546b87f06a6358425b6b6` と instruction-decoder `02bdcbfd5663a72e4a0b1b9d54519412d417fab1` です。
 
 clean build は `build/S12/clean-a` と `build/surfer` の別々の Cargo target directory で実行しました。両方とも source copy を作り直し、nested submodule を shallow fetch してから同じ patch を適用しました。Trunk の log は `offline=true` を示し、PATH 上の wasm-bindgen 0.2.118 と wasm-opt version_123 を選択したため、Trunk による tool download はありません。

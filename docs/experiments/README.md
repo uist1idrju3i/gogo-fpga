@@ -37,6 +37,7 @@
 | [S11 NVC r1.23.1 の WASM 化](S11-nvc-wasm.md) | Emscripten NVC の callback signature mismatch を特定。cast emulation 後も Node simulation が完走せず、5-file limit で停止 | 中止（5-file limit） |
 | [S11 NVC WASM 化の凍結基準](S11-nvc-wasm-criteria.md) | NVC WASM の build、parity、negative control の基準と延長条件 | 測定前に固定 |
 | [S12 Surfer WASM 化](S12-surfer-wasm.md) | Surfer v0.7.0 の WASM build、配布、browser test と再現性 | 同一 revision の local 2回と CI の全453ファイル一致 |
+| [S12C Surfer の再現ビルド](S12C-surfer-reproducibility.md) | 親の Git metadata と SRI の変動、pin 由来の版と日付 | clean build の比較 |
 | [S12 Surfer WASM 化の凍結基準](S12-surfer-wasm-criteria.md) | Surfer の再現 build、browser load、negative control の条件 | 測定前に固定 |
 | [S12B シミュレーション統合の回帰検証](S12B-simulation-integration.md) | timescale前後の4ボードbitstream比較、波形8画面、Icarus配布前検査と初回失敗の記録 | 全体E2E76件成功・比較測定4件skip、シミュレーション3回反復30件成功 |
 | [S13 nextpnr の配置結果の再現性](S13-nextpnr-determinism.md) | 製品用の8代表回路×4ボードで native / WASI を各5回比較。A/A、負の対照、資源、CSV を記録 | 候補2を採用。通常320回と A/A 20回が一致し、負例10回を拒否 |
