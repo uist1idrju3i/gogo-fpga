@@ -77,6 +77,17 @@ WASI Yosysとshareは事前に`build/wasi/yosys`へ用意する。固定HDLラ�
 - 失敗artifact名はsuite別にする。共通pack資材はHDL側が一度だけuploadする。
 - Playwrightの`needs.pyodide-pack.result == 'success'`は維持する。matrixの全成功が必要で、片側の失敗を無視しない。
 
+## 分割後のCI
+
+修正commit `c3dc11bf19942de49fc0c934d3653a6750820e09`の[PR run 43215356976](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43215356976)で、Cloudflare Pagesを除く20 checkがすべて成功した。[CI生データ](S8B-pyodide-parity-shards-ci.csv)の所要時間は各1回の値で、runner間の性能差を測るものではない。
+
+| suite | job全体 | parityのNode計測 | parityの成功数 | 失敗・skip |
+| --- | ---: | ---: | ---: | --- |
+| CPU | 23分50秒 | 1,352.628秒 | 29 | 各0 |
+| HDL | 28分37秒 | 1,633.355秒 | 62 | 各0 |
+
+parityの合計91件は、旧成功runの91件と同じ。HDL側に残した形式検証84件と独立再実行7件も成功した。各jobが60分以内に終了し、後続のPlaywrightも実行された。job `131190637679`の結果は76 passed、4 skippedで、所要時間は13分13秒だった。4 skippedは、`S5_CHROMIUM_VARIANT`と`S5_ASSET_DIR`の指定時だけ動くS5計測で、通常のCIでは従来どおり除外される。この条件は変更していない。Cloudflare Pagesの失敗はowner側の別件として扱い、この変更では回避していない。
+
 ## 未確認の点
 
-分割後のCI所要時間とPlaywrightの結果は確認後に追記する。ローカルではparity全体を再実行せず、問題のnative配置配線と選択境界を確認した。旧runnerとローカルの速度は直接の性能比較にしない。Cloudflare Pagesはowner側の別件として扱う。実機のTang Nanoでは試していない。
+ローカルではparity全体を再実行せず、問題のnative配置配線と選択境界を確認した。旧runnerとローカルの速度は直接の性能比較にしない。実機のTang Nanoでは試していない。
