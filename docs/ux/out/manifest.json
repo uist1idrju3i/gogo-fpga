@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "artifacts": [
+    {
+      "path": "gogo-fpga.ai_connection.scxml",
+      "sha256": "795e442fad6256b311b255b654237b68201541e7db35c5e770d0bd413e396656"
+    },
+    {
+      "path": "gogo-fpga.ai_connection.statechart.mmd",
+      "sha256": "dcc5bb0edd1d9705fe6d1fa5722f7b917458d66a9e684c813afb4883fb657cb9"
+    },
+    {
+      "path": "gogo-fpga.ai_connection.statechart.puml",
+      "sha256": "ec54a66da700dde268de4544d1f09c4cb8597e83fd1647b421a33301cb366fa3"
+    },
+    {
+      "path": "gogo-fpga.ai_connection.xstate.json",
+      "sha256": "bc4281b7a21cd3f72b4f55bb2824c0ac9c20092b990e87d0a0586b332a0ce0ea"
+    },
+    {
+      "path": "gogo-fpga.ai_help.emotion.json",
+      "sha256": "150666f8e8ee7c806be5b9994111d57cf26e0326f36363cda661eb247e6e145b"
+    },
+    {
+      "path": "gogo-fpga.ai_help.emotion.mmd",
+      "sha256": "b2c75514c79aa7b448a103fc0dedafe16064d9f49466eaf6c052e0d7e2d35d98"
+    },
+    {
+      "path": "gogo-fpga.ai_help.journey.mmd",
+      "sha256": "eecc0097ef4d1d4579907db21a53473d89973d6766fa39f76547d86a9551850b"
+    },
+    {
+      "path": "gogo-fpga.ai_help.sequence.puml",
+      "sha256": "6698f0496e8bd97dbd9ba0c18ea64e4408f5c43cea53313467cce3753c302869"
+    },
+    {
+      "path": "gogo-fpga.blueprint.puml",
+      "sha256": "387751d0721c85c87dcbc92c23174ae90c926796ab91d91043a102bc3d89709a"
+    },
+    {
+      "path": "gogo-fpga.daily_work.emotion.json",
+      "sha256": "8994ed2b90f560195433c26b9198669e3b989593405187110efe09d38c9a7af7"
+    },
+    {
+      "path": "gogo-fpga.daily_work.emotion.mmd",
+      "sha256": "7920baf8653692ee946825788fc6a9f0ac42293238d225711f114c81a7dbaa36"
+    },
+    {
+      "path": "gogo-fpga.daily_work.journey.mmd",
+      "sha256": "34f50af8a4e07dc5370a2bd11493168852385185d887986f8968127e2ffadfaf"
+    },
+    {
+      "path": "gogo-fpga.daily_work.sequence.puml",
+      "sha256": "a0839d8e06f80624db66915b889d812cc77f8e529d117b52d1c7b33214e18936"
+    },
+    {
+      "path": "gogo-fpga.design_flow.scxml",
+      "sha256": "ba4de71b1387e8c6daa1093ac801c3e8df4228907472364a6c4bdbdb6bba1eda"
+    },
+    {
+      "path": "gogo-fpga.design_flow.statechart.mmd",
+      "sha256": "9a37cb5b03d186847e2e47a5068d9e242b9b7cc76b38bef22999dc91135dface"
+    },
+    {
+      "path": "gogo-fpga.design_flow.statechart.puml",
+      "sha256": "4d67cd28995485833e542c85ae2bd99f4a414a393b073963b67b5592210954bf"
+    },
+    {
+      "path": "gogo-fpga.design_flow.xstate.json",
+      "sha256": "f09ce01a4467f54ddc809f27f9bc2897421a372efa7530383218460d0871acb5"
+    },
+    {
+      "path": "gogo-fpga.experience-loops.mmd",
+      "sha256": "5cbbbcd95387defaad3dd5f282728517a6f19053ca265b18fb435f666fef7eff"
+    },
+    {
+      "path": "gogo-fpga.first_session.emotion.json",
+      "sha256": "a75bd18ac3e300aec5e7f0d6220d56d083ee700b948bc589e094b72fca8b6b07"
+    },
+    {
+      "path": "gogo-fpga.first_session.emotion.mmd",
+      "sha256": "691dfbabbab885cb9583d57113ec0ebd896d5671c8740061fc000155e3b69bb2"
+    },
+    {
+      "path": "gogo-fpga.first_session.journey.mmd",
+      "sha256": "92c9ffe4a2b50387a0a8e96cf775be4df687ea5b0e2a504475ea02730586d93b"
+    },
+    {
+      "path": "gogo-fpga.first_session.sequence.puml",
+      "sha256": "a9e5ac44c96369ba4aa7ceaae2b22302b961e5d0c0eaed731644f9a12950f53a"
+    },
+    {
+      "path": "gogo-fpga.mindmap.mmd",
+      "sha256": "bfdade939c5207d5c1591981140b822f17adc5f9aeef977c00510451e7dc4763"
+    },
+    {
+      "path": "gogo-fpga.odi.csv",
+      "sha256": "318e5e5eaf486c33d267b830de8f3872c757b2fc4e61518bd403463e115ecb28"
+    },
+    {
+      "path": "gogo-fpga.stories.json",
+      "sha256": "73da367dbdcf124cec1d9f779d4f7dafd62d24ab24d4eb857ef4584766a60065"
+    },
+    {
+      "path": "gogo-fpga.wbs.puml",
+      "sha256": "871dd8592a15d301f62ac7a92211b8869d5c32c4035a7c363696f39e13338704"
+    },
+    {
+      "path": "gogo-fpga.wireframe.puml",
+      "sha256": "665a92cf8b32c30ada7469796f5134968ded8a3892f6074e11cf19695844eec9"
+    }
+  ]
+}

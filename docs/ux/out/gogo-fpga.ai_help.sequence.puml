@@ -1,0 +1,20 @@
+@startuml
+title ai_help — sequence
+actor "learner" as U
+participant "web_app" as S_0
+participant "openrouter" as S_1
+== connect_ai (onboard) ==
+U -> S_0 : ai_consent, openrouter_auth
+U -> S_1 : ai_consent, openrouter_auth
+note right of U : emotion 3/5 — pain: 何が外部へ送られるのか不安, 鍵がどこに保存されるのか不安
+== ask (use) ==
+U -> S_0 : ai_context_preview, ai_chat
+U -> S_1 : ai_context_preview, ai_chat
+note right of U : emotion 4/5
+== review_change (use) ==
+U -> S_0 : ai_diff
+note right of U : emotion 4/5 — pain: 提案が複数ファイルにまたがると全体が見えない
+== disconnect (exit) ==
+U -> S_0 : ai_disconnect
+note right of U : emotion 4/5
+@enduml

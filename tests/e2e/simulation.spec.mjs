@@ -74,6 +74,7 @@ async function openIde(page) {
   await page.goto("/");
   await expect(page.locator("#project-name")).toHaveText("blink");
   await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.locator("#right-tab-verify").click();
 }
 
 async function createProject(page, board, language = "verilog") {

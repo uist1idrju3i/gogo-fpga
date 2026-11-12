@@ -1,0 +1,34 @@
+@startuml
+title daily_work — sequence
+actor "maker" as U
+participant "web_app" as S_0
+participant "project_store" as S_1
+participant "tool_workers" as S_2
+participant "tang_nano" as S_3
+== reopen (use) ==
+U -> S_0 : project_list, save_status
+U -> S_1 : project_list, save_status
+note right of U : emotion 4/5
+== edit (use) ==
+U -> S_0 : editor, pin_table
+note right of U : emotion 4/5 — pain: ピン割り当てとコードが別の場所にある
+== build (use) ==
+U -> S_0 : build_progress, build_summary
+U -> S_2 : build_progress, build_summary
+note right of U : emotion 3/5
+== fix_errors (recover) ==
+U -> S_0 : problem_list, editor
+note right of U : emotion 2/5 — pain: ログが長く、問題の行へ移れない, 古い成果物を書き込んでしまう
+== verify (use) ==
+U -> S_0 : sim_run, waveform, formal_run
+U -> S_2 : sim_run, waveform, formal_run
+note right of U : emotion 3/5 — pain: 設定が左の列の奥にあり見つけにくい
+== write (use) ==
+U -> S_0 : write_progress, write_result
+U -> S_3 : write_progress, write_result
+note right of U : emotion 4/5
+== share (exit) ==
+U -> S_0 : zip_export
+U -> S_1 : zip_export
+note right of U : emotion 4/5
+@enduml

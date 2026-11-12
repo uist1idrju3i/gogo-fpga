@@ -1,0 +1,9 @@
+job_id,functional,emotional,social,importance,satisfaction,opportunity,served,covered_by
+first_blink,テンプレートから最初の書き込みまでを 10 分以内に終える,自分にもできたという手応え,動いたボードを人に見せられる,9,3,15.0,underserved,first_session.arrive|first_session.choose_board|first_session.first_build|first_session.first_write|first_session.start_template
+understand_errors,合成・配置配線・書き込みの失敗の原因の行と直し方を知る,行き詰まらずに次の一手がわかる安心,質問するときに状況を正確に伝えられる,9,3,15.0,underserved,ai_help.ask|daily_work.fix_errors
+ask_ai,AI に設計やエラーを相談し、変更を差分で確かめて取り込む,知らないことを気軽に聞ける心強さと、勝手に書き換えられない安心,どこを AI に頼ったかを説明できる,7,2,12.0,appropriate,ai_help.ask|ai_help.connect_ai|ai_help.disconnect|ai_help.review_change
+assign_pins,設計の信号をボードのピンに正しく割り当てる,ボードを壊さないかという不安がない,配線図と一致した設計を共有できる,8,4,12.0,appropriate,daily_work.edit|first_session.choose_board
+flash_safely,SRAM かフラッシュかを選び、書き込みの成否を確実に知る,成功したと信じてよいという確信,動かない原因を書き込みのせいにしなくて済む,8,4,12.0,appropriate,daily_work.write|first_session.connect_board|first_session.first_write
+iterate_design,編集から合成・書き込みまでを少ない操作で繰り返す,待たされずに集中が続く,作業の速さで周りに遅れない,8,4,12.0,appropriate,ai_help.review_change|daily_work.build|daily_work.edit|daily_work.write|first_session.first_build
+keep_projects,プロジェクトを失わずに保存し、ZIP で受け渡す,閉じても消えないという安心,課題や作品を他の人と交換できる,7,5,9.0,overserved,daily_work.reopen|daily_work.share
+verify_before_write,シミュレーションと形式検証で書き込む前に動作を確かめる,実機で悩む前に間違いを見つけられる余裕,検証した設計として提出できる,6,4,8.0,overserved,daily_work.verify

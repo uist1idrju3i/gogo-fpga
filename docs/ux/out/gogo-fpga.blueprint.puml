@@ -1,0 +1,42 @@
+@startuml
+title gogo-fpga — service blueprint
+|Customer|
+:first_session/arrive — touchpoints support_check;
+:first_session/choose_board — touchpoints board_select;
+:first_session/start_template — touchpoints template_open;
+:first_session/first_build — touchpoints tool_download, build_progress;
+:first_session/connect_board — touchpoints usb_permission;
+:first_session/first_write — touchpoints write_progress, write_result;
+:daily_work/reopen — touchpoints project_list, save_status;
+:daily_work/edit — touchpoints editor, pin_table;
+:daily_work/build — touchpoints build_progress, build_summary;
+:daily_work/fix_errors — touchpoints problem_list, editor;
+:daily_work/verify — touchpoints sim_run, waveform, formal_run;
+:daily_work/write — touchpoints write_progress, write_result;
+:daily_work/share — touchpoints zip_export;
+:ai_help/connect_ai — touchpoints ai_consent, openrouter_auth;
+:ai_help/ask — touchpoints ai_context_preview, ai_chat;
+:ai_help/review_change — touchpoints ai_diff;
+:ai_help/disconnect — touchpoints ai_disconnect;
+|Frontstage|
+:editor;
+:board_select;
+:build_summary;
+:problem_list;
+:waveform;
+:write_panel;
+:ai_panel;
+|Backstage|
+:yosys_ghdl;
+:nextpnr;
+:gowin_pack;
+:icarus;
+:surfer;
+:sby;
+:openfpgaloader;
+:opfs;
+|Support|
+:ci_build;
+:cloudflare_pages;
+:openrouter_api;
+@enduml

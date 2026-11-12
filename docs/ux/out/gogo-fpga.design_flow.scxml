@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" initial="editing" datamodel="python">
+  <state id="editing">
+    <transition event="build_requested" target="loading_tools" cond="tools_not_cached"/>
+    <transition event="build_requested" target="building" cond="tools_cached"/>
+    <transition event="write_requested" target="writing" cond="uploaded_fs_selected &amp;&amp; board_idcode_matches"/>
+  </state>
+  <state id="loading_tools">
+    <onentry>
+      <log label="action" expr="'show_download_progress'"/>
+    </onentry>
+    <transition event="tools_ready" target="building"/>
+    <transition event="download_failed" target="build_failed"/>
+  </state>
+  <state id="building">
+    <onentry>
+      <log label="action" expr="'show_stage_progress'"/>
+    </onentry>
+    <transition event="build_succeeded" target="built"/>
+    <transition event="build_errored" target="build_failed"/>
+    <transition event="build_cancelled" target="editing"/>
+  </state>
+  <state id="built">
+    <onentry>
+      <log label="action" expr="'show_build_summary'"/>
+    </onentry>
+    <transition event="source_edited" target="stale"/>
+    <transition event="write_requested" target="writing" cond="board_idcode_matches"/>
+  </state>
+  <state id="build_failed">
+    <onentry>
+      <log label="action" expr="'open_problem_list'"/>
+    </onentry>
+    <transition event="source_edited" target="editing"/>
+    <transition event="build_requested" target="loading_tools" cond="tools_not_cached"/>
+    <transition event="build_requested" target="building" cond="tools_cached"/>
+  </state>
+  <state id="stale">
+    <onentry>
+      <log label="action" expr="'mark_artifacts_stale'"/>
+    </onentry>
+    <transition event="write_requested" target="stale">
+      <log label="action" expr="'explain_rebuild_needed'"/>
+    </transition>
+    <transition event="build_requested" target="loading_tools" cond="tools_not_cached"/>
+    <transition event="build_requested" target="building" cond="tools_cached"/>
+  </state>
+  <state id="writing">
+    <onentry>
+      <log label="action" expr="'show_write_progress'"/>
+    </onentry>
+    <transition event="write_succeeded" target="written"/>
+    <transition event="write_errored" target="write_failed"/>
+  </state>
+  <state id="written">
+    <onentry>
+      <log label="action" expr="'show_write_result'"/>
+    </onentry>
+    <transition event="source_edited" target="stale"/>
+    <transition event="write_requested" target="writing" cond="board_idcode_matches"/>
+  </state>
+  <state id="write_failed">
+    <onentry>
+      <log label="action" expr="'show_write_hint'"/>
+    </onentry>
+    <transition event="write_requested" target="writing" cond="board_idcode_matches"/>
+  </state>
+</scxml>

@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "stories": [
+    {
+      "feedback": [
+        "ai_connected",
+        "ai_exchange",
+        "ai_failed",
+        "build_summary",
+        "download_progress",
+        "problems_open",
+        "rebuild_needed",
+        "stage_progress",
+        "stale_notice",
+        "write_hint",
+        "write_progress",
+        "write_result"
+      ],
+      "layer": "web_ui",
+      "required_stories": [
+        "auth_failed",
+        "build_failed",
+        "built",
+        "connected",
+        "default",
+        "disconnected",
+        "editing",
+        "empty-state",
+        "error",
+        "exchanging",
+        "loading",
+        "loading_tools",
+        "stale",
+        "write_failed",
+        "written"
+      ],
+      "states": [
+        "auth_failed",
+        "build_failed",
+        "built",
+        "connected",
+        "disconnected",
+        "editing",
+        "exchanging",
+        "loading_tools",
+        "stale",
+        "write_failed",
+        "written"
+      ],
+      "surface": "web_app",
+      "title": "gogo-fpga/web_app",
+      "touchpoints": [
+        "ai_chat",
+        "ai_consent",
+        "ai_context_preview",
+        "ai_diff",
+        "ai_disconnect",
+        "board_select",
+        "build_progress",
+        "build_summary",
+        "editor",
+        "formal_run",
+        "openrouter_auth",
+        "pin_table",
+        "problem_list",
+        "project_list",
+        "save_status",
+        "sim_run",
+        "support_check",
+        "template_open",
+        "tool_download",
+        "usb_permission",
+        "waveform",
+        "write_progress",
+        "write_result",
+        "zip_export"
+      ]
+    },
+    {
+      "feedback": [],
+      "layer": "web_ui",
+      "required_stories": [
+        "building",
+        "default",
+        "empty-state",
+        "error",
+        "loading"
+      ],
+      "states": [
+        "building"
+      ],
+      "surface": "tool_workers",
+      "title": "gogo-fpga/tool_workers",
+      "touchpoints": [
+        "build_progress",
+        "build_summary",
+        "formal_run",
+        "sim_run",
+        "tool_download",
+        "waveform"
+      ]
+    },
+    {
+      "feedback": [],
+      "layer": "web_ui",
+      "required_stories": [
+        "default",
+        "empty-state",
+        "error",
+        "loading"
+      ],
+      "states": [],
+      "surface": "project_store",
+      "title": "gogo-fpga/project_store",
+      "touchpoints": [
+        "project_list",
+        "save_status",
+        "zip_export"
+      ]
+    },
+    {
+      "feedback": [],
+      "layer": "hardware",
+      "required_stories": [
+        "default",
+        "empty-state",
+        "error",
+        "idle",
+        "writing"
+      ],
+      "states": [
+        "writing"
+      ],
+      "surface": "tang_nano",
+      "title": "gogo-fpga/tang_nano",
+      "touchpoints": [
+        "usb_permission",
+        "write_progress",
+        "write_result"
+      ]
+    },
+    {
+      "feedback": [],
+      "layer": "cloud_backend",
+      "required_stories": [
+        "authorizing",
+        "default",
+        "empty-state",
+        "error",
+        "idle"
+      ],
+      "states": [
+        "authorizing"
+      ],
+      "surface": "openrouter",
+      "title": "gogo-fpga/openrouter",
+      "touchpoints": [
+        "ai_chat",
+        "ai_consent",
+        "ai_context_preview",
+        "openrouter_auth"
+      ]
+    }
+  ],
+  "system": "ux-creator"
+}

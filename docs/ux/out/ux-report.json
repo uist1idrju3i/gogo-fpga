@@ -1,0 +1,448 @@
+{
+  "checks": [
+    {
+      "detail": "initial states: ['editing']",
+      "id": "statechart.design_flow.single_initial",
+      "limit": 1.0,
+      "measured": 1.0,
+      "status": "pass",
+      "subject": "design_flow"
+    },
+    {
+      "detail": "",
+      "id": "statechart.design_flow.states_defined",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "design_flow"
+    },
+    {
+      "detail": "",
+      "id": "statechart.design_flow.reachability",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "design_flow"
+    },
+    {
+      "detail": "",
+      "id": "statechart.design_flow.no_dead_end",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "design_flow"
+    },
+    {
+      "detail": "",
+      "id": "statechart.design_flow.deterministic",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "design_flow"
+    },
+    {
+      "detail": "",
+      "id": "statechart.design_flow.state_surface_declared",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "design_flow"
+    },
+    {
+      "detail": "initial states: ['disconnected']",
+      "id": "statechart.ai_connection.single_initial",
+      "limit": 1.0,
+      "measured": 1.0,
+      "status": "pass",
+      "subject": "ai_connection"
+    },
+    {
+      "detail": "",
+      "id": "statechart.ai_connection.states_defined",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "ai_connection"
+    },
+    {
+      "detail": "",
+      "id": "statechart.ai_connection.reachability",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "ai_connection"
+    },
+    {
+      "detail": "",
+      "id": "statechart.ai_connection.no_dead_end",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "ai_connection"
+    },
+    {
+      "detail": "",
+      "id": "statechart.ai_connection.deterministic",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "ai_connection"
+    },
+    {
+      "detail": "",
+      "id": "statechart.ai_connection.state_surface_declared",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "ai_connection"
+    },
+    {
+      "detail": "",
+      "id": "journey.first_session.surfaces_declared",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "first_session"
+    },
+    {
+      "detail": "",
+      "id": "journey.first_session.pain_points_recorded",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "first_session"
+    },
+    {
+      "detail": "",
+      "id": "journey.daily_work.surfaces_declared",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "daily_work"
+    },
+    {
+      "detail": "",
+      "id": "journey.daily_work.pain_points_recorded",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "daily_work"
+    },
+    {
+      "detail": "",
+      "id": "journey.ai_help.surfaces_declared",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "ai_help"
+    },
+    {
+      "detail": "",
+      "id": "journey.ai_help.pain_points_recorded",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "ai_help"
+    },
+    {
+      "detail": "onboard stages: arrive, choose_board, start_template, connect_ai",
+      "id": "journey.onboarding_present",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "journeys"
+    },
+    {
+      "detail": "",
+      "id": "jobs.three_dimensions",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "jobs"
+    },
+    {
+      "detail": "",
+      "id": "opportunity.coverage",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "jobs"
+    },
+    {
+      "detail": "",
+      "id": "opportunity.stage_links",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "jobs"
+    },
+    {
+      "detail": "",
+      "id": "feedback.surface_declared",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "feedback"
+    },
+    {
+      "detail": "",
+      "id": "feedback.trigger_known",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "feedback"
+    },
+    {
+      "detail": "",
+      "id": "feedback.latency_budget",
+      "limit": 10000.0,
+      "measured": 200.0,
+      "status": "pass",
+      "subject": "feedback"
+    },
+    {
+      "detail": "no undersized controls",
+      "id": "hig.target_size",
+      "limit": 7.8,
+      "measured": 8.0,
+      "status": "pass",
+      "subject": "controls"
+    },
+    {
+      "detail": "no low-contrast controls",
+      "id": "hig.contrast",
+      "limit": 4.5,
+      "measured": 6.55,
+      "status": "pass",
+      "subject": "controls"
+    },
+    {
+      "detail": "",
+      "id": "loop.steps_known",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "loops"
+    },
+    {
+      "detail": "",
+      "id": "loop.closes",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "loops"
+    },
+    {
+      "detail": "",
+      "id": "core_experience.non_empty",
+      "limit": null,
+      "measured": null,
+      "status": "pass",
+      "subject": "core_experience"
+    }
+  ],
+  "design": {
+    "contract_sha256": "sha256:7cc94f8d17da9378d3ce0105038fcf18530ed2d53bd659c47b77dcb6bb0c8c13",
+    "name": "gogo-fpga"
+  },
+  "elements": {
+    "jobs": 8,
+    "journeys": 3,
+    "personas": 3,
+    "stages": 17,
+    "statecharts": 2,
+    "surfaces": 5,
+    "top_opportunities": [
+      {
+        "id": "first_blink",
+        "opportunity": 15
+      },
+      {
+        "id": "understand_errors",
+        "opportunity": 15
+      },
+      {
+        "id": "ask_ai",
+        "opportunity": 12
+      },
+      {
+        "id": "assign_pins",
+        "opportunity": 12
+      },
+      {
+        "id": "flash_safely",
+        "opportunity": 12
+      }
+    ]
+  },
+  "gate": "ux-creator",
+  "imports": [],
+  "lenses": {
+    "game_design": {
+      "avg_loop_length": 4.5,
+      "feedback_by_modality": {
+        "text": 6,
+        "visual": 6
+      },
+      "feedback_count": 12,
+      "loops": 2,
+      "onboard_stages": 4,
+      "recover_stages": 1,
+      "surfaces_without_feedback": [
+        "openrouter",
+        "project_store",
+        "tang_nano",
+        "tool_workers"
+      ]
+    },
+    "innovation": {
+      "bold_blocked": [],
+      "bold_proposals": 0,
+      "by_served": {
+        "appropriate": [
+          "ask_ai",
+          "assign_pins",
+          "flash_safely",
+          "iterate_design"
+        ],
+        "overserved": [
+          "keep_projects",
+          "verify_before_write"
+        ],
+        "underserved": [
+          "first_blink",
+          "understand_errors"
+        ]
+      },
+      "core_experience": "\u30d6\u30e9\u30a6\u30b6\u30fc\u3092\u958b\u304f\u3060\u3051\u3067\u3001\u66f8\u3044\u305f\u56de\u8def\u304c\u624b\u5143\u306e Tang Nano \u3067\u52d5\u304f",
+      "coverage": {
+        "ask_ai": [
+          "ai_help.ask",
+          "ai_help.connect_ai",
+          "ai_help.disconnect",
+          "ai_help.review_change"
+        ],
+        "assign_pins": [
+          "daily_work.edit",
+          "first_session.choose_board"
+        ],
+        "first_blink": [
+          "first_session.arrive",
+          "first_session.choose_board",
+          "first_session.first_build",
+          "first_session.first_write",
+          "first_session.start_template"
+        ],
+        "flash_safely": [
+          "daily_work.write",
+          "first_session.connect_board",
+          "first_session.first_write"
+        ],
+        "iterate_design": [
+          "ai_help.review_change",
+          "daily_work.build",
+          "daily_work.edit",
+          "daily_work.write",
+          "first_session.first_build"
+        ],
+        "keep_projects": [
+          "daily_work.reopen",
+          "daily_work.share"
+        ],
+        "understand_errors": [
+          "ai_help.ask",
+          "daily_work.fix_errors"
+        ],
+        "verify_before_write": [
+          "daily_work.verify"
+        ]
+      },
+      "uncovered_underserved": []
+    },
+    "liaison": {
+      "answered": 0,
+      "by_state": {
+        "answered": 0,
+        "blocked": 0,
+        "broken": 0,
+        "circular": 0,
+        "mismatched": 0,
+        "open": 0,
+        "stale": 0
+      },
+      "by_status": {
+        "accepted": 0,
+        "deferred": 0,
+        "done": 0,
+        "in_progress": 0,
+        "needs_info": 0,
+        "rejected": 0
+      },
+      "malformed": [],
+      "mismatched": 0,
+      "open": 0,
+      "open_user_questions": 0,
+      "orphans": [],
+      "rejected_high_risk": [],
+      "requests": 0
+    },
+    "review": {
+      "contradicted": [],
+      "findings_by_severity": {
+        "info": 0,
+        "major": 0,
+        "minor": 0
+      },
+      "images_without_record": [],
+      "intake": {
+        "declared_count": 0,
+        "malformed": [],
+        "records": 0,
+        "surface_mismatch": [],
+        "undeclared": [],
+        "unobserved": [
+          "ai_chat",
+          "ai_consent",
+          "ai_context_preview",
+          "ai_diff",
+          "ai_disconnect",
+          "board_select",
+          "build_progress",
+          "build_summary",
+          "editor",
+          "formal_run",
+          "openrouter_auth",
+          "pin_table",
+          "problem_list",
+          "project_list",
+          "save_status",
+          "sim_run",
+          "support_check",
+          "template_open",
+          "tool_download",
+          "usb_permission",
+          "waveform",
+          "write_progress",
+          "write_result",
+          "zip_export"
+        ]
+      },
+      "malformed": [],
+      "reconciliation": {
+        "contradicted": 0,
+        "corroborated": 0,
+        "unverifiable": 0
+      },
+      "records": 0
+    }
+  },
+  "renders": [],
+  "schema_version": 1,
+  "summary": {
+    "fail": 0,
+    "pass": 30,
+    "unknown": 0
+  },
+  "verdict": "pass",
+  "vision_points": []
+}
