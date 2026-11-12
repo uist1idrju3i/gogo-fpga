@@ -1,6 +1,6 @@
 ---
 name: vendor-update
-description: 午後のFPGA Web Toolchain の依存（vendor/ と third_party/ の submodule、emsdk、GitHub Actions、npm、fixture 用の pip パッケージ）を追加・更新するときや、Dependabot の PR、「固定版の更新確認」で見つかった更新を確かめるときに使う。変更履歴をすべて読み、採否、ライセンス、ビルドの再現性、仮想 USB と E2E の回帰を更新前後で比べる。
+description: 午後のFPGA の依存（vendor/ と third_party/ の submodule、emsdk、GitHub Actions、npm、fixture 用の pip パッケージ）を追加・更新するときや、Dependabot の PR、「固定版の更新確認」で見つかった更新を確かめるときに使う。変更履歴をすべて読み、採否、ライセンス、ビルドの再現性、仮想 USB と E2E の回帰を更新前後で比べる。
 ---
 
 # vendor-update（依存関係の更新）

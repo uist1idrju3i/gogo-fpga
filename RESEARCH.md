@@ -1,8 +1,8 @@
-# 午後のFPGA Web Toolchain 調査記録
+# 午後のFPGA 調査記録
 
 ## 1. 目的と対象ボード
 
-本リポジトリーは、ブラウザー内で VHDL と Verilog の設計、論理合成、配置配線、ビットストリーム作成、Tang Nano への書き込みを行う Web IDE を目指します。サーバーへ設計データを送らない構成を計画しています。T0 では、午後のFPGA Web Flasher から書き込み部を移植した段階で、IDE の機能はまだありません。
+本リポジトリーは、ブラウザー内で VHDL と Verilog の設計、論理合成、配置配線、ビットストリーム作成、Tang Nano への書き込みを行う Web IDE を目指します。サーバーへ設計データを送らない構成を計画しています。T0 では旧書き込みアプリから書き込み部を移植しました。
 
 対象は Tang Nano 1K、4K、9K、20K です。FPGA の内蔵 SRAM に構成を書き込めることを、ユーザー指定の選定理由としています。ボード名、FPGA、openFPGALoader のボード名、IDCODE、書き込み先は移植元の調査記録を引き継ぎます。
 
@@ -17,9 +17,9 @@
 
 IDCODE と書き込み先は、[移植元の RESEARCH.md](https://github.com/gogo-fpga/flasher/blob/dcbeb67/RESEARCH.md) に記録された値です。nextpnr の device / family 名は Apicula の README と wiki で確認しました。C 品種では `gowin_pack -d` に device 名ではなく family 名を渡します。詳細と出典は[広域調査](docs/research/oss-survey.md)を参照してください。実機の Tang Nano では試していません。
 
-## 2. 午後のFPGA Web Flasher から引き継ぐ知見
+## 2. 旧書き込みアプリから引き継ぐ知見
 
-書き込み部は午後のFPGA Web Flasherを基礎にし、JSPI、pthread、WebUSBを使います。終了コード0でもログの `FAIL` を拒否し、仮想USBの結果を実機確認と扱いません。移植元の知見、S7の既定ビルド選定とhash照合、asyncifyのlink失敗・バイト一致未確認は、[書き込み部の移植とビルド選定](docs/research/flasher-integration.md)に原典とともに保持しました。
+書き込み部は旧書き込みアプリを基礎にし、JSPI、pthread、WebUSBを使います。終了コード0でもログの `FAIL` を拒否し、仮想USBの結果を実機確認と扱いません。移植元の知見、S7の既定ビルド選定とhash照合、asyncifyのlink失敗・バイト一致未確認は、[書き込み部の移植とビルド選定](docs/research/flasher-integration.md)に原典とともに保持しました。
 
 vendor submodule の commit は次のとおりです。pin checker がこの表と gitlink の一致を検査します。
 

@@ -1,4 +1,4 @@
--- Copyright (c) 2026, 午後のFPGA
--- SPDX-License-Identifier: GPL-2.0-or-later
+-- Copyright (c) 2026, Y.Yamashiro
+-- SPDX-License-Identifier: BSD-3-Clause
 package body Interfaces.C_Streams is
 end Interfaces.C_Streams;

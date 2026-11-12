@@ -76,9 +76,9 @@ GHDL 6.0.0 の `COPYING.md` は GPL-2.0-or-later の本文です。synth-explore
 - `patches/ghdl/vhdl-only-synthesis.patch`
 - `tests/synth/ghdl-wasm.test.mjs`
 
-`scripts/ghdl-wasm/rts/` の独自 runtime と WASI helper は clean-room 実装で、各ファイルの SPDX 表記に従い GPL-2.0-or-later で提供します。
+`scripts/ghdl-wasm/rts/` の独自 runtime と WASI helper は clean-room 実装で、BSD-3-Clause で提供します。著作権表記は `Copyright (c) 2026, Y.Yamashiro` です。
 
-`ghdl-synth.wasm` は、GPL-2.0-or-later の GHDL と独自 runtime、Apache-2.0 の synth-explorer 由来部分、GPL-3.0-or-later（GCC Runtime Library Exception 付き）の libgnat を結合します。Apache-2.0 は GPL-3.0 と両立し、GPL-2.0 だけとは両立しないため、結合した `ghdl-synth.wasm` は GPL-3.0-or-later として配布します。
+`ghdl-synth.wasm` は、GPL-2.0-or-later の GHDL、BSD-3-Clause の独自 runtime、Apache-2.0 の synth-explorer 由来部分、GPL-3.0-or-later（GCC Runtime Library Exception 付き）の libgnat を結合します。Apache-2.0 は GPL-3.0 と両立し、GPL-2.0 だけとは両立しないため、結合した `ghdl-synth.wasm` は GPL-3.0-or-later として配布します。
 
 AdaWebPack の 24.0.0 release archive にはライセンスファイルがありませんでした。BSD-3-Clause の本文は、同じ 24.0.0 upstream tag の `LICENSE.BSD3` から取得しました。
 

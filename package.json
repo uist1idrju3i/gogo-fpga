@@ -1,5 +1,6 @@
 {
-  "name": "toolchain",
+  "name": "gogo-fpga",
+  "description": "午後のFPGA",
   "license": "BSD-3-Clause",
   "private": true,
   "type": "module",

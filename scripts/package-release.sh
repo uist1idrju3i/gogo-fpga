@@ -572,7 +572,7 @@ for path in submodules:
     rows.append(f"| {labels.get(path, path.removeprefix('third_party/'))} | {pinned_version} | `{sha}` |")
 
 text = [
-    f"# 午後のFPGA Web Toolchain {version}",
+    f"# 午後のFPGA {version}",
     "",
     f"- Commit: `{commit}`",
     f"- emcc: `{build_info['emcc_version']}`",

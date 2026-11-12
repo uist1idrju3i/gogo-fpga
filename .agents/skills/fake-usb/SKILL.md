@@ -1,6 +1,6 @@
 ---
 name: fake-usb
-description: 午後のFPGA Web Toolchain の書き込み機能で使う仮想デバイス（tests/sim/fake-webusb.mjs の FT2232/MPSSE、GOWIN TAP、NOR フラッシュ）を拡張・修正するとき、仮想 USB のテストが失敗したとき、新しい操作やボードを仮想 USB で確かめるときに使う。upstream の手順に合わせ、負の対照で失敗を検出できることを確かめる。
+description: 午後のFPGA の書き込み機能で使う仮想デバイス（tests/sim/fake-webusb.mjs の FT2232/MPSSE、GOWIN TAP、NOR フラッシュ）を拡張・修正するとき、仮想 USB のテストが失敗したとき、新しい操作やボードを仮想 USB で確かめるときに使う。upstream の手順に合わせ、負の対照で失敗を検出できることを確かめる。
 ---
 
 # fake-usb（仮想デバイスの拡張）

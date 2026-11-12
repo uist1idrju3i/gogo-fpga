@@ -1,6 +1,6 @@
 # AGENTS.md
 
-このリポジトリー「午後のFPGA Web Toolchain」で作業するすべての AI エージェントと人間が守るルールです。Devin、Codex、Claude Code などを対象にします。
+このリポジトリー「午後のFPGA」で作業するすべての AI エージェントと人間が守るルールです。Devin、Codex、Claude Code などを対象にします。
 
 ## 1. main ブランチ
 
@@ -28,7 +28,7 @@
 - 対象は Sipeed Tang Nano 1K・4K・9K・20K です。FPGA の内蔵 SRAM に構成を書き込めることを選定理由とします。ボードを増やすときは、upstream の対応、IDCODE、フラッシュの構成を公式の資料とソースで確かめてから計画します。
 - HDL は VHDL と Verilog を最初から対象にします。SystemVerilog と Verilator は将来の段階です。
 - openFPGALoader、Yosys + ABC、GHDL、nextpnr-himbaechel、Apicula、NVC、Icarus Verilog、形式検証ソルバーは、upstream のソースを WASM にビルドして使います。機能を手作業で移植しません。upstream へのパッチが避けられない場合は `patches/` に置き、理由を RESEARCH.md に記録します。
-- T0 で実装しているのは書き込み部だけです。書き込み部は午後のFPGA Web Flasher から移植し、JSPI、pthread、`-fwasm-exceptions`、COOP/COEP を使います。合成・配置配線のツールでは、実験で必要性が示されない限り JSPI と pthread を使いません。
+- T0 では旧書き込みアプリから書き込み部を移植しました。書き込み部は、JSPI、pthread、`-fwasm-exceptions`、COOP/COEP を使います。合成・配置配線のツールでは、実験で必要性が示されない限り JSPI と pthread を使いません。
 - すべての自動検査は fail closed にします。必要なツールやファイルがない場合、または出力を解析できない場合は失敗として扱います。
 - `.cst` はプロジェクトのピン割り当てから生成し、手で編集しません。
 - ツールのバージョンと依存の pin は、pin checker が検査するファイルを正とします。ソースコードなどに二重の固定値を持たせません。

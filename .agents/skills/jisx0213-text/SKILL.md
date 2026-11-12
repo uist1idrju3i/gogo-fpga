@@ -1,6 +1,6 @@
 ---
 name: jisx0213-text
-description: 午後のFPGA Web Toolchain のファイルに文字を書くとき、JIS X 0213:2004 の範囲外の文字（簡体字、絵文字、特殊記号など）を避け、upstream 由来のファイルや原文の引用にだけ例外を認めるために使う。CI の JIS X 0213 検査が失敗・警告したとき、引用や upstream のファイルを追加するとき、`.github/jisx0213-allowlist.tsv` を編集するときにも使う。
+description: 午後のFPGA のファイルに文字を書くとき、JIS X 0213:2004 の範囲外の文字（簡体字、絵文字、特殊記号など）を避け、upstream 由来のファイルや原文の引用にだけ例外を認めるために使う。CI の JIS X 0213 検査が失敗・警告したとき、引用や upstream のファイルを追加するとき、`.github/jisx0213-allowlist.tsv` を編集するときにも使う。
 ---
 
 # jisx0213-text（文字の範囲と例外）

@@ -1,7 +1,7 @@
 {
   "repo_notes": [
     {
-      "content": "午後のFPGA Web Toolchain は、ブラウザー上で VHDL と Verilog の編集から FPGA への書き込みまで行う開発環境を目指します。対象は Tang Nano 1K・4K・9K・20K です。現在は T0 で、午後のFPGA Web Flasher から移植した書き込み部だけが実装されています。合成など IDE の機能はまだありません。"
+      "content": "午後のFPGA は、ブラウザー上で VHDL と Verilog の編集から FPGA への書き込みまで行う開発環境を目指します。対象は Tang Nano 1K・4K・9K・20K です。T0 では旧書き込みアプリから書き込み部を移植しました。対応状況は README.md を参照してください。"
     },
     {
       "content": "Wiki は日本語で書いてください。コード、識別子、ファイル名、コマンド、Emscripten の設定名は英語のまま記載します。README.md、RESEARCH.md、docs/ の文書も日本語です。"

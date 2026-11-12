@@ -25,7 +25,7 @@ class WebHandler(SimpleHTTPRequestHandler):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Serve the local WebUSB FPGA programmer.")
+    parser = argparse.ArgumentParser(description="午後のFPGA をローカルで配信する。")
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
 

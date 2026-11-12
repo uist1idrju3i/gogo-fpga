@@ -1,5 +1,5 @@
--- Copyright (c) 2026, 午後のFPGA
--- SPDX-License-Identifier: GPL-2.0-or-later
+-- Copyright (c) 2026, Y.Yamashiro
+-- SPDX-License-Identifier: BSD-3-Clause
 package Ada.Calendar.Time_Zones is
    type Time_Offset is range -(28 * 60) .. 28 * 60;
 
