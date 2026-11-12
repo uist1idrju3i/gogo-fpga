@@ -488,7 +488,7 @@ test("built distribution matches sources and the build-root WASM", () => {
     writeFileSync(surferIndexPath, alteredSurferIndex);
     assert.throws(
       () => assertDistributionMatchesSources(),
-      /public_html\/surfer\/index\.html differs from .*surfer\/public_html\/index\.html/,
+      /public_html\/surfer\/index\.html differs from .*surfer\/dist\/index\.html/,
     );
   } finally {
     writeFileSync(surferIndexPath, originalSurferIndex);
