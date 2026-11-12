@@ -85,7 +85,7 @@ hostはLinux `6.8.0-1061-aws`、x86_64、Intel Xeonの2 CPU、memory 8,327,749,6
 
 ## CIの起動準備の追補
 
-[Playwright E2Eの起動ログ](https://github.com/gogo-fpga/toolchain/actions/runs/41436913533/job/125275201976) では、テスト開始前のWeb資材生成が `third_party/colibri: checkout differs from pinned gitlink` で停止しました。このjobはzstdだけを取得しており、Web生成が参照するHDLライブラリーを取得していませんでした。Build jobで取得したsubmoduleは、別jobのcheckoutには引き継がれません。
+Playwright E2Eの起動ログ（旧toolchainリポジトリーの actions/runs/41436913533/job/125275201976） では、テスト開始前のWeb資材生成が `third_party/colibri: checkout differs from pinned gitlink` で停止しました。このjobはzstdだけを取得しており、Web生成が参照するHDLライブラリーを取得していませんでした。Build jobで取得したsubmoduleは、別jobのcheckoutには引き継がれません。
 
 E2Eでも固定gitlinkの `third_party/` とVexRiscvの入れ子ソースを明示的に取得するように修正しました。無条件のrecursive取得やpin検査の緩和はしません。取得順を検査する回帰テストは修正前のworkflowで失敗し、修正後はライブラリー検査24件が成功しました。これは起動準備の修正であり、ブラウザーでの形式検証や元HDLの再実行を確認した結果ではありません。
 

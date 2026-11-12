@@ -6,7 +6,7 @@ Web ブラウザーだけで VHDL と Verilog の編集、論理合成、配置�
 
 ## 開発状況
 
-T0 から T3 の編集・保存・合成・配置配線・ビットストリーム作成に加え、T4 の Verilog シミュレーションと波形表示を実装しています。合成には Yosys + ABC と GHDL、配置配線には nextpnr-himbaechel、ビットストリームの作成には Apicula を使います。書き込み部は、[書き込み部](https://github.com/gogo-fpga/flasher) から移植したものです。T5 は22候補の固定版カタログ、依存解決、選択画面、ZIPへの同梱と名前付きVHDLライブラリーに対応しています。[HDL8部品の全4ボード](docs/experiments/S14-production-hdl.md)と[CPU6候補の4K・9K・20K](docs/experiments/S14-production-cpu.md)は、代表回路のnative / WASI配置配線を各5回照合しました。CPU6候補の1Kは容量超過、FemtoRVはIcarus frontend非対応として選択を制限します。これは固定構成の仮想検証です。[昇格後の最終回帰と配布ソースの照合](docs/experiments/S14-final-regression.md)に、全60組の分類、全列CSV、警告の根拠、Git情報なしの再生成と未確認範囲を記録しています。形式検証（T6）は未対応です。
+T0 から T3 の編集・保存・合成・配置配線・ビットストリーム作成に加え、T4 の Verilog シミュレーションと波形表示を実装しています。合成には Yosys + ABC と GHDL、配置配線には nextpnr-himbaechel、ビットストリームの作成には Apicula を使います。書き込み部は、[旧書き込みアプリ](docs/research/flasher-integration.md) から移植したものです。T5 は22候補の固定版カタログ、依存解決、選択画面、ZIPへの同梱と名前付きVHDLライブラリーに対応しています。[HDL8部品の全4ボード](docs/experiments/S14-production-hdl.md)と[CPU6候補の4K・9K・20K](docs/experiments/S14-production-cpu.md)は、代表回路のnative / WASI配置配線を各5回照合しました。CPU6候補の1Kは容量超過、FemtoRVはIcarus frontend非対応として選択を制限します。これは固定構成の仮想検証です。[昇格後の最終回帰と配布ソースの照合](docs/experiments/S14-final-regression.md)に、全60組の分類、全列CSV、警告の根拠、Git情報なしの再生成と未確認範囲を記録しています。形式検証（T6）は未対応です。
 
 形式検証は、[固定ソース・依存・ライセンスの調査](docs/research/formal-sources.md)と[S15の事前基準](docs/experiments/S15-formal-verification.md)を登録しています。[Yosys SATの比較とIcarusによる反例の独立再実行](docs/research/formal-verification.md)、[GHDLのVHDL・PSL property保持](docs/experiments/S15-vhdl-formal.md)、[元のVHDLをGHDLで独立に再実行する検査](docs/experiments/S15-vhdl-native-replay.md)は限定した検査経路として実装中です。通常合成の出力は変えず、形式出力を明示した場合だけGHDLからYosysへ性質を渡します。SBY・Yices2・Z3などのソースを配布対象へ加えていますが、ブラウザーからのVHDL反例再実行、SMTソルバーのWASM実行・形式検証画面はまだ提供していません。
 
@@ -73,8 +73,8 @@ VHDL だけのプロジェクトではシミュレーションを無効にし、
 ## ビルドとテスト
 
 ```sh
-git clone https://github.com/gogo-fpga/toolchain.git
-cd toolchain
+git clone https://github.com/uist1idrju3i/gogo-fpga.git
+cd gogo-fpga
 git submodule update --init --depth 1
 git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv
 git -C vendor/emsdk fetch --depth=1 --tags origin  # build-wasm.sh に必要な emsdk のタグを取得。CI の build.yml と同じ

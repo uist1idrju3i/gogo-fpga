@@ -4,7 +4,7 @@
 -- you may not use this file except in compliance with the License.
 -- https://www.apache.org/licenses/LICENSE-2.0
 -- SPDX-License-Identifier: Apache-2.0
--- Modified by gogo-fpga/toolchain to select the VHDL standard at runtime.
+-- Modified by Y.Yamashiro to select the VHDL standard at runtime.
 --  Minimal exported entry points to drive GHDL's synthesis kernel from a
 --  WebAssembly host, bypassing the native command-line driver.
 with Types; use Types;

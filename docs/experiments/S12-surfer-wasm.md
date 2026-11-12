@@ -114,7 +114,7 @@ E2E は `DISPLAY` を unset し、`--use-angle=swiftshader --enable-unsafe-swift
 | upstream / nested submodules | 上記の固定条件と同じ3つの commit |
 | Cargo | `--locked --release --features accesskit`、`CARGO_BUILD_JOBS=2`、`CARGO_INCREMENTAL=0` |
 | cache | Cargo registry と取得済み tool archive は共有。Cargo target と配布先は2回とも別の空 directory |
-| CI | [run 41273028148](https://github.com/gogo-fpga/toolchain/actions/runs/41273028148)、[Surfer job](https://github.com/gogo-fpga/toolchain/actions/runs/41273028148/job/124749532054)、artifact `ci-surfer-wasm-41273028148`（ID `13069543578`） |
+| CI | run 41273028148（旧toolchainリポジトリーの actions/runs/41273028148）、Surfer job（旧toolchainリポジトリーの actions/runs/41273028148/job/124749532054）、artifact `ci-surfer-wasm-41273028148`（ID `13069543578`） |
 
 ビルド中は root repository の HEAD と追跡ファイルを変えませんでした。最初の試行は環境の `RUST_LOG=info` と Trunk の `--verbose` が競合し、Cargo build 前に終了コード2で停止しました。失敗ログを保存し、以後は `RUST_LOG` を外して実行しました。script の変更や版の更新はしていません。
 
@@ -123,9 +123,9 @@ E2E は `DISPLAY` を unset し、`--use-angle=swiftshader --enable-unsafe-swift
 ```sh
 env -u RUST_LOG CARGO_BUILD_JOBS=2 scripts/build-surfer.sh
 env -u RUST_LOG CARGO_BUILD_JOBS=2 SURFER_BUILD_ROOT=build/S12B-clean-b scripts/build-surfer.sh
-gh run download 41273028148 --repo gogo-fpga/toolchain \
-  --name ci-surfer-wasm-41273028148 --dir build/S12B-ci
 ```
+
+CI との比較には、旧toolchainリポジトリーの run 41273028148 の artifact `ci-surfer-wasm-41273028148` を `build/S12B-ci` に保存して使いました。旧リポジトリーの削除後は、このartifactを取得できません。
 
 比較した全ファイルの値は [S12-surfer-wasm-ci-comparison.csv](S12-surfer-wasm-ci-comparison.csv) に残します。比較では path、bytes、SHA-256 のすべてを使い、空の配布先と既存 CSV の上書きを拒否します。比較器にも、不足、余剰、同じサイズの内容変更、サイズ変更の負の対照を与え、4つとも不一致を検出することを確認しました。
 

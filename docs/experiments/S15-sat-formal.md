@@ -10,7 +10,7 @@
 
 - 条件は `tests/synth/formal-sat-cases.mjs` の 12 件である。verdict 8 件（`identity`・`broken-identity`・`depth3`・`depth4`・`depth5`・`induction`・`false-induction`・`contradictory-assumes`）と error 4 件（`zero-properties`・`wrong-clock`・`wrong-edge`・`unsupported-syntax`）からなる。監査器 `scripts/audit-sat-formal.py` は、この表とは別に書いた条件表と期待値（error は phase・終了コード・理由の文まで）を持つ。
 - 1 回分は 12 条件 × native/WASI の 24 行。A/A 2 回と正式 5 回で計 168 行になる。実行順は回の偶奇で native-first と wasm-first を入れ替える。
-- 計測 commit は `a4209427efa8511690899192c23d8a42a79cba20`（[PR #86](https://github.com/gogo-fpga/toolchain/pull/86) の merge 後の main）で、作業ツリーは清浄である。計測器は各コマンドの前後で清浄さを確かめ、使った script 7 件の SHA-256 を `plan.json` に、その複製を `snapshots/` に保存する。
+- 計測 commit は `a4209427efa8511690899192c23d8a42a79cba20`（PR #86（旧toolchainリポジトリーの pull/86） の merge 後の main）で、作業ツリーは清浄である。計測器は各コマンドの前後で清浄さを確かめ、使った script 7 件の SHA-256 を `plan.json` に、その複製を `snapshots/` に保存する。
 - host は Linux `6.8.0-1061-aws`、x64、2 CPU。Node `v24.21.0`、Icarus Verilog `13.0 (stable) (v13_0)`。Yosys は v0.70（`28ba3cb9…`）を WASI SDK 34.0 でビルドしたものである。binary の SHA-256 は[証拠概要](S15-sat-formal-evidence.json)にある。
 
 ## 事前の採否基準

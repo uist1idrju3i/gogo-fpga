@@ -107,7 +107,7 @@ LTO は S5 の Yosys と nextpnr 成果物を A1 として再利用し、S5 CSV 
 
 基準 2 は3候補すべてが速度条件とサイズ条件の両方を満たした。圧縮サイズは B の 15,253,172 bytes に対して LTO が 11.649%、Os が 13.009%、OsLTO が 25.739% 小さく、いずれも B より速いためサイズ条件も満たす。速度条件では各候補の改善幅が10%以上で、B–B2 noise の 85.245 ms を超えた。基準 3 の上限 1,864.660 s に対し、3候補の合計 build time はすべて上限内だった。基準 4 は WASI SDK 34 の標準 target feature (`bulk-memory`、`multivalue`、`mutable-globals`、`nontrapping-fptoint`、`reference-types`、`sign-ext`) を対象とし、確認した現行安定版 Chromium、Firefox、Safari でサポートされる。基準 5 の最大 peak RSS は14 GiB未満で、各候補の A/A と連続5回の Node test も通過した。
 
-全候補が安定性条件を含む基準を満たした。凍結した選定規則を適用すると、正式 Chromium 計測で最も速い **OsLTO** を選ぶ。これは実験上の選定結果であり、既定 build script はこの変更では変更しない。既定への反映は [PR #24](https://github.com/gogo-fpga/toolchain/pull/24) で行った。
+全候補が安定性条件を含む基準を満たした。凍結した選定規則を適用すると、正式 Chromium 計測で最も速い **OsLTO** を選ぶ。これは実験上の選定結果であり、既定 build script はこの変更では変更しない。既定への反映は PR #24（旧toolchainリポジトリーの pull/24） で行った。
 
 ### OsLTO Node 行列の時間
 

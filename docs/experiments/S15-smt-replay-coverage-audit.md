@@ -10,8 +10,8 @@
 
 | 子工程 | 提出 | 証拠 |
 |---|---|---|
-| タスク56（元Verilog） | [PR #77](https://github.com/gogo-fpga/toolchain/pull/77) merge済み | `replay.csv` 1,484行・SHA-256 `b1352a19…ea484`、ZIP 69,870,106 bytes・96,592 files・`256fbabf…fce1` |
-| タスク54（元VHDL/PSL・下位化Verilog） | [PR #78](https://github.com/gogo-fpga/toolchain/pull/78)・[#79](https://github.com/gogo-fpga/toolchain/pull/79)・[#80](https://github.com/gogo-fpga/toolchain/pull/80) merge済み | `replay.csv` 1,785行・SHA-256 `62177dd2…fcbe`、ZIP 75,724,487 bytes・74,316 files・`b416a56d…541c` |
+| タスク56（元Verilog） | PR #77（旧toolchainリポジトリーの pull/77） merge済み | `replay.csv` 1,484行・SHA-256 `b1352a19…ea484`、ZIP 69,870,106 bytes・96,592 files・`256fbabf…fce1` |
+| タスク54（元VHDL/PSL・下位化Verilog） | PR #78（旧toolchainリポジトリーの pull/78）・#79（旧toolchainリポジトリーの pull/79）・#80（旧toolchainリポジトリーの pull/80） merge済み | `replay.csv` 1,785行・SHA-256 `62177dd2…fcbe`、ZIP 75,724,487 bytes・74,316 files・`b416a56d…541c` |
 
 照合は、証拠ZIPの bytes・SHA-256 と生CSVの行数・SHA-256 が、各記録（[Verilog版](S15-smt-verilog-replay.md)・[VHDL版](S15-smt-vhdl-replay.md)）の記載と一致することを確認したものです。
 

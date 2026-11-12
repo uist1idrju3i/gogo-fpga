@@ -2,9 +2,9 @@
 
 [調査の索引](../../RESEARCH.md#7-分割した調査)へ戻る。
 
-書き込み部から引き継いだ知見と、その後のS7・asyncify検証をまとめます。測定当時の版、失敗、未確認の範囲を残しています。コマンドとファイルのパスは、リポジトリーのルートを基準にします。
+旧書き込みアプリから引き継いだ知見と、その後のS7・asyncify検証をまとめます。測定当時の版、失敗、未確認の範囲を残しています。コマンドとファイルのパスは、リポジトリーのルートを基準にします。
 
-書き込み部は、[書き込み部](https://github.com/gogo-fpga/flasher) のコード、ビルド、テストを基礎にします。移植元の調査記録は[RESEARCH.md](https://github.com/gogo-fpga/flasher/blob/dcbeb67/RESEARCH.md)です。実験記録はコピーせず、[S0](https://github.com/gogo-fpga/flasher/blob/dcbeb67/docs/experiments/S0-wasm-build.md)、[S1a](https://github.com/gogo-fpga/flasher/blob/dcbeb67/docs/experiments/S1a-program-sim.md)、[S1b](https://github.com/gogo-fpga/flasher/blob/dcbeb67/docs/experiments/S1b-option-matrix.md)、[S2](https://github.com/gogo-fpga/flasher/blob/dcbeb67/docs/experiments/S2-ci-sim-environment.md)、[S3](https://github.com/gogo-fpga/flasher/blob/dcbeb67/docs/experiments/S3-ci-speed.md)を参照してください。
+書き込み部は、旧書き込みアプリのコード、ビルド、テストを基礎にします。移植元の調査記録は[初期調査記録](flasher-history.md)です。統合した実験記録の[S0](../experiments/S0-wasm-build.md)、[S1a](../experiments/S1a-program-sim.md)、[S1b](../experiments/S1b-option-matrix.md)、[S2](../experiments/S2-ci-sim-environment.md)、[S3](../experiments/S3-ci-speed.md)を参照してください。
 
 - openFPGALoader v1.2.0 と libusb、libftdi、zlib を Emscripten 6.0.13 でビルドしています。
 - JSPI と `-fwasm-exceptions` を組み合わせる構成で書き込み部を動かしています。libusb の WebUSB バックエンドは pthread と共有メモリーを必要とし、配信には COOP/COEP ヘッダーを使います。

@@ -4,7 +4,7 @@
 
 ## 目的と先に定めた基準
 
-[S14の正式反復](S14-production-cpu.md)は手元の製品用バイナリーで一致しました。その後、[PR 47](https://github.com/gogo-fpga/toolchain/pull/47)と[PR 48](https://github.com/gogo-fpga/toolchain/pull/48)の環境では、SERV / Tang Nano 20Kの配置配線JSONに差が出ました。元のCIのバイナリーと入力で差を再現し、比較条件を緩めずに原因を切り分けます。以前の成功を取り消したり、別の環境の成功へ読み替えたりしません。
+[S14の正式反復](S14-production-cpu.md)は手元の製品用バイナリーで一致しました。その後、PR 47（旧toolchainリポジトリーの pull/47）とPR 48（旧toolchainリポジトリーの pull/48）の環境では、SERV / Tang Nano 20Kの配置配線JSONに差が出ました。元のCIのバイナリーと入力で差を再現し、比較条件を緩めずに原因を切り分けます。以前の成功を取り消したり、別の環境の成功へ読み替えたりしません。
 
 基準commitは `571da8ac6961a4cc4bb3d990182d3eac07a085d3` です。製品用設定の変更前に、Eigenのベクトル化を無効にしても残るFMAの丸め差を仮説として定めました。FMA命令があることだけでは原因としません。入力、seed、chipdb、ソース、他のobjectを固定し、heap placerの演算の縮約だけを切り替える対照を使います。
 
@@ -14,7 +14,7 @@
 
 ## 固定条件とツール
 
-- nextpnrは `62e659ed6748e9f60b2a4aa25dd4fe79a9605881` です。[元のCI実行](https://github.com/gogo-fpga/toolchain/actions/runs/41352383006)のnative / WASIの成果物とbuild-infoを保存して使用しました。
+- nextpnrは `62e659ed6748e9f60b2a4aa25dd4fe79a9605881` です。元のCI実行（旧toolchainリポジトリーの actions/runs/41352383006）のnative / WASIの成果物とbuild-infoを保存して使用しました。
 - nativeのELFにある `.comment` は `GCC: (Ubuntu 15.2.0-16ubuntu1) 15.2.0` です。対照も同じコンパイラーを隔離環境で使いました。CPUのFMAが使える `-march=x86-64-v3`、`-O3`、LTO、元のリンクobjectを固定しました。
 - 同じ `placer_heap.cc` にパッチ0002を適用したSHA-256は `1a088adcbbbe523dc919034e48b7aad8fd29e0544bcfdaff55be6e074cd475db` です。両対照とも `EIGEN_DONT_VECTORIZE` を維持します。
 - 入力netlistは `fb3130cc993ea5899f184d9ece04e23fbe521cc3c19b1e096f0cf6d6370e1b60`、seedは `73421`、周波数は12 MHzです。制約は保存済みプロジェクトから生成したものを再利用し、手で編集していません。
