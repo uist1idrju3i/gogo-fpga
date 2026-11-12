@@ -18,13 +18,10 @@
 
 ## Cloudflare Pages: 記録と未確認の範囲
 
-旧toolchainの最終treeと本リポジトリーのworkflows、scripts、package設定、文書を調べた範囲では、Pagesへのdeploy job、Wrangler設定、Wrangler依存、Pages project名や `pages.dev` のURLはありません。build workflowはWeb一式をActions artifactとして保存し、release workflowは配布zipとsource archiveを作成します。これらをCloudflareへのデプロイとは扱いません。
+M1統合時点で旧toolchainの最終treeと本リポジトリーのworkflows、scripts、package設定、文書を調べた範囲では、Pagesへのdeploy job、Wrangler設定、Wrangler依存、Pages project名や `pages.dev` のURLはありませんでした。build workflowはWeb一式をActions artifactとして保存し、release workflowは配布zipとsource archiveを作成します。これらをCloudflareへのデプロイとは扱いません。
 
 [配信調査](browser-build-and-delivery.md)は、Cloudflare Pagesを目標とし、実機確認後に公開すると記載しています。同文書には「デプロイは行っていません」とあります。これは文書上の状態です。Cloudflareの管理画面・APIやPagesのGit連携設定は確認していないため、手動uploadや外部のGit連携が存在しなかったとは断定できません。GitHub Pagesの設定とは別です。
 
-このリポジトリーから公開するには、まず人間による実機確認と公開の承認が必要です。その後、管理者がCloudflare側の既存project・Git連携の有無を確認し、次のいずれかを選ぶ必要があります。
+現在は、mainの全build成功runの検証済み成果物からpages宛ての承認PRを作り、人間の実機確認とマージ後にGit連携で本番へ配信する方式を採ります。Pages側では再ビルドせず、build commandは空欄、output directoryは`public_html`です。[Pages公開手順](pages-delivery.md)に初期化、preview、Actionsとrulesetの管理者設定をまとめました。
 
-- Git連携: `uist1idrju3i/gogo-fpga` と対象branchを接続し、root directory、build command、output directory `public_html/` を設定します。`scripts/build-web.sh` は既存のWASM成果物を必要とするため、このコマンドだけを指定してもclean環境ではビルドできません。固定したsubmodule、npm依存、各WASM toolchainとビルド、または検証済み成果物の取得手順が必要です。Pagesの実行時間・メモリー上限に収まるかは未確認です。
-- CIまたは手動upload: CIで検査した `public_html/` を配布対象にします。CIで行う場合はproject/accountと限定した権限の認証情報、deploy command、branch・承認の制御を別途用意します。現行workflowには実装していません。
-
-いずれも `public_html/_headers` のCOOP/COEPとSurferの経路、WASMのMIME、HTTPS、1ファイル25 MiB未満・ファイル数の制限を公開先で確認します。圧縮済み資材はブラウザー内で展開するため、そのbytesが変わらず届くことも必要です。この統合作業ではdeployやCloudflare設定の変更を行っていません。
+公開先では`public_html/_headers`のCOOP/COEPとSurferの経路、WASMのMIME、HTTPS、1ファイル25 MiB未満・ファイル数の制限を確認します。圧縮済み資材はブラウザー内で展開するため、そのbytesが変わらず届くことも必要です。この変更ではdeployやCloudflare設定の変更を行っていません。

@@ -21,7 +21,7 @@
 ## 3. 対応範囲
 
 - 作るのは Web 版だけです。CLI やネイティブのバイナリーは作りません。
-- 配信先は Cloudflare Pages です。公開は、人間が実機の Tang Nano で動作を確かめてから行います。エージェントはデプロイせず、Cloudflare の設定も変えません。
+- 配信先は Cloudflare Pages です。mainへのpushの全build検査が成功したら、CIが検証済み成果物をpagesブランチへ反映する承認PRを作ります。人間がpreview URLで実機の Tang Nano を確認し、そのPRをマージして本番公開を承認します。エージェントは公開準備とPR作成までを行い、PRのマージやCloudflareの設定変更は行いません。設定と初期化の手順は[Pages公開手順](docs/research/pages-delivery.md)に従います。
 - GitHub Pages は応答ヘッダー（COOP/COEP）を設定できないため使いません。
 - 配信のヘッダーは `web/_headers` に書き、`public_html/serve.py` と同じにします。1 ファイルは 25 MiB 未満にします（ビルドで検査します）。
 - CI の成果物と Release の zip でも配布します。

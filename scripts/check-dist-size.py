@@ -6,12 +6,20 @@ from pathlib import Path
 
 
 MAX_FILE_BYTES = 25 * 1024 * 1024
+MAX_FILES = 20_000
 
 
 def check_dist(directory: Path) -> None:
-    if not directory.is_dir():
+    if directory.is_symlink() or not directory.is_dir():
         raise RuntimeError(f"Distribution directory is missing: {directory}")
+    files = 0
     for path in sorted(directory.rglob("*")):
+        if path.is_symlink() or not (path.is_dir() or path.is_file()):
+            raise RuntimeError(f"Distribution contains a non-regular entry: {path}")
+        if path.is_file():
+            files += 1
+            if files >= MAX_FILES:
+                raise RuntimeError(f"Distribution must contain fewer than {MAX_FILES} files")
         if path.is_file() and path.stat().st_size >= MAX_FILE_BYTES:
             relative = path.relative_to(directory).as_posix()
             raise RuntimeError(

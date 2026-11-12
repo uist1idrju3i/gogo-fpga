@@ -173,6 +173,7 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 
 | 文書 | 内容 |
 |---|---|
+| [Pages公開の承認と配信](docs/research/pages-delivery.md) | mainの成功runの成果物をpagesへ渡す承認PR、previewでの実機確認、管理者のGit連携・ruleset設定 |
 | [依存の版の検出と負の対照](docs/research/dependency-version-detection.md) | GHDLの公開安定タグの選択、Rust channel TOMLの構造化読取り、欠落と不正入力の扱い |
 | [書き込み部の移植とビルド選定](docs/research/flasher-integration.md) | 移植元の原典、JSPIとWebUSB、S7の選定とhash照合、asyncifyの失敗と未確認範囲 |
 | [GHDL WASM の調査と合成の検証](docs/research/ghdl-wasm.md) | Ada API、VHDL の合成、最適化と配布・ライセンスの記録 |

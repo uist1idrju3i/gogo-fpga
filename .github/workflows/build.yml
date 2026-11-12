@@ -2,6 +2,7 @@ name: build
 
 on:
   pull_request:
+    branches-ignore: [pages, 'pages-update/**']
   push:
     branches: [main]
   schedule:
@@ -251,6 +252,9 @@ jobs:
       - name: Web 単体テスト
         run: node --test tests/web/*.test.mjs
 
+      - name: Pages公開準備の回帰テスト
+        run: python3 -m unittest discover -s tests/check-pages-publish
+
       - name: 成果物の SHA-256 を記録
         if: always()
         run: |
@@ -286,6 +290,7 @@ jobs:
         with:
           name: gogo-fpga-web-${{ github.sha }}
           path: public_html/
+          if-no-files-found: error
           retention-days: 30
 
       - name: Summarize step timings

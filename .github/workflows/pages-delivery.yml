@@ -1,0 +1,43 @@
+name: Pages公開の承認依頼
+
+on:
+  # mainのpushをAPIでも照合し、artifactは実行せずbytesとして検証する。
+  workflow_run: # zizmor: ignore[dangerous-triggers]
+    workflows: [build]
+    types: [completed]
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: pages-delivery
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+    permissions:
+      actions: read
+      contents: write
+      pull-requests: write
+    steps:
+      - name: mainの公開手順だけを取得
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: 検証済みWeb成果物から承認PRを作成
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          python3 scripts/publish-pages.py \
+            --repository "$GITHUB_REPOSITORY" --run-id "$SOURCE_RUN_ID" \
+            --git-repo "$RUNNER_TEMP/pages-git"
