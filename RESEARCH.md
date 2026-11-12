@@ -182,7 +182,7 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 | [書き込み部の初期調査記録](docs/research/flasher-history.md) | 旧書き込みアプリの最終版におけるIDCODE・ビルド・仮想USBの記録 |
 | [ブラウザー内ビルドと静的配信の調査](docs/research/browser-build-and-delivery.md) | S4、圧縮資材の復号、配信量と配信先の比較 |
 | [OSS の FPGA 開発環境と HDL ライブラリーの広域調査](docs/research/oss-survey.md) | ブラウザーで動く HDL ツールの先行例、HDL のツール、形式検証のソルバー、HDL ライブラリーと CPU コア（2026-10-26） |
-| [エディターと AI 機能の調査](docs/research/editor-and-ai.md) | エディターの候補（CodeMirror 6、Monaco Editor、Ace など）の比較、AI 機能の接続方式（OpenRouter OAuth PKCE など）との相性（2026-10-26） |
+| [エディターと AI 機能の調査](docs/research/editor-and-ai.md) | エディターの比較、A1 の OpenRouter OAuth PKCE 接続と保存設定、未実装の AI 機能の調査 |
 | [Actions.lock の調査結果と導入の採否](docs/research/actions-lock.md) | 現行 CI、保護範囲、既存検査との関係、運用負担と再検討条件（2026-11-01） |
 | [文書を意味単位で分割する方針](docs/research/document-structure.md) | 目的・読者による分割、サイズの目安、例外、旧リンクと証拠の保持 |
 | [HDL ライブラリーと CPU コアの調査](docs/research/hdl-libraries.md) | T5 の22候補、ライセンスの原典、対応範囲、固定版と更新監視（2026-11-01） |

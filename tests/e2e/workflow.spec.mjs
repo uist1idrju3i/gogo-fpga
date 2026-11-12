@@ -144,7 +144,7 @@ test("editing during the first build cancels it rather than exposing the old sna
   await expect(page.locator("#fs-source option[value^='build/']")).toHaveCount(0);
 });
 
-test("right tabs contain verification settings, keyboard navigation and a local-only AI placeholder", async ({ page }) => {
+test("right tabs contain verification settings, keyboard navigation and idle AI connection settings", async ({ page }) => {
   const external = [];
   page.on("request", (request) => { if (!request.url().startsWith("http://127.0.0.1:") && /^https?:/.test(request.url())) external.push(request.url()); });
   await openProject(page);
@@ -166,7 +166,8 @@ test("right tabs contain verification settings, keyboard navigation and a local-
   await page.locator("#right-tab-verify").focus();
   await page.keyboard.press("ArrowRight");
   await expect(page.locator("#right-tab-ai")).toBeFocused();
-  await expect(page.locator("#right-panel-ai")).toContainText("外部への通信やデータの送信は行いません");
+  await expect(page.locator("#right-panel-ai")).toContainText("設計データは送信しません");
+  await expect(page.locator("#ai-connect")).toBeVisible();
   expect(external).toEqual([]);
   await page.setViewportSize({ width: 390, height: 900 });
   await page.locator("#toggle-board-pane").click();

@@ -38,8 +38,9 @@ async function openSurfer(page, vcd) {
   await frame.waitForFunction(() => typeof window.register_message_listener === "function");
   await page.evaluate((contents) => {
     const iframe = document.querySelector("#surfer-frame");
-    const url = URL.createObjectURL(new Blob([contents], { type: "text/plain" }));
-    iframe.contentWindow.postMessage({ command: "LoadUrl", url }, window.location.origin);
+    const bytes = Array.from(new TextEncoder().encode(contents));
+    iframe.contentWindow.postMessage({ command: "InjectMessage",
+      message: JSON.stringify({ LoadFromData: [bytes, "Clear"] }) }, window.location.origin);
   }, vcd);
   return { frame, messages, externalRequests };
 }
@@ -67,18 +68,20 @@ async function addScope(frame, scopeName) {
   }, scopeName);
 }
 
-test("loads a VCD from a same-origin blob URL and exposes logic.clk", async ({ page }) => {
+test("loads VCD bytes without a blob fetch and exposes logic.clk", async ({ page }) => {
   const { frame, messages, externalRequests } = await openSurfer(page, fixture);
-  await expect.poll(() => messages.some((message) => message.includes("LoadWaveformFileFromUrl"))).toBe(true);
+  await expect.poll(() => messages.some((message) => message.includes("LoadFromData"))).toBe(true);
   await expect.poll(() => wavesLoaded(frame), { timeout: 5000 }).toBe(true);
   await addScope(frame, "logic");
   await expect.poll(() => indexOfName(frame, "logic.clk"), { timeout: 5000 }).toBeGreaterThanOrEqual(0);
   expect(messages.some((message) => message.includes("Failed to parse wave file"))).toBe(false);
+  expect(messages.some((message) => message.includes("Content Security Policy"))).toBe(false);
   expect(externalRequests).toEqual([]);
 });
 
-test("reports a parse error for a corrupt VCD", async ({ page }) => {
-  const { frame, messages, externalRequests } = await openSurfer(page, "not a VCD waveform");
+for (const [kind, contents] of [["corrupt", "not a VCD waveform"], ["empty", ""]]) {
+test(`reports a parse error for a ${kind} VCD`, async ({ page }) => {
+  const { frame, messages, externalRequests } = await openSurfer(page, contents);
   await expect.poll(
     () => messages.some((message) => message.includes("Failed to parse wave file")),
     { timeout: 5000 },
@@ -90,6 +93,7 @@ test("reports a parse error for a corrupt VCD", async ({ page }) => {
   } while (Date.now() < deadline);
   expect(externalRequests).toEqual([]);
 });
+}
 
 test("ships Surfer without Service Worker registration", async () => {
   const dist = resolve(root, "public_html/surfer");

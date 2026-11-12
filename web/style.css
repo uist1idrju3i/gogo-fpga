@@ -1218,6 +1218,10 @@ button.secondary:not(.danger):hover:not(:disabled),
 .board-pane .simulation-settings { margin-top: 1rem; }
 #simulation-files label, #formal-files label { display: flex; align-items: center; gap: 0.4rem; overflow-wrap: anywhere; }
 #simulation-files input, #formal-files input { flex: 0 0 18px; width: 18px; height: 18px; min-height: 18px; padding: 0; margin: 0; }
+.ai-persist { display: flex; align-items: center; gap: 0.4rem; margin: 0.75rem 0; }
+.ai-persist input { flex: 0 0 18px; width: 18px; height: 18px; min-height: 18px; padding: 0; margin: 0; }
+#ai-auth-error { color: #b42318; }
+@media (prefers-color-scheme: dark) { #ai-auth-error { color: #fda29b; } }
 #writer-secondary-action { margin: 0.5rem 0; }
 .welcome-card, .build-summary { margin: 0.6rem; padding: 0.75rem; border: 1px solid #98a2b3; border-radius: 0.5rem; background: #f8faff; color: #344054; }
 .welcome-card h2, .build-summary h2 { margin: 0 0 0.5rem; font-size: 1rem; }

@@ -408,7 +408,8 @@ test("built distribution matches sources and the build-root WASM", () => {
     "/*\n" +
       "  Cross-Origin-Opener-Policy: same-origin\n" +
       "  Cross-Origin-Embedder-Policy: require-corp\n" +
-      "  Cross-Origin-Resource-Policy: same-origin\n",
+      "  Cross-Origin-Resource-Policy: same-origin\n" +
+      "  Content-Security-Policy: connect-src 'self' https://openrouter.ai; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'self'\n",
   );
 
   const packRoot = resolve(repoRoot, "public_html/pack");

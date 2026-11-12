@@ -64,7 +64,6 @@ export function initializeWorkspaceUI(boards) {
     panels.get("verify").append(document.querySelector(`#${id}`).closest(".synthesis-control"));
   }
   for (const section of files.querySelectorAll(".simulation-settings")) panels.get("verify").append(section);
-  panels.get("ai").innerHTML = "<h3>AI に相談する</h3><p>今後の対応を予定しています。このタブから外部への通信やデータの送信は行いません。</p>";
   files.append(document.querySelector("#licenses"));
   selectTab("board");
 
@@ -177,5 +176,13 @@ export function initializeWorkspaceUI(boards) {
       if (led.disabled) led.checked = false;
     },
     selectTab,
+    showTab(name) {
+      selectTab(name);
+      if (media.matches) {
+        pane.dataset.open = "true";
+        document.querySelector("#toggle-board-pane").setAttribute("aria-expanded", "true");
+        syncSheets();
+      }
+    },
   };
 }
