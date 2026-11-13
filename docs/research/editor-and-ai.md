@@ -85,6 +85,8 @@ Blob URL は波形のダウンロードだけに使います。
 実装は `web/lib/openrouter-auth.mjs` と `web/lib/openrouter-ui.mjs`、
 検査は `tests/web/openrouter-auth.test.mjs` と `tests/e2e/openrouter-auth.spec.mjs` にあります。
 RFC 7636 Appendix B のベクトル、拒否・期限切れ・応答不正、保存の選択と削除、外部通信の遮断を検査します。
+S256の正しい組はverifier `dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk` とchallenge `E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM` です。当初の指定値との差をWeb CryptoとOpenSSLで独立に確かめ、検査の期待値を[RFC 7636 Appendix B](https://www.rfc-editor.org/rfc/rfc7636#appendix-B)に合わせて訂正しました。
+Cloudflare Pagesでは複数の経路規則に一致したCSPも同時に効くため、Surferだけの例外ではなく、全経路を `frame-ancestors 'self'` にそろえました。`connect-src 'self' https://openrouter.ai` は変えていません。
 OpenRouter の実際のアカウントでのログインは、本リポジトリでは試していません。
 
 ### A2: 相談・エラー説明・変更提案
@@ -100,6 +102,18 @@ AI タブでモデル、相談文、送るファイル・直前のツール別�
 各ファイルの unified diff を確認し、「この変更を適用」で適用対象に選びます。「却下」ではファイルを変更しません。「選んだ変更をまとめて適用」が選択を確定し、既存の `store.save` を1回呼び、設計の変更を1回通知します。成果物は古い状態になります。合成・検証・書き込み・保存中は適用できず、送信時の SHA-256 と現在の内容が違う場合も拒否します。別のプロジェクトへの適用も拒否します。「元に戻す」は直前の AI 適用だけを1回の保存で戻し、新規ファイルは削除します。適用後にそのファイルを編集した場合は上書きせずに拒否します。
 
 送信本文は最大2 MiBです。応答や差分の計算量にも上限を設け、差分を計算できない提案は適用できません。`openrouter-chat.mjs`、`ai-proposals.mjs`、`ai-chat-ui.mjs` と対応する単体・画面テストが実装と根拠です。[UX契約](../ux/README.md)の `ai_chat` を固定イメージで生成し、状態・event・guard の照合テストを加えました。実際の OpenRouter のアカウントでのログイン、課金、モデルからの応答と、実機の Tang Nano は、本リポジトリでは試していません。画面テストは OpenRouter の応答を模擬します。
+
+#### OpenRouterの逐次受信と提案形式
+
+初期モデルは `openrouter/auto` で、利用者が変更できます。[Chat Completionsのstreaming](https://openrouter.ai/docs/api-reference/streaming)を使い、`choices[0].delta.content` を連結します。keep-aliveの `:` コメントと内容を持たない行は表示せず、CRLF、通信chunkの途中で分かれた行やUTF-8文字を保持して処理します。HTTP失敗、providerのerror、正常な `[DONE]` のない終了、中断は正常完了と区別します。[アプリ帰属のヘッダー](https://openrouter.ai/docs/app-attribution)は本文の確認時にも表示し、HTTP-Refererを現在のorigin、X-OpenRouter-Titleを製品名にします。これらは利用者の鍵を第三者へ転送する設定ではありません。
+
+提案はunified diffの適用ではなく、次の名前付きコードフェンス内のJSONによる全文置換です。差分はこの全文と送信時の内容から表示用に生成します。
+
+```gogo-fpga-changes
+{"changes":[{"path":"src/top.v","content":"module top; endmodule\n","reason":"変更の理由"}]}
+```
+
+上記の上限・パス検査を全提案に適用し、採用したファイルだけを一括保存します。追加行・削除行・hunkに背景色を付けても `+` と `-` は残し、長い行は折り返さず横にスクロールします。OpenRouterの接続操作を相談より先に置き、未接続なら「接続すると使えます」と表示します。狭い画面の適用ボタンは、下部barのborder-boxの高さに合わせたsheetの余白で隠れないようにします。受信と失敗の検査は `tests/web/openrouter-chat.test.mjs`、画面と適用の検査は `tests/e2e/ai-chat.spec.mjs` にあります。教師モードと行内補完はA2に含めません。
 
 #### 差分の依存と採否
 

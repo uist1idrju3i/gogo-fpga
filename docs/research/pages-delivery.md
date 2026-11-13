@@ -34,7 +34,36 @@ pages用rulesetはPR経由の更新と少なくとも1人の人間による承�
 
 初回のorphan作成もrulesetで拒否される構成では、管理者が同じ承認待ちの初期branchを用意してから保護を適用します。保護のためにCIへ恒常的なbypassを付けたり、初回だけ実機未確認のアプリを本番に置いたりしません。Cloudflareを接続する前に初期branchと保護を準備することもできます。
 
-この変更ではGitHubやCloudflareの設定、実際のpreview・本番の配信を確認していません。PR作成が403で拒否された場合は上記のActions設定を管理者が確認します。認証情報や保護規則を回避せず、失敗を解消してから再実行します。artifactは30日保持され、期限切れは失敗になります。
+導入時にはGitHubやCloudflareの設定、実際のpreview・本番の配信を確認していませんでした。後続の配信確認は下節に分けます。PR作成が403で拒否された場合は上記のActions設定を管理者が確認します。認証情報や保護規則を回避せず、失敗を解消してから再実行します。artifactは30日保持され、期限切れは失敗になります。
+
+### 推奨するGitHub設定と確認の限界
+
+以下は管理者への推奨であり、設定済みと確認した記録ではありません。
+
+- mainのrequired checksには `check`、`lint`、`zizmor`、`Build`、`Playwright E2E`、`Simulation shard coverage`、`Pyodide gowin_pack (hdl)`、`Pyodide gowin_pack (cpu)` を指定し、上流の合成・配置配線・比較jobも含めて保護対象を選びます。依存jobの失敗によるskipを成功と取り違えないようにします。
+- マージ方式はsquashだけにし、Actionsの既定権限はread-onlyにします。公開準備だけに `contents: write` と `pull-requests: write` を明示し、PR作成の許可を有効にします。
+- Releaseの `v*` tag作成をrulesetで制限するなら、作成用の規則に限ってGitHub Actionsのbypassを検討します。tag更新・削除の禁止は別に保ち、mainやpagesの保護にはbypassを与えません。
+
+`GITHUB_TOKEN` によるpushやPR作成は、通常は別のActions workflowを起動しません（[GitHubの説明](https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-when-your-workflow-runs/triggering-a-workflow)）。承認PRに通常のPR検査が付かないことを、成果物の検査を省いてよい理由にはしません。元main runの全build成功とartifact検証を公開準備側で要求します。
+
+通常の開発PRに現れるCloudflare Pages checkは、所有者が管理するGit連携の設定です。main向けCIの推奨必須項目には含めません。previewを配信する承認PRで必要なcheckと、通常の開発PRのcheckは区別します。
+
+## Pagesの設定判断と配信確認
+
+build watch pathsのincludeは `*` のままにします。配信対象をpages系branchだけに絞っているため、さらにパスを狭める利点は小さく、rootの設定変更や下位の生成資材の更新を見落とすおそれがあります。root directoryはリポジトリーroot、output directoryだけを `public_html` にします。両方に `public_html` を指定して二重のパスにしません。
+
+[PR #8](https://github.com/uist1idrju3i/gogo-fpga/pull/8)のpreviewが404になった事象を確認しました。production branchの変更時にcustom preview対象の `pages-update/*` が外れた可能性がありますが、管理画面の設定履歴を確認していないため原因は未確定です。後の[PR #10](https://github.com/uist1idrju3i/gogo-fpga/pull/10)ではpreviewの配信を確認しました。404だけから成果物の破損やbranch controlの変更を断定しません。
+
+2026-11-12 23:53 UTCに、[fpga.moe](https://fpga.moe/)と[gogo-fpga.pages.dev](https://gogo-fpga.pages.dev/)をheadless Chromiumで読み込み、両方で次を確認しました。公開設定の管理画面を調べた結果や、実機での書き込み成功ではありません。
+
+| 対象 | 両originでの結果 |
+| --- | --- |
+| browser機能 | `crossOriginIsolated === true`、`SharedArrayBuffer` と `WebAssembly.Suspending` はfunction、`navigator.usb` はobject |
+| `/`、`/surfer/surfer_bg.wasm`、`/synth/yosys.wasm.zst` | HTTP 200、COOP `same-origin`、COEP `require-corp`、CORP `same-origin` |
+| Surfer WASM | `Content-Type: application/wasm` |
+| `.zst` | `Content-Type: application/octet-stream`、`Content-Encoding` なし。ブラウザー内で展開する圧縮済みbytesとして配信 |
+
+再確認はChromiumの `page.evaluate` で上記の機能を読み、同じURLにHEADを送ってヘッダーを調べます。USB APIが存在することは、機器へのアクセスや書き込みを確認したことにはなりません。公開側が今後のmainと常に同じ内容であることも、この確認では保証しません。
 
 ## ローカルでの確認
 

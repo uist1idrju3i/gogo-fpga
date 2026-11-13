@@ -4,6 +4,36 @@
 
 製品名は「午後のFPGA」、正規リポジトリーは [uist1idrju3i/gogo-fpga](https://github.com/uist1idrju3i/gogo-fpga) です。npm の識別子と配布archive名には `gogo-fpga` を使います。書き込みは製品内の機能として扱います。
 
+## M0: 履歴とファイルの保存
+
+統合時の比較対象は旧toolchainの `544f5cf` と旧flasherの `dcbeb67` です。[toolchainの統合commit](https://github.com/uist1idrju3i/gogo-fpga/commit/30cf64b)と[flasherの統合commit](https://github.com/uist1idrju3i/gogo-fpga/commit/00379e7)で履歴を取り込みました。両方の旧mainは現在のmainの祖先です。2026-11-12の再照合でも、mainから到達するオブジェクトの欠落は0件でした。
+
+| 統合完了時 `00379e7` との比較 | 結果 |
+| --- | --- |
+| toolchainの同一パス | 804パスのオブジェクトとmodeが一致。例外は統合先の条件を残したroot `LICENSE` だけ |
+| flasherの同一パス | 66件が一致。45件は後継toolchain版を採用。root `LICENSE` は統合先のBSD-3-Clauseを保持 |
+| flasherだけにあった実験記録 | S0、S1a、S1b、S2、S3の各MarkdownとCSV、計10ファイルを同じパス・内容で保存 |
+| submodule | 共通6件のSHAが一致。toolchainだけの35件を含め、全41件のgitlinkを保存 |
+
+10ファイルの組は `S0-wasm-build`、`S1a-program-sim`、`S1b-option-matrix`、`S2-ci-sim-environment`、`S3-ci-speed` です。[実験索引](../experiments/README.md)から原記録を参照できます。45件の差は欠落ではなく後継版の採用であり、現在のtreeが移行時のtreeと同一という意味ではありません。
+
+履歴と比較対象は、旧リポジトリーを取得し直さずに次で確認できます。`--missing=print` の出力に `?` で始まる行があれば欠落です。tree比較では内容だけでなくmodeとgitlinkも照合します。
+
+```sh
+git merge-base --is-ancestor 544f5cf origin/main
+git merge-base --is-ancestor dcbeb67 origin/main
+git rev-list --objects --missing=print origin/main
+git ls-tree -r 544f5cf
+git ls-tree -r dcbeb67
+git ls-tree -r 00379e7
+```
+
+## 旧リポジトリーの削除前確認
+
+2026-11-12の削除前確認では、両リポジトリーにtagとReleaseはなく、GitHub Pages APIは404を返しました。main以外のbranchはDependabotによるものだけでした。flasherのApycula 0.35更新案は、旧書き込み部のfixtureが0.32を固定していたため採用しませんでした。これは当時の更新案の扱いで、後継toolchainの採用版を0.32へ戻す判断ではありません。
+
+移行時のsubmodule設定と実行用workflowに、旧リポジトリーへの依存が残っていないことも確認しました。保存した履歴やAPI生データ内の旧名は、実行時の依存とは区別します。Cloudflare project、独自ドメイン、secret、webhook、deploy keyはエージェントが確認できた範囲に含めません。GitHub Actionsのsecret・variableの取得も403だったため、「存在しない」とは扱いません。これらは所有者による削除前確認が必要です。
+
 ## 旧リポジトリーの参照
 
 旧toolchain・flasherのファイルは本リポジトリー内の相対リンクで参照します。PR・issue・Actionsの実行やartifactは削除後に取得できないため、旧リポジトリーでの識別番号を本文に残し、リンクは使いません。書き込み部の元の調査記録は[初期調査記録](flasher-history.md)、S0〜S3は[実験索引](../experiments/README.md)から読めます。
