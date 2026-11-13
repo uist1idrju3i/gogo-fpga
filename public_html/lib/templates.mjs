@@ -62,6 +62,28 @@ export function generateCst(boardId) {
   ].join("\n");
 }
 
+export function repairTemplateConstraints(project, files) {
+  if (!TEMPLATE_PINS[project?.board]) throw new Error("このボードの制約テンプレートはありません。");
+  const target = `constraints/${project.board}.cst`;
+  if (files.has(target)) throw new Error("対応する制約ファイルが既にあります。内容を確認してください。");
+  const nextFiles = new Map(files);
+  let repaired = false;
+  const entries = project.files.map((entry) => {
+    const board = entry.path.match(/^constraints\/([^/]+)\.cst$/)?.[1];
+    if (!board || board === project.board || !TEMPLATE_PINS[board]) return entry;
+    if (!files.has(entry.path)) throw new Error("元の制約ファイルを読み込めません。");
+    let path = `${entry.path}.bak.txt`;
+    for (let number = 1; nextFiles.has(path); number += 1) path = `${entry.path}.bak.${number}.txt`;
+    nextFiles.set(path, files.get(entry.path));
+    nextFiles.delete(entry.path);
+    repaired = true;
+    return { ...entry, path };
+  });
+  if (!repaired) throw new Error("置き換えられるボードの制約ファイルがありません。");
+  nextFiles.set(target, generateCst(project.board));
+  return { project: { ...project, files: [...entries, { path: target }] }, files: nextFiles, path: target };
+}
+
 function verilogTemplate() {
   return [
     "`timescale 1ns/1ps",

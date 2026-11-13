@@ -13,6 +13,7 @@ const synthAssets = createVerifiedAssetLoader({
   baseURL: synthURL,
   cacheName: synthCacheName,
   label: "Synthesis asset",
+  onProgress: (progress) => self.postMessage({ type: "progress", progress }),
 });
 const requiredAssetPaths = [
   "yosys.wasm",
@@ -242,6 +243,7 @@ self.addEventListener("message", async ({ data }) => {
       releaseDecoders();
     }
     await synthAssets.pruneCache(cache, assets);
+    self.postMessage({ type: "tools_ready" });
     const loadedAssets = new Map(
       requiredPaths.map((path, index) => [path, loadedAssetBytes[index]]),
     );
