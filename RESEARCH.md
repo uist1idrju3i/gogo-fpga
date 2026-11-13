@@ -178,6 +178,7 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 | 文書 | 内容 |
 |---|---|
 | [Pages公開の承認と配信](docs/research/pages-delivery.md) | mainの成功runの成果物をpagesへ渡す承認PR、previewでの実機確認、管理者のGit連携・ruleset設定 |
+| [DeepWikiの構成と検査](docs/research/deepwiki.md) | 日本語のページ階層、実装・調査の参照方針、安全上の制約と設定の上限検査 |
 | [UX契約と状態遷移](docs/ux/README.md) | DSLの生成手順、design_flowとUIの接続、U2の主操作・tab・安全側の判断、画面確認。実機確認は未実施 |
 | [依存の版の検出と負の対照](docs/research/dependency-version-detection.md) | GHDLの公開安定タグの選択、Rust channel TOMLの構造化読取り、欠落と不正入力の扱い |
 | [書き込み部の移植とビルド選定](docs/research/flasher-integration.md) | 移植元の原典、JSPIとWebUSB、S7の選定とhash照合、asyncifyの失敗と未確認範囲 |

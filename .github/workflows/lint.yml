@@ -27,6 +27,12 @@ jobs:
       - name: main用案内ページ検査のテスト
         run: python3 -m unittest discover -s tests/check-main-placeholder
 
+      - name: DeepWiki設定を検査
+        run: python3 .github/scripts/check-deepwiki.py
+
+      - name: DeepWiki設定検査のテスト
+        run: python3 -m unittest discover -s tests/check-deepwiki -v
+
       - name: actionlint を取得して検査
         run: |
           archive="$RUNNER_TEMP/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
