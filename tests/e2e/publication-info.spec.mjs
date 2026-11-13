@@ -27,9 +27,22 @@ test("published source and DeepWiki are accessible without external resource req
   mkdirSync(shots, { recursive: true });
   for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
     await page.setViewportSize({ width: 1280, height: 960 });
-    await page.locator("#board-select").selectOption(board);
+    await page.locator("#welcome-board").selectOption(board);
+    await page.locator("#welcome-start").click();
+    await expect(page.locator("#project-name")).toHaveText(`blink-${board}`);
     await expect(page.locator("#project-status")).toHaveText("保存しました。");
     await page.screenshot({ path: resolve(shots, `${board}-1280.png`) });
+    await page.setViewportSize({ width: 390, height: 900 });
+    await expect(version).toBeVisible();
+    await expect(wiki).toBeVisible();
+    for (const link of [version, wiki]) {
+      const box = await link.boundingBox();
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(390);
+    }
+    const editor = await page.locator("#editor-mount").boundingBox();
+    expect(editor.y).toBeLessThan(430);
+    await page.screenshot({ path: resolve(shots, `${board}-390.png`) });
   }
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(version).toBeVisible();

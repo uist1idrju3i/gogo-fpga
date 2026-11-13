@@ -1281,7 +1281,7 @@ button.secondary:not(.danger):hover:not(:disabled),
 @media (max-width: 820px) {
   .ide-form { padding-bottom: calc(var(--mobile-action-bar-height, 5rem) + 1rem); }
   .ide-header { display: block; padding: 0.5rem; }
-  .brand { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.5rem; }
+  .brand { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.25rem 0.5rem; }
   .brand h1 { font-size: 1rem; white-space: nowrap; }
   .publication-information { grid-column: 1 / -1; }
   .project-toolbar { gap: 0.3rem; }
