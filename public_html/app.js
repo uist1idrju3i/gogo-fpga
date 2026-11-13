@@ -17,9 +17,11 @@ import { initializeIde } from "./ide.mjs";
 import { createDesignWorkflow } from "./lib/workflow-ui.mjs";
 import { initializeWorkspaceUI } from "./lib/workspace-ui.mjs";
 import { initializeOpenRouterUI } from "./lib/openrouter-ui.mjs";
+import { initializePublicationInfo } from "./lib/publication-info.mjs";
 import { createProposalEditor, initializeAiChatUI } from "./lib/ai-chat-ui.bundle.mjs";
 
 const form = document.querySelector("#program-form");
+void initializePublicationInfo(document.querySelector("#publication-version"));
 const boardSelect = document.querySelector("#board-select");
 const fileInput = document.querySelector("#bitstream-file");
 const fsSourceSelect = document.querySelector("#fs-source");
