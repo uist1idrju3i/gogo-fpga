@@ -1,101 +1,147 @@
 {
   "repo_notes": [
     {
-      "content": "午後のFPGA は、ブラウザー上で VHDL と Verilog の編集から FPGA への書き込みまで行う開発環境を目指します。対象は Tang Nano 1K・4K・9K・20K です。T0 では旧書き込みアプリから書き込み部を移植しました。対応状況は README.md を参照してください。"
+      "content": "午後のFPGAは、VHDLとVerilogの編集、合成、配置配線、ビットストリーム作成、Tang Nanoへの書き込みをブラウザーで行う単一製品です。正規リポジトリーはuist1idrju3i/gogo-fpgaです。CLI製品やサーバー側の合成サービスとして説明しないでください。書き込みだけのT0という旧説明を現在の実装に当てはめず、web/とテストで到達できる機能を確認してください。"
     },
     {
-      "content": "Wiki は日本語で書いてください。コード、識別子、ファイル名、コマンド、Emscripten の設定名は英語のまま記載します。README.md、RESEARCH.md、docs/ の文書も日本語です。"
+      "content": "Wikiの本文と見出しは日本語で書き、コード、識別子、パス、コマンドは英語のままにしてください。README.mdを入口、RESEARCH.mdとdocs/research/ を判断・制約の根拠、docs/experiments/ を固定条件・失敗・反復測定の証拠、docs/ux/ を画面契約の根拠として使います。初期計画、後続の検証、現在の実装が食い違う場合は、時点と検証範囲を分けてコードとテストへリンクし、調査成功だけで製品対応を断定しないでください。"
     },
     {
-      "content": "vendor/ 配下（openFPGALoader、libusb、libftdi、zlib、emsdk、yomiyasu）は shallow submodule で取り込んだ外部コードで、編集していません。将来追加する HDL ライブラリーと CPU コアも、pin を固定した shallow submodule として参照し、ライセンスを記録します。scripts/build-wasm.sh、.gitmodules、RESEARCH.md を根拠にしてください。"
+      "content": "web/、scripts/、tests/、.github/workflows/と手書き文書を優先します。vendor/とthird_party/は固定した外部ソースなので、上流全体の解説より製品からの接続、patches/、pin、原文ライセンスを説明してください。生成されたpublic_html/やdocs/ux/out/ を正本として重複説明せず、web/とUX DSLへ戻ってください。mainが追跡するpublic_html/index.htmlは案内用のプレースホルダーで、実際のアプリとは異なります。これは読取りの優先度の指示で、技術的な索引除外設定ではありません。"
     },
     {
-      "content": "確認済みの事実と未確認事項を区別してください。書き込み部は tests/sim/fake-webusb.mjs の仮想の FT2232・GOWIN TAP・NOR フラッシュ、Node のテスト（tests/sim/）、Playwright（tests/e2e/）で確かめます。実機の Tang Nano では試していません。仮想デバイスで測った時間を実機の値のように書かないでください。"
+      "content": "主要な流れはYosys・ABCとGHDLによる合成、nextpnr-himbaechelによる配置配線、Pyodide上のApiculaによるビットストリーム作成、openFPGALoaderとWebUSBによる書き込みです。Worker、WASI、Emscripten、共有メモリー、圧縮資材の境界を区別します。書き込み部のJSPI・pthreadの選定を全ツールへ一般化せず、各ビルドスクリプトと実験記録に従ってください。通常の開発処理はブラウザー内で行い、任意のAI機能の通信とは分けて説明します。"
     },
     {
-      "content": "現在の書き込み部の流れです。scripts/build-wasm.sh が libusb・libftdi・zlib・openFPGALoader を JSPI + pthread + -fwasm-exceptions + -Os でビルドし、build-info.json を作ります。scripts/build-web.sh が web/ と WASM を public_html/ にまとめ、build-info.json と照合します。画面（web/app.js）は .fs の IDCODE を確認してから navigator.usb.requestDevice を呼び出す実装です。各実行では、新しい Worker（web/worker.js）と WASM のインスタンスを作成し、callMain に引数を渡します。引数は web/lib/build-args.mjs が作り、適用条件は web/lib/options.mjs が決めます。"
+      "content": "安全性の説明では、.fsのIDCODEと選択ボードの照合、WebUSBの利用者による選択、終了コード0でもログのFAILを失敗とする判定を外さないでください。実機のTang Nanoでは試していません。仮想FT2232・GOWIN TAP・NORフラッシュでの成功や時間を実機の保証にしないでください。未対応、容量超過、unknown、停止、期限切れを成功や証明に読み替えないでください。"
+    },
+    {
+      "content": "公開はmainの成功した全build検査と検証済みartifactからpages-update/*の承認PRを作り、人間がpreviewを確認してpagesへマージする流れです。mainへのマージだけで本番公開を承認したことにはなりません。scripts/publish-pages.pyとdocs/research/pages-delivery.md を根拠に、元run・SHA・digestの照合、同一内容の処理、権限と失敗時の停止を説明してください。エージェントは承認PRをマージせず、Cloudflareや保護規則の設定済み状態を推測しません。"
+    },
+    {
+      "content": "OpenRouterは任意の外部サービスです。接続のPKCE通信と、利用者が正確な本文を確認して送るAI相談を区別してください。キーは既定でタブのメモリーだけに持ち、明示的な選択後だけIndexedDBへ保存します。CSPと実装の通信先制限を根拠にしてください。実OpenRouterへのログイン・課金・応答品質を、mockのテストから確認済みとは書かないでください。"
     }
   ],
   "pages": [
     {
-      "title": "概要とプロジェクトの目的",
-      "purpose": "対象ボード、Web IDE の目標、T0 で移植済みの機能、今後の段階を説明する",
-      "page_notes": [
-        { "content": "README.md と RESEARCH.md の「目的と対象ボード」を主な根拠にしてください。現時点で実装済みなのは書き込み部だけです。" }
-      ]
+      "title": "午後のFPGAの全体像",
+      "purpose": "ブラウザー内でのHDL開発、対象ボード、現在の機能と未確認事項、各ページへの読み順を示す。",
+      "parent": null,
+      "page_notes": [{ "content": "README.md、RESEARCH.mdの目的・未確認事項、web/app.js、web/ide.mjsを照合します。旧製品名と統合の経緯はdocs/research/repository-consolidation.md で確認してください。" }]
     },
     {
-      "title": "リポジトリ構成と開発ルール",
-      "purpose": "ディレクトリ構成、AGENTS.md の作業規約（main の保護、日本語、JIS X 0213、外部 submodule、fail closed の検査）、Codex と Claude Code 向けのスキルリンクを説明する",
-      "parent": "概要とプロジェクトの目的",
-      "page_notes": [
-        { "content": "AGENTS.md、CLAUDE.md、.agents/skills/、.claude/skills/、.github/workflows/agent-docs.yml を根拠にしてください。" }
-      ]
+      "title": "ブラウザー内の構成とデータの流れ",
+      "purpose": "工程ごとの入出力、WorkerとWASMの責務、保存と成果物の失効、配布資材の読込みを図で結ぶ。",
+      "parent": "午後のFPGAの全体像",
+      "page_notes": [{ "content": "web/ide.mjs、web/worker.js、web/lib/、scripts/build-web.shを起点に、呼出し元とファイル形式を追います。合成・配置配線・pack・書き込みを一つのWASMとして説明しないでください。" }]
     },
     {
-      "title": "WASM のビルド",
-      "purpose": "書き込み部の依存固定、Emscripten の版、build-wasm.sh の手順、build-info.json による照合を説明する。合成系の WASM 化は後続段階であることを明記する",
-      "page_notes": [
-        { "content": "scripts/build-wasm.sh、scripts/build-info.py、scripts/build-web.sh、.gitmodules、RESEARCH.md の「書き込み部から引き継ぐ知見」を根拠にしてください。" }
-      ]
+      "title": "Yosys・GHDLによる合成",
+      "purpose": "VerilogとVHDLの入力経路、GHDLとYosys・ABCの接続、netlistと診断、名前付きライブラリー、WASI実行を説明する。",
+      "parent": "ブラウザー内の構成とデータの流れ",
+      "page_notes": [{ "content": "scripts/build-synth-wasm.sh、scripts/build-ghdl-wasm.sh、web/lib/、tests/synth/、docs/research/ghdl-wasm.md 、docs/research/yosys-nextpnr-wasi.md を根拠にします。通常合成と形式出力の経路を区別してください。" }]
     },
     {
-      "title": "Emscripten のビルドオプションの選定",
-      "purpose": "Emscripten の比較項目と実験計画を説明し、書き込み部と将来の合成系で必要な構成を分ける",
-      "parent": "WASM のビルド",
-      "page_notes": [
-        { "content": "RESEARCH.md の「Emscripten のオプション」と docs/experiments/README.md を根拠にしてください。T0 では合成系のオプション比較をまだ実施していません。" }
-      ]
+      "title": "nextpnrによる配置配線",
+      "purpose": "netlist、ボード・デバイス・制約とchipdbを入力に、配置配線結果、資源・タイミングと失敗分類を説明する。",
+      "parent": "ブラウザー内の構成とデータの流れ",
+      "page_notes": [{ "content": "scripts/build-pnr-wasm.sh、web/lib/、tests/synth/nextpnr.test.mjs、docs/research/yosys-nextpnr-wasi.md を参照し、native/WASIの比較条件とボードごとの容量超過を保持してください。" }]
     },
     {
-      "title": "Web 画面と Worker",
-      "purpose": "T0 の書き込み画面の流れと、将来追加する IDE 画面の設計を区別して説明する",
-      "parent": "概要とプロジェクトの目的",
-      "page_notes": [
-        { "content": "現在の書き込み部は web/index.html、web/app.js、web/worker.js、web/lib/、web/serve.py を根拠にしてください。IDE の画面設計は docs/research/editor-and-ai.md を参照してください。" }
-      ]
+      "title": "Apicula・Pyodideによるビットストリーム作成",
+      "purpose": "配置配線結果から.fsを作るpack工程、Python依存の資材、Workerの実行と進捗、配布サイズの制約を説明する。",
+      "parent": "ブラウザー内の構成とデータの流れ",
+      "page_notes": [{ "content": "scripts/build-pack-assets.sh、scripts/build-pack-assets.py、tests/synth/gowin-pack.test.mjs、docs/experiments/S3A-pyodide-gowin-pack.md を参照します。依存とhashの正本はpin checkerとlockファイルで確認し、Wikiに版を重複固定しないでください。" }]
     },
     {
-      "title": "高度な設定と openFPGALoader のオプション",
-      "purpose": "書き込み部で使う openFPGALoader の操作とオプションを説明する",
-      "parent": "Web 画面と Worker",
-      "page_notes": [
-        { "content": "web/lib/options.mjs、web/lib/build-args.mjs、RESEARCH.md の「書き込み部から引き継ぐ知見」を根拠にしてください。upstream の行番号は RESEARCH.md の引用に従ってください。" }
-      ]
+      "title": "openFPGALoader・WebUSBと書き込みの安全性",
+      "purpose": ".fsとIDCODEの事前照合、USB選択、Worker、SRAM・フラッシュの操作条件と失敗検出を説明する。",
+      "parent": "ブラウザー内の構成とデータの流れ",
+      "page_notes": [{ "content": "web/app.js、web/worker.js、web/lib/build-args.mjs、web/lib/options.mjs、web/lib/classify-result.mjs、docs/research/flasher-integration.md を参照します。FAILログ、IDCODE不一致、実機未確認の制限を必ず記載してください。" }]
     },
     {
-      "title": "仮想 USB によるテスト",
-      "purpose": "仮想 FT2232/MPSSE、GOWIN TAP、NOR フラッシュ、故障の注入、負の対照、テストの層を説明する",
-      "parent": "概要とプロジェクトの目的",
-      "page_notes": [
-        { "content": "tests/sim/、tests/web/、tests/e2e/、tests/fixtures/、.agents/skills/fake-usb/SKILL.md、docs/experiments/README.md を根拠にしてください。実機では試していないことを明記してください。" }
-      ]
+      "title": "シミュレーションと波形",
+      "purpose": "Icarus Verilogによる実行、テストベンチ、VCDとSurferの表示、WASM実行とブラウザー制約を説明する。",
+      "parent": "ブラウザー内の構成とデータの流れ",
+      "page_notes": [{ "content": "scripts/build-iverilog-wasm.sh、web/ide.mjs、web/surfer-bridge.js、tests/e2e/、docs/research/browser-build-and-delivery.md 、docs/experiments/S12C-surfer-reproducibility.md を参照します。NVCなどの候補調査と製品の経路を混同しないでください。" }]
     },
     {
-      "title": "調査記録の読み方",
-      "purpose": "RESEARCH.md、docs/research/、docs/experiments/ の構成、実験記録の方法、未確認事項を説明する",
-      "parent": "概要とプロジェクトの目的",
-      "page_notes": [
-        { "content": "RESEARCH.md の 7 章の一覧と docs/research/、docs/experiments/README.md、.agents/skills/experiment-record/ を根拠にしてください。実施していない実験を結果として記載しないでください。" }
-      ]
+      "title": "形式検証の経路と有効化条件",
+      "purpose": "内蔵SAT、SBY・SMTBMCとsolver、propertyと反例の再実行、製品の有効・無効と研究上の検証範囲を分けて説明する。",
+      "parent": "ブラウザー内の構成とデータの流れ",
+      "page_notes": [{ "content": "web/lib/formal-capabilities.mjs、web/lib/formal-runner.mjs、docs/research/formal-capabilities.md 、docs/research/formal-verification.md 、docs/research/formal-solvers.md とS15を優先します。初期の未実装記述や実験のPASSだけで現在の対応を決めず、有界PASS、証明、cover、unknownを区別してください。" }]
     },
     {
-      "title": "ライセンス",
-      "purpose": "書き込み部と将来追加するツール、HDL ライブラリーのライセンスと配布時の義務を説明する",
-      "parent": "概要とプロジェクトの目的",
-      "page_notes": [
-        { "content": "RESEARCH.md の「ライセンス」と THIRD_PARTY_NOTICES.md を根拠にしてください。" }
-      ]
+      "title": "Web IDEとプロジェクト管理",
+      "purpose": "ファイル編集、OPFS保存、revision、ZIP入出力、診断、成果物失効、デスクトップとモバイルの操作を説明する。",
+      "parent": "午後のFPGAの全体像",
+      "page_notes": [{ "content": "web/ide.mjs、web/lib/workspace-ui.mjs、web/lib/、tests/web/、tests/e2e/、docs/research/editor-and-ai.md を根拠にし、保存失敗や実行中の編集制限を省かないでください。" }]
     },
     {
-      "title": "CI と依存関係の監視",
-      "purpose": "build、lint、agent-docs、固定版の更新確認の各 workflow が検査する内容と、Dependabot が週次で確認する依存を説明する",
-      "parent": "リポジトリ構成と開発ルール",
-      "page_notes": [
-        {
-          "content": ".github/workflows/build.yml は変更 path を判定してから build します。emsdk と fixture の cache を条件付きで使い、build artifact は 3 つの simulator shard と Playwright に共有します。sim-coverage が TAP report の失敗と網羅性を検査し、週次 schedule は cache を使わない cold build です。.github/workflows/lint.yml は workflow、shell、依存 pin、zizmor、shard coverage checker を対象にします。.github/workflows/agent-docs.yml は文書とスキルリンクを検査します。.github/workflows/pins-check.yml は固定バージョンの更新時に Issue を開く workflow です。.github/dependabot.yml は branch を追う submodule、GitHub Actions、npm、pip を週次で確認します。pin checker が検査するファイルを基準にし、pin の二重管理を避けてください。"
-        }
-      ]
+      "title": "UX契約と状態遷移",
+      "purpose": "主操作、タブ、案内、状態chartと実装の対応、DSLからの生成とgate検査の手順を説明する。",
+      "parent": "Web IDEとプロジェクト管理",
+      "page_notes": [{ "content": "docs/ux/README.md 、docs/ux/gogo-fpga.ux.rb 、docs/ux/gogo-fpga.ux.json 、web/lib/と対応テストを参照します。docs/ux/out/ は生成結果として照合し、手編集の正本にしないでください。" }]
+    },
+    {
+      "title": "OpenRouter接続とキーの保護",
+      "purpose": "PKCE S256、stateと期限、動的callback、URLの消去、タブ内のキー保持と明示保存、CSPを説明する。",
+      "parent": "Web IDEとプロジェクト管理",
+      "page_notes": [{ "content": "web/lib/openrouter-auth.mjs、web/lib/openrouter-ui.mjs、web/_headers、web/serve.py、docs/research/editor-and-ai.md のA1、tests/e2e/openrouter-auth.spec.mjsを参照します。sessionStorageの一時値削除、localStorage不使用、キーをURL・ログへ出さない条件を保持してください。" }]
+    },
+    {
+      "title": "AI相談・エラー説明と差分の採否",
+      "purpose": "送信本文の確認と同一バイト列での送信、streamingと停止、文脈選択、ファイルごとの採否、一括revisionと成果物失効を説明する。",
+      "parent": "Web IDEとプロジェクト管理",
+      "page_notes": [{ "content": "web/lib/openrouter-chat.mjs、web/lib/ai-chat-ui.mjs、web/lib/ai-chat-flow.mjs、web/lib/ai-proposals.mjs、docs/research/editor-and-ai.md のA2と対応テストを参照します。.cst、ライブラリー、binary、不正パスの拒否を示し、教師役・inline補完などの将来案を実装済みとしないでください。" }]
+    },
+    {
+      "title": "HDLライブラリーとCPUコア",
+      "purpose": "固定版カタログ、依存解決、利用条件、ボード別の制限、名前付きVHDLライブラリーと配布ソース照合を説明する。",
+      "parent": "Web IDEとプロジェクト管理",
+      "page_notes": [{ "content": "docs/research/hdl-libraries.md 、docs/research/hdl-validation-history.md 、scripts/build-library-assets.py、third_party/の固定参照とS14を参照します。上流の全機能ではなく製品で検証した構成とライセンスを扱ってください。" }]
+    },
+    {
+      "title": "対応ボードと制約",
+      "purpose": "Tang Nano 1K・4K・9K・20Kの識別、FPGAとIDCODE、SRAM・フラッシュ、ピン制約とテンプレート、容量の制限を説明する。",
+      "parent": "午後のFPGAの全体像",
+      "page_notes": [{ "content": "web/内のボード定義・制約テンプレート、tests/fixtures/、README.md、docs/research/hdl-libraries.md を根拠にします。生成する.cstを手編集する手順や、別ボードでの実機動作保証を書かないでください。" }]
+    },
+    {
+      "title": "ビルドとCIの検査",
+      "purpose": "WASMと静的アプリの組立て、固定ツール、native/WASI比較、unit・E2E・仮想USBの分担、releaseとライセンス検証を説明する。",
+      "parent": "午後のFPGAの全体像",
+      "page_notes": [{ "content": "scripts/、.github/workflows/、package.json、tests/、THIRD_PARTY_NOTICES.mdを参照します。localのbuildコマンドは製品CLIではありません。build-web.shが案内用public_html/index.htmlを上書きする二段階運用と復元をdocs/research/pages-delivery.md で確認してください。" }]
+    },
+    {
+      "title": "再現ビルドと配布の完全性",
+      "purpose": "pinとlock、WASM manifest、圧縮資材とdigest、Surferの日時・版の由来、配布ソースと原文ライセンスの照合を説明する。",
+      "parent": "ビルドとCIの検査",
+      "page_notes": [{ "content": "scripts/build-info.py、scripts/package-release.sh、tests/check-release-closure/、docs/experiments/S12C-surfer-reproducibility.md 、docs/research/formal-sources.md を根拠にします。不一致を正規化で隠さず、親リポジトリーの日時を依存の版として埋め込まない条件を説明してください。" }]
+    },
+    {
+      "title": "Pages公開の承認と配信",
+      "purpose": "mainの検証済みartifactからpagesへの承認PR、preview、人間による本番承認、同一内容の扱いと失敗時の停止を説明する。",
+      "parent": "ビルドとCIの検査",
+      "page_notes": [{ "content": ".github/workflows/pages-delivery.yml、scripts/publish-pages.py、tests/check-pages-publish/、docs/research/pages-delivery.md を根拠にします。mainの案内ページをアプリとして配布しない条件と、実装・推奨設定・実際の配信観測の区別を示してください。" }]
+    },
+    {
+      "title": "仮想USBと失敗を確かめるテスト",
+      "purpose": "仮想FT2232・GOWIN TAP・NORフラッシュ、4ボードの書き込み対照、ログと終了の判定、shard網羅性と実機との差を説明する。",
+      "parent": "ビルドとCIの検査",
+      "page_notes": [{ "content": "tests/sim/fake-webusb.mjs、tests/sim/、tests/check-sim-shards/、tests/e2e/、docs/research/flasher-integration.md とS7を参照します。仮想USBで試せない電気的条件や実機の時間を確認済みとは扱わないでください。" }]
+    },
+    {
+      "title": "開発参加とエージェントの規則",
+      "purpose": "main保護、日本語・JIS X 0213、fail closed、外部コードのpin・patch・ライセンス、スキルと変更時の検査を案内する。",
+      "parent": "午後のFPGAの全体像",
+      "page_notes": [{ "content": "AGENTS.md、CLAUDE.md、.agents/skills/、.claude/skills/、.github/dependabot.yml、.github/workflows/pins-check.ymlを参照します。版の正本はpin checkerで確認し、エージェントによるPRマージや無断の上流書込みを勧めないでください。" }]
+    },
+    {
+      "title": "調査記録とWikiの保守",
+      "purpose": "主題別調査・実験・UX契約を読む方法、現在の結論・過去の失敗・未確認の区別、Wiki設定の更新手順を説明する。",
+      "parent": "開発参加とエージェントの規則",
+      "page_notes": [{ "content": "RESEARCH.mdの7・8章、docs/experiments/README.md 、docs/research/document-structure.md 、docs/research/deepwiki.md 、.devin/wiki.jsonを参照します。Wikiは派生した案内であり、実装や原記録の代わりではありません。" }]
     }
   ]
 }
