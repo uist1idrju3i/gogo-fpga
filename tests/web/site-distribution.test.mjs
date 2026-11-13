@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
@@ -18,13 +18,22 @@ test("the assembled app preserves the product identity and discovery metadata", 
   assert.doesNotMatch(html, /Web Toolchain|Web Flasher|GOWIN FPGA/i);
 });
 
-test("public_html is generated output with the same isolation policy as the source", () => {
-  assert.equal(execFileSync("git", ["check-ignore", "public_html/index.html"], {
+test("only the main placeholder is tracked; generated assets retain the source isolation policy", () => {
+  assert.equal(spawnSync("git", ["check-ignore", "--no-index", "public_html/index.html"], {
     cwd: root, encoding: "utf8",
-  }).trim(), "public_html/index.html");
+  }).status, 1);
+  assert.equal(execFileSync("git", ["check-ignore", "--no-index", "public_html/app.js"], {
+    cwd: root, encoding: "utf8",
+  }).trim(), "public_html/app.js");
   assert.equal(execFileSync("git", ["ls-files", "public_html"], {
     cwd: root, encoding: "utf8",
-  }), "");
+  }), "public_html/index.html\n");
+  const placeholder = execFileSync("git", ["show", ":public_html/index.html"], {
+    cwd: root, encoding: "utf8",
+  });
+  assert.match(placeholder, /name="gogo-fpga-placeholder" content="main"/);
+  assert.doesNotMatch(placeholder, /<script\b|<link\b/i);
+  assert.doesNotMatch(read("public_html/index.html"), /gogo-fpga-placeholder/);
   const headers = read("public_html/_headers");
   assert.equal(headers, read("web/_headers"));
   assert.match(headers, /^\/\*\n/m);

@@ -98,6 +98,8 @@ python3 public_html/serve.py --port 8000
 
 書き込み部は Emscripten、合成・配置配線と Icarus Verilog は WASI SDK、GHDL の合成部は AdaWebPack と WASI SDK、Surfer は Rust で WASM にします。Apicula は Pyodide で動かします。`scripts/build-web.sh` が Web 画面と各ツールの資材・ライセンスを `public_html/` にまとめます。
 
+mainで追跡する `public_html/index.html` は案内ページです。ビルドすると実際のアプリに置き換わり、変更扱いになります。生成物はcommitせず、検査後の[案内への戻し方](docs/research/pages-delivery.md#mainの案内ページと生成物)に従ってください。
+
 ビルドには Autotools、CMake 3.28 以上、rustup などが必要です。`scripts/build-wasm.sh` は `vendor/emsdk` を使います。ツールの固定版と取得元は [RESEARCH.md](RESEARCH.md) を参照してください。
 
 ネイティブ版は比較テストの参照用で、製品として配布するものではありません。比較には Yosys、nextpnr、Icarus Verilog の `--native` ビルドも必要です。

@@ -18,6 +18,20 @@ mainにpushした[build workflow](../../.github/workflows/build.yml)が全検査
 
 公開準備のコードは固定SHAのcheckout actionでmainから取得し、元runの任意のrefを実行しません。artifactも実行せず、Gitのfilterを適用しないblobとして格納します。`workflow_run`一般へのzizmor警告は、この信頼境界とAPI・digestの照合を前提に、そのtriggerの1か所だけに理由付きの例外を置いています。他の監査は無効にしません。
 
+## mainの案内ページと生成物
+
+Cloudflare Pagesのブランチ指定に対する回避策として、mainにも `public_html/` を置きます。追跡するのは案内用の `index.html` だけで、アプリの公開先 `https://fpga.moe/` とpagesブランチを示します。外部資材やscriptは読み込まず、検索対象から外すmetaを付けます。アプリの配信ヘッダーは従来どおりビルドで `web/_headers` から取得し、案内用の別の `_headers` は追跡しません。
+
+`scripts/build-web.sh` は案内を含む出力先を作り直し、`web/index.html` を含む完全なアプリを `public_html/` に生成します。ビルド直後に追跡中のindexが変更扱いになるのは想定内です。`site-distribution` の検査後に、そのアプリをWeb artifactへ保存します。後続stepにclean treeへの依存がないため、CIでは案内へ戻しません。公開準備workflowはmainの案内ではなく、従来どおり検査済みartifactだけを取り込みます。pagesブランチの構成と承認手順は変えません。
+
+lintの [main用案内検査](../../.github/scripts/check-main-placeholder.py) は作業treeではなくcommitのtreeを読みます。追跡対象が通常ファイルの `public_html/index.html` だけであること、案内のmarker、製品名、pagesと公開先リンクを要求し、script・資材の参照や想定外の要素・属性を拒否します。生成したアプリや余分な生成物を誤ってcommitすると失敗します。
+
+ローカルではアプリの検査やartifact作成を終えてから、次で案内へ戻せます。案内への未commitの変更も戻るため、必要な変更は先に保存してください。無視された生成物は残り、再びアプリを動かすにはビルドし直します。
+
+```sh
+git checkout -- public_html
+```
+
 ## 管理者が設定すること
 
 これらの設定は自動変更しません。API tokenやCloudflareのsecretを追加する必要はなく、CIはGITHUB_TOKENだけを使います。

@@ -21,6 +21,12 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: commit内のmain用案内ページを検査
+        run: python3 .github/scripts/check-main-placeholder.py
+
+      - name: main用案内ページ検査のテスト
+        run: python3 -m unittest discover -s tests/check-main-placeholder
+
       - name: actionlint を取得して検査
         run: |
           archive="$RUNNER_TEMP/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
