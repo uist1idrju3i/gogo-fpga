@@ -1189,6 +1189,13 @@ label:has(input[type="checkbox"]), label:has(input[type="radio"]) { min-height: 
 .ide-header { grid-template-columns: minmax(15rem, 1fr) auto; gap: 0.4rem 1rem; padding: 0.6rem 1rem; }
 .brand { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
 .brand .project-title { display: none; }
+.publication-information { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; font-size: 0.8rem; color: #475467; }
+.publication-information a { text-underline-offset: 0.2em; }
+.publication-information a:hover { text-decoration-thickness: 2px; }
+#publication-version { font-variant-numeric: tabular-nums; }
+@media (prefers-color-scheme: dark) {
+  .publication-information { color: #d0d5dd; }
+}
 .project-toolbar { margin: 0; flex-wrap: nowrap; }
 .project-toolbar label > span { display: none; }
 #project-action-status:empty { display: none; }
@@ -1276,6 +1283,7 @@ button.secondary:not(.danger):hover:not(:disabled),
   .ide-header { display: block; padding: 0.5rem; }
   .brand { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.5rem; }
   .brand h1 { font-size: 1rem; white-space: nowrap; }
+  .publication-information { grid-column: 1 / -1; }
   .project-toolbar { gap: 0.3rem; }
   .project-toolbar label { min-width: 0; flex: 1; }
   .project-toolbar select { width: 100%; min-width: 0; max-width: 100%; }

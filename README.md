@@ -1,5 +1,7 @@
 # 午後のFPGA
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/uist1idrju3i/gogo-fpga)
+
 Web ブラウザーだけで VHDL と Verilog の編集、論理合成、配置配線、ビットストリームの作成、Tang Nano への書き込みまで行う FPGA 開発環境を目指します。設計データをサーバーへ送らない構成にします。
 
 対象は Sipeed Tang Nano 1K、4K、9K、20K です。各ボードの FPGA が内蔵 SRAM へ構成できることを選定理由としています。HDL は VHDL と Verilog を最初から対象とし、SystemVerilog は将来の段階で扱います。

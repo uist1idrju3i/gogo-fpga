@@ -1,6 +1,7 @@
 import copy
 import hashlib
 import importlib.util
+import json
 from pathlib import Path
 import stat
 import tempfile
@@ -16,6 +17,7 @@ SPEC.loader.exec_module(PAGES)
 HEADERS = "/*\n  Cross-Origin-Opener-Policy: same-origin\n  Cross-Origin-Embedder-Policy: require-corp\n"
 SHA = "a" * 40
 RUN_URL = "https://github.com/example/project/actions/runs/7"
+COMMIT_DATE = "2026-11-13T09:00:00Z"
 
 
 def run_info(number=7):
@@ -71,7 +73,7 @@ class PublishPagesTests(unittest.TestCase):
         self.repo = self.root / "delivery"
 
     def test_orphan_bootstrap_identical_noop_changed_commit_and_candidate_reuse(self):
-        first = PAGES.prepare(self.repo, self.source, SHA, RUN_URL)
+        first = PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
         self.assertTrue(first["bootstrap_created"])
         self.assertTrue(first["new_commit"])
         base = first["base_commit"]
@@ -80,17 +82,17 @@ class PublishPagesTests(unittest.TestCase):
                          ["README.md", "public_html"])
         self.assertNotEqual(PAGES.git(self.repo, "show", f"{base}:public_html/index.html"), "verified app")
         self.assertEqual(PAGES.git(self.repo, "show", f"{first['commit']}:public_html/index.html"), "verified app")
-        again = PAGES.prepare(self.repo, self.source, SHA, RUN_URL)
+        again = PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
         self.assertEqual(again["status"], "existing")
         self.assertFalse(again["new_commit"])
         PAGES.git(self.repo, "update-ref", "refs/heads/pages", first["commit"])
-        identical = PAGES.prepare(self.repo, self.source, "b" * 40, RUN_URL)
+        identical = PAGES.prepare(self.repo, self.source, "b" * 40, RUN_URL, "2026-11-14T09:00:00Z")
         self.assertEqual(identical["status"], "unchanged")
         self.assertIsNone(identical["commit"])
         self.assertIsNone(PAGES.git(self.repo, "rev-parse", "--verify", "--quiet",
                                    "refs/heads/pages-update/" + "b" * 40, optional=True))
         (self.source / "index.html").write_text("changed app", encoding="utf-8")
-        changed = PAGES.prepare(self.repo, self.source, "c" * 40, RUN_URL)
+        changed = PAGES.prepare(self.repo, self.source, "c" * 40, RUN_URL, COMMIT_DATE)
         self.assertTrue(changed["new_commit"])
         self.assertEqual(PAGES.git(self.repo, "rev-parse", f"{changed['commit']}^"), first["commit"])
         self.assertIn("main " + "c" * 40, PAGES.git(self.repo, "show", "-s", "--format=%B", changed["commit"]))
@@ -98,12 +100,12 @@ class PublishPagesTests(unittest.TestCase):
     def test_snapshot_retains_ignored_files_and_removes_deleted_files(self):
         (self.source / ".gitignore").write_text("ignored.bin\n", encoding="utf-8")
         (self.source / "ignored.bin").write_bytes(b"\x00\xff")
-        first = PAGES.prepare(self.repo, self.source, SHA, RUN_URL)
+        first = PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
         self.assertEqual(PAGES.git(self.repo, "ls-tree", "--name-only", first["commit"],
                                   "public_html/ignored.bin"), "public_html/ignored.bin")
         PAGES.git(self.repo, "update-ref", "refs/heads/pages", first["commit"])
         (self.source / "ignored.bin").unlink()
-        changed = PAGES.prepare(self.repo, self.source, "b" * 40, RUN_URL)
+        changed = PAGES.prepare(self.repo, self.source, "b" * 40, RUN_URL, COMMIT_DATE)
         self.assertEqual(PAGES.git(self.repo, "ls-tree", "--name-only", changed["commit"],
                                   "public_html/ignored.bin"), "")
 
@@ -115,13 +117,70 @@ class PublishPagesTests(unittest.TestCase):
         (placeholder / "index.html").write_text(content, encoding="utf-8")
         main = PAGES.commit(self.repo, PAGES.snapshot(self.repo, placeholder), "mainの案内")
         PAGES.git(self.repo, "update-ref", "refs/heads/main", main)
-        result = PAGES.prepare(self.repo, self.source, SHA, RUN_URL)
+        result = PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
         self.assertEqual(PAGES.git(self.repo, "show", f"{main}:public_html/index.html"), content)
         self.assertEqual(PAGES.git(self.repo, "show", f"{result['commit']}:public_html/index.html"),
                          "verified app")
         self.assertEqual(PAGES.git(self.repo, "show", f"{result['commit']}:public_html/_headers"),
                          HEADERS.strip())
         self.assertEqual(PAGES.git(self.repo, "rev-parse", "refs/heads/main"), main)
+
+    def test_provenance_overlay_preserves_every_other_artifact_byte(self):
+        (self.source / "build-info.json").write_text("null\n")
+        (self.source / "binary.wasm").write_bytes(b"\x00\xff\r\n")
+        original = {p.name: p.read_bytes() for p in self.source.iterdir()}
+        result = PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
+        info = json.loads(PAGES.git(self.repo, "show", f"{result['commit']}:public_html/build-info.json"))
+        self.assertEqual(info, {"sha": SHA, "short_sha": SHA[:7], "run_url": RUN_URL,
+                                "commit_date": COMMIT_DATE})
+        self.assertEqual(result["files"], len(original))
+        self.assertEqual(result["bytes"], sum(len(value) for name, value in original.items()
+                                            if name != "build-info.json") +
+                         len(PAGES.publication_info(SHA, RUN_URL, COMMIT_DATE).encode()))
+        for name, content in original.items():
+            self.assertEqual((self.source / name).read_bytes(), content)
+            if name != "build-info.json":
+                actual = PAGES.subprocess.check_output([
+                    "git", "-C", str(self.repo), "show", f"{result['commit']}:public_html/{name}"])
+                self.assertEqual(actual, content)
+        changed_metadata = PAGES.prepare(self.repo, self.source, SHA, RUN_URL.replace("/7", "/8"),
+                                         "2026-11-14T09:00:00Z")
+        self.assertEqual(changed_metadata["status"], "existing")
+        self.assertEqual(changed_metadata["commit"], result["commit"])
+        PAGES.git(self.repo, "update-ref", "refs/heads/pages", result["commit"])
+        unchanged = PAGES.prepare(self.repo, self.source, "b" * 40, RUN_URL, COMMIT_DATE)
+        self.assertEqual(unchanged["status"], "unchanged")
+        self.assertEqual(json.loads(PAGES.git(self.repo, "show", "pages:public_html/build-info.json")), info)
+        (self.source / "_headers").write_text(HEADERS + "  X-Test: changed\n")
+        self.assertEqual(PAGES.prepare(self.repo, self.source, "b" * 40, RUN_URL, COMMIT_DATE)["status"],
+                         "prepared")
+
+    def test_legacy_pages_without_metadata_are_unchanged(self):
+        PAGES.init_repo(self.repo)
+        legacy = PAGES.commit(self.repo, PAGES.snapshot(self.repo, self.source), "legacy")
+        PAGES.git(self.repo, "update-ref", "refs/heads/pages", legacy)
+        result = PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
+        self.assertEqual(result["status"], "unchanged")
+
+    def test_invalid_provenance_fails_before_repository_mutation(self):
+        for url, date in [("https://example.com/run/7", COMMIT_DATE), (RUN_URL, "bad"),
+                          (RUN_URL, "2026-02-30T09:00:00Z")]:
+            with self.subTest(url=url, date=date), self.assertRaises((RuntimeError, ValueError)):
+                PAGES.prepare(self.repo, self.source, SHA, url, date)
+        self.assertFalse(self.repo.exists())
+        (self.source / "build-info.json").mkdir()
+        with self.assertRaisesRegex(RuntimeError, "must be a file"):
+            PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
+
+    def test_commit_date_comes_from_the_exact_source_commit(self):
+        api = FakeAPI()
+        with patch.object(api, "request", return_value={"sha": SHA, "commit": {
+                "committer": {"date": COMMIT_DATE}}}) as request:
+            self.assertEqual(PAGES.source_commit_date(api, SHA), COMMIT_DATE)
+            request.assert_called_once_with(f"commits/{SHA}")
+        with patch.object(api, "request", return_value={"sha": "b" * 40}):
+            with self.assertRaisesRegex(RuntimeError, "does not match"):
+                PAGES.source_commit_date(api, SHA)
 
     def test_git_filters_cannot_execute_or_change_artifact_bytes(self):
         (self.source / ".gitattributes").write_text("*.txt text eol=lf filter=fail\n", encoding="utf-8")
@@ -132,7 +191,7 @@ class PublishPagesTests(unittest.TestCase):
             "GIT_CONFIG_VALUE_0": "false", "GIT_CONFIG_KEY_1": "filter.fail.required",
             "GIT_CONFIG_VALUE_1": "true",
         }):
-            result = PAGES.prepare(self.repo, self.source, SHA, RUN_URL)
+            result = PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
         actual = PAGES.subprocess.check_output([
             "git", "-C", str(self.repo), "show", f"{result['commit']}:public_html/preserved.txt",
         ])
@@ -140,13 +199,13 @@ class PublishPagesTests(unittest.TestCase):
 
     def test_missing_files_headers_and_invalid_sha_fail_before_git_mutation(self):
         with self.assertRaises(RuntimeError):
-            PAGES.prepare(self.repo, self.source, "bad", RUN_URL)
+            PAGES.prepare(self.repo, self.source, "bad", RUN_URL, COMMIT_DATE)
         (self.source / "_headers").write_text("/*\n", encoding="utf-8")
         with self.assertRaises(RuntimeError):
-            PAGES.prepare(self.repo, self.source, SHA, RUN_URL)
+            PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
         (self.source / "index.html").unlink()
         with self.assertRaises(RuntimeError):
-            PAGES.prepare(self.repo, self.source, SHA, RUN_URL)
+            PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
         self.assertFalse(self.repo.exists())
 
     def test_symlinks_git_metadata_and_oversized_files_are_rejected(self):
@@ -170,6 +229,8 @@ class PublishPagesTests(unittest.TestCase):
         for index in range(19997):
             (self.source / f"file-{index}").touch()
         self.assertEqual(PAGES.validate_tree(self.source)["files"], 19999)
+        with self.assertRaisesRegex(RuntimeError, "fewer than 20000"):
+            PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
         (self.source / "one-too-many").touch()
         with self.assertRaisesRegex(RuntimeError, "fewer than 20000"):
             PAGES.validate_tree(self.source)
