@@ -24,7 +24,7 @@ export function parseToolDiagnostics(tool, text) {
         message: location[4],
       });
     } else if (
-      /\b(?:\w*error|failed|exception|traceback)\b/i.test(line) ||
+      /\b(?:\w*error|failed|exception|traceback|warning)\b/i.test(line) ||
       (tool === "gowin_pack" && /\b(?:invalid|cannot|could not)\b/i.test(line))
     ) {
       diagnostics.push({ file: null, severity, message: line });
