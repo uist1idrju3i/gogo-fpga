@@ -33,6 +33,9 @@ jobs:
       - name: DeepWiki設定検査のテスト
         run: python3 -m unittest discover -s tests/check-deepwiki -v
 
+      - name: ビルドキャッシュと計測器の回帰テスト
+        run: python3 -m unittest discover -s tests/check-ci-cache -v
+
       - name: actionlint を取得して検査
         run: |
           archive="$RUNNER_TEMP/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"

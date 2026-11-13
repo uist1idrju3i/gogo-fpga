@@ -6,6 +6,7 @@
 
 | 記録 | 内容 | 状態 |
 |---|---|---|
+| [S16 CIの出力キャッシュ](S16-ci-build-cache.md) | 成功5 runの全job/step時間、mainのみの保存と全ファイル検査 | 改善前を収集。改善後のCI時間・cold/warm公開物一致は未確認 |
 | [S8B Pyodide parityのCI分割](S8B-pyodide-parity-shards.md) | 旧CIの60分中止とdarkriscv/9K nativeの5回再現 | HDL/CPUとPlaywrightが成功。Cloudflare以外の20 checkが成功 |
 | [S0 WASMビルド](S0-wasm-build.md) | 旧書き込みアプリのビルドと仮想USB検出 | 当時の記録。書き込みと実機は対象外 |
 | [S1a 書き込みシミュレーション](S1a-program-sim.md) | 仮想GOWINでの書き込みと故障注入 | 当時の記録。実機では未確認 |

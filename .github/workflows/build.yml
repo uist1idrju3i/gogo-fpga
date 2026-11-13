@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       cache:
-        description: Use the emsdk, WASI SDK, and fixture caches
+        description: Use verified build and download caches
         required: false
         type: boolean
         default: true
@@ -151,23 +151,116 @@ jobs:
       - name: npm 依存を取得
         run: npm ci
 
-      - id: emsdk-key
-        name: emsdk cache key を作成
-        run: echo "revision=$(git rev-parse HEAD:vendor/emsdk)" >> "$GITHUB_OUTPUT"
+      - id: output-cache-key
+        name: flasher cache key
+        env:
+          COMPONENT: flasher
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
 
-      - id: emsdk-cache-restore
-        name: emsdk をキャッシュから復元
-        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+      - id: output-cache-lookup
+        name: flasher cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: build/emsdk-*
-          key: emsdk-ubuntu-26.04-${{ steps.emsdk-key.outputs.revision }}-${{ hashFiles('scripts/build-wasm.sh') }}
+          path: ${{ steps.output-cache-key.outputs.paths }}
+          key: ${{ steps.output-cache-key.outputs.key }}
+          lookup-only: true
+
+      - id: output-cache
+        name: flasher cache restore
+        if: steps.output-cache-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.output-cache-key.outputs.paths }}
+          key: ${{ steps.output-cache-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: output-cache-check
+        name: flasher cache integrity
+        env:
+          COMPONENT: flasher
+          CACHE_KEY: ${{ steps.output-cache-key.outputs.key }}
+          CACHE_HIT: ${{ steps.output-cache.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.output-cache-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
+
+      - id: emsdk-cache-restore-key
+        name: emsdk cache key
+        env:
+          COMPONENT: emsdk
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
+
+      - id: emsdk-cache-restore-lookup
+        name: emsdk cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.emsdk-cache-restore-key.outputs.paths }}
+          key: ${{ steps.emsdk-cache-restore-key.outputs.key }}
+          lookup-only: true
+
+      - id: emsdk-cache-restore
+        name: emsdk cache restore
+        if: steps.emsdk-cache-restore-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.emsdk-cache-restore-key.outputs.paths }}
+          key: ${{ steps.emsdk-cache-restore-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: emsdk-cache-restore-check
+        name: emsdk cache integrity
+        env:
+          COMPONENT: emsdk
+          CACHE_KEY: ${{ steps.emsdk-cache-restore-key.outputs.key }}
+          CACHE_HIT: ${{ steps.emsdk-cache-restore.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.emsdk-cache-restore-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
 
       - name: emsdk のタグを取得
         run: git -C vendor/emsdk fetch --depth=1 --tags origin
 
+      - name: キャッシュのWASMと同じemsdkを有効化
+        if: steps.output-cache.outputs.cache-hit == 'true'
+        run: |
+          version="$(git -C vendor/emsdk describe --tags --exact-match)"
+          sdk="$GITHUB_WORKSPACE/build/emsdk-$version"
+          if [[ ! -x "$sdk/emsdk" ]]; then
+            mkdir -p "$sdk"
+            git -C vendor/emsdk archive HEAD | tar -x -C "$sdk"
+          fi
+          "$sdk/emsdk" install "$version"
+          "$sdk/emsdk" activate "$version"
+
       - id: wasm-build
         name: WASM をビルド
+        if: steps.output-cache.outputs.cache-hit != 'true'
         run: scripts/build-wasm.sh
 
       - name: Icarus Verilog の比較用資材を取得
@@ -212,39 +305,59 @@ jobs:
           name: ci-decoder-web-assets-${{ github.run_id }}
           path: build/wasi/decoders
 
-      - name: emsdk cache を保存
-        if: steps.emsdk-cache-restore.outputs.cache-hit != 'true' && steps.wasm-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: build/emsdk-*
-          key: emsdk-ubuntu-26.04-${{ steps.emsdk-key.outputs.revision }}-${{ hashFiles('scripts/build-wasm.sh') }}
-
       - name: Web アプリを組み立て
         run: scripts/build-web.sh
 
-      - id: fixture-key
-        name: fixture cache key を作成
-        run: echo "python-version=$(python3 --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+      - id: fixture-cache-restore-key
+        name: fixtures cache key
+        env:
+          COMPONENT: fixtures
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
 
-      - id: fixture-cache-restore
-        name: fixture をキャッシュから復元
-        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+      - id: fixture-cache-restore-lookup
+        name: fixtures cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: build/fixtures/*.fs
-          key: fixtures-${{ steps.fixture-key.outputs.python-version }}-${{ hashFiles('tests/fixtures/**') }}
+          path: ${{ steps.fixture-cache-restore-key.outputs.paths }}
+          key: ${{ steps.fixture-cache-restore-key.outputs.key }}
+          lookup-only: true
+
+      - id: fixture-cache-restore
+        name: fixtures cache restore
+        if: steps.fixture-cache-restore-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.fixture-cache-restore-key.outputs.paths }}
+          key: ${{ steps.fixture-cache-restore-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: fixture-cache-restore-check
+        name: fixtures cache integrity
+        env:
+          COMPONENT: fixtures
+          CACHE_KEY: ${{ steps.fixture-cache-restore-key.outputs.key }}
+          CACHE_HIT: ${{ steps.fixture-cache-restore.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.fixture-cache-restore-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
 
       - name: テスト用ビットストリームを生成
         id: fixture-build
         if: steps.fixture-cache-restore.outputs.cache-hit != 'true'
         run: tests/fixtures/build-fs.sh
-
-      - name: fixture cache を保存
-        if: steps.fixture-cache-restore.outputs.cache-hit != 'true' && steps.fixture-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: build/fixtures/*.fs
-          key: fixtures-${{ steps.fixture-key.outputs.python-version }}-${{ hashFiles('tests/fixtures/**') }}
 
       - name: fixture の SHA-256 を記録
         run: sha256sum build/fixtures/*.fs | tee -a "$GITHUB_STEP_SUMMARY"
@@ -315,6 +428,48 @@ jobs:
             echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
           fi
 
+      - name: emsdk cache manifest
+        if: steps.emsdk-cache-restore.outputs.cache-hit != 'true' && steps.wasm-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: emsdk
+          CACHE_KEY: ${{ steps.emsdk-cache-restore-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: emsdk cache save
+        if: steps.emsdk-cache-restore.outputs.cache-hit != 'true' && steps.wasm-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.emsdk-cache-restore-key.outputs.key }}
+          path: ${{ steps.emsdk-cache-restore-key.outputs.paths }}
+
+      - name: fixtures cache manifest
+        if: steps.fixture-cache-restore.outputs.cache-hit != 'true' && steps.fixture-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: fixtures
+          CACHE_KEY: ${{ steps.fixture-cache-restore-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: fixtures cache save
+        if: steps.fixture-cache-restore.outputs.cache-hit != 'true' && steps.fixture-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.fixture-cache-restore-key.outputs.key }}
+          path: ${{ steps.fixture-cache-restore-key.outputs.paths }}
+
+      - name: flasher cache manifest
+        if: steps.output-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: flasher
+          CACHE_KEY: ${{ steps.output-cache-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: flasher cache save
+        if: steps.output-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.output-cache-key.outputs.key }}
+          path: ${{ steps.output-cache-key.outputs.paths }}
+
   synth:
     name: Yosys WASI synthesis
     needs: changes
@@ -350,57 +505,108 @@ jobs:
           node-version-file: .nvmrc
           package-manager-cache: false
 
-      - id: synth-key
-        name: Yosys と WASI SDK の cache key を作成
-        run: |
-          pin="$(python3 .github/scripts/check-pins.py wasi-sdk-pin)"
-          effective_flags="$(
-            {
-              printf 'WASI_OPT_FLAGS=%s\n' "${WASI_OPT_FLAGS--Os}"
-              printf 'WASI_EXTRA_CFLAGS=%s\n' "${WASI_EXTRA_CFLAGS--flto}"
-              printf 'WASI_EXTRA_CXXFLAGS=%s\n' "${WASI_EXTRA_CXXFLAGS--flto}"
-              printf 'WASI_EXTRA_LDFLAGS=%s\n' "${WASI_EXTRA_LDFLAGS--flto}"
-            } | sha256sum | awk '{print $1}'
-          )"
-          printf 'revision=%s\n' "$(git rev-parse HEAD:vendor/yosys)" >> "$GITHUB_OUTPUT"
-          printf 'pin=%s\n' "$(printf '%s\n%s\n' "$pin" "$effective_flags" | sha256sum | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+      - id: synth-cache-restore-key
+        name: synth-sdk cache key
+        env:
+          COMPONENT: synth-sdk
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
+
+      - id: synth-cache-restore-lookup
+        name: synth-sdk cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.synth-cache-restore-key.outputs.paths }}
+          key: ${{ steps.synth-cache-restore-key.outputs.key }}
+          lookup-only: true
 
       - id: synth-cache-restore
-        name: WASI SDK を cache から復元
-        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        name: synth-sdk cache restore
+        if: steps.synth-cache-restore-lookup.outputs.cache-hit == 'true'
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: |
-            build/cache/
-            build/wasi-sdk-*
-          key: yosys-wasi-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
+          path: ${{ steps.synth-cache-restore-key.outputs.paths }}
+          key: ${{ steps.synth-cache-restore-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: synth-cache-restore-check
+        name: synth-sdk cache integrity
+        env:
+          COMPONENT: synth-sdk
+          CACHE_KEY: ${{ steps.synth-cache-restore-key.outputs.key }}
+          CACHE_HIT: ${{ steps.synth-cache-restore.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.synth-cache-restore-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
+
+      - id: synth-wasi-output-cache-restore-key
+        name: synth cache key
+        env:
+          COMPONENT: synth
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
+
+      - id: synth-wasi-output-cache-restore-lookup
+        name: synth cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.synth-wasi-output-cache-restore-key.outputs.paths }}
+          key: ${{ steps.synth-wasi-output-cache-restore-key.outputs.key }}
+          lookup-only: true
 
       - id: synth-wasi-output-cache-restore
-        name: Yosys WASI build output cache を復元
-        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+        name: synth cache restore
+        if: steps.synth-wasi-output-cache-restore-lookup.outputs.cache-hit == 'true'
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: |
-            build/wasi/yosys/yosys.wasm
-            build/wasi/yosys/share/
-            build/wasi/yosys/build-info.json
-          key: yosys-wasi-out-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
+          path: ${{ steps.synth-wasi-output-cache-restore-key.outputs.paths }}
+          key: ${{ steps.synth-wasi-output-cache-restore-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: synth-wasi-output-cache-restore-check
+        name: synth cache integrity
+        env:
+          COMPONENT: synth
+          CACHE_KEY: ${{ steps.synth-wasi-output-cache-restore-key.outputs.key }}
+          CACHE_HIT: ${{ steps.synth-wasi-output-cache-restore.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.synth-wasi-output-cache-restore-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
 
       - id: synth-wasi-output-cache-check
         name: Yosys WASI cache artifact の整合性を確認
         if: steps.synth-wasi-output-cache-restore.outputs.cache-hit == 'true'
         run: |
-          if python3 scripts/build-synth-info.py \
+          python3 scripts/build-synth-info.py \
             --check --mode wasi \
             --binary build/wasi/yosys/yosys.wasm \
-            --output build/wasi/yosys/build-info.json \
-            && test -d build/wasi/yosys/share; then
-            echo "valid=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "valid=false" >> "$GITHUB_OUTPUT"
-            rm -f build/wasi/yosys/yosys.wasm build/wasi/yosys/build-info.json
-            rm -rf build/wasi/yosys/share
-          fi
+            --output build/wasi/yosys/build-info.json
+          test -d build/wasi/yosys/share
+          echo "valid=true" >> "$GITHUB_OUTPUT"
 
       - name: Runner resources
         run: |
@@ -419,28 +625,56 @@ jobs:
           free -g
           LC_ALL=C JOBS="$(nproc)" /usr/bin/time -v -o "$timing_dir/yosys-wasi.time.log" scripts/build-synth-wasm.sh
 
+      - id: decoder-cache-key
+        name: decoders cache key
+        env:
+          COMPONENT: decoders
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
+
+      - id: decoder-cache-lookup
+        name: decoders cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.decoder-cache-key.outputs.paths }}
+          key: ${{ steps.decoder-cache-key.outputs.key }}
+          lookup-only: true
+
+      - id: decoder-cache
+        name: decoders cache restore
+        if: steps.decoder-cache-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.decoder-cache-key.outputs.paths }}
+          key: ${{ steps.decoder-cache-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: decoder-cache-check
+        name: decoders cache integrity
+        env:
+          COMPONENT: decoders
+          CACHE_KEY: ${{ steps.decoder-cache-key.outputs.key }}
+          CACHE_HIT: ${{ steps.decoder-cache.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.decoder-cache-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
+
       - id: decoder-wasi-build
         name: 圧縮 decoder WASM をビルド
+        if: steps.decoder-cache.outputs.cache-hit != 'true'
         run: scripts/build-decoders.sh
-
-      - name: WASI SDK cache を保存
-        if: steps.synth-cache-restore.outputs.cache-hit != 'true' && steps.synth-wasi-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            build/cache/
-            build/wasi-sdk-*
-          key: yosys-wasi-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
-
-      - name: Yosys WASI output cache を保存
-        if: steps.synth-wasi-output-cache-restore.outputs.cache-hit != 'true' && steps.synth-wasi-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            build/wasi/yosys/yosys.wasm
-            build/wasi/yosys/share/
-            build/wasi/yosys/build-info.json
-          key: yosys-wasi-out-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
 
       - name: Yosys build resource summary
         if: always()
@@ -571,6 +805,48 @@ jobs:
             echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
           fi
 
+      - name: synth-sdk cache manifest
+        if: steps.synth-cache-restore.outputs.cache-hit != 'true' && steps.synth-wasi-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: synth-sdk
+          CACHE_KEY: ${{ steps.synth-cache-restore-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: synth-sdk cache save
+        if: steps.synth-cache-restore.outputs.cache-hit != 'true' && steps.synth-wasi-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.synth-cache-restore-key.outputs.key }}
+          path: ${{ steps.synth-cache-restore-key.outputs.paths }}
+
+      - name: synth cache manifest
+        if: steps.synth-wasi-output-cache-restore.outputs.cache-hit != 'true' && steps.synth-wasi-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: synth
+          CACHE_KEY: ${{ steps.synth-wasi-output-cache-restore-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: synth cache save
+        if: steps.synth-wasi-output-cache-restore.outputs.cache-hit != 'true' && steps.synth-wasi-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.synth-wasi-output-cache-restore-key.outputs.key }}
+          path: ${{ steps.synth-wasi-output-cache-restore-key.outputs.paths }}
+
+      - name: decoders cache manifest
+        if: steps.decoder-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: decoders
+          CACHE_KEY: ${{ steps.decoder-cache-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: decoders cache save
+        if: steps.decoder-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.decoder-cache-key.outputs.key }}
+          path: ${{ steps.decoder-cache-key.outputs.paths }}
+
   synth-native:
     name: Yosys native synthesis
     needs: changes
@@ -597,49 +873,63 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y bison flex
 
-      - id: synth-key
-        name: Yosys と WASI SDK の cache key を作成
-        run: |
-          pin="$(python3 .github/scripts/check-pins.py wasi-sdk-pin)"
-          effective_flags="$(
-            {
-              printf 'WASI_OPT_FLAGS=%s\n' "${WASI_OPT_FLAGS--Os}"
-              printf 'WASI_EXTRA_CFLAGS=%s\n' "${WASI_EXTRA_CFLAGS--flto}"
-              printf 'WASI_EXTRA_CXXFLAGS=%s\n' "${WASI_EXTRA_CXXFLAGS--flto}"
-              printf 'WASI_EXTRA_LDFLAGS=%s\n' "${WASI_EXTRA_LDFLAGS--flto}"
-            } | sha256sum | awk '{print $1}'
-          )"
-          printf 'revision=%s\n' "$(git rev-parse HEAD:vendor/yosys)" >> "$GITHUB_OUTPUT"
-          printf 'pin=%s\n' "$(printf '%s\n%s\n' "$pin" "$effective_flags" | sha256sum | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+      - id: synth-native-output-cache-restore-key
+        name: synth-native cache key
+        env:
+          COMPONENT: synth-native
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
 
-      - id: synth-native-output-cache-restore
-        name: Yosys native build output cache を復元
-        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+      - id: synth-native-output-cache-restore-lookup
+        name: synth-native cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: |
-            build/native/yosys
-            build/native/yosys-abc
-            build/native/share/
-            build/native/build-info.json
-          key: yosys-native-out-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
+          path: ${{ steps.synth-native-output-cache-restore-key.outputs.paths }}
+          key: ${{ steps.synth-native-output-cache-restore-key.outputs.key }}
+          lookup-only: true
+
+      - id: synth-native-output-cache-restore
+        name: synth-native cache restore
+        if: steps.synth-native-output-cache-restore-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.synth-native-output-cache-restore-key.outputs.paths }}
+          key: ${{ steps.synth-native-output-cache-restore-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: synth-native-output-cache-restore-check
+        name: synth-native cache integrity
+        env:
+          COMPONENT: synth-native
+          CACHE_KEY: ${{ steps.synth-native-output-cache-restore-key.outputs.key }}
+          CACHE_HIT: ${{ steps.synth-native-output-cache-restore.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.synth-native-output-cache-restore-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
 
       - id: synth-native-output-cache-check
         name: Yosys native cache artifact の整合性を確認
         if: steps.synth-native-output-cache-restore.outputs.cache-hit == 'true'
         run: |
-          if python3 scripts/build-synth-info.py \
+          python3 scripts/build-synth-info.py \
             --check --mode native \
             --binary build/native/yosys \
-            --output build/native/build-info.json \
-            && test -x build/native/yosys-abc \
-            && test -d build/native/share/gowin; then
-            echo "valid=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "valid=false" >> "$GITHUB_OUTPUT"
-            rm -f build/native/yosys build/native/yosys-abc build/native/build-info.json
-            rm -rf build/native/share
-          fi
+            --output build/native/build-info.json
+          test -x build/native/yosys-abc
+          test -d build/native/share/gowin
+          echo "valid=true" >> "$GITHUB_OUTPUT"
 
       - name: Runner resources
         run: |
@@ -657,17 +947,6 @@ jobs:
           nproc
           free -g
           LC_ALL=C JOBS="$(nproc)" /usr/bin/time -v -o "$timing_dir/yosys-native.time.log" scripts/build-synth-wasm.sh --native
-
-      - name: Yosys native output cache を保存
-        if: steps.synth-native-output-cache-restore.outputs.cache-hit != 'true' && steps.synth-native-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            build/native/yosys
-            build/native/yosys-abc
-            build/native/share/
-            build/native/build-info.json
-          key: yosys-native-out-ubuntu-26.04-${{ steps.synth-key.outputs.revision }}-${{ steps.synth-key.outputs.pin }}-${{ hashFiles('scripts/build-synth-wasm.sh', 'scripts/build-synth-info.py') }}
 
       - name: Yosys native build resource summary
         if: always()
@@ -757,6 +1036,20 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+      - name: synth-native cache manifest
+        if: steps.synth-native-output-cache-restore.outputs.cache-hit != 'true' && steps.synth-native-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: synth-native
+          CACHE_KEY: ${{ steps.synth-native-output-cache-restore-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: synth-native cache save
+        if: steps.synth-native-output-cache-restore.outputs.cache-hit != 'true' && steps.synth-native-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.synth-native-output-cache-restore-key.outputs.key }}
+          path: ${{ steps.synth-native-output-cache-restore-key.outputs.paths }}
+
   synth-compare:
     name: Yosys WASM/native comparison
     needs: [changes, synth, synth-native]
@@ -835,33 +1128,106 @@ jobs:
           node-version-file: .nvmrc
           package-manager-cache: false
 
-      - id: nextpnr-pin
-        name: nextpnr cache key pins を作成
-        run: |
-          echo "gitlink=$(git rev-parse HEAD:vendor/nextpnr)" >> "$GITHUB_OUTPUT"
-          pins="$(python3 .github/scripts/check-pins.py pnr-cache-pin)"
-          printf '%s' "$pins" | sha256sum | awk '{ print "dependencies=" $1 }' >> "$GITHUB_OUTPUT"
-
       - name: nextpnr の整列パッチと負の対照を検証
         run: node --test tests/synth/nextpnr-control-set.test.mjs
 
-      - id: nextpnr-cache-restore
-        name: nextpnr build cache を復元
-        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+      - id: output-cache-key
+        name: nextpnr cache key
+        env:
+          COMPONENT: nextpnr
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
+
+      - id: output-cache-lookup
+        name: nextpnr cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: |
-            build/cache/
-            build/deps/
-            build/wasi-sdk-*
-            build/wasi/nextpnr/
-            build/native/nextpnr/
-          key: nextpnr-ubuntu-26.04-${{ steps.nextpnr-pin.outputs.gitlink }}-${{ steps.nextpnr-pin.outputs.dependencies }}-${{ hashFiles('scripts/build-pnr-wasm.sh', 'scripts/build-pnr-info.py', 'scripts/prepare-pnr-source.py', 'scripts/nextpnr-patches.cmake', 'patches/nextpnr/*.patch') }}
+          path: ${{ steps.output-cache-key.outputs.paths }}
+          key: ${{ steps.output-cache-key.outputs.key }}
+          lookup-only: true
+
+      - id: output-cache
+        name: nextpnr cache restore
+        if: steps.output-cache-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.output-cache-key.outputs.paths }}
+          key: ${{ steps.output-cache-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: output-cache-check
+        name: nextpnr cache integrity
+        env:
+          COMPONENT: nextpnr
+          CACHE_KEY: ${{ steps.output-cache-key.outputs.key }}
+          CACHE_HIT: ${{ steps.output-cache.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.output-cache-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
+
+      - id: nextpnr-cache-restore-key
+        name: nextpnr-inputs cache key
+        env:
+          COMPONENT: nextpnr-inputs
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
+
+      - id: nextpnr-cache-restore-lookup
+        name: nextpnr-inputs cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) && steps.output-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.nextpnr-cache-restore-key.outputs.paths }}
+          key: ${{ steps.nextpnr-cache-restore-key.outputs.key }}
+          lookup-only: true
+
+      - id: nextpnr-cache-restore
+        name: nextpnr-inputs cache restore
+        if: steps.nextpnr-cache-restore-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.nextpnr-cache-restore-key.outputs.paths }}
+          key: ${{ steps.nextpnr-cache-restore-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: nextpnr-cache-restore-check
+        name: nextpnr-inputs cache integrity
+        env:
+          COMPONENT: nextpnr-inputs
+          CACHE_KEY: ${{ steps.nextpnr-cache-restore-key.outputs.key }}
+          CACHE_HIT: ${{ steps.nextpnr-cache-restore.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.nextpnr-cache-restore-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) && steps.output-cache.outputs.cache-hit != 'true' }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
 
       - id: nextpnr-wasi-build
         name: WASI nextpnr と chipdb をビルド
         env:
-          CACHE_HIT: ${{ steps.nextpnr-cache-restore.outputs.cache-hit }}
+          CACHE_HIT: ${{ steps.output-cache.outputs.cache-hit }}
+        if: steps.output-cache.outputs.cache-hit != 'true'
         run: |
           timing_dir="$GITHUB_WORKSPACE/build/timings"
           mkdir -p "$timing_dir"
@@ -871,21 +1237,10 @@ jobs:
           free -g
           LC_ALL=C JOBS="$(nproc)" /usr/bin/time -v -o "$timing_dir/nextpnr-wasi.time.log" scripts/build-pnr-wasm.sh
 
-      - name: nextpnr build cache を保存
-        if: steps.nextpnr-cache-restore.outputs.cache-hit != 'true' && steps.nextpnr-wasi-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            build/cache/
-            build/deps/
-            build/wasi-sdk-*
-            build/wasi/nextpnr/
-            build/native/nextpnr/
-          key: nextpnr-ubuntu-26.04-${{ steps.nextpnr-pin.outputs.gitlink }}-${{ steps.nextpnr-pin.outputs.dependencies }}-${{ hashFiles('scripts/build-pnr-wasm.sh', 'scripts/build-pnr-info.py', 'scripts/prepare-pnr-source.py', 'scripts/nextpnr-patches.cmake', 'patches/nextpnr/*.patch') }}
-
       - name: native nextpnr をビルド
         env:
-          CACHE_HIT: ${{ steps.nextpnr-cache-restore.outputs.cache-hit }}
+          CACHE_HIT: ${{ steps.output-cache.outputs.cache-hit }}
+        if: steps.output-cache.outputs.cache-hit != 'true'
         run: |
           timing_dir="$GITHUB_WORKSPACE/build/timings"
           mkdir -p "$timing_dir"
@@ -898,8 +1253,12 @@ jobs:
       - name: nextpnr build resource summary
         if: always()
         env:
-          CACHE_HIT: ${{ steps.nextpnr-cache-restore.outputs.cache-hit }}
+          CACHE_HIT: ${{ steps.output-cache.outputs.cache-hit }}
         run: |
+          if [[ "$CACHE_HIT" == true ]]; then
+            echo "Verified output cache hit; compilation and build resource measurement skipped." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           report_time() {
             local label="$1"
             local log="$2"
@@ -928,7 +1287,7 @@ jobs:
       - name: 成果物の SHA-256 を記録
         if: always()
         env:
-          CACHE_HIT: ${{ steps.nextpnr-cache-restore.outputs.cache-hit }}
+          CACHE_HIT: ${{ steps.output-cache.outputs.cache-hit }}
         run: |
           hash_file() {
             local path="$1"
@@ -944,7 +1303,7 @@ jobs:
             printf 'S8-SHA256 nextpnr MISSING %s\n' "$path"
           }
           {
-            printf 'S8-CACHE nextpnr hit=%s valid=not-checked\n' "${CACHE_HIT:-false}"
+            printf 'S8-CACHE nextpnr hit=%s integrity=verified-on-hit\n' "${CACHE_HIT:-false}"
             hash_file build/wasi/nextpnr/nextpnr-himbaechel-gowin.wasm
             hash_file build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1N-9C.bin
             hash_file build/wasi/nextpnr/share/himbaechel/gowin/chipdb-GW1NS-4.bin
@@ -995,6 +1354,34 @@ jobs:
           else
             echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
           fi
+
+      - name: nextpnr-inputs cache manifest
+        if: steps.nextpnr-cache-restore.outputs.cache-hit != 'true' && steps.nextpnr-wasi-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: nextpnr-inputs
+          CACHE_KEY: ${{ steps.nextpnr-cache-restore-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: nextpnr-inputs cache save
+        if: steps.nextpnr-cache-restore.outputs.cache-hit != 'true' && steps.nextpnr-wasi-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.nextpnr-cache-restore-key.outputs.key }}
+          path: ${{ steps.nextpnr-cache-restore-key.outputs.paths }}
+
+      - name: nextpnr cache manifest
+        if: steps.output-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: nextpnr
+          CACHE_KEY: ${{ steps.output-cache-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: nextpnr cache save
+        if: steps.output-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.output-cache-key.outputs.key }}
+          path: ${{ steps.output-cache-key.outputs.paths }}
 
   nextpnr-compare:
     name: nextpnr WASI/native comparison
@@ -1072,25 +1459,100 @@ jobs:
       - name: npm 依存を取得
         run: npm ci
 
-      - id: ghdl-key
-        name: GHDL の cache key を作成
-        run: |
-          echo "ghdl=$(git rev-parse HEAD:vendor/ghdl)" >> "$GITHUB_OUTPUT"
-          wasi_pin="$(python3 .github/scripts/check-pins.py wasi-sdk-pin)"
-          echo "wasi=$(printf '%s' "$wasi_pin" | sha256sum | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+      - id: output-cache-key
+        name: ghdl cache key
+        env:
+          COMPONENT: ghdl
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
 
-      - id: ghdl-cache-restore
-        name: GHDL build inputs を cache から復元
-        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+      - id: output-cache-lookup
+        name: ghdl cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: |
-            build/cache/ghdl-wasm/
-            build/cache/ghdl-host-packages/
-            build/wasi-sdk-*
-          key: ghdl-wasm-ubuntu-26.04-${{ steps.ghdl-key.outputs.ghdl }}-${{ steps.ghdl-key.outputs.wasi }}-${{ hashFiles('scripts/build-ghdl-wasm.sh', 'scripts/ghdl-wasm/**', 'patches/ghdl/**') }}
+          path: ${{ steps.output-cache-key.outputs.paths }}
+          key: ${{ steps.output-cache-key.outputs.key }}
+          lookup-only: true
+
+      - id: output-cache
+        name: ghdl cache restore
+        if: steps.output-cache-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.output-cache-key.outputs.paths }}
+          key: ${{ steps.output-cache-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: output-cache-check
+        name: ghdl cache integrity
+        env:
+          COMPONENT: ghdl
+          CACHE_KEY: ${{ steps.output-cache-key.outputs.key }}
+          CACHE_HIT: ${{ steps.output-cache.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.output-cache-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
+
+      - id: ghdl-cache-restore-key
+        name: ghdl-inputs cache key
+        env:
+          COMPONENT: ghdl-inputs
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
+
+      - id: ghdl-cache-restore-lookup
+        name: ghdl-inputs cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) && steps.output-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.ghdl-cache-restore-key.outputs.paths }}
+          key: ${{ steps.ghdl-cache-restore-key.outputs.key }}
+          lookup-only: true
+
+      - id: ghdl-cache-restore
+        name: ghdl-inputs cache restore
+        if: steps.ghdl-cache-restore-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.ghdl-cache-restore-key.outputs.paths }}
+          key: ${{ steps.ghdl-cache-restore-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: ghdl-cache-restore-check
+        name: ghdl-inputs cache integrity
+        env:
+          COMPONENT: ghdl-inputs
+          CACHE_KEY: ${{ steps.ghdl-cache-restore-key.outputs.key }}
+          CACHE_HIT: ${{ steps.ghdl-cache-restore.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.ghdl-cache-restore-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) && steps.output-cache.outputs.cache-hit != 'true' }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Pinned WASI SDK 34 を取得
+        if: steps.output-cache.outputs.cache-hit != 'true'
         run: |
           pin="$(python3 .github/scripts/check-pins.py wasi-sdk-pin)"
           IFS=$'\t' read -r version sha asset url <<< "$pin"
@@ -1119,6 +1581,7 @@ jobs:
 
       - id: ghdl-build
         name: GHDL WASM と native 版をビルド
+        if: steps.output-cache.outputs.cache-hit != 'true'
         run: |
           timing_dir="$GITHUB_WORKSPACE/build/timings"
           mkdir -p "$timing_dir"
@@ -1130,8 +1593,12 @@ jobs:
       - name: GHDL build resource summary
         if: always()
         env:
-          CACHE_HIT: ${{ steps.ghdl-cache-restore.outputs.cache-hit }}
+          CACHE_HIT: ${{ steps.output-cache.outputs.cache-hit }}
         run: |
+          if [[ "$CACHE_HIT" == true ]]; then
+            echo "Verified output cache hit; compilation and build resource measurement skipped." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           log="$GITHUB_WORKSPACE/build/timings/ghdl.time.log"
           wall="$(sed -n 's/^[[:space:]]*Elapsed (wall clock) time (h:mm:ss or m:ss): //p' "$log" 2>/dev/null | tail -n 1)"
           rss="$(sed -n 's/^[[:space:]]*Maximum resident set size (kbytes): //p' "$log" 2>/dev/null | tail -n 1)"
@@ -1148,16 +1615,6 @@ jobs:
       - id: ghdl-tests
         name: WASM/native VHDL 合成を比較
         run: node --test tests/synth/ghdl-wasm.test.mjs
-
-      - name: GHDL build inputs cache を保存
-        if: steps.ghdl-cache-restore.outputs.cache-hit != 'true' && steps.ghdl-build.outcome == 'success' && steps.ghdl-tests.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            build/cache/ghdl-wasm/
-            build/cache/ghdl-host-packages/
-            build/wasi-sdk-*
-          key: ghdl-wasm-ubuntu-26.04-${{ steps.ghdl-key.outputs.ghdl }}-${{ steps.ghdl-key.outputs.wasi }}-${{ hashFiles('scripts/build-ghdl-wasm.sh', 'scripts/ghdl-wasm/**', 'patches/ghdl/**') }}
 
       - name: 成果物の SHA-256 を記録
         if: always()
@@ -1216,6 +1673,34 @@ jobs:
             echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
           fi
 
+      - name: ghdl-inputs cache manifest
+        if: steps.ghdl-cache-restore.outputs.cache-hit != 'true' && steps.ghdl-build.outcome == 'success' && steps.ghdl-tests.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: ghdl-inputs
+          CACHE_KEY: ${{ steps.ghdl-cache-restore-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: ghdl-inputs cache save
+        if: steps.ghdl-cache-restore.outputs.cache-hit != 'true' && steps.ghdl-build.outcome == 'success' && steps.ghdl-tests.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.ghdl-cache-restore-key.outputs.key }}
+          path: ${{ steps.ghdl-cache-restore-key.outputs.paths }}
+
+      - name: ghdl cache manifest
+        if: steps.output-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: ghdl
+          CACHE_KEY: ${{ steps.output-cache-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: ghdl cache save
+        if: steps.output-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.output-cache-key.outputs.key }}
+          path: ${{ steps.output-cache-key.outputs.paths }}
+
   iverilog:
     name: Icarus Verilog WASI build and comparison
     needs: changes
@@ -1250,25 +1735,101 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y bison flex gperf
 
-      - id: iverilog-key
-        name: Icarus Verilog の cache key を作成
-        run: |
-          echo "iverilog=$(git rev-parse HEAD:vendor/iverilog)" >> "$GITHUB_OUTPUT"
-          wasi_pin="$(python3 .github/scripts/check-pins.py wasi-sdk-pin)"
-          echo "wasi=$(printf '%s' "$wasi_pin" | sha256sum | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+      - id: output-cache-key
+        name: iverilog cache key
+        env:
+          COMPONENT: iverilog
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
 
-      - id: iverilog-cache-restore
-        name: Icarus Verilog build inputs を cache から復元
-        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+      - id: output-cache-lookup
+        name: iverilog cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: |
-            build/cache/wasi-sdk-*
-            build/wasi-sdk-*
-          key: iverilog-wasi-ubuntu-26.04-${{ steps.iverilog-key.outputs.iverilog }}-${{ steps.iverilog-key.outputs.wasi }}-${{ hashFiles('scripts/build-iverilog-wasm.sh', 'scripts/build-iverilog-info.py', 'patches/iverilog/**') }}
+          path: ${{ steps.output-cache-key.outputs.paths }}
+          key: ${{ steps.output-cache-key.outputs.key }}
+          lookup-only: true
+
+      - id: output-cache
+        name: iverilog cache restore
+        if: steps.output-cache-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.output-cache-key.outputs.paths }}
+          key: ${{ steps.output-cache-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: output-cache-check
+        name: iverilog cache integrity
+        env:
+          COMPONENT: iverilog
+          CACHE_KEY: ${{ steps.output-cache-key.outputs.key }}
+          CACHE_HIT: ${{ steps.output-cache.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.output-cache-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
+
+      - id: iverilog-cache-restore-key
+        name: iverilog-inputs cache key
+        env:
+          COMPONENT: iverilog-inputs
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
+
+      - id: iverilog-cache-restore-lookup
+        name: iverilog-inputs cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) && steps.output-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.iverilog-cache-restore-key.outputs.paths }}
+          key: ${{ steps.iverilog-cache-restore-key.outputs.key }}
+          lookup-only: true
+
+      - id: iverilog-cache-restore
+        name: iverilog-inputs cache restore
+        if: steps.iverilog-cache-restore-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.iverilog-cache-restore-key.outputs.paths }}
+          key: ${{ steps.iverilog-cache-restore-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: iverilog-cache-restore-check
+        name: iverilog-inputs cache integrity
+        env:
+          COMPONENT: iverilog-inputs
+          CACHE_KEY: ${{ steps.iverilog-cache-restore-key.outputs.key }}
+          CACHE_HIT: ${{ steps.iverilog-cache-restore.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.iverilog-cache-restore-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) && steps.output-cache.outputs.cache-hit != 'true' }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
 
       - id: iverilog-build
         name: Icarus Verilog WASM と native 版をビルド
+        if: steps.output-cache.outputs.cache-hit != 'true'
         run: |
           scripts/build-iverilog-wasm.sh
           scripts/build-iverilog-wasm.sh --native
@@ -1297,14 +1858,33 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-      - name: Icarus Verilog build inputs cache を保存
-        if: steps.iverilog-cache-restore.outputs.cache-hit != 'true' && steps.iverilog-build.outcome == 'success' && steps.iverilog-tests.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+      - name: iverilog-inputs cache manifest
+        if: steps.iverilog-cache-restore.outputs.cache-hit != 'true' && steps.iverilog-build.outcome == 'success' && steps.iverilog-tests.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: iverilog-inputs
+          CACHE_KEY: ${{ steps.iverilog-cache-restore-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: iverilog-inputs cache save
+        if: steps.iverilog-cache-restore.outputs.cache-hit != 'true' && steps.iverilog-build.outcome == 'success' && steps.iverilog-tests.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: |
-            build/cache/wasi-sdk-*
-            build/wasi-sdk-*
-          key: iverilog-wasi-ubuntu-26.04-${{ steps.iverilog-key.outputs.iverilog }}-${{ steps.iverilog-key.outputs.wasi }}-${{ hashFiles('scripts/build-iverilog-wasm.sh', 'scripts/build-iverilog-info.py', 'patches/iverilog/**') }}
+          key: ${{ steps.iverilog-cache-restore-key.outputs.key }}
+          path: ${{ steps.iverilog-cache-restore-key.outputs.paths }}
+
+      - name: iverilog cache manifest
+        if: steps.output-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: iverilog
+          CACHE_KEY: ${{ steps.output-cache-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: iverilog cache save
+        if: steps.output-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.output-cache-key.outputs.key }}
+          path: ${{ steps.output-cache-key.outputs.paths }}
 
   surfer:
     name: Surfer WASM build
@@ -1324,26 +1904,101 @@ jobs:
       - name: Surfer submodule を取得
         run: git submodule update --init --depth 1 -- vendor/surfer
 
-      - id: surfer-key
-        name: Surfer Cargo cache key を作成
-        run: |
-          pin="$(python3 .github/scripts/check-pins.py surfer-tool-pins)"
-          rust="${pin%%$'\t'*}"
-          echo "rust=$rust" >> "$GITHUB_OUTPUT"
+      - id: output-cache-key
+        name: surfer cache key
+        env:
+          COMPONENT: surfer
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
 
-      - id: surfer-cache-restore
-        name: Surfer Cargo cache を復元
-        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+      - id: output-cache-lookup
+        name: surfer cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: |
-            ~/.cargo/registry/
-            ~/.cargo/git/db/
-            build/surfer/target/
-          key: surfer-cargo-ubuntu-26.04-rust-${{ steps.surfer-key.outputs.rust }}-${{ hashFiles('vendor/surfer/Cargo.lock') }}-${{ hashFiles('patches/surfer/**') }}
+          path: ${{ steps.output-cache-key.outputs.paths }}
+          key: ${{ steps.output-cache-key.outputs.key }}
+          lookup-only: true
+
+      - id: output-cache
+        name: surfer cache restore
+        if: steps.output-cache-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.output-cache-key.outputs.paths }}
+          key: ${{ steps.output-cache-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: output-cache-check
+        name: surfer cache integrity
+        env:
+          COMPONENT: surfer
+          CACHE_KEY: ${{ steps.output-cache-key.outputs.key }}
+          CACHE_HIT: ${{ steps.output-cache.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.output-cache-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
+
+      - id: surfer-cache-restore-key
+        name: surfer-inputs cache key
+        env:
+          COMPONENT: surfer-inputs
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
+
+      - id: surfer-cache-restore-lookup
+        name: surfer-inputs cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) && steps.output-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.surfer-cache-restore-key.outputs.paths }}
+          key: ${{ steps.surfer-cache-restore-key.outputs.key }}
+          lookup-only: true
+
+      - id: surfer-cache-restore
+        name: surfer-inputs cache restore
+        if: steps.surfer-cache-restore-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.surfer-cache-restore-key.outputs.paths }}
+          key: ${{ steps.surfer-cache-restore-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: surfer-cache-restore-check
+        name: surfer-inputs cache integrity
+        env:
+          COMPONENT: surfer-inputs
+          CACHE_KEY: ${{ steps.surfer-cache-restore-key.outputs.key }}
+          CACHE_HIT: ${{ steps.surfer-cache-restore.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.surfer-cache-restore-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) && steps.output-cache.outputs.cache-hit != 'true' }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
 
       - id: surfer-build
         name: Surfer WASM をビルドし license を収集
+        if: steps.output-cache.outputs.cache-hit != 'true'
         run: scripts/build-surfer.sh
 
       - name: Surfer artifact の SHA-256 を記録
@@ -1356,22 +2011,40 @@ jobs:
               printf 'S12-SHA256 %s %s %s\n' "$relative" "$size" "$digest"
             done | tee -a "$GITHUB_STEP_SUMMARY"
 
-      - name: Surfer Cargo cache を保存
-        if: steps.surfer-cache-restore.outputs.cache-hit != 'true' && steps.surfer-build.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            ~/.cargo/registry/
-            ~/.cargo/git/db/
-            build/surfer/target/
-          key: surfer-cargo-ubuntu-26.04-rust-${{ steps.surfer-key.outputs.rust }}-${{ hashFiles('vendor/surfer/Cargo.lock') }}-${{ hashFiles('patches/surfer/**') }}
-
       - name: Surfer WASM artifact を保存
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ci-surfer-wasm-${{ github.run_id }}
           path: build/surfer/dist/
           retention-days: 1
+
+      - name: surfer-inputs cache manifest
+        if: steps.surfer-cache-restore.outputs.cache-hit != 'true' && steps.surfer-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: surfer-inputs
+          CACHE_KEY: ${{ steps.surfer-cache-restore-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: surfer-inputs cache save
+        if: steps.surfer-cache-restore.outputs.cache-hit != 'true' && steps.surfer-build.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.surfer-cache-restore-key.outputs.key }}
+          path: ${{ steps.surfer-cache-restore-key.outputs.paths }}
+
+      - name: surfer cache manifest
+        if: steps.output-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: surfer
+          CACHE_KEY: ${{ steps.output-cache-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: surfer cache save
+        if: steps.output-cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.output-cache-key.outputs.key }}
+          path: ${{ steps.output-cache-key.outputs.paths }}
 
   pyodide-pack:
     name: Pyodide gowin_pack (${{ matrix.suite }})
@@ -1475,13 +2148,51 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-      - id: pack-cache-restore
-        name: Pyodide pack asset cache を復元
-        if: github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
+      - id: pack-cache-restore-key
+        name: pack-inputs cache key
+        env:
+          COMPONENT: pack-inputs
+        run: python3 scripts/ci-build-cache.py key "$COMPONENT" >> "$GITHUB_OUTPUT"
+
+      - id: pack-cache-restore-lookup
+        name: pack-inputs cache lookup
+        if: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: build/cache/pack/
-          key: pyodide-pack-ubuntu-26.04-${{ hashFiles('package.json', 'package-lock.json', 'requirements-nextpnr.txt', 'scripts/build-pack-assets.sh', 'scripts/build-pack-assets.py', '.github/scripts/check-pins.py') }}
+          path: ${{ steps.pack-cache-restore-key.outputs.paths }}
+          key: ${{ steps.pack-cache-restore-key.outputs.key }}
+          lookup-only: true
+
+      - id: pack-cache-restore
+        name: pack-inputs cache restore
+        if: steps.pack-cache-restore-lookup.outputs.cache-hit == 'true'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.pack-cache-restore-key.outputs.paths }}
+          key: ${{ steps.pack-cache-restore-key.outputs.key }}
+          fail-on-cache-miss: true
+
+      - id: pack-cache-restore-check
+        name: pack-inputs cache integrity
+        env:
+          COMPONENT: pack-inputs
+          CACHE_KEY: ${{ steps.pack-cache-restore-key.outputs.key }}
+          CACHE_HIT: ${{ steps.pack-cache-restore.outputs.cache-hit }}
+          EXPECTED_HIT: ${{ steps.pack-cache-restore-lookup.outputs.cache-hit }}
+          ENABLED: ${{ github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache) }}
+        run: |
+          if [[ "$EXPECTED_HIT" == true && "$CACHE_HIT" != true ]]; then
+            echo "Cache restore failed after an exact lookup hit" >&2
+            exit 1
+          fi
+          state=miss
+          if [[ "$ENABLED" != true ]]; then state=disabled; fi
+          if [[ "$CACHE_HIT" == true ]]; then
+            python3 scripts/ci-build-cache.py check "$COMPONENT" --key "$CACHE_KEY"
+            state=verified-hit
+            echo "valid=true" >> "$GITHUB_OUTPUT"
+          fi
+          printf 'Cache %s: %s (%s)\n' "$COMPONENT" "$state" "$CACHE_KEY" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Native Apycula venv を作成
         run: |
@@ -1491,13 +2202,6 @@ jobs:
       - id: pack-assets
         name: Pyodide pack assets を検証
         run: scripts/build-pack-assets.sh
-
-      - name: Pyodide pack asset cache を保存
-        if: steps.pack-cache-restore.outputs.cache-hit != 'true' && steps.pack-assets.outcome == 'success' && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.cache)
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: build/cache/pack/
-          key: pyodide-pack-ubuntu-26.04-${{ hashFiles('package.json', 'package-lock.json', 'requirements-nextpnr.txt', 'scripts/build-pack-assets.sh', 'scripts/build-pack-assets.py', '.github/scripts/check-pins.py') }}
 
       - id: pack-parity
         name: Native / Pyodide gowin_pack parity
@@ -1548,6 +2252,20 @@ jobs:
           else
             echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
           fi
+
+      - name: pack-inputs cache manifest
+        if: steps.pack-cache-restore.outputs.cache-hit != 'true' && steps.pack-assets.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        env:
+          COMPONENT: pack-inputs
+          CACHE_KEY: ${{ steps.pack-cache-restore-key.outputs.key }}
+        run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
+
+      - name: pack-inputs cache save
+        if: steps.pack-cache-restore.outputs.cache-hit != 'true' && steps.pack-assets.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: ${{ steps.pack-cache-restore-key.outputs.key }}
+          path: ${{ steps.pack-cache-restore-key.outputs.paths }}
 
   sim:
     name: Simulation shard ${{ matrix.shard }}
