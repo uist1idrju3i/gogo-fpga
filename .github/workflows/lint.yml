@@ -33,6 +33,17 @@ jobs:
       - name: DeepWiki設定検査のテスト
         run: python3 -m unittest discover -s tests/check-deepwiki -v
 
+      - name: ビルドキャッシュと計測器の回帰テスト
+        run: python3 -m unittest discover -s tests/check-ci-cache -v
+
+      - name: shard検査用のNode.jsを設定
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: parityとE2Eのshard・網羅性・集約の回帰テスト
+        run: node --test tests/ci-shards.test.mjs
+
       - name: actionlint を取得して検査
         run: |
           archive="$RUNNER_TEMP/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"

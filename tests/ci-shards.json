@@ -1,0 +1,46 @@
+{
+  "cpu": [
+    [
+      "hazard3"
+    ],
+    [
+      "darkriscv",
+      "femtorv"
+    ],
+    [
+      "neorv32",
+      "serv"
+    ],
+    [
+      "picorv32",
+      "vexriscv"
+    ]
+  ],
+  "hdl": [
+    [
+      "tangnano4k",
+      "tangnano9k"
+    ],
+    [
+      "tangnano1k",
+      "tangnano20k"
+    ]
+  ],
+  "e2e": [
+    [
+      "synthesis.spec.mjs",
+      "workflow.spec.mjs",
+      "openrouter-auth.spec.mjs",
+      "surfer.spec.mjs"
+    ],
+    [
+      "vhdl.spec.mjs",
+      "simulation.spec.mjs",
+      "web-flasher.spec.mjs",
+      "ai-chat.spec.mjs",
+      "ide.spec.mjs",
+      "publication-info.spec.mjs",
+      "s5-synthesis.spec.mjs"
+    ]
+  ]
+}

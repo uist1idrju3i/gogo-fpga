@@ -7,10 +7,12 @@ import test from "node:test";
 
 test("the E2E web rebuild initializes library sources and nested CPU provenance before Playwright", () => {
   const workflow = readFileSync(new URL("../../.github/workflows/build.yml", import.meta.url), "utf8");
-  const e2e = workflow.split("\n  e2e:\n")[1];
-  assert.ok(e2e, "Missing E2E job");
-  const execution = e2e.indexOf("        run: npx playwright test");
+  const e2e = workflow.split("\n  e2e-shards:\n")[1]?.split("\n  e2e-coverage:\n")[0];
+  assert.ok(e2e, "Missing E2E shard job");
+  const execution = e2e.indexOf('        run: node scripts/run-ci-shard.mjs e2e "$E2E_SHARD"');
   assert.ok(execution >= 0, "Missing Playwright execution");
+  const runner = readFileSync(new URL("../../scripts/run-ci-shard.mjs", import.meta.url), "utf8");
+  assert.match(runner, /spawnSync\("npx", \["playwright", "test",/);
   const setup = e2e.slice(0, execution).replace(/\\\n\s*/g, " ");
   assert.match(setup, /git submodule update --init --depth 1 -- vendor\/zstd third_party\//);
   assert.match(setup, /git -C third_party\/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv\/verilog\/ext\/VexRiscv/);

@@ -98,12 +98,12 @@ if (s5bVariants.length > 0) {
     }
   }
 } else {
+  test.skip(
+    !variant || !selectedAssetDir,
+    "Set S5_CHROMIUM_VARIANT and S5_ASSET_DIR to run the S5 finalist measurement.",
+  );
   for (const board of BOARDS) {
     test(`S5 Chromium build matches the baseline for ${board.id}`, async ({ page }) => {
-      test.skip(
-        !variant || !selectedAssetDir,
-        "Set S5_CHROMIUM_VARIANT and S5_ASSET_DIR to run the S5 finalist measurement.",
-      );
       assert.ok(Number.isInteger(repeats) && repeats > 0);
       const projectName = await createProject(page, board);
       await page.evaluate(() => {

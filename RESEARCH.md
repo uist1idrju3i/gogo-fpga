@@ -122,6 +122,10 @@ Pyodide parityの60分中止は、HDL32組とCPU28組を一つのジョブで直
 
 S8 v2 の warm / Yosys cache-miss 合計時間中央値は 12.233 / 28.183 分でした。R1-R6 で見つかった chipdb 差は Apicula の hash-ordered set 反復が原因で、`PYTHONHASHSEED=0` 固定後の R7 miss / R8 hit は4 chipdb とも local seed-0 hash に一致しました。計測した nextpnr / GHDL build の max RSS は12 GiB以下で、ローカルの corrupted-cache check も成功しました。採用は、ユーザーが測定後の2026-10-30に決定したものです（判断「A」、凍結基準は未達項目あり）。未確認なのは `cache=false` run、cache 合計サイズ、CI での corrupted-cache 検出、output-cache hit run で省略された Yosys build の max RSS の4項目です。GHDL native `.cf` は timestamp が変わる既知の中間物で、WASM staging copy は正規化されます。詳細と raw data は [S8 実験記録](docs/experiments/S8-ci-speed.md) と CSV を参照してください。
 
+CIの出力キャッシュを拡張する前に、直近の成功5 runを [S16](docs/experiments/S16-ci-build-cache.md) で調べました。実行区間は中央値52分56秒で、最新mainではCPU parityが34分41秒を占め、Yosysは既にcache hitでした。nextpnr/chipdb、GHDL、Icarus、decoder、Surfer、書き込み部などの出力を、広い入力キーと全ファイルhash検査で再利用します。保存はmainのpush/scheduleだけに制限し、全機能検査とPagesの承認を維持します。改善後の時間とcold/warmの公開資材一致は未確認で、キャッシュ単独の期待は全体で数分です。[保守手順](docs/research/ci-build-cache.md)にキーと運用上の制約を記します。
+
+続けてCPUを4、HDLを2、Playwrightを2 shardへ分けます。CPUの同一コアの4ボードをまとめたまま、全件一覧と実行結果の和集合・重複をcoverage jobで検査します。旧名の3 required checkは全shardとcoverageの成功を調べる集約jobに残します。分割数は個別時間と準備費から選び、27 job、build内の重なりは約9並列です。warmの全体を約21〜26分と予想しますが、分割後CIは未測定です。詳細と生CSVはS16の後続計画に記録します。
+
 ### Pyodide 上の Apicula `gowin_pack`
 
 S3 では Apicula 0.35 の Python wheel を配布物に含め、Node.js の Pyodide 314.0.7 から実行します。Pyodide の lock は Python 3.14.2、micropip 0.11.1、NumPy 2.4.6（SHA-256 `a292c1f5d7d8a2208cd5e94fc467604c131cabcd2fc14fed6eefde121e7fabdf`）、msgspec 0.20.0（SHA-256 `2a4075cee8afc2c0424c63ae1a9b0655e727478df7fa2eb78f86f846fc5fb4bd`）を指定します。これらの wheel hash はビルド時に Pyodide の lock から読み、Apicula wheel の hash は `requirements-nextpnr.txt` の固定値を使います。
@@ -177,6 +181,7 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 
 | 文書 | 内容 |
 |---|---|
+| [CIのビルドキャッシュ](docs/research/ci-build-cache.md) | キーと全ファイル整合性検査、mainだけの保存、cold/warmの観察と未確認範囲 |
 | [Pages公開の承認と配信](docs/research/pages-delivery.md) | mainの成功runの成果物をpagesへ渡す承認PR、previewでの実機確認、管理者のGit連携・ruleset設定 |
 | [DeepWikiの構成と検査](docs/research/deepwiki.md) | 日本語のページ階層、実装・調査の参照方針、安全上の制約と設定の上限検査 |
 | [UX契約と状態遷移](docs/ux/README.md) | DSLの生成手順、design_flowとUIの接続、U2の主操作・tab・安全側の判断、画面確認。実機確認は未実施 |

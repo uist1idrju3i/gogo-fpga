@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
-import test from "node:test";
+import { createPackTest } from "./pack-sharding.mjs";
 import { assertUnknownPnrCellFailure, executionErrorDetails, inspectCpuStructure, isCapacityExceeded, parseDeviceUtilization, withUnknownPnrCell } from "./library-measurements.mjs";
 
+const test = createPackTest(import.meta.url);
 const log = "Info: Device utilisation:\nInfo: LUT4: 217/ 1152 18%\nInfo: DFF: 81/ 864 9%\nInfo: BSRAM: 0/ 4 0%\nInfo:\n";
 
 test("unknown-cell controls leave existing LUT and wide-mux topology unchanged", () => {
