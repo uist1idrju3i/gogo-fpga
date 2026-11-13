@@ -2046,16 +2046,29 @@ jobs:
           key: ${{ steps.output-cache-key.outputs.key }}
           path: ${{ steps.output-cache-key.outputs.paths }}
 
-  pyodide-pack:
-    name: Pyodide gowin_pack (${{ matrix.suite }})
+  pyodide-shards:
+    name: Pyodide shard ${{ matrix.suite }}-${{ matrix.shard }}
     needs: [changes, nextpnr, nextpnr-compare, synth-native, ghdl, iverilog]
     if: needs.changes.outputs.build == 'true' && needs.nextpnr.result == 'success' && needs.nextpnr-compare.result == 'success' && needs.synth-native.result == 'success' && needs.ghdl.result == 'success' && needs.iverilog.result == 'success'
     runs-on: ubuntu-26.04
     timeout-minutes: 60
     strategy:
       fail-fast: false
+      max-parallel: 6
       matrix:
-        suite: [hdl, cpu]
+        include:
+          - suite: cpu
+            shard: 1
+          - suite: cpu
+            shard: 2
+          - suite: cpu
+            shard: 3
+          - suite: cpu
+            shard: 4
+          - suite: hdl
+            shard: 1
+          - suite: hdl
+            shard: 2
     permissions:
       actions: read
       contents: read
@@ -2122,7 +2135,7 @@ jobs:
 
       - id: formal-vhdl
         name: VHDLとPSLの性質をGHDLとYosysで照合
-        if: matrix.suite == 'hdl'
+        if: matrix.suite == 'hdl' && matrix.shard == 1
         run: node --test --test-concurrency=1 tests/synth/formal-vhdl.test.mjs tests/synth/ghdl-replay.test.mjs tests/synth/ghdl-lowered-replay.test.mjs tests/synth/formal-vhdl-lowered.test.mjs
 
       - name: VHDL形式検証の入力・一覧・反例・CSVを保存
@@ -2136,7 +2149,7 @@ jobs:
 
       - id: formal-replay
         name: 元のVerilogでSAT反例を独立に再実行
-        if: matrix.suite == 'hdl'
+        if: matrix.suite == 'hdl' && matrix.shard == 1
         run: node --test --test-concurrency=1 tests/synth/formal-replay.test.mjs
 
       - name: 独立再実行の入力・VCD・ログ・CSVを保存
@@ -2206,25 +2219,29 @@ jobs:
       - id: pack-parity
         name: Native / Pyodide gowin_pack parity
         env:
-          PACK_SUITE: ${{ matrix.suite }}
-        run: |
-          if [[ "$PACK_SUITE" == cpu ]]; then
-            node --test --test-name-pattern '^pinned CPU libraries retain execution and classify all four board builds' tests/synth/gowin-pack.test.mjs
-          else
-            node --test --test-skip-pattern '^pinned CPU libraries retain execution and classify all four board builds' tests/synth/gowin-pack.test.mjs tests/synth/library-components.test.mjs tests/synth/yosys-parity.test.mjs tests/synth/library-measurements.test.mjs
-          fi
+          PACK_SHARD: ${{ matrix.suite }}-${{ matrix.shard }}
+        run: node scripts/run-ci-shard.mjs pack "$PACK_SHARD" "build/ci-shards/parity-$PACK_SHARD"
+
+      - name: parity shard の実行一覧を保存
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: parity-shard-${{ matrix.suite }}-${{ matrix.shard }}
+          path: build/ci-shards/parity-${{ matrix.suite }}-${{ matrix.shard }}/
+          if-no-files-found: error
+          retention-days: 7
 
       - name: 合成・配置配線・packの失敗した入力とログを保存
         if: always() && steps.pack-parity.outcome == 'failure'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: ci-library-flow-failure-${{ matrix.suite }}-${{ github.run_id }}
+          name: ci-library-flow-failure-${{ matrix.suite }}-${{ matrix.shard }}-${{ github.run_id }}
           path: build/t5-library-flow-*/
           if-no-files-found: error
           retention-days: 7
 
       - name: Pyodide pack assets を保存
-        if: matrix.suite == 'hdl'
+        if: matrix.suite == 'hdl' && matrix.shard == 1
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ci-pyodide-pack-${{ github.run_id }}
@@ -2236,7 +2253,7 @@ jobs:
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-          JOB_DISPLAY_NAME: Pyodide gowin_pack (${{ matrix.suite }})
+          JOB_DISPLAY_NAME: Pyodide shard ${{ matrix.suite }}-${{ matrix.shard }}
         run: |
           step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
             .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
@@ -2254,18 +2271,66 @@ jobs:
           fi
 
       - name: pack-inputs cache manifest
-        if: steps.pack-cache-restore.outputs.cache-hit != 'true' && steps.pack-assets.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        if: matrix.suite == 'hdl' && matrix.shard == 1 && steps.pack-cache-restore.outputs.cache-hit != 'true' && steps.pack-assets.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
         env:
           COMPONENT: pack-inputs
           CACHE_KEY: ${{ steps.pack-cache-restore-key.outputs.key }}
         run: python3 scripts/ci-build-cache.py seal "$COMPONENT" --key "$CACHE_KEY"
 
       - name: pack-inputs cache save
-        if: steps.pack-cache-restore.outputs.cache-hit != 'true' && steps.pack-assets.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
+        if: matrix.suite == 'hdl' && matrix.shard == 1 && steps.pack-cache-restore.outputs.cache-hit != 'true' && steps.pack-assets.outcome == 'success' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule')
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           key: ${{ steps.pack-cache-restore-key.outputs.key }}
           path: ${{ steps.pack-cache-restore-key.outputs.paths }}
+
+  parity-coverage:
+    name: Pyodide shard coverage
+    needs: [changes, pyodide-shards]
+    if: always() && needs.changes.outputs.build == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: parity-shard-*
+          path: shard-results
+      - name: 実行一覧の和集合と重複を検査
+        run: node scripts/check-ci-shards.mjs pack shard-results
+
+  pyodide-pack:
+    name: Pyodide gowin_pack (${{ matrix.suite }})
+    needs: [changes, pyodide-shards, parity-coverage]
+    if: always() && needs.changes.outputs.build == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [cpu, hdl]
+    steps:
+      - name: 全shardと網羅性検査の成功を確認
+        env:
+          NEEDS_RESULTS: ${{ toJSON(needs) }}
+          EXPECTED_NEEDS: changes,pyodide-shards,parity-coverage
+        run: |
+          python3 - <<'PYTHON'
+          import json, os
+          results = json.loads(os.environ["NEEDS_RESULTS"])
+          expected = set(os.environ["EXPECTED_NEEDS"].split(","))
+          if set(results) != expected or any(row.get("result") != "success" for row in results.values()):
+              raise SystemExit("Required shard or coverage job did not succeed: " + json.dumps(results))
+          print("All shards and coverage succeeded.")
+          PYTHON
 
   sim:
     name: Simulation shard ${{ matrix.shard }}
@@ -2379,12 +2444,17 @@ jobs:
             echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
           fi
 
-  e2e:
-    name: Playwright E2E
+  e2e-shards:
+    name: Playwright shard ${{ matrix.shard }}
     needs: [changes, build, synth, synth-native, synth-compare, nextpnr, nextpnr-compare, ghdl, pyodide-pack, surfer]
     if: needs.changes.outputs.build == 'true' && needs.build.result == 'success' && needs.synth.result == 'success' && needs.synth-native.result == 'success' && needs.synth-compare.result == 'success' && needs.nextpnr.result == 'success' && needs.nextpnr-compare.result == 'success' && needs.ghdl.result == 'success' && needs.pyodide-pack.result == 'success' && needs.surfer.result == 'success'
     runs-on: ubuntu-26.04
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        shard: [1, 2]
     permissions:
       actions: read
       contents: read
@@ -2489,13 +2559,23 @@ jobs:
         env:
           BUILD_ROOT: build
           BUILD_INFO_CHECK: artifacts
-        run: npx playwright test
+          E2E_SHARD: ${{ matrix.shard }}
+        run: node scripts/run-ci-shard.mjs e2e "$E2E_SHARD" "build/ci-shards/e2e-$E2E_SHARD"
+
+      - name: E2E shard の実行一覧を保存
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-shard-${{ matrix.shard }}
+          path: build/ci-shards/e2e-${{ matrix.shard }}/
+          if-no-files-found: error
+          retention-days: 7
 
       - name: E2E 失敗資料を保存
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: gogo-fpga-web-test-failures-${{ github.sha }}
+          name: gogo-fpga-web-test-failures-${{ github.sha }}-${{ matrix.shard }}
           path: |
             playwright-report/
             test-results/
@@ -2507,7 +2587,7 @@ jobs:
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-          JOB_DISPLAY_NAME: Playwright E2E
+          JOB_DISPLAY_NAME: Playwright shard ${{ matrix.shard }}
         run: |
           step_lines="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs" --paginate --jq '
             .jobs[] | select(.name == env.JOB_DISPLAY_NAME) | .steps[] |
@@ -2523,3 +2603,47 @@ jobs:
           else
             echo "Step timings unavailable (unknown)." >> "$GITHUB_STEP_SUMMARY"
           fi
+
+  e2e-coverage:
+    name: Playwright shard coverage
+    needs: [changes, e2e-shards]
+    if: always() && needs.changes.outputs.build == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: e2e-shard-*
+          path: shard-results
+      - name: 実行一覧の和集合と重複を検査
+        run: node scripts/check-ci-shards.mjs e2e shard-results
+
+  e2e:
+    name: Playwright E2E
+    needs: [changes, e2e-shards, e2e-coverage]
+    if: always() && needs.changes.outputs.build == 'true'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    steps:
+      - name: 全shardと網羅性検査の成功を確認
+        env:
+          NEEDS_RESULTS: ${{ toJSON(needs) }}
+          EXPECTED_NEEDS: changes,e2e-shards,e2e-coverage
+        run: |
+          python3 - <<'PYTHON'
+          import json, os
+          results = json.loads(os.environ["NEEDS_RESULTS"])
+          expected = set(os.environ["EXPECTED_NEEDS"].split(","))
+          if set(results) != expected or any(row.get("result") != "success" for row in results.values()):
+              raise SystemExit("Required shard or coverage job did not succeed: " + json.dumps(results))
+          print("All shards and coverage succeeded.")
+          PYTHON

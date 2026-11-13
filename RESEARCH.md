@@ -122,7 +122,9 @@ Pyodide parityの60分中止は、HDL32組とCPU28組を一つのジョブで直
 
 S8 v2 の warm / Yosys cache-miss 合計時間中央値は 12.233 / 28.183 分でした。R1-R6 で見つかった chipdb 差は Apicula の hash-ordered set 反復が原因で、`PYTHONHASHSEED=0` 固定後の R7 miss / R8 hit は4 chipdb とも local seed-0 hash に一致しました。計測した nextpnr / GHDL build の max RSS は12 GiB以下で、ローカルの corrupted-cache check も成功しました。採用は、ユーザーが測定後の2026-10-30に決定したものです（判断「A」、凍結基準は未達項目あり）。未確認なのは `cache=false` run、cache 合計サイズ、CI での corrupted-cache 検出、output-cache hit run で省略された Yosys build の max RSS の4項目です。GHDL native `.cf` は timestamp が変わる既知の中間物で、WASM staging copy は正規化されます。詳細と raw data は [S8 実験記録](docs/experiments/S8-ci-speed.md) と CSV を参照してください。
 
-CIの出力キャッシュを拡張する前に、直近の成功5 runを [S16](docs/experiments/S16-ci-build-cache.md) で調べました。実行区間は中央値52分56秒で、最新mainではCPU parityが34分41秒を占め、Yosysは既にcache hitでした。nextpnr/chipdb、GHDL、Icarus、decoder、Surfer、書き込み部などの出力を、広い入力キーと全ファイルhash検査で再利用します。保存はmainのpush/scheduleだけに制限し、全機能検査とPagesの承認を維持します。改善後の時間とcold/warmの公開資材一致は未確認で、期待は全体で数分です。[保守手順](docs/research/ci-build-cache.md)にキーと運用上の制約を記します。
+CIの出力キャッシュを拡張する前に、直近の成功5 runを [S16](docs/experiments/S16-ci-build-cache.md) で調べました。実行区間は中央値52分56秒で、最新mainではCPU parityが34分41秒を占め、Yosysは既にcache hitでした。nextpnr/chipdb、GHDL、Icarus、decoder、Surfer、書き込み部などの出力を、広い入力キーと全ファイルhash検査で再利用します。保存はmainのpush/scheduleだけに制限し、全機能検査とPagesの承認を維持します。改善後の時間とcold/warmの公開資材一致は未確認で、キャッシュ単独の期待は全体で数分です。[保守手順](docs/research/ci-build-cache.md)にキーと運用上の制約を記します。
+
+続けてCPUを4、HDLを2、Playwrightを2 shardへ分けます。CPUの同一コアの4ボードをまとめたまま、全件一覧と実行結果の和集合・重複をcoverage jobで検査します。旧名の3 required checkは全shardとcoverageの成功を調べる集約jobに残します。分割数は個別時間と準備費から選び、27 job、build内の重なりは約9並列です。warmの全体を約21〜26分と予想しますが、分割後CIは未測定です。詳細と生CSVはS16の後続計画に記録します。
 
 ### Pyodide 上の Apicula `gowin_pack`
 

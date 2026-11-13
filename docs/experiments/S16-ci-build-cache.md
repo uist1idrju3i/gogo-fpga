@@ -99,3 +99,44 @@ python3 -m unittest discover -s tests/check-ci-cache -v
 実装時はcomposite action案を試しましたが、zizmorのself-repository警告が出ました。推奨の `$/` 参照は固定したactionlintが拒否しました。どちらの検査も緩めず、workflowへ直接展開する案に変更しました。CSVのCRLFによるwhitespaceエラーも修正しました。
 
 基準mainの取得ログのSHA-256は `3541db4eadb57ddcb91ea2f979ee40cade1d134c83d87548e5dffe6318b22642`。ログは上のコマンドで再取得できます。GitHubのstep名の表示方法が変わる場合は、取得時のhashとAPIの時刻を区別してください。
+
+## 後続: parityとPlaywrightの分割
+
+キャッシュのみの実装 `32fd44ae9ebd9e3539958fd8b4395f76d4ce753d` を基準に、同じbranchで検査を分割します。改善後の時間はまだ測っていません。以下はrun 43358334397の個別テスト時間から作った予測で、採用後の実測ではありません。個別値と準備費は [分割前CSV](S16-shards-before.csv)、固定した割当は `tests/ci-shards.json` に保存します。未計測のpublication-info specは10秒を仮置きし、通常は無効なS5の4件は0秒とします。
+
+CPUは28組をコア単位で4分割します。同じコアの4ボードを同一processへ残し、合成netlistのボード間比較と正常・故障注入の実行結果を共有する既存の検査を失わないようにします。HDLは32組をボード別に2分割します。約244秒ずつのEthernetの4組を2組ずつに分け、HDLの独立scoreboard、通常pack、負の対照、形式検証と反例再実行はHDL-1だけで実行します。
+
+| shard | 割当 | 測定済み検査の合計 | 準備込みの目安 |
+|---|---|---:|---:|
+| cpu-1 | hazard3の4ボード | 574.6秒 | 約10.6分 |
+| cpu-2 | darkriscv・femtorvの4ボード | 432.0秒 | 約8.2分 |
+| cpu-3 | neorv32・servの4ボード | 494.2秒 | 約9.2分 |
+| cpu-4 | picorv32・vexriscvの4ボード | 576.1秒 | 約10.6分 |
+| hdl-1 | 4K・9K、通常pack・負の対照など | 約530秒、別に形式検証 | 約10〜11分 |
+| hdl-2 | 1K・20K | 約510秒 | 約9〜10分 |
+| E2E-1 | synthesis・workflow・OpenRouter認証・Surfer | 327.8秒 | 約8分 |
+| E2E-2 | VHDL・simulation・WebUSB・AI・IDE・公開情報・S5 | 323.1秒（仮置き10秒を含む） | 約8分 |
+
+CPUのjob準備・終了処理は59秒、HDLは形式検証を含め84秒でした。Pyodide自体の初期化は2.7〜2.8秒です。既存artifactからnative参照とpack資材を各jobへ渡し、コンパイルは繰り返しません。3 CPU shardではコア単位の割当が約767.5秒に達し、準備を足すと12分を超えるため4個にしました。さらに小さくすると準備・ダウンロード・Pyodide初期化とCPU正常系の再実行を増やすため採用しません。
+
+E2Eはspec全体を一つのshardに置きます。job準備99秒とglobal setup・server約50秒をそれぞれ繰り返します。最長のsynthesis specが265.7秒なので、3分割でもその下には短縮できません。2分割からの改善は約1分にとどまり、追加の準備費が大きいため2個を選びました。workers=1、検査内容、timeoutを維持し、retryは元と同じ0回です。S5の無効条件はcollection時に同じ条件で宣言し、通常の4 skipを一覧にも反映します。新しいskipは許しません。
+
+### 網羅性とrequired check
+
+parityでは各processが元の全4ファイルを読み、登録された全leafの一覧と割当を出力します。実行済み一覧はNodeの実際のpass/failイベントから取得します。matrixの親はcontainerとして扱い、28 CPU・32 HDLの各組を一回ずつ数えます。独立scoreboardの8子テストや通常テストも検査対象です。全shardのcollection一致、割当と実際のpassの一致、既知の全matrix組、失敗・不足・重複を検査します。形式検証の別stepはHDL-1だけに残します。
+
+E2Eは毎shardでPlaywrightの全件 `--list` を取得した後、割り当てたspecだけを実行します。全件一覧の一致、全specの割当、全test IDの和集合、結果1件、期待したstatusを検査します。既存S5の4 skipは全件一覧で確認できる場合だけ認めます。結果がない、余分、失敗、予期しないskip、retry、途中終了、artifact不足のいずれもcoverageを失敗させます。
+
+`Pyodide gowin_pack (cpu)`、`Pyodide gowin_pack (hdl)`、`Playwright E2E` は同名の集約jobとして残します。元のChanges判定でbuildを行う場合は `always()` で実行し、shard群とcoverageの両方がsuccessでなければ失敗します。cancelledやskippedは成功扱いにしません。Changesで元から全buildを省く文書差分は、これまでと同じくbuild群全体を省きます。coverage jobも `always()` で不足資料を検出します。
+
+### job数と期待する実行区間
+
+build.ymlのmatrix展開後は17から27 jobへ増えます。parityは最大6並列、E2Eは最大2並列に制限します。parityの6個とsimulationの3個が重なる段階でも約9並列で、このworkflowだけならpublic repoの20並列枠内です。別workflowや別PRと枠を共有すると待ちが出るため、作成からの時間と実行区間を引き続き分けます。
+
+warm時はproducer約1〜6分、parity約11分、coverage・集約、E2E約8分で、全体約21〜26分を予想します。HDLとCPUは並列なので足しません。coldのコンパイラー再構築やqueueを含む上限の保証ではありません。改善後は同じpin/imageで各5回以上測り、各shardの12分程度の目標、準備費、全体中央値、全coverageと集約の成功を確認します。基準に届かなければ個別durationと準備時間を併記して再配分します。実機の計測ではありません。
+
+実行例は `node scripts/run-ci-shard.mjs pack cpu-1 build/ci-shards/parity-cpu-1` と `node scripts/run-ci-shard.mjs e2e 1 build/ci-shards/e2e-1` です。既存出力は上書きしません。coverageは `node scripts/check-ci-shards.mjs pack shard-results` と `node scripts/check-ci-shards.mjs e2e shard-results` で再実行できます。実際の分割後CI、全parityと全E2Eの再実行は後続CIで確認する残件です。
+
+回帰テストの初回には、Nodeのprogrammatic runnerが検査用 `-e` の起動引数を子へ継承し、検査用launcher自身を再実行しました。追加のexecArgv指定では継承を消せなかったため、CIと同じ通常のmoduleファイルを起動する負の対照へ直します。productionの呼び出しは元から通常のscriptです。失敗、除外、重複出力拒否を実際のNodeイベントで検査し、Playwrightの全件collectionは116件・11 spec・既存skip 4件であることを照合します。
+
+追加で独立scoreboardのローカル実行も試しましたが、既存のnative参照 `build/iverilog-native/output/ivlpp` が未配置で失敗しました。Node 24の環境は読み込み済みで、欠けているのはnative出力ディレクトリーです。参照先を選ぶ既存helperは変更していません。CIではIcarus producerの成果物を取得する既存のstepを維持します。このローカル実行を成功とは数えず、全parityの実行確認は残件にします。

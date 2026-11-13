@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import test from "node:test";
+import { createPackTest } from "./pack-sharding.mjs";
 import { HDL_LIBRARY_CASES } from "../fixtures/libraries/cases.mjs";
 import { libraryBench } from "../fixtures/libraries/bench.mjs";
 import { runGhdlSynth } from "../../web/lib/ghdl-host.mjs";
@@ -14,6 +14,7 @@ import { createBlinkTemplate } from "../../web/lib/templates.mjs";
 import { orderVhdlFiles } from "../../web/lib/vhdl-order.mjs";
 import { nativeSimulation } from "./iverilog-helpers.mjs";
 
+const test = createPackTest(import.meta.url);
 const root = path.resolve(import.meta.dirname, "../..");
 const ghdlRoot = path.resolve(root, process.env.GHDL_WASM_BUILD_ROOT ?? "build");
 const wasmDir = path.resolve(root, process.env.IVERILOG_WASM_DIR ?? "build/iverilog-wasm/output");

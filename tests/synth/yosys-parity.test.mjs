@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import test from "node:test";
+import { createPackTest } from "./pack-sharding.mjs";
 import { assertYosysCreator, assertYosysParity, creatorPrefix, nativeYosysSharePath } from "./yosys-parity.mjs";
+
+const test = createPackTest(import.meta.url);
 
 function documents() {
   const native = {

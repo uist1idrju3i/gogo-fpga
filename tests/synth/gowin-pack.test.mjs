@@ -13,7 +13,8 @@ import {
   writeFileSync,
 } from "node:fs";
 import path from "node:path";
-import { after, before, test } from "node:test";
+import { after, before } from "node:test";
+import { createPackTest, includeMatrixCase } from "./pack-sharding.mjs";
 import { performance } from "node:perf_hooks";
 import { pathToFileURL } from "node:url";
 import { loadPyodide } from "pyodide";
@@ -45,6 +46,7 @@ import {
   runYosysWasi,
 } from "./nextpnr-helpers.mjs";
 
+const test = createPackTest(import.meta.url);
 const root = path.resolve(import.meta.dirname, "../..");
 const packRoot = path.join(root, "build/pack");
 const indexURL = pathToFileURL(`${packRoot}/pyodide/`).href;
@@ -264,6 +266,8 @@ async function libraryBuildMatrix(t, { cpu = false } = {}) {
   let passedBoards = 0;
   let capacityExceeded = 0;
   let frontendUnsupported = 0;
+  const matrix = samples.flatMap((sample) => BOARDS.map((board) => ({ ...sample, board })))
+    .filter(({ id, board }) => includeMatrixCase(cpu, id, board.id));
   try {
     const ghdlRoot = path.resolve(root, process.env.GHDL_WASM_BUILD_ROOT ?? "build");
     const ghdlModule = new WebAssembly.Module(readFileSync(path.join(ghdlRoot, "ghdl-wasm/ghdl-synth.wasm")));
@@ -275,7 +279,6 @@ async function libraryBuildMatrix(t, { cpu = false } = {}) {
     assert.equal(built.status, 0, `${built.stderr}\n${built.error ?? ""}`);
     }
     const catalog = JSON.parse(readFileSync(path.join(assets, "catalog.json"), "utf8"));
-    const matrix = samples.flatMap((sample) => BOARDS.map((board) => ({ ...sample, board })));
     for (const { id, component, language, fixture, board, frontendFailure } of matrix) {
       const recipe = catalog.entries.find((entry) => entry.id === id).components.find((entry) => entry.id === component);
       const expectedState = recipe.boards[board.id];
@@ -437,7 +440,7 @@ async function libraryBuildMatrix(t, { cpu = false } = {}) {
       });
     }
   } finally {
-    const expectedBoards = BOARDS.length * samples.length;
+    const expectedBoards = matrix.length;
     writeFileSync(path.join(directory, "summary.json"), JSON.stringify({ passed: passedBoards, capacity_exceeded: capacityExceeded, frontend_unsupported: frontendUnsupported, expected: expectedBoards, pyodideSetupMs }, null, 2), { flag: "wx" });
     if (passedBoards + capacityExceeded + frontendUnsupported === expectedBoards && !keepEvidence) rmSync(directory, { recursive: true, force: true });
     else console.error(`Retained library-flow evidence: ${directory}`);

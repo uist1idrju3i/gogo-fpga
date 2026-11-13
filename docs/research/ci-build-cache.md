@@ -39,3 +39,11 @@ scheduleは復元せず、常にcold buildを行い、成功後の保存は許�
 新しいパス別のジョブ省略は追加しません。required checkの名前と依存関係、既存の文書差分判定は維持します。UIだけの変更でも全ての正しさの検査を実行し、キャッシュでコンパイルを短縮します。cache actionはworkflowへ直接記載し、既存のpin checkerとzizmorで検査します。zizmorの除外は追加していません。
 
 初回PRは新しいキーでcold missになります。マージ後のmain pushで保存し、次のPRで同じ入力・image・パッケージのキーが `verified-hit` になることを確認します。各ジョブのsummaryにcomponent、状態、キーを記録します。容量と転送・hash時間も測り、古いPR用キャッシュが残る移行期のevictionを区別してください。
+
+## parityとブラウザー検査の分割
+
+キャッシュだけでは残る長い検査を、CPU 4、HDL 2、Playwright 2 shardへ分けます。CPUは同じコアの全4ボードを同じprocessで検査し、HDLはボード単位、E2Eはspec単位で割り当てます。正常系、負の対照、形式検証、scoreboardを削りません。割当と個別時間、準備費、27 jobの並列枠と予測は [S16の後続計画](../experiments/S16-ci-build-cache.md#後続-parityとplaywrightの分割) を参照してください。実測の改善は未確認です。
+
+`scripts/run-ci-shard.mjs` は全件一覧と実行結果を出力し、`scripts/check-ci-shards.mjs` が不足・重複・失敗・途中終了を拒否します。全件一覧を変更したり、一部の検査をskipしたりして成功させません。通常は無効なS5の既存4件だけは、Playwrightの全件一覧でもskipと宣言された場合に同じ扱いを維持します。
+
+旧名の3 checkは集約jobに残し、build対象のrunでは `always()` でshard群とcoverageの結果を調べます。skippedやcancelledをsuccessへ変換しません。元のChangesによる全build省略は維持します。pack配布artifact、形式検証、pack入力cacheの保存者はHDL-1だけで、artifact名とPagesの承認手順は変えません。
