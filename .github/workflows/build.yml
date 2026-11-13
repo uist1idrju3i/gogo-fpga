@@ -2310,7 +2310,7 @@ jobs:
   pyodide-pack:
     name: Pyodide gowin_pack (${{ matrix.suite }})
     needs: [changes, pyodide-shards, parity-coverage]
-    if: always() && needs.changes.outputs.build == 'true'
+    if: always() && !(needs.changes.result == 'success' && needs.changes.outputs.build == 'false')
     runs-on: ubuntu-26.04
     timeout-minutes: 5
     strategy:
@@ -2630,7 +2630,7 @@ jobs:
   e2e:
     name: Playwright E2E
     needs: [changes, e2e-shards, e2e-coverage]
-    if: always() && needs.changes.outputs.build == 'true'
+    if: always() && !(needs.changes.result == 'success' && needs.changes.outputs.build == 'false')
     runs-on: ubuntu-26.04
     timeout-minutes: 5
     steps:

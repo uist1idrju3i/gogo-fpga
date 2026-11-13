@@ -129,7 +129,7 @@ test("required-name aggregators reject failed, cancelled, skipped and missing de
   const workflow = readFileSync(path.join(root, ".github/workflows/build.yml"), "utf8");
   for (const job of ["pyodide-pack", "e2e"]) {
     const body = workflow.split(`  ${job}:\n`)[1].split(/^  [a-z][a-z-]*:\n/m)[0];
-    assert.match(body, /if: always\(\)/);
+    assert.match(body, /if: always\(\) && !\(needs.changes.result == 'success' && needs.changes.outputs.build == 'false'\)/);
     assert.match(body, /parity-coverage|e2e-coverage/);
     const expected = /EXPECTED_NEEDS: (.+)/.exec(body)[1].split(",");
     const script = /          import json, os\n([\s\S]+?)          PYTHON/.exec(body)[0].replace(/          PYTHON$/, "").replace(/^          /gm, "");
