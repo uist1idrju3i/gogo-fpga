@@ -107,6 +107,22 @@ class PublishPagesTests(unittest.TestCase):
         self.assertEqual(PAGES.git(self.repo, "ls-tree", "--name-only", changed["commit"],
                                   "public_html/ignored.bin"), "")
 
+    def test_main_placeholder_does_not_replace_verified_artifact(self):
+        PAGES.init_repo(self.repo)
+        placeholder = self.root / "main-placeholder"
+        placeholder.mkdir()
+        content = '<meta name="gogo-fpga-placeholder" content="main">'
+        (placeholder / "index.html").write_text(content, encoding="utf-8")
+        main = PAGES.commit(self.repo, PAGES.snapshot(self.repo, placeholder), "mainの案内")
+        PAGES.git(self.repo, "update-ref", "refs/heads/main", main)
+        result = PAGES.prepare(self.repo, self.source, SHA, RUN_URL)
+        self.assertEqual(PAGES.git(self.repo, "show", f"{main}:public_html/index.html"), content)
+        self.assertEqual(PAGES.git(self.repo, "show", f"{result['commit']}:public_html/index.html"),
+                         "verified app")
+        self.assertEqual(PAGES.git(self.repo, "show", f"{result['commit']}:public_html/_headers"),
+                         HEADERS.strip())
+        self.assertEqual(PAGES.git(self.repo, "rev-parse", "refs/heads/main"), main)
+
     def test_git_filters_cannot_execute_or_change_artifact_bytes(self):
         (self.source / ".gitattributes").write_text("*.txt text eol=lf filter=fail\n", encoding="utf-8")
         content = b"first\r\nsecond\r\n"

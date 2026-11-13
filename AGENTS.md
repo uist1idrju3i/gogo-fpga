@@ -24,6 +24,7 @@
 - 配信先は Cloudflare Pages です。mainへのpushの全build検査が成功したら、CIが検証済み成果物をpagesブランチへ反映する承認PRを作ります。人間がpreview URLで実機の Tang Nano を確認し、そのPRをマージして本番公開を承認します。エージェントは公開準備とPR作成までを行い、PRのマージやCloudflareの設定変更は行いません。設定と初期化の手順は[Pages公開手順](docs/research/pages-delivery.md)に従います。
 - GitHub Pages は応答ヘッダー（COOP/COEP）を設定できないため使いません。
 - 配信のヘッダーは `web/_headers` に書き、`public_html/serve.py` と同じにします。1 ファイルは 25 MiB 未満にします（ビルドで検査します）。
+- mainの `public_html/` は案内用の `index.html` だけを追跡し、ほかの生成物は無視します。`scripts/build-web.sh` は案内を実際のアプリに置き換えます。生成した `public_html/` はcommitせず、ローカルで案内へ戻すときは `git checkout -- public_html` を使います。この操作は案内への未commitの変更も戻すため、必要な変更は先に保存してください。lintはcommit内の案内を検査し、アプリの混入を拒否します。
 - CI の成果物と Release の zip でも配布します。
 - 対象は Sipeed Tang Nano 1K・4K・9K・20K です。FPGA の内蔵 SRAM に構成を書き込めることを選定理由とします。ボードを増やすときは、upstream の対応、IDCODE、フラッシュの構成を公式の資料とソースで確かめてから計画します。
 - HDL は VHDL と Verilog を最初から対象にします。SystemVerilog と Verilator は将来の段階です。
