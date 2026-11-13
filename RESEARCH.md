@@ -178,7 +178,7 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 | 文書 | 内容 |
 |---|---|
 | [Pages公開の承認と配信](docs/research/pages-delivery.md) | mainの成功runの成果物をpagesへ渡す承認PR、previewでの実機確認、管理者のGit連携・ruleset設定 |
-| [UX契約と状態遷移](docs/ux/README.md) | DSLを原本とする生成手順、助言としてのvision review、design_flowと実装の照合。UIへの接続と実機確認は未実施 |
+| [UX契約と状態遷移](docs/ux/README.md) | DSLの生成手順、design_flowとUIの接続、U2の主操作・tab・安全側の判断、画面確認。実機確認は未実施 |
 | [依存の版の検出と負の対照](docs/research/dependency-version-detection.md) | GHDLの公開安定タグの選択、Rust channel TOMLの構造化読取り、欠落と不正入力の扱い |
 | [書き込み部の移植とビルド選定](docs/research/flasher-integration.md) | 移植元の原典、JSPIとWebUSB、S7の選定とhash照合、asyncifyの失敗と未確認範囲 |
 | [GHDL WASM の調査と合成の検証](docs/research/ghdl-wasm.md) | Ada API、VHDL の合成、最適化と配布・ライセンスの記録 |
@@ -224,14 +224,16 @@ T6 P2では、WASI shimの同期stdin reader、容量を制限した共有buffer
 
 ## 8. 未確認の事項
 
+合成・配置配線WASMの実行と測定は[WASI調査](docs/research/yosys-nextpnr-wasi.md)、ApiculaとPyodideの依存・時間・配布量と全4ボードの比較は[S3A](docs/experiments/S3A-pyodide-gowin-pack.md)、SBY・SMTBMCとYices2・Z3の接続・native/WASI比較は[形式検証](docs/research/formal-verification.md#調査から実装への対応)と[ソルバー調査](docs/research/formal-solvers.md)で確認済みです。以下は、その確認を超える残件です。
+
 - Tang Nano の IDCODE とフラッシュ情報の個体差。移植元の調査値はありますが、実機での照合はしていません。
-- 合成・配置配線 WASM の実行可否、実行時間、メモリー量、成果物サイズ。YoWASP と synth-explorer の記録を本リポジトリーで再現していません。
+- ブラウザーごとの最大メモリー量と、大規模設計・長時間実行での動作限界。
 - WASI SDK 33 での LTO とネイティブ WASM 例外の問題。synth-explorer の報告を確認しただけで、再現していません。
 - NVC で `--disable-llvm` を指定したときの interpreter の runtime 完走。S11 では `-sEMULATE_FUNCTION_POINTER_CASTS=1` により analysis/elaboration が進むことを確認しましたが、Node counter simulation は `missing body for (null)` で停止しました。function signature mismatch の原因は特定済みですが、null unit name の根本原因は未確認です。[実験記録](docs/experiments/S11-nvc-wasm.md)を参照してください。
-- Apicula と Pyodide の組み合わせ、必要な Python 依存、実行時間、配布サイズ。
-- VeriSim の Icarus Verilog 構成を本リポジトリーへ適用した場合の機能範囲と実行時間。
+- VeriSim固有のIcarus Verilog構成の再現。現行のWASI版による実行と比較は[ブラウザー内ビルド調査](docs/research/browser-build-and-delivery.md)で確認しており、それとは区別します。
 - Verilator 生成 C++ をブラウザー内でコンパイル・実行する方法。
-- SymbiYosys / `yosys-smtbmc`、Yices2 / Z3 のWASM統合と実行性能。初期表で未確認だったSBY・BoolectorのlicenseはISC・MITと確認し、上記の形式検証調査に記録しました。
+- 追加ソルバーの製品認定や独立した証明書検査など、各S15記録に残る対応範囲の拡張。
 - sv-elab の WASM 対応。
 - Chromium 以外のブラウザー、実機 USB、4 ボードでの書き込み。
+- OpenRouterの実アカウントでのログイン、課金、実モデルの応答。A1・A2の画面検査はproviderの模擬応答を使います。
 - GPL ツールおよび HDL ライブラリーを配布する際の、各 revision に固有のソース提供・表示義務。
