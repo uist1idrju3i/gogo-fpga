@@ -14,7 +14,7 @@ test("published source and DeepWiki are accessible without external resource req
       external.push(request.url());
     }
   });
-  await page.route("**/build-info.json", route => route.fulfill({ json: info }));
+  await page.route("**/publication-info.json", route => route.fulfill({ json: info }));
   await page.goto("/");
   await expect(page.locator("#project-name")).toHaveText("blink");
   const version = page.getByRole("link", { name: "公開版 8ce027b" });
@@ -43,12 +43,12 @@ test("published source and DeepWiki are accessible without external resource req
 
 for (const failure of ["absent", "invalid", "offline", "redirect", "development"]) {
   test(`metadata ${failure} leaves editing available in development mode`, async ({ page }) => {
-    await page.route("**/build-info.json", route => {
+    await page.route("**/publication-info.json", route => {
       if (failure === "offline") return route.abort();
       if (failure === "absent") return route.fulfill({ status: 404, body: "missing" });
       if (failure === "invalid") return route.fulfill({ json: { ...info, sha: "not-a-sha" } });
       if (failure === "redirect") return route.fulfill({ status: 302,
-        headers: { location: "https://example.invalid/build-info.json" } });
+        headers: { location: "https://example.invalid/publication-info.json" } });
       return route.fulfill({ body: "null", contentType: "application/json" });
     });
     const errors = [];

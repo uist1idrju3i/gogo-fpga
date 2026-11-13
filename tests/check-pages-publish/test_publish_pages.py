@@ -126,20 +126,21 @@ class PublishPagesTests(unittest.TestCase):
         self.assertEqual(PAGES.git(self.repo, "rev-parse", "refs/heads/main"), main)
 
     def test_provenance_overlay_preserves_every_other_artifact_byte(self):
-        (self.source / "build-info.json").write_text("null\n")
+        (self.source / "publication-info.json").write_text("null\n")
+        (self.source / "build-info.json").write_text('{"artifacts": {"tool.wasm": "verified hash"}}\n')
         (self.source / "binary.wasm").write_bytes(b"\x00\xff\r\n")
         original = {p.name: p.read_bytes() for p in self.source.iterdir()}
         result = PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
-        info = json.loads(PAGES.git(self.repo, "show", f"{result['commit']}:public_html/build-info.json"))
+        info = json.loads(PAGES.git(self.repo, "show", f"{result['commit']}:public_html/publication-info.json"))
         self.assertEqual(info, {"sha": SHA, "short_sha": SHA[:7], "run_url": RUN_URL,
                                 "commit_date": COMMIT_DATE})
         self.assertEqual(result["files"], len(original))
         self.assertEqual(result["bytes"], sum(len(value) for name, value in original.items()
-                                            if name != "build-info.json") +
+                                            if name != "publication-info.json") +
                          len(PAGES.publication_info(SHA, RUN_URL, COMMIT_DATE).encode()))
         for name, content in original.items():
             self.assertEqual((self.source / name).read_bytes(), content)
-            if name != "build-info.json":
+            if name != "publication-info.json":
                 actual = PAGES.subprocess.check_output([
                     "git", "-C", str(self.repo), "show", f"{result['commit']}:public_html/{name}"])
                 self.assertEqual(actual, content)
@@ -150,7 +151,11 @@ class PublishPagesTests(unittest.TestCase):
         PAGES.git(self.repo, "update-ref", "refs/heads/pages", result["commit"])
         unchanged = PAGES.prepare(self.repo, self.source, "b" * 40, RUN_URL, COMMIT_DATE)
         self.assertEqual(unchanged["status"], "unchanged")
-        self.assertEqual(json.loads(PAGES.git(self.repo, "show", "pages:public_html/build-info.json")), info)
+        self.assertEqual(json.loads(PAGES.git(self.repo, "show", "pages:public_html/publication-info.json")), info)
+        (self.source / "build-info.json").write_text('{"artifacts": {"tool.wasm": "changed hash"}}\n')
+        self.assertEqual(PAGES.prepare(self.repo, self.source, "b" * 40, RUN_URL, COMMIT_DATE)["status"],
+                         "prepared")
+        (self.source / "build-info.json").write_bytes(original["build-info.json"])
         (self.source / "_headers").write_text(HEADERS + "  X-Test: changed\n")
         self.assertEqual(PAGES.prepare(self.repo, self.source, "b" * 40, RUN_URL, COMMIT_DATE)["status"],
                          "prepared")
@@ -168,7 +173,7 @@ class PublishPagesTests(unittest.TestCase):
             with self.subTest(url=url, date=date), self.assertRaises((RuntimeError, ValueError)):
                 PAGES.prepare(self.repo, self.source, SHA, url, date)
         self.assertFalse(self.repo.exists())
-        (self.source / "build-info.json").mkdir()
+        (self.source / "publication-info.json").mkdir()
         with self.assertRaisesRegex(RuntimeError, "must be a file"):
             PAGES.prepare(self.repo, self.source, SHA, RUN_URL, COMMIT_DATE)
 

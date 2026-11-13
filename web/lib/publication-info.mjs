@@ -19,7 +19,7 @@ export function publicationView(info) {
 
 export async function loadPublicationInfo(fetcher = globalThis.fetch) {
   try {
-    const response = await fetcher(new URL("../build-info.json", import.meta.url), {
+    const response = await fetcher(new URL("../publication-info.json", import.meta.url), {
       mode: "same-origin", credentials: "omit", redirect: "error", cache: "no-cache",
       signal: AbortSignal.timeout(5000),
     });

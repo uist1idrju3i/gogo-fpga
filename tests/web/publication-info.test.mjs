@@ -27,7 +27,7 @@ test("missing, malformed and unsafe metadata stay in development mode", () => {
 
 test("metadata fetch stays same-origin, refuses redirects and tolerates errors", async () => {
   assert.equal((await loadPublicationInfo(async (url, options) => {
-    assert.equal(url.pathname.endsWith("/build-info.json"), true);
+    assert.equal(url.pathname.endsWith("/publication-info.json"), true);
     assert.equal(options.mode, "same-origin");
     assert.equal(options.redirect, "error");
     assert.equal(options.credentials, "omit");
@@ -42,5 +42,8 @@ test("metadata fetch stays same-origin, refuses redirects and tolerates errors",
 });
 
 test("development artifact contains no source commit", () => {
-  assert.equal(readFileSync(new URL("../../web/build-info.json", import.meta.url), "utf8"), "null\n");
+  assert.equal(readFileSync(new URL("../../web/publication-info.json", import.meta.url), "utf8"), "null\n");
+  assert.equal(readFileSync(new URL("../../public_html/publication-info.json", import.meta.url), "utf8"), "null\n");
+  const manifest = JSON.parse(readFileSync(new URL("../../public_html/build-info.json", import.meta.url), "utf8"));
+  assert.match(manifest.artifacts["openFPGALoader.wasm"], /^[0-9a-f]{64}$/);
 });

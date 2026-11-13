@@ -20,7 +20,7 @@ import zipfile
 
 SHA = re.compile(r"[0-9a-f]{40}")
 MANAGED_BRANCH = re.compile(r"pages-update/[0-9a-f]{40}")
-BUILD_INFO = "build-info.json"
+BUILD_INFO = "publication-info.json"
 REQUIRED_JOBS = {"Build", "Playwright E2E", "Simulation shard coverage",
                  "Pyodide gowin_pack (cpu)", "Pyodide gowin_pack (hdl)"}
 BRANCH_README = """# 午後のFPGAの配信用生成物
@@ -253,7 +253,7 @@ def extract_archive(archive, destination, digest):
 def pr_body(result):
     return (f"## 公開する生成物\n\nmain SHA: `{result['main_sha']}`\n\n"
             f"[成功したbuild run]({result['run_url']})のpublic_html成果物を使用します。"
-            f"公開元のbuild-info.jsonだけを付け、アプリは再ビルドも変更もしていません。\n\nファイル数: {result['files']}\n\n"
+            f"公開元のpublication-info.jsonだけを付け、アプリは再ビルドも変更もしていません。\n\nファイル数: {result['files']}\n\n"
             f"合計サイズ: {result['bytes']} bytes\n\n"
             "Cloudflareのpages-update/*のpreview URLで確認してください。"
             "このPRのマージが本番公開の承認です。エージェントはマージしません。\n\n"
