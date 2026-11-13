@@ -79,6 +79,14 @@ build watch pathsのincludeは `*` のままにします。配信対象をpages�
 
 再確認はChromiumの `page.evaluate` で上記の機能を読み、同じURLにHEADを送ってヘッダーを調べます。USB APIが存在することは、機器へのアクセスや書き込みを確認したことにはなりません。公開側が今後のmainと常に同じ内容であることも、この確認では保証しません。
 
+## 公開元の表示とDeepWiki
+
+画面上部に「公開版」と元のmainコミットの短いSHAを表示します。リンク先はGitHubの元コミットで、リンクの説明に完全なSHA、コミット日時とbuild runを載せます。「仕組みを読む · DeepWiki」はツールの説明を別タブで開きます。アプリの読み込み時にDeepWikiへの通信や外部画像の読み込みは行いません。
+
+公開準備はGitHub APIで元コミットのSHAとcommitter日時を確認し、`public_html/publication-info.json` だけを追加・置換します。アプリのartifactには元コミットを埋め込まず、開発用の同名ファイルには `null` だけを置きます。既存の `build-info.json` はWASMの検証情報なので変更せず、比較からも除きません。artifactのZIP digestと全ファイルの検査は従来どおり行い、公開用のメタデータ以外は同じバイト列を保存します。
+
+同一内容の判定から除くのは `public_html/publication-info.json` だけです。アプリが変わらなければ承認PRを作らず、公開中のメタデータも元のまま保ちます。本番の公開版は最後に承認された配布物の出自を示し、最新mainへの追従を意味しません。previewでは承認候補の出自を表示します。ファイルが欠落、不正、取得失敗の場合は「開発版」のまま表示し、編集やビルドを妨げません。取得は同一originだけに制限し、外部へのredirectも拒否します。CSPは変更しません。
+
 ## ローカルでの確認
 
 次のdry-runは一時的なローカルGitリポジトリーだけにcommitとbranchを作り、push、PR作成、Cloudflareへの通信をしません。検証済みのローカル`public_html/`を用意し、リポジトリーrootで実行します。
@@ -88,7 +96,8 @@ mkdir -p build/pages-dry-run
 python3 scripts/publish-pages.py --dry-run \
   --source public_html --git-repo build/pages-dry-run/repo \
   --sha "$(git rev-parse HEAD)" \
-  --run-url https://github.com/uist1idrju3i/gogo-fpga/actions
+  --run-url https://github.com/uist1idrju3i/gogo-fpga/actions/runs/1 \
+  --commit-date "$(TZ=UTC git show -s --date=format-local:%Y-%m-%dT%H:%M:%SZ --format=%cd HEAD)"
 python3 -m unittest discover -s tests/check-pages-publish
 ```
 

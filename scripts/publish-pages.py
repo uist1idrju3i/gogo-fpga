@@ -2,6 +2,7 @@
 
 import argparse
 import base64
+from datetime import datetime
 import hashlib
 import json
 import os
@@ -19,6 +20,7 @@ import zipfile
 
 SHA = re.compile(r"[0-9a-f]{40}")
 MANAGED_BRANCH = re.compile(r"pages-update/[0-9a-f]{40}")
+BUILD_INFO = "publication-info.json"
 REQUIRED_JOBS = {"Build", "Playwright E2E", "Simulation shard coverage",
                  "Pyodide gowin_pack (cpu)", "Pyodide gowin_pack (hdl)"}
 BRANCH_README = """# 午後のFPGAの配信用生成物
@@ -73,15 +75,20 @@ def init_repo(repo):
                        check=True, capture_output=True)
 
 
-def snapshot(repo, source):
+def snapshot(repo, source, build_info=None):
     def subtree(directory):
         entries = []
         for path in sorted(directory.iterdir()):
+            if directory == source and path.name == BUILD_INFO and build_info is not None:
+                continue
             if path.is_dir():
                 entries.append(f"040000 tree {subtree(path)}\t{path.name}\0")
             else:
                 blob = git(repo, "hash-object", "-w", "--no-filters", "--", str(path))
                 entries.append(f"100644 blob {blob}\t{path.name}\0")
+        if directory == source and build_info is not None:
+            blob = git(repo, "hash-object", "-w", "--stdin", data=build_info)
+            entries.append(f"100644 blob {blob}\t{BUILD_INFO}\0")
         return git(repo, "mktree", "-z", data="".join(entries))
 
     readme = git(repo, "hash-object", "-w", "--stdin", data=BRANCH_README)
@@ -99,12 +106,41 @@ def commit(repo, tree, message, parent=None):
                env=env, data=message + "\n")
 
 
-def prepare(repo, source, sha, run_url):
+def publication_info(sha, run_url, commit_date):
     if not SHA.fullmatch(sha):
         raise RuntimeError("The source main SHA must be 40 lowercase hexadecimal characters")
+    if not re.fullmatch(r"https://github.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/actions/runs/[1-9][0-9]{0,19}", run_url):
+        raise RuntimeError("Invalid build run URL")
+    if datetime.strptime(commit_date, "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%dT%H:%M:%SZ") != commit_date:
+        raise RuntimeError("Invalid UTC commit date")
+    return json.dumps({"sha": sha, "short_sha": sha[:7], "run_url": run_url,
+                       "commit_date": commit_date}, sort_keys=True) + "\n"
+
+
+def same_content(repo, first, second):
+    return not git(repo, "diff-tree", "--no-commit-id", "--name-only", "-r", first, second,
+                   "--", ".", f":(exclude)public_html/{BUILD_INFO}")
+
+
+def source_commit_date(api, sha):
+    origin = api.request(f"commits/{sha}")
+    if origin["sha"] != sha:
+        raise RuntimeError("Commit metadata does not match the validated build")
+    return origin["commit"]["committer"]["date"]
+
+
+def prepare(repo, source, sha, run_url, commit_date):
+    info = publication_info(sha, run_url, commit_date)
     summary = validate_tree(source)
+    reserved = source / BUILD_INFO
+    if reserved.exists() and not reserved.is_file():
+        raise RuntimeError("The publication metadata path must be a file")
+    summary["files"] += 0 if reserved.exists() else 1
+    summary["bytes"] += len(info.encode()) - (reserved.stat().st_size if reserved.exists() else 0)
+    if summary["files"] >= DIST_CHECK["MAX_FILES"]:
+        raise RuntimeError("Published tree must contain fewer than 20000 files")
     init_repo(repo)
-    tree = snapshot(repo, source)
+    tree = snapshot(repo, source, info)
     base = git(repo, "rev-parse", "--verify", "--quiet", "refs/heads/pages", optional=True)
     bootstrap = base is None
     if bootstrap:
@@ -116,11 +152,11 @@ def prepare(repo, source, sha, run_url):
     result = {**summary, "main_sha": sha, "run_url": run_url,
               "bootstrap_created": bootstrap, "base_commit": base,
               "branch": f"pages-update/{sha}", "new_commit": False}
-    if git(repo, "rev-parse", f"{base}^{{tree}}") == tree:
+    if same_content(repo, base, tree):
         return {**result, "status": "unchanged", "commit": None}
     ref = f"refs/heads/{result['branch']}"
     previous = git(repo, "rev-parse", "--verify", "--quiet", ref, optional=True)
-    if previous and git(repo, "rev-parse", f"{previous}^{{tree}}") == tree:
+    if previous and same_content(repo, previous, tree):
         return {**result, "status": "existing", "commit": previous}
     candidate = commit(repo, tree, f"main {sha} の検証済みWeb配布物を更新する\n\n{run_url}",
                        parent=previous or base)
@@ -216,8 +252,8 @@ def extract_archive(archive, destination, digest):
 
 def pr_body(result):
     return (f"## 公開する生成物\n\nmain SHA: `{result['main_sha']}`\n\n"
-            f"[成功したbuild run]({result['run_url']})のpublic_html成果物をそのまま使用します。"
-            f"再ビルドしていません。\n\nファイル数: {result['files']}\n\n"
+            f"[成功したbuild run]({result['run_url']})のpublic_html成果物を使用します。"
+            f"公開元のpublication-info.jsonだけを付け、アプリは再ビルドも変更もしていません。\n\nファイル数: {result['files']}\n\n"
             f"合計サイズ: {result['bytes']} bytes\n\n"
             "Cloudflareのpages-update/*のpreview URLで確認してください。"
             "このPRのマージが本番公開の承認です。エージェントはマージしません。\n\n"
@@ -281,7 +317,8 @@ def publish(api, run_id, repo):
                 raise RuntimeError("Unexpected remote ref")
             git(repo, "fetch", "--no-tags", "origin", f"{ref}:{ref}", env=auth)
         result = prepare(repo, source, run["head_sha"],
-                         f"https://github.com/{api.repository}/actions/runs/{run_id}")
+                         f"https://github.com/{api.repository}/actions/runs/{run_id}",
+                         source_commit_date(api, run["head_sha"]))
         if result["bootstrap_created"]:
             git(repo, "push", "origin", "refs/heads/pages:refs/heads/pages", env=auth)
         if result["status"] != "unchanged":
@@ -299,18 +336,20 @@ def main():
     parser.add_argument("--source", type=Path)
     parser.add_argument("--sha")
     parser.add_argument("--run-url")
+    parser.add_argument("--commit-date")
     args = parser.parse_args()
     repo = args.git_repo.resolve()
     if not repo.parent.is_dir():
         parser.error("The Git directory parent must already exist")
     if args.dry_run:
-        if not (args.source and args.sha and args.run_url):
-            parser.error("--dry-run requires --source, --sha and --run-url")
-        result = prepare(repo, args.source.resolve(), args.sha, args.run_url)
+        if not (args.source and args.sha and args.run_url and args.commit_date):
+            parser.error("--dry-run requires --source, --sha, --run-url and --commit-date")
+        result = prepare(repo, args.source.resolve(), args.sha, args.run_url, args.commit_date)
         result["dry_run"] = True
         result["pull_request"] = None
     else:
-        if not (args.repository and args.run_id and args.run_id > 0) or args.source or args.sha or args.run_url:
+        if (not (args.repository and args.run_id and args.run_id > 0) or
+                args.source or args.sha or args.run_url or args.commit_date):
             parser.error("Publishing requires only --repository, --run-id and --git-repo")
         result = publish(GitHub(args.repository), args.run_id, repo)
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
