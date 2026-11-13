@@ -10,7 +10,11 @@ mainにpushした[build workflow](../../.github/workflows/build.yml)が全検査
 2. `gogo-fpga-web-<main SHA>`をそのrunから取得します。build側は`public_html/`を組み立て、ファイル上限、配信ヘッダー、Web単体テストを確認してこの名前で保存します。`ci-build-*`はWASMとfixtureであり、公開用ではありません。再ビルドは行いません。
 3. artifactのrun・SHA・期限を照合し、ZIPのSHA-256がGitHubのdigestと一致することを確認します。相対パスだけを展開し、重複、親への移動、symlink、Gitの管理情報を拒否します。ファイル数は20,000未満、各ファイルは25 MiB未満とし、`index.html`とCOOP/COEP付き`_headers`も必須です。欠落や解析失敗を無視しません。
 4. pagesがなければ、mainの履歴を持たないorphan commitで初期化します。rootは`README.md`と`public_html/`だけです。初期のindexは承認待ちの案内で、FPGAアプリは含めません。初回のアプリ公開もPRの承認を必要とします。
-5. 検証したtreeを`pages-update/<main SHA>`にcommitし、pages宛てのPRを作ります。本文にmain SHA、build run、ファイル数、合計bytesと「実機で確認した」のチェック欄を記録します。同じpublic_htmlなら新しいcommitやPRは作りません。未マージの同一候補は再利用し、新しい承認PRを作れた後に古い自動PRを閉じます。すでに同じtreeが公開済みなら古い自動PRも閉じます。
+5. 検証したtreeを`pages-update/<main SHA>`にcommitし、pages宛てのPRを作ります。本文にmain SHA、build run、ファイル数、合計bytesと「実機で確認した」のチェック欄を記録します。同じpublic_htmlなら新しいcommitやPRは作りません。未マージの同一候補は再利用し、新しい承認PRを作れた後に古い自動PRを閉じ、そのheadブランチを削除します。すでに同じtreeが公開済みの場合も、古い自動PRを閉じてheadブランチを削除します。
+
+承認PRを整理するたびに、公開内容が変わらない場合も含め、同じリポジトリーに残る不要な候補ブランチを削除します。対象は名前全体が `pages-update/<小文字の16進40桁>` に一致し、pages宛ての開いているPRに使われていないブランチだけです。以前に閉じたPRのブランチも次回の公開準備で削除します。マージ済みPRのブランチはGitHubのマージ後の自動削除に任せます。pages、現在の承認候補、ほかの名前のブランチ、fork側のheadは削除しません。forkからの開いているPRと同名の候補も念のため残します。
+
+削除前にブランチと開いているPRを全ページ取得し、応答の形式を検査します。古いPRを閉じた後にも開いているPRを取得し直します。どちらかの一覧の取得や検査に失敗した場合は、ブランチを一つも削除せず公開準備を失敗させます。削除APIの404は削除済みとして扱い、422は参照の再取得が404になる場合だけ許容します。それ以外の削除エラーも失敗です。権限は既存の `contents: write` と `pull-requests: write` を使います。新しい全検査済みbuildがある場合など、承認PRの整理に到達せず処理を見送るrunでは削除しません。
 6. より新しいmainの全build成功runがあれば、遅れて終了した古いrunは更新を作りません。処理は同じconcurrency groupで直列化し、force pushは使いません。pages系のpushはbuildの対象外で、pages宛てPRもbuildの対象外です。
 7. 人間がpreviewの配信ヘッダー、WASMのMIME、圧縮資材の読み込みと書き込み結果を実機で確認し、チェック欄を記入してマージします。Git連携によりpagesの内容が本番へ配信されます。
 
@@ -101,4 +105,4 @@ python3 scripts/publish-pages.py --dry-run \
 python3 -m unittest discover -s tests/check-pages-publish
 ```
 
-回帰テストは初回orphan、未マージ候補の再利用、マージ後の同一treeの無更新、変更後のcommitを確認します。欠落・上限超過・危険なZIP・元runの不一致と、古い承認PRを閉じる順序も失敗側から検査します。APIのテストは模擬応答であり、GitHubやCloudflareでの実配信の確認ではありません。
+回帰テストは初回orphan、未マージ候補の再利用、マージ後の同一treeの無更新、変更後のcommitを確認します。欠落・上限超過・危険なZIP・元runの不一致と、古い承認PRを閉じてheadを削除する順序も失敗側から検査します。不要ブランチの削除、開いているPRの保護、名前とforkの除外、一覧の取得失敗と不正な応答、削除済みの参照、APIのページ分割も検査します。APIのテストは模擬応答であり、GitHubやCloudflareでの実配信の確認ではありません。

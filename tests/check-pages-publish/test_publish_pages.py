@@ -7,6 +7,7 @@ import stat
 import tempfile
 import unittest
 from unittest.mock import patch
+import urllib.error
 import zipfile
 
 
@@ -34,6 +35,13 @@ def artifact(run):
             "workflow_run": {"id": run["id"], "head_branch": "main", "head_sha": run["head_sha"]}}
 
 
+def approval(number, branch, repository="example/project"):
+    return {"number": number, "state": "open",
+            "html_url": f"https://github.com/example/project/pull/{number}",
+            "base": {"ref": "pages", "repo": {"full_name": "example/project"}},
+            "head": {"ref": branch, "repo": {"full_name": repository}}}
+
+
 class FakeAPI:
     repository = "example/project"
 
@@ -43,15 +51,25 @@ class FakeAPI:
         self.artifacts = [artifact(self.run)]
         self.runs = [self.run]
         self.prs = []
+        self.branches = []
         self.writes = []
 
     def request(self, path, method="GET", body=None):
         if method == "GET":
             return self.run
         self.writes.append((path, method, body))
+        if path == "pulls" and method == "POST":
+            self.prs.append(approval(200, body["head"]))
+        if path.startswith("pulls/") and body == {"state": "closed"}:
+            self.prs = [pr for pr in self.prs if pr["number"] != int(path.split("/")[1])]
+        if method == "DELETE":
+            self.branches = [branch for branch in self.branches
+                             if path != f"git/refs/heads/{branch['name']}"]
         return {"number": 200, "html_url": "https://github.com/example/project/pull/200"}
 
     def items(self, path, key=None):
+        if path == "branches":
+            return iter(self.branches)
         if path.endswith("/jobs"):
             return iter(self.jobs)
         if path.endswith("/artifacts"):
@@ -313,25 +331,26 @@ class PublishPagesTests(unittest.TestCase):
 
     def test_pr_creation_closes_only_managed_prs_after_creation(self):
         api = FakeAPI()
-        api.prs = [{"number": 3, "head": {"ref": "pages-update/" + "b" * 40,
-                                           "repo": {"full_name": api.repository}}},
-                   {"number": 4, "head": {"ref": "human-change", "repo": {"full_name": api.repository}}}]
+        old = "pages-update/" + "b" * 40
+        api.prs = [approval(3, old), approval(4, "human-change")]
         result = {"status": "prepared", "branch": "pages-update/" + SHA, "main_sha": SHA,
                   "run_url": RUN_URL, "files": 2, "bytes": 100}
         self.assertIn("/pull/200", PAGES.reconcile_prs(api, result))
         self.assertEqual(api.writes[0][1], "POST")
         self.assertEqual(api.writes[0][2]["base"], "pages")
         self.assertIn("- [ ] 実機で確認した", api.writes[0][2]["body"])
-        self.assertEqual(api.writes[-1], ("pulls/3", "PATCH", {"state": "closed"}))
+        self.assertEqual(api.writes[-2:], [("pulls/3", "PATCH", {"state": "closed"}),
+                                          (f"git/refs/heads/{old}", "DELETE", None)])
         api.writes.clear()
+        api.prs = [approval(3, old)]
         result["status"] = "unchanged"
         self.assertIsNone(PAGES.reconcile_prs(api, result))
-        self.assertEqual(api.writes, [("pulls/3", "PATCH", {"state": "closed"})])
+        self.assertEqual(api.writes, [("pulls/3", "PATCH", {"state": "closed"}),
+                                     (f"git/refs/heads/{old}", "DELETE", None)])
 
     def test_failed_pr_creation_does_not_close_existing_approval(self):
         api = FakeAPI()
-        api.prs = [{"number": 3, "head": {"ref": "pages-update/" + "b" * 40,
-                                           "repo": {"full_name": api.repository}}}]
+        api.prs = [approval(3, "pages-update/" + "b" * 40)]
         result = {"status": "prepared", "branch": "pages-update/" + SHA, "main_sha": SHA,
                   "run_url": RUN_URL, "files": 2, "bytes": 100}
         with patch.object(api, "request", side_effect=RuntimeError("PR creation denied")) as request:
@@ -342,13 +361,181 @@ class PublishPagesTests(unittest.TestCase):
 
     def test_existing_approval_is_updated_without_duplicate_pr(self):
         api = FakeAPI()
-        api.prs = [{"number": 3, "html_url": "https://github.com/example/project/pull/3",
-                    "head": {"ref": "pages-update/" + SHA, "repo": {"full_name": api.repository}}}]
+        api.prs = [approval(3, "pages-update/" + SHA)]
         result = {"status": "existing", "branch": "pages-update/" + SHA, "main_sha": SHA,
                   "run_url": RUN_URL, "files": 2, "bytes": 100}
         self.assertTrue(PAGES.reconcile_prs(api, result).endswith("/3"))
         self.assertEqual(len(api.writes), 1)
         self.assertEqual(api.writes[0][:2], ("pulls/3", "PATCH"))
+
+    def cleanup_result(self, status="unchanged"):
+        return {"status": status, "branch": "pages-update/" + SHA, "main_sha": SHA,
+                "run_url": RUN_URL, "files": 2, "bytes": 100}
+
+    def test_sweep_orphans_on_unchanged_run_preserves_unmanaged_and_fork_heads(self):
+        api = FakeAPI()
+        orphans = ["pages-update/" + char * 40 for char in "bcde"]
+        preserved = ["pages", "main", "pages-update/" + "F" * 40,
+                     "pages-update/" + "a" * 39, "pages-update/" + SHA + "/extra",
+                     "human-change", "pages-update/" + "f" * 40]
+        api.branches = [{"name": name} for name in orphans + preserved]
+        api.prs = [approval(4, preserved[-1], "fork/project"), approval(5, "human-change")]
+        PAGES.reconcile_prs(api, self.cleanup_result())
+        self.assertEqual(api.writes, [(f"git/refs/heads/{name}", "DELETE", None) for name in orphans])
+        self.assertEqual(api.branches, [{"name": name} for name in preserved])
+        api.writes.clear()
+        PAGES.reconcile_prs(api, self.cleanup_result())
+        self.assertEqual(api.writes, [])
+
+    def test_empty_cleanup_inventory_is_a_noop(self):
+        api = FakeAPI()
+        self.assertIsNone(PAGES.reconcile_prs(api, self.cleanup_result()))
+        self.assertEqual(api.writes, [])
+
+    def test_malformed_created_approval_never_closes_or_deletes_existing_heads(self):
+        for response in [None, {}, {"number": 200}, {"number": True, "html_url": "invalid"}]:
+            with self.subTest(response=response):
+                api = FakeAPI()
+                api.prs = [approval(3, "pages-update/" + "b" * 40)]
+                with patch.object(api, "request", return_value=response) as request:
+                    with self.assertRaises(RuntimeError):
+                        PAGES.reconcile_prs(api, self.cleanup_result("prepared"))
+                    self.assertEqual(request.call_count, 1)
+                    self.assertEqual(request.call_args.args[:2], ("pulls", "POST"))
+
+    def test_current_open_approval_and_newly_observed_approval_are_preserved(self):
+        api = FakeAPI()
+        current, orphan = "pages-update/" + SHA, "pages-update/" + "b" * 40
+        api.prs = [approval(3, current)]
+        api.branches = [{"name": current}, {"name": orphan}]
+        original = api.items
+        calls = 0
+
+        def listing(path, key=None):
+            nonlocal calls
+            if path.startswith("pulls?"):
+                calls += 1
+                if calls == 2:
+                    api.prs.append(approval(4, orphan))
+            return original(path, key)
+
+        with patch.object(api, "items", side_effect=listing):
+            PAGES.reconcile_prs(api, self.cleanup_result("existing"))
+        self.assertEqual(len(api.writes), 1)
+        self.assertEqual(api.writes[0][:2], ("pulls/3", "PATCH"))
+
+    def test_listing_errors_and_malformed_rows_never_delete_any_branch(self):
+        for failure in ["branches", "pulls-first", "pulls-final", "branch-row", "pr-row",
+                        "head-repo", "base", "state", "url", "duplicate-branch", "duplicate-pr"]:
+            with self.subTest(failure=failure):
+                api = FakeAPI()
+                api.branches = [{"name": "pages-update/" + "b" * 40}]
+                api.prs = [approval(3, "pages-update/" + SHA)]
+                if failure == "branch-row":
+                    api.branches.append({"name": None})
+                if failure == "pr-row":
+                    api.prs.append({"head": {}})
+                if failure == "head-repo":
+                    api.prs[0]["head"]["repo"] = {}
+                if failure == "base":
+                    api.prs[0]["base"]["ref"] = "main"
+                if failure == "state":
+                    api.prs[0]["state"] = "closed"
+                if failure == "url":
+                    del api.prs[0]["html_url"]
+                if failure == "duplicate-branch":
+                    api.branches *= 2
+                if failure == "duplicate-pr":
+                    api.prs *= 2
+                original = api.items
+                calls = 0
+
+                def listing(path, key=None):
+                    nonlocal calls
+                    if path.startswith("pulls?"):
+                        calls += 1
+                    if ((failure == "branches" and path == "branches") or
+                            (failure == "pulls-first" and calls == 1) or
+                            (failure == "pulls-final" and calls == 2)):
+                        raise RuntimeError("Listing failed")
+                    return original(path, key)
+
+                with patch.object(api, "items", side_effect=listing), self.assertRaises(RuntimeError):
+                    PAGES.reconcile_prs(api, self.cleanup_result("existing"))
+                self.assertFalse(any(method == "DELETE" for _, method, _ in api.writes))
+
+    def test_delete_idempotency_and_other_http_errors(self):
+        branch = "pages-update/" + SHA
+        for code, absent in [(404, False), (422, True), (422, False), (403, False), (500, False)]:
+            with self.subTest(code=code, absent=absent):
+                api = FakeAPI()
+
+                def request(path, method="GET", body=None):
+                    if method == "DELETE":
+                        raise urllib.error.HTTPError("https://api.github.com", code, "error", {}, None)
+                    if absent:
+                        raise urllib.error.HTTPError("https://api.github.com", 404, "absent", {}, None)
+                    return {"ref": "refs/heads/" + branch}
+
+                with patch.object(api, "request", side_effect=request) as mocked:
+                    if code == 404 or (code == 422 and absent):
+                        PAGES.delete_managed_branch(api, branch)
+                    else:
+                        with self.assertRaises(urllib.error.HTTPError):
+                            PAGES.delete_managed_branch(api, branch)
+                    if code == 422:
+                        self.assertEqual(mocked.call_args.args, (f"git/ref/heads/{branch}",))
+        with self.assertRaises(RuntimeError):
+            PAGES.delete_managed_branch(FakeAPI(), "pages")
+
+    def test_cleanup_paginates_both_lists_before_deleting(self):
+        api = PAGES.GitHub.__new__(PAGES.GitHub)
+        api.repository = "example/project"
+        names = ["pages-update/" + f"{number:040x}" for number in range(101)]
+        requests = []
+
+        def request(path, method="GET", body=None):
+            requests.append((path, method))
+            if method == "DELETE":
+                return None
+            if path.startswith("branches?"):
+                start = 0 if path.endswith("page=1") else 100
+                return [{"name": name} for name in names[start:start + 100]]
+            if path.startswith("pulls?"):
+                start = 0 if path.endswith("page=1") else 100
+                return [approval(number + 1, names[number], "fork/project")
+                        for number in range(start, min(start + 100, 100))]
+            self.fail(path)
+
+        with patch.object(api, "request", side_effect=request):
+            PAGES.reconcile_prs(api, self.cleanup_result())
+        self.assertEqual(requests[-1], (f"git/refs/heads/{names[-1]}", "DELETE"))
+        self.assertEqual(sum(method == "DELETE" for _, method in requests), 1)
+        self.assertIn(("branches?per_page=100&page=2", "GET"), requests)
+        self.assertEqual(requests.count(("pulls?state=open&base=pages&per_page=100&page=2", "GET")), 2)
+
+    def test_malformed_pagination_and_late_page_errors_prevent_deletion(self):
+        for response in [{}, {"jobs": {}}, None, "not a list"]:
+            api = PAGES.GitHub.__new__(PAGES.GitHub)
+            with patch.object(api, "request", return_value=response), self.assertRaises(RuntimeError):
+                list(api.items("branches"))
+        api = PAGES.GitHub.__new__(PAGES.GitHub)
+        with patch.object(api, "request", return_value={"jobs": {}}), self.assertRaises(RuntimeError):
+            list(api.items("jobs", "jobs"))
+        api.repository = "example/project"
+        first = [{"name": "pages-update/" + f"{number:040x}"} for number in range(100)]
+        with patch.object(api, "request", side_effect=[first, RuntimeError("page 2 failed")]) as request:
+            with self.assertRaises(RuntimeError):
+                PAGES.reconcile_prs(api, self.cleanup_result())
+            self.assertEqual(request.call_count, 2)
+            self.assertTrue(all(len(call.args) == 1 for call in request.call_args_list))
+
+    def test_delete_response_has_no_json_body(self):
+        api = PAGES.GitHub.__new__(PAGES.GitHub)
+        api.repository, api.token = "example/project", "fake-test-token"
+        with patch.object(PAGES.urllib.request, "urlopen") as urlopen:
+            urlopen.return_value.__enter__.return_value.status = 204
+            self.assertIsNone(api.request("git/refs/heads/pages-update/" + SHA, "DELETE"))
 
 
 if __name__ == "__main__":

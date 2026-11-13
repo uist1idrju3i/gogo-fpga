@@ -14,6 +14,7 @@ import stat
 import subprocess
 import sys
 import tempfile
+import urllib.error
 import urllib.request
 import zipfile
 
@@ -179,14 +180,18 @@ class GitHub:
                      "Content-Type": "application/json", "X-GitHub-Api-Version": "2022-11-28"},
             method=method)
         with urllib.request.urlopen(request, timeout=60) as response:
-            return json.load(response)
+            return None if response.status == 204 else json.load(response)
 
     def items(self, path, key=None):
         separator = "&" if "?" in path else "?"
         page = 1
         while True:
             response = self.request(f"{path}{separator}per_page=100&page={page}")
+            if key and (not isinstance(response, dict) or key not in response):
+                raise RuntimeError("Malformed paginated API response")
             values = response[key] if key else response
+            if not isinstance(values, list):
+                raise RuntimeError("Expected an API result list")
             yield from values
             if len(values) < 100:
                 break
@@ -260,8 +265,64 @@ def pr_body(result):
             "- [ ] 実機で確認した\n- [ ] 配信ヘッダーと書き込み結果を確認し、公開を承認する\n")
 
 
+def open_page_prs(api):
+    prs = list(api.items("pulls?state=open&base=pages"))
+    numbers = set()
+    for pr in prs:
+        if not isinstance(pr, dict):
+            raise RuntimeError("Malformed open approval PR")
+        head, base = pr.get("head"), pr.get("base")
+        if (type(pr.get("number")) is not int or pr["number"] <= 0 or
+                pr["number"] in numbers or pr.get("state") != "open" or
+                not isinstance(pr.get("html_url"), str) or
+                pr["html_url"] != f"https://github.com/{api.repository}/pull/{pr['number']}" or
+                not isinstance(head, dict) or not isinstance(head.get("ref"), str) or
+                not head["ref"] or not isinstance(base, dict) or base.get("ref") != "pages" or
+                not isinstance(base.get("repo"), dict) or
+                base["repo"].get("full_name") != api.repository):
+            raise RuntimeError("Malformed open approval PR")
+        repository = head.get("repo")
+        if ("repo" not in head or (repository is not None and
+                (not isinstance(repository, dict) or
+                 not isinstance(repository.get("full_name"), str) or
+                 not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repository["full_name"])))):
+            raise RuntimeError("Malformed approval head repository")
+        numbers.add(pr["number"])
+    return prs
+
+
+def managed_branches(api):
+    branches = list(api.items("branches"))
+    names = set()
+    for branch in branches:
+        if (not isinstance(branch, dict) or not isinstance(branch.get("name"), str) or
+                not branch["name"] or branch["name"] in names):
+            raise RuntimeError("Malformed repository branch list")
+        names.add(branch["name"])
+    return {name for name in names if MANAGED_BRANCH.fullmatch(name)}
+
+
+def delete_managed_branch(api, branch):
+    if not MANAGED_BRANCH.fullmatch(branch):
+        raise RuntimeError("Refusing to delete an unmanaged branch")
+    try:
+        api.request(f"git/refs/heads/{branch}", "DELETE")
+    except urllib.error.HTTPError as error:
+        if error.code == 404:
+            return
+        if error.code == 422:
+            try:
+                api.request(f"git/ref/heads/{branch}")
+            except urllib.error.HTTPError as lookup_error:
+                if lookup_error.code == 404:
+                    return
+                raise
+        raise
+
+
 def reconcile_prs(api, result):
-    managed = [pr for pr in api.items("pulls?state=open&base=pages")
+    branches = managed_branches(api)
+    managed = [pr for pr in open_page_prs(api)
                if MANAGED_BRANCH.fullmatch(pr["head"]["ref"]) and
                pr["head"]["repo"] and pr["head"]["repo"]["full_name"] == api.repository]
     current = next((pr for pr in managed if pr["head"]["ref"] == result["branch"]), None)
@@ -271,9 +332,20 @@ def reconcile_prs(api, result):
             api.request(f"pulls/{current['number']}", "PATCH", body)
         else:
             current = api.request("pulls", "POST", {**body, "head": result["branch"], "base": "pages"})
+        if (not isinstance(current, dict) or type(current.get("number")) is not int or
+                current["number"] <= 0 or
+                current.get("html_url") != f"https://github.com/{api.repository}/pull/{current['number']}"):
+            raise RuntimeError("Malformed current approval PR")
+    closed = set()
     for pr in managed:
         if result["status"] == "unchanged" or not current or pr["number"] != current["number"]:
             api.request(f"pulls/{pr['number']}", "PATCH", {"state": "closed"})
+            closed.add(pr["head"]["ref"])
+    protected = {pr["head"]["ref"] for pr in open_page_prs(api)}
+    if result["status"] != "unchanged":
+        protected.add(result["branch"])
+    for branch in sorted((branches | closed) - protected):
+        delete_managed_branch(api, branch)
     return current["html_url"] if current and result["status"] != "unchanged" else None
 
 
