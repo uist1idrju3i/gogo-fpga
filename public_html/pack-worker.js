@@ -13,6 +13,7 @@ const packAssetsLoader = createVerifiedAssetLoader({
   baseURL: packURL,
   cacheName: packCacheName,
   label: "Pack asset",
+  onProgress: (progress) => self.postMessage({ type: "progress", progress }),
   cacheRaw: true,
 });
 const apyculaWheelURL = new URL(

@@ -30,6 +30,7 @@ Bitwuzlaの隔離したMeson診断は、上流wrapで固定したCaDiCaL（MIT�
 
 | 部品 | 固定版 / commit | ライセンス | WASM への静的リンク / 開発用 | web zip 内のライセンスファイル |
 |---|---|---|---|---|
+| jsdiff（npm `diff`） | 9.0.0 | BSD-3-Clause、Kevin Decker | AI の変更提案の unified diff をブラウザーで生成 | `licenses/jsdiff-LICENSE` |
 | openFPGALoader | v1.2.0 / `befbab4f646207dbaf1daf8b144dd980ad283dd5` | Apache-2.0 | WASM に静的リンク | `licenses/openFPGALoader-LICENSE` |
 | libusb | v1.0.30 / `87a55632db62c9bdc58cd31d3ccfa673f1bb017f` | LGPL-2.1-or-later | WASM に静的リンク | `licenses/libusb-COPYING` |
 | libftdi | 1.6rc1 / `92d657bcb543a9622947d984d4a8e725fb680e8c` | LGPL-2.1（ライブラリ部分） | WASM に静的リンク | `licenses/libftdi-COPYING.LIB` |

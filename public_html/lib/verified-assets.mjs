@@ -52,6 +52,7 @@ export function createVerifiedAssetLoader({
   cacheName,
   label = "Synthesis asset",
   cacheRaw = false,
+  onProgress = () => {},
 }) {
   if (!(baseURL instanceof URL)) {
     throw new TypeError("baseURL must be a URL");
@@ -111,7 +112,9 @@ export function createVerifiedAssetLoader({
         if (cached) {
           try {
             const bytes = new Uint8Array(await cached.arrayBuffer());
-            return await verifyAssetBytes(bytes, metadata, path);
+            const verified = await verifyAssetBytes(bytes, metadata, path);
+            onProgress({ path, loaded: bytes.length, total: bytes.length, cached: true });
+            return verified;
           } catch (error) {
             console.warn(`Discarding invalid cached ${lowerLabel} ${path}`, error);
             await cache.delete(key).catch((deleteError) => {
@@ -133,7 +136,28 @@ export function createVerifiedAssetLoader({
     if (!response.ok) {
       throw new Error(`Could not load ${lowerLabel} ${path} (${response.status})`);
     }
-    const bytes = new Uint8Array(await response.arrayBuffer());
+    const total = metadata.compressed_size ?? metadata.size;
+    const chunks = [];
+    let loaded = 0;
+    onProgress({ path, loaded, total, cached: false });
+    if (response.body?.getReader) {
+      const reader = response.body.getReader();
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        loaded += value.length;
+        onProgress({ path, loaded, total, cached: false });
+      }
+    } else {
+      const chunk = new Uint8Array(await response.arrayBuffer());
+      chunks.push(chunk);
+      loaded = chunk.length;
+      onProgress({ path, loaded, total, cached: false });
+    }
+    const bytes = new Uint8Array(loaded);
+    let offset = 0;
+    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
     let output = bytes;
     if (metadata.encoding === "zstd") {
       if (bytes.byteLength !== metadata.compressed_size) {

@@ -2,3 +2,4 @@
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Embedder-Policy: require-corp
   Cross-Origin-Resource-Policy: same-origin
+  Content-Security-Policy: connect-src 'self' https://openrouter.ai; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'self'
