@@ -67,9 +67,10 @@ export function createVerifiedAssetLoader({
     new URL(`${path}?sha256=${sha256}`, baseURL);
   const shouldCache = (asset) => asset.encoding === "zstd" || cacheRaw;
 
-  async function loadManifest() {
+  async function loadManifest({ signal } = {}) {
     const response = await fetchAsset(new URL("manifest.json", baseURL), {
       cache: "no-cache",
+      signal,
     });
     if (!response.ok) {
       throw new Error(`Could not load ${lowerLabel} manifest (${response.status})`);
@@ -102,7 +103,8 @@ export function createVerifiedAssetLoader({
     return bytes;
   }
 
-  async function fetchVerifiedAsset(assets, path, cache) {
+  async function fetchVerifiedAsset(assets, path, cache, { signal } = {}) {
+    signal?.throwIfAborted();
     const metadata = assets.get(path);
     if (!metadata) throw new Error(`${label} is missing from manifest: ${path}`);
     const key = cacheKey(path, metadata.sha256);
@@ -132,7 +134,8 @@ export function createVerifiedAssetLoader({
       metadata.encoding === "zstd" ? `${encodedPath}.zst` : encodedPath,
       baseURL,
     );
-    const response = await fetchAsset(url, { cache: "no-cache" });
+    signal?.throwIfAborted();
+    const response = await fetchAsset(url, { cache: "no-cache", signal });
     if (!response.ok) {
       throw new Error(`Could not load ${lowerLabel} ${path} (${response.status})`);
     }

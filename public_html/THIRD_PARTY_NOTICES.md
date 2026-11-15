@@ -41,6 +41,9 @@ Bitwuzlaの隔離したMeson診断は、上流wrapで固定したCaDiCaL（MIT�
 | ABC | `6c5104934c90eb3cdef9ea063318f7588908a185` | Regents of the University of California の許諾条件 | Yosys WASM に静的リンク | `licenses/abc-copyright.txt` |
 | cxxopts | `4bf61f08697b110d9e3991864650a405b3dd515d` | MIT | Yosys WASM に静的リンク | `licenses/cxxopts-LICENSE` |
 | fmt | `a00f82c6b66dcae15503ba19c1598b2733057dea` | MIT | Yosys WASM に静的リンク | `licenses/fmt-LICENSE` |
+| toml++ | Yosys 内の固定 submodule | MIT、Mark Gillard | Yosys WASM のヘッダー依存 | `licenses/tomlplusplus-LICENSE` |
+| SymFPU | Yosys 内の固定 submodule | GPL-3.0 OR BSD-3-Clause（BSD を選択）、authors | Yosys WASM のヘッダー依存 | `licenses/symfpu-LICENSE`、`licenses/symfpu-LICENSE-BSD` |
+| Boost.Regex | Yosys 内の固定 submodule | Boost Software License 1.0 | Yosys WASM のヘッダー依存 | `licenses/boost-LICENSE_1_0.txt` |
 | nextpnr-himbaechel | nextpnr-0.11.1 / `62e659ed6748e9f60b2a4aa25dd4fe79a9605881` | ISC | WASI WASM に静的リンク | `licenses/nextpnr-COPYING` |
 | Boost | 1.92.0 / SHA-256 `ea7b982002cc9dfbe59b0b217b206f470dc75f3de0bb2973d844118934d82411` | Boost Software License 1.0 | `program_options`、`iostreams` を nextpnr WASM に静的リンク | `licenses/boost-LICENSE_1_0.txt` |
 | Eigen | 5.0.1 / SHA-256 `e9c326dc8c05cd1e044c71f30f1b2e34a6161a3b6ecf445d56b53ff1669e3dec` | 主に MPL-2.0。一部に BSD など互換ライセンスのコード | nextpnr WASM のビルドでヘッダーを使用 | `licenses/eigen-*` |
