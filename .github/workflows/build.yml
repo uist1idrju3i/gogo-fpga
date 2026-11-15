@@ -313,7 +313,7 @@ jobs:
 
       - id: formal-product
         name: 配信したSATの実worker実行とPythonの初期化を検査
-        run: node --test --test-concurrency=1 tests/synth/formal-product.test.mjs
+        run: node --test --test-concurrency=1 tests/product/formal.test.mjs
 
       - name: 形式検証の配信資材と実workerの検査記録を保存
         if: always() && steps.formal-product.outcome != 'skipped'

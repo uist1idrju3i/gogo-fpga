@@ -32,6 +32,8 @@ SMTBMC用のsolver名と、実行するコマンド名は異なる場合があ�
 
 `scripts/build-web.sh` は `scripts/build-formal-python.py` を呼び、固定したYosys、SBY、Clickのソースと原license、process patch、adapterを `formal/python/` へ配置します。manifestにはsource pin、patch hash、原ファイルの出所とhash、配信する各ファイルのsize/hashを保持します。通常buildのCIでもSBYとClickを固定commitから取得します。
 
+Releaseのソース書庫には `vendor/formal-python-sources.json` として来歴を同梱します。Gitがないときは、そのpinと元ソースのhashを照合してからpatchを適用し、同じbundleを再生成します。ソースの改変・欠損・リンクや来歴の欠落は拒否します。Release closureでも同梱した来歴と配信manifestのbyte一致を検査します。
+
 Python workerには `web/lib/formal-pyodide.mjs` を接続しました。従来の直接起動では、通常配信でzstdにしたPyodide WASMの未圧縮URLを要求していました。修正後はpack manifestを読み、検証済みのlockを渡し、WASMと標準ライブラリーを取得するときに既存のhash検査とブラウザー用展開器を通します。runtimeの準備に失敗した場合は再試行でき、workerの準備例外もhostへ通知します。
 
 ## 生成物をHTTPで検査する
@@ -57,12 +59,12 @@ node --test tests/web/formal-*.test.mjs tests/web/verified-assets.test.mjs
 python3 -m unittest discover -s tests/check-formal-distribution -v
 scripts/build-web.sh
 python3 scripts/formal-distribution.py audit public_html
-node --test --test-concurrency=1 tests/synth/formal-product.test.mjs
+node --test --test-concurrency=1 tests/product/formal.test.mjs
 ```
 
-最初の2コマンドは2026-11-15に実行し、関連単体試験149件とHTTP監査器の8件が成功しました。HTTP監査器では、fixtureの実HTTP配信と固定版zstdを使い、200 HTML、不正JSON、404、欠損・改変・途中までのbody、重複・不正metadata、誤ったContent-Type、COEP欠落、license改変、圧縮前後それぞれのhash不一致を拒否しました。Pythonではpinとソースの改変、原licenseの欠落も検査します。runtimeの3単体試験は、実際のブラウザー用zstd展開器を使います。HTTP監査用のfixtureはYosysの実行を検査するbinaryではありません。
+最初の2コマンドは2026-11-15に実行し、関連単体試験149件と配信・書庫再生成の11件が成功しました。HTTP監査器では、fixtureの実HTTP配信と固定版zstdを使い、200 HTML、不正JSON、404、欠損・改変・途中までのbody、重複・不正metadata、誤ったContent-Type、COEP欠落、license改変、圧縮前後それぞれのhash不一致を拒否しました。Pythonではpinとソースの改変、原licenseの欠落も検査します。runtimeの3単体試験は、実際のブラウザー用zstd展開器を使います。HTTP監査用のfixtureはYosysの実行を検査するbinaryではありません。
 
-別に `tests/synth/formal-product.test.mjs` を追加しました。HTTPから圧縮SAT資材を取得し、製品loader、runner、実WASI workerを通して12条件を検査します。BMC、prove、反例、深さの境界、矛盾したassume、性質なし、不正なclock/edge、未対応構文を含みます。さらにHTTPから取得したPythonソースで原本SBYの `--setup` をPyodide上で実行します。ログを含むworkspace差分、結果、入力、snapshot、binary hash、commitと作業差分の有無を保存し、CIの通常build後にも実行します。
+別に `tests/product/formal.test.mjs` を追加しました。HTTPから圧縮SAT資材を取得し、製品loader、runner、実WASI workerを通して12条件を検査します。BMC、prove、反例、深さの境界、矛盾したassume、性質なし、不正なclock/edge、未対応構文を含みます。さらにHTTPから取得したPythonソースで原本SBYの `--setup` をPyodide上で実行します。ログを含むworkspace差分、結果、入力、snapshot、binary hash、commitと作業差分の有無を保存します。Gitがない書庫では `RELEASE-SOURCE.json` のcommitとmetadata hashを記録します。資材生成前のsynth試験からは分離し、通常CI・Release・書庫再ビルドのWeb build後に明示して実行します。
 
 ローカルでは、[CI run 43700337952](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43700337952)のSAT資材と、現行のPython bundle・展開器を合わせた `FORMAL_WEB_ROOT=build/formal-product-web` で、この検査14件が成功しました。Yosys WASMのSHA-256は `11ee003141aa7c05b8413f77f44e7a1e54c124a66bb338ff38fd47028387b5c3` です。この検査はNode worker_threads上の回帰試験で、ブラウザー操作、solverの実行、SQLiteを含むSBY全実行、VHDL、反例の独立再実行の認定ではありません。製品の生成物はCIの通常buildで別途監査・実行します。
 

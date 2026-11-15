@@ -98,6 +98,9 @@ jobs:
       - name: Web アプリを組み立て
         run: scripts/build-web.sh
 
+      - name: 形式検証の配信資材を実workerで検査
+        run: node --test --test-concurrency=1 tests/product/formal.test.mjs
+
       - name: テスト用ビットストリームを生成
         run: tests/fixtures/build-fs.sh
 
@@ -128,6 +131,7 @@ jobs:
             build/ghdl-native/
             build/native/
             build/pack/
+            build/formal-product-results-*/
           retention-days: 1
 
   test:
@@ -241,6 +245,7 @@ jobs:
           scripts/build-pack-assets.sh
           node --test tests/synth/*.test.mjs
           scripts/build-web.sh
+          node --test --test-concurrency=1 tests/product/formal.test.mjs
 
       - name: Release zip と再ビルドの hash を比較
         run: |

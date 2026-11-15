@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { createServer } from "node:http";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { createFormalAssetLoader, snapshotHash } from "../../web/lib/formal-assets.mjs";
@@ -10,9 +10,9 @@ import { createFormalRunner } from "../../web/lib/formal-runner.mjs";
 import { startFormalPython } from "../../web/lib/formal-python-process.mjs";
 import { startFormalToolProcess } from "../../web/lib/formal-tool-process.mjs";
 import { createVerifiedAssetLoader } from "../../web/lib/verified-assets.mjs";
-import { nodeFormalWorker, nodeFormalWasiWorker } from "./formal-python-helpers.mjs";
-import { satFormalCases } from "./formal-sat-cases.mjs";
-import { sbyCases, sbyConfig } from "./formal-sby-cases.mjs";
+import { nodeFormalWorker, nodeFormalWasiWorker } from "../synth/formal-python-helpers.mjs";
+import { satFormalCases } from "../synth/formal-sat-cases.mjs";
+import { sbyCases, sbyConfig } from "../synth/formal-sby-cases.mjs";
 
 globalThis.crossOriginIsolated = true;
 const root = path.resolve(import.meta.dirname, "../..");
@@ -55,9 +55,15 @@ test("HTTP-delivered SAT assets run through the product runner and actual WASI w
   assert.ok(assets.yosys, "Delivered Yosys assets must pass compressed and decoded hash checks");
   assert.ok(requests.some(url => url.endsWith("yosys.wasm.zst")));
   assert.ok(!requests.some(url => url.startsWith("/formal/")), "SAT must not depend on Python or solver delivery");
-  save("metadata.json", {
+  const releaseSource = existsSync(path.join(root, ".git")) ? null : readFileSync(path.join(root, "RELEASE-SOURCE.json"));
+  const source = releaseSource ? { commit: JSON.parse(releaseSource).commit, worktree: null,
+    sourceKind: "source-archive", releaseSourceSha256: sha256(releaseSource) } : {
     commit: execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim(),
-    worktree: execFileSync("git", ["status", "--porcelain"], { cwd: root, encoding: "utf8" }),
+    worktree: execFileSync("git", ["status", "--porcelain"], { cwd: root, encoding: "utf8" }), sourceKind: "git",
+  };
+  assert.match(source.commit, /^[0-9a-f]{40}$/);
+  save("metadata.json", {
+    ...source,
     node: process.version, yosysSha256: assets.yosys.sha256, shareSha256: assets.yosys.shareSha256,
     synthManifestSha256: sha256(readFileSync(path.join(web, "synth/manifest.json"))),
     execution: "Node worker_threads; browser interaction is not tested",
