@@ -65,7 +65,8 @@ def audit_url(base_url, root=ROOT):
     raw, mime = get(base_url, "synth/manifest.json", 256 * 1024)
     require(mime == "application/json", "SAT manifest Content-Type is not JSON")
     manifest = json.loads(raw)
-    require(isinstance(manifest, dict) and manifest.get("format_version") == 1 and
+    require(isinstance(manifest, dict) and type(manifest.get("format_version")) is int and
+            manifest["format_version"] == 1 and
             isinstance(manifest.get("assets"), list) and 0 < len(manifest["assets"]) <= 256,
             "Invalid SAT manifest")
     entries = {}
@@ -77,7 +78,7 @@ def audit_url(base_url, root=ROOT):
         require(path not in entries, "Duplicate SAT asset path")
         require(type(entry.get("size")) is int and 0 < entry["size"] <= 512 * 1024 * 1024 and
                 re.fullmatch("[0-9a-f]{64}", str(entry.get("sha256"))), "Invalid SAT asset identity")
-        require(entry.get("encoding") in (None, "zstd"), "Unsupported SAT asset encoding")
+        require("encoding" not in entry or entry["encoding"] == "zstd", "Unsupported SAT asset encoding")
         if entry.get("encoding") == "zstd":
             require(type(entry.get("compressed_size")) is int and 0 < entry["compressed_size"] < LIMIT and
                     re.fullmatch("[0-9a-f]{64}", str(entry.get("compressed_sha256"))), "Invalid compressed SAT asset")

@@ -61,9 +61,14 @@ class FormalDistributionTest(unittest.TestCase):
                     DIST.audit(self.directory)
 
     def test_invalid_metadata_cannot_pass(self):
+        self.manifest["format_version"] = True
+        self.write_manifest()
+        with self.assertRaisesRegex(ValueError, "Invalid SAT manifest"):
+            DIST.audit(self.directory)
+        self.manifest["format_version"] = 1
         original = self.manifest["assets"][0].copy()
         for change in ({"path": "../escape"}, {"size": True}, {"size": DIST.LIMIT},
-                       {"encoding": "gzip"}, {"encoding": "zstd"}, {"sha256": "invalid"}):
+                       {"encoding": "gzip"}, {"encoding": None}, {"encoding": "zstd"}, {"sha256": "invalid"}):
             with self.subTest(change=change):
                 self.manifest["assets"][0] = {**original, **change}
                 self.write_manifest()
