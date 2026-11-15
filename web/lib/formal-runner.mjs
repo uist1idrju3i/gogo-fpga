@@ -104,7 +104,7 @@ export function createFormalRunner({
   async function run(input) {
     if (active) throw new Error("A formal job is already running");
     const project = input?.project;
-    const formal = project?.formal;
+    let formal = project?.formal;
     if (!formal || typeof formal !== "object") {
       throw new Error("Formal verification is disabled for this project");
     }
@@ -144,6 +144,7 @@ export function createFormalRunner({
         const lowered = await lowerVhdl({ input, formal, selected, context, base, started, deadline });
         if (lowered.error) return lowered.error;
         selected = lowered.selected;
+        formal = { ...formal, top: formal.top.toLowerCase(), clock: formal.clock?.toLowerCase() ?? null };
         input = { ...input, vhdlLowered: true, files: new Map([...input.files, ...selected.map(file => [file.path, file.bytes])]) };
       }
       if (engine.id === "yosys-sat") {

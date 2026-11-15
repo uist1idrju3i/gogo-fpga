@@ -200,11 +200,11 @@ test("HTTP-delivered SAT assets run through the product runner and actual WASI w
           return job;
         } });
       const project = { version: 4, name: "vhdl-product", board: "tangnano9k", top: "top", files: [{ path: "top.vhd" }],
-        libraries: [], formal: { engine: "smtbmc", solver: "yices2", top: "top", mode: fixture.mode, depth: fixture.depth,
-          clock: fixture.clock, edge: fixture.edge, timeoutSeconds: 60, memoryMiB: 512, files: null, sby: null } };
+        libraries: [], formal: { engine: "smtbmc", solver: "yices2", top: "ToP", mode: fixture.mode, depth: fixture.depth,
+          clock: fixture.clock?.toUpperCase() ?? null, edge: fixture.edge, timeoutSeconds: 60, memoryMiB: 512, files: null, sby: null } };
       const files = new Map([["top.vhd", fixture.source]]);
       const outcome = await runner.run({ project, files, assets: vhdlAssets, snapshotHash: await snapshotHash(project, files) });
-      save(`vhdl-${fixture.name}.json`, { fixture, outcome, workers, ghdlSha256: vhdlAssets.ghdl.sha256,
+      save(`vhdl-${fixture.name}.json`, { fixture, project, outcome, workers, ghdlSha256: vhdlAssets.ghdl.sha256,
         librariesSha256: vhdlAssets.ghdl.shareSha256 });
       const rejected = fixture.name === "no-property";
       assert.equal(outcome.status, rejected ? "invalid-properties" : fixture.status, JSON.stringify(outcome));
@@ -276,7 +276,8 @@ test("HTTP-delivered SAT assets run through the product runner and actual WASI w
     const fixture = smtVhdlReplayCases.find(fixture => fixture.name === "combinational");
     const input = lifecycleInput(vhdlAssets);
     input.project.files = [{ path: "top.vhd" }];
-    input.project.formal.clock = fixture.clock;
+    input.project.formal.top = "TOP";
+    input.project.formal.clock = fixture.clock?.toUpperCase() ?? null;
     input.project.formal.depth = fixture.depth;
     input.files = new Map([["top.vhd", fixture.source]]);
     const runner = createFormalRunner({ wasiWorkerFactory: nodeFormalWasiWorker });

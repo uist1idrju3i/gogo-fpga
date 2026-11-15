@@ -357,6 +357,32 @@ function smtInventoryTool() {
   return fakeTool({ phases: { inventory: { exitCode: 0, files: { "__formal/before.json": jsonBytes(document) } } } }).startTool;
 }
 
+for (const engine of ["yosys-sat", "smtbmc"]) {
+  for (const top of ["TOP", "ToP"]) {
+    test(`VHDL ${engine} resolves ${top} and CLK in the lowered design without changing the project`, async () => {
+      const current = smtProject({ engine, solver: engine === "smtbmc" ? "yices2" : null, top, clock: "CLK" });
+      current.files = [{ path: "src/top.vhd" }];
+      const original = JSON.stringify(current);
+      const tool = fakeTool({ phases: { ...satPhases(smtDocument),
+        inventory: { exitCode: 0, files: { "__formal/before.json": jsonBytes(smtDocument) } } } });
+      const python = fakePython({ sby: sbyStatus("PASS", 0) });
+      const runner = createFormalRunner({ startPython: python.startPython, startTool(options) {
+        if (options.data.args[0] !== "ghdl") return tool.startTool(options);
+        return { completion: (async () => ({ status: "exited", exitCode: 0, integrityVerified: true,
+          frame: await packWorkspaceDelta(options.data.files, [...options.data.files,
+            { path: "model/__formal_vhdl.v", bytes: encoder.encode("module top(input clk); endmodule") }]) }))() };
+      } });
+      const outcome = await runner.run(input({ project: current, files: new Map([["src/top.vhd", "entity top is end;"]]),
+        assets: { ...smtAssets(), ghdl: {} } }));
+      assert.equal(outcome.kind, "bounded-pass", JSON.stringify(outcome));
+      assert.equal(JSON.stringify(current), original);
+      if (engine === "smtbmc") {
+        assert.match(python.calls[0].files.find(file => file.path === "formal.sby").text, /prep -top top/);
+      }
+    });
+  }
+}
+
 test("SMT rejects empty targets, unsupported state and multiple clocks before Python starts", async () => {
   for (const mutate of [
     document => { delete document.modules.top.cells.P; },
