@@ -72,4 +72,6 @@ node --test --test-concurrency=1 tests/product/formal.test.mjs
 
 全Web単体試験は初回のローカル実行で、未生成のflasher資材と製品 `public_html/` により5件失敗しました。[CI run 43704401597](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43704401597)では、通常Web build、SAT・Python配信監査、製品回帰14件とWeb単体試験440件が成功しました。[製品試験の原記録](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43704401597/artifacts/14158384493)には、検査したmerge commit `e17c88c64429a43d885c8b18ae123a85350641ba` と同じYosys WASMのhashを保存しています。別jobのE2E shardでは、Yosysの原licenseを取得しておらずWeb再生成が停止しました。上記のソース取得を追加し、清浄な取得先で原license11件の配置とPythonの44資材・manifestのbyte一致を確認しました。
 
+[続くCI run 43707742243](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43707742243)では、取得コマンドの全文を固定していた2件のライブラリー試験が失敗しました。改行と引数の追加を許容し、必要なソース取得と実行順序を引き続き検査するよう修正しました。修正後のローカル試験と、必要な取得先を除いた負の対照も確認しました。
+
 4ボードのブラウザー操作と画面の目視は、ユーザーの指定により全実装後にまとめて実施します。この時点では未実施です。再監査時点の証拠書庫は変更せず、当時の障害記録と今回の実装を区別します。

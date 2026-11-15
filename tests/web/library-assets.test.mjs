@@ -14,7 +14,11 @@ test("the E2E web rebuild initializes library sources and nested CPU provenance 
   const runner = readFileSync(new URL("../../scripts/run-ci-shard.mjs", import.meta.url), "utf8");
   assert.match(runner, /spawnSync\("npx", \["playwright", "test",/);
   const setup = e2e.slice(0, execution).replace(/\\\n\s*/g, " ");
-  assert.match(setup, /git submodule update --init --depth 1 -- vendor\/zstd third_party\//);
+  const sourceCommand = setup.match(/^\s*git submodule update --init --depth 1 -- ([^\n]*)/m);
+  assert.ok(sourceCommand, "Missing source checkout command");
+  const sourceArgs = sourceCommand[1].trim().split(/\s+/);
+  assert.ok(sourceArgs.includes("vendor/zstd"), "Missing decoder sources");
+  assert.ok(sourceArgs.includes("third_party/"), "Missing library sources");
   assert.match(setup, /git -C third_party\/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv\/verilog\/ext\/VexRiscv/);
 });
 
