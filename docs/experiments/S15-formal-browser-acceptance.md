@@ -139,6 +139,39 @@ node tests/browser-acceptance/replay-deadline-ui.mjs --out build/browser-accepta
 再実行時は既存証拠を別へ保存し、空の出力ディレクトリーで実行する。
 これは受入れ確認の補助であり、通常CIの自動gateには含めていない。
 
+## 追跡版の起動経路の再確認
+
+`7bcf401bbfeba9d85f2d764c08ca7bfc0617dc78` で、上記の `run-targeted.mjs` から
+対象2件をheaded Chromiumで実行し、2/2成功、unexpected 0、errors 0だった。
+workerIndex 0・1がそれぞれ実行し、設定再読込時の `EEXIST` は発生していない。
+各試験が作る独立したVHDL-only・混在project・VHDL projectの名前・言語・対象ファイルを
+確認してから段階実行した。条件と期待値は元の2件と同じである。
+製品コードは最初の4ボード受入れ時から変更しておらず、全経路の再走は行っていない。
+
+起動時は次の条件を使用した。`PWDEBUG=1` による対話停止を含む6.7分の実行であり、
+[生CSV](S15-formal-browser-targeted.csv)の時間を通常の性能値として扱わない。
+
+```sh
+PWDEBUG=1 node tests/browser-acceptance/run-targeted.mjs \
+  --out build/pr28-targeted-7bcf401-final --base-url http://127.0.0.1:8123/
+```
+
+最初の準備では配信rootに案内placeholderが残っていることを検出して中断した。
+Webを再構築し、新しい出力先で実行した結果だけを採用した。
+この中断ログと、旧設定の再読込失敗も[失敗・予備記録](S15-formal-product-integration-failures.csv)へ残した。
+
+[実施セッション](https://app.devin.ai/sessions/d978c0f0cabc4a0faac01e03c62e2cf8)の添付
+`pr28-browser-targeted-7bcf401-evidence.tar.gz` に、追加2件のJSON・trace・画像・録画、
+準備中断、旧設定の失敗再現、修正後のworker読込・証拠上書き拒否のログを保存した。
+書庫内の41ファイルをhash manifestから再照合した。元の100ファイルの書庫は変更していない。
+
+| 追加証拠 | SHA-256 |
+|---|---|
+| 追加の証拠書庫 | `d8770cf58399eeb169f0ceba150a749c14b337f9b2353cec5af0afc3911336d8` |
+| 対象2件のJSON | `408db6dc5a5a4dc3fe795a942926e424412995d9502b26e0ff875619fe92f497` |
+| 対象2件のログ | `3a73c810a3c2655e9988d8400f3c46d17bfc2f320fc2a69b527b0840348868bf` |
+| CLI・実worker読込の確認ログ | `99d5f27e6a154209d1ec89183359dc3f72be0bd68b86073eb8d5e22ede94c5a7` |
+
 ## 未確認・対象外
 
 原VHDLの独立シミュレーション、独自の `.sby`、混在HDLの形式検証、
