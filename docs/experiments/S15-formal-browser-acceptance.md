@@ -1,0 +1,259 @@
+# S15 形式検証のブラウザー受入れ確認
+
+## 目的と採否基準
+
+[製品runnerの43条件5回反復](S15-formal-product-integration.md)で扱わない、
+対象一覧、設定の保存、画面表示、実ブラウザーworkerの終了と復旧を確認する。
+全実装と自動回帰の完了後に開始し、次の条件を採否基準とした。
+
+- VHDL形式対象と混在プロジェクトのシミュレーション対象を、画面から保存・再読込できる。
+- Tang Nano 1K・4K・9K・20Kの各画面で、新しいSAT実行の開始と成功を確認できる。
+- 明示選択したYices2でBMC・prove・coverが動き、Verilog反例をIcarusで独立再実行できる。
+- VHDLをGHDLで下位化してSATとYices2へ渡し、原文再実行の利用不可を理由付きで表示する。
+- 停止・期限・編集・プロジェクト切替後に古い結果と波形を除去し、再実行できる。
+- 改変したキャッシュを拒否して再取得できる。4ボードの全画面画像と主経路の録画を保存する。
+
+## 実施条件
+
+対象commitは `1ab86d26ba68a54c983e5f2c1b77a4aee4372f46`。
+開始時の作業ツリーは清浄で、Web組立てによる案内placeholderの変更だけを実施した。
+製品実装は、215判定の再認定を行った `d2a16d8` と同じである。
+その後の変更は実験記録と、再読込後に元プロジェクトを選び直すE2Eの訂正である。
+
+Linux上のheaded Chromium `156.0.8078.4` を使用した。
+`scripts/build-web.sh` で現commitから組み立て、`public_html/serve.py` で配信した。
+build-info、manifest、HTTP配信のhash、COOP/COEPを検査してから操作した。
+HTTPで取得した `ide.mjs` と `web/ide.mjs` のSHA-256はともに
+`d39b4e5bd71c7d98b0103f01ebcd7489e0a7f1937f8fe50d73f229e183cc9a9b` だった。
+配信したsolver manifestのSHA-256は
+`281452a51a55d6fd30acc25348c4651d2741eec6ec8a577b4b057ca77c8072bb`。
+
+操作はPlaywrightによる実画面のクリック・入力と目視で行った。
+キャッシュ破損・削除だけは実Cache Storageをscriptで変更し、復旧を通常UIから確認した。
+worker生成・終了とDOM状態遷移の観測にもscriptを併用した。
+Node worker_threads、native参照、実機の結果はブラウザーの成功数に含めない。
+これは画面の受入れ確認であり、5回反復の性能比較ではない。
+
+## 結果
+
+| 対象 | 判定と確認内容 |
+|---|---|
+| 対象選択のE2E | 2/2成功。VHDL形式対象の解除・保存・再読込と、混在projectのVHDL除外・checkbox保存・再編集・実シミュレーション |
+| 4ボード | 4/4。1K・4K・9K・20Kごとに新runのSAT成功と画面を目視し、全画面画像を保存 |
+| Verilog SAT | 安全と反例を確認。Icarus独立再実行は「確認済み」、独立VCD波形も表示 |
+| Yices2 | solverを明示選択してBMCの反例・独立再実行、prove成功、cover到達を確認 |
+| VHDL | `TOP`・`ToP` と `CLK` でGHDLからSAT／Yices2へ接続。原文再実行は理由付きの「利用不可」 |
+| 停止と期限 | SAT、再帰solver、Icarus再実行の実行中に停止・期限到達を確認。対象workerの終了後に再実行成功 |
+| 編集と切替 | 完了後・実行中の編集で結果と波形を破棄。実行中のproject switchでworkerを終了し、新projectで再実行成功 |
+| 再読込 | 元projectを画面で選び直すとtop・clock設定を保持。古い結果は残さず再実行成功 |
+| キャッシュ | 改変データのhash不一致を検出し再取得。キャッシュ全体の削除後も再実行成功 |
+
+[生CSV](S15-formal-browser-acceptance.csv)は、原JSONの31観測を転記したものである。
+`outcome=failed` には、期待した反例・停止・期限到達も含む。試験自体の失敗数ではない。
+時間は画面操作から観測した単発値で、solver単体の速度や厳密な応答期限を示さない。
+特にIcarus再実行の期限は3秒設定に対して、クリックから全worker終了の確認まで7,259 msだった。
+資材準備と終了監視を含み、3秒以内の応答を認定した結果ではない。
+
+Surferのthread pool警告とfaviconの404を観察した。独立VCD波形の表示は確認できた。
+これらを理由に判定条件を緩めてはいない。実機Tang Nanoは本リポジトリでは試していない。
+
+## 失敗・中止した試行と訂正
+
+失敗試行は[失敗・予備記録](S15-formal-product-integration-failures.csv)と証拠書庫へ保持した。
+製品の不具合と、一時試験器の不具合を区別している。
+
+1. 旧E2Eは再読込後の `blink` を検査して2件とも失敗した。元projectを選び直す追跡済み試験の修正後は2/2成功した。
+2. ボード連続試験が前runの成功を再利用し、4K完了前に9Kへ進んだ。DOMで新runの開始・終了を記録するよう直し、4ボードとも再実行した。旧4K画像は採用しない。
+3. 再帰solverの期限試験で、最初の入力は期限前に完了した。solver起動と期限到達の両方を確認できる条件で再実行した。
+4. 通常完了後も再利用されるidle sim-workerを、試験器が未終了workerと誤認した。停止・期限時の強制終了と、通常完了後の待機を分けて確認した。
+5. Icarus再実行の最初の期限試験は、再実行前に期限へ達するか、再実行が期限前に完了していた。合成から除外する実ループ負荷を加え、Icarus workerの生成後に期限へ達することと終了・再実行を確認した。
+
+製品コードと追跡済み試験は、一時試験器の修正では変更していない。
+最終の判定には `final-run`、`supplemental-final`、`replay-deadline-final` を使用した。
+旧runは経緯の証拠として保持し、最終の4ボード画像や主録画へ混ぜない。
+
+## 原証拠と再確認手順
+
+[実施セッション](https://app.devin.ai/sessions/d978c0f0cabc4a0faac01e03c62e2cf8)の添付
+`pr28-browser-1ab86d2-evidence.tar.gz` に、失敗・成功のtrace、JSON、入力、
+組立て・HTTP監査ログ、4ボード画像、最終報告、一時試験器、主録画を保存した。
+稼働中serverの可変ログだけを除外した。書庫内の `evidence-sha256.txt` の100ファイルを再照合した。
+
+| 証拠 | SHA-256 |
+|---|---|
+| 証拠書庫 | `073e04419e13e2f5f9eb6e530e38da8ebe2bba3d5888eac5a22b049713ddd1ce` |
+| 生CSV | `390b99d806696ec4fa15a9430e4be4a63419079f3ca1811dd82208517ebff121` |
+| 主経路JSON | `0fdc8aef18dc86ea26c3fa0d02349f21c8d358b40dcc83b8965d63bedcca751b` |
+| 停止・切替の追加JSON | `9c0c3eaf2ef49b6dc41212882b1a3d55f4aaab5528084f4d494859cf5238e4dc` |
+| 再実行期限JSON | `4e6fcdd88f95d8f67e1dae9e5fdf5a51fc01ffd518e3e53dba27fa5a796cae72` |
+| 対象選択E2Eログ | `9a8de4f7c4ff24bd90ca6b51dc3ed42428205336997821a1dc1ad9c001243668` |
+
+依存と固定資材を用意した同commitのcheckoutで、次の順に組み立て・配信する。
+
+```sh
+scripts/build-web.sh
+python3 public_html/serve.py --port 8123
+```
+
+別端末で、通常E2Eの対象2件を実行できる。実施時は書庫内の
+`targeted.config.mjs` を使い、重い合成fixture用globalSetupは使用していない。
+後のレビューで試験器の収録漏れを訂正し、
+[追跡対象の設定](../../tests/browser-acceptance/targeted.config.mjs)と
+[主経路](../../tests/browser-acceptance/manual-ui.mjs)、
+[停止・切替](../../tests/browser-acceptance/supplemental-ui.mjs)、
+[再実行期限](../../tests/browser-acceptance/replay-deadline-ui.mjs)を保存した。
+同じ受入れ条件を、添付書庫なしで再実行できる。
+追跡版では配信URLと新しい出力先を指定でき、既存の出力先は空でも拒否する。
+記録のrevisionは再実行時のcheckoutから取得し、対話操作が失敗した場合の終了コードは1とする。
+製品コードと各条件の操作・判定は変更していない。
+
+リポジトリのrootで、[起動スクリプト](../../tests/browser-acceptance/run-targeted.mjs)から
+既存serverに対する対象2件を実行する。出力先は未使用のものに変える。
+Playwrightが出力を消去する前に起動側で出力先を確保し、設定再読込時には作り直さない。
+初版の追跡設定はworkerでの再評価時に既存出力を拒否したため、この方式へ訂正した。
+旧設定を別processで2回読むと2回目に `EEXIST` となることを再現し、
+訂正後はブラウザーを使わない実Playwright workerで設定を再読込できた。
+同じ出力先で起動を繰り返した場合は、Playwrightの開始前に拒否し、保存済み証拠を保持した。
+`--base-url` を省略すると8123番を使う。`--list` で対象2件だけを表示できる。
+
+```sh
+node tests/browser-acceptance/run-targeted.mjs --out build/browser-acceptance-targeted
+```
+
+対話的な補助は、別々の出力先で次のように起動する。
+配信先を変えるときは `--base-url http://127.0.0.1:8123/` を加える。
+
+```sh
+node tests/browser-acceptance/manual-ui.mjs --out build/browser-acceptance-main
+node tests/browser-acceptance/supplemental-ui.mjs --out build/browser-acceptance-supplemental
+node tests/browser-acceptance/replay-deadline-ui.mjs --out build/browser-acceptance-deadline
+```
+
+各scriptの起動後に、次のコマンドを標準入力へ1行ずつ入力する。
+実施時の `manual-ui.mjs` は
+`primary`、`boards`、`counterexample`、`edit`、`bmc`、`prove`、`cover`、
+`vhdl`、`vhdlsmt`、`switchreload`、`stop`、`timeout`、`activeedit`、`cache`、`finish` を順に入力した。
+追加の `supplemental-ui.mjs` は `recursive`、`recursivetimeout`、`replaystop`、`activeswitch`、`finish`、
+`replay-deadline-ui.mjs` は `replaydeadline`、`finish` を使用した。
+各scriptは独立した新しいブラウザーを起動し、`exit` で終了する。
+再実行時は既存証拠を別へ保存し、空の出力ディレクトリーで実行する。
+これは受入れ確認の補助であり、通常CIの自動gateには含めていない。
+
+## 追跡版の起動経路の再確認
+
+`7bcf401bbfeba9d85f2d764c08ca7bfc0617dc78` で、上記の `run-targeted.mjs` から
+対象2件をheaded Chromiumで実行し、2/2成功、unexpected 0、errors 0だった。
+workerIndex 0・1がそれぞれ実行し、設定再読込時の `EEXIST` は発生していない。
+各試験が作る独立したVHDL-only・混在project・VHDL projectの名前・言語・対象ファイルを
+確認してから段階実行した。条件と期待値は元の2件と同じである。
+製品コードは最初の4ボード受入れ時から変更しておらず、全経路の再走は行っていない。
+
+起動時は次の条件を使用した。`PWDEBUG=1` による対話停止を含む6.7分の実行であり、
+[生CSV](S15-formal-browser-targeted.csv)の時間を通常の性能値として扱わない。
+
+```sh
+PWDEBUG=1 node tests/browser-acceptance/run-targeted.mjs \
+  --out build/pr28-targeted-7bcf401-final --base-url http://127.0.0.1:8123/
+```
+
+最初の準備では配信rootに案内placeholderが残っていることを検出して中断した。
+Webを再構築し、新しい出力先で実行した結果だけを採用した。
+この中断ログと、旧設定の再読込失敗も[失敗・予備記録](S15-formal-product-integration-failures.csv)へ残した。
+
+[実施セッション](https://app.devin.ai/sessions/d978c0f0cabc4a0faac01e03c62e2cf8)の添付
+`pr28-browser-targeted-7bcf401-evidence.tar.gz` に、追加2件のJSON・trace・画像・録画、
+準備中断、旧設定の失敗再現、修正後のworker読込・証拠上書き拒否のログを保存した。
+書庫内の41ファイルをhash manifestから再照合した。元の100ファイルの書庫は変更していない。
+
+| 追加証拠 | SHA-256 |
+|---|---|
+| 追加の証拠書庫 | `d8770cf58399eeb169f0ceba150a749c14b337f9b2353cec5af0afc3911336d8` |
+| 対象2件のJSON | `408db6dc5a5a4dc3fe795a942926e424412995d9502b26e0ff875619fe92f497` |
+| 対象2件のログ | `3a73c810a3c2655e9988d8400f3c46d17bfc2f320fc2a69b527b0840348868bf` |
+| CLI・実worker読込の確認ログ | `99d5f27e6a154209d1ec89183359dc3f72be0bd68b86073eb8d5e22ede94c5a7` |
+
+## CIで見つかった結果表示後の編集不具合
+
+`5d5b82bba3439f0198720c6d252e0459653689da` の
+[Playwright shard 1](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43737891752/job/132894371675)で、
+SAT成功後に入力し直すCSP試験が `Formal preparation failed` となった。
+同じblink projectと入力順序を保ち、追跡済み試験を変更せずheaded Chromiumで再現した。
+以前の画面受入れでは、この連続入力の破損を検出できていなかった。
+
+非改変のWorker観測で、2回目の `model/src/top.v` が
+`eludomdne ;)a(tressa *@ syawla ;)a eriw tupnimodule top()` に崩れ、
+Yosysのstderrが `syntax error, unexpected TOK_ID`、終了値が1であることを確認した。
+最初のprepare・presat・proofはすべて終了値0だった。
+追加観測は原因確定後に中断し、成功試行に数えない。
+
+原因は `persistEditorContent` が新しい内容を保存する前に `workflow.verify` を呼び、
+同期的な `flow-change` から古い内容でエディターを再描画する順序だった。
+`stopped` も結果ありと扱うため、入力のたびにこの処理が繰り返された。
+内容を先に保存し、破棄済みの結果は再び破棄しないよう修正した。
+回帰試験には入力全文の一致と保存後のreloadによる一致を加えた。
+
+修正後の採用条件は、CSP試験の5回すべてで入力一致・安全判定・反例・保存の再読込が成功し、
+4ボードの画面確認で編集と結果破棄に問題がないこととする。
+対象はWebの編集経路であり、solverの性能比較や実機認定ではない。
+修正前のログ・実入力・終了値・編集イベントも、次の証拠書庫へ保存した。
+
+### 修正後と追跡版の結果
+
+製品修正の `b5cc4a8c762d383cfd45f7fb59c150913fda3b5f` と、補助試験器を収録した
+`7bd4e361198c98056b440a4941d6775178e4d91e` で、それぞれCSP試験5/5と4ボード4/4が成功した。
+各ボードで安全判定後の分割入力、途中・最終の全文一致、結果破棄、新runの反例、保存・reloadを確認した。
+4枚ずつの全画面画像を目視し、追加の製品・試験器不具合は検出しなかった。
+追跡版の実行ではWebを作り直さず、修正直後と同じ配信hashを確認して再利用した。
+Web単体451件も成功した。
+
+[生CSV](S15-formal-browser-editor.csv)に両実行の10行を保存した。
+時刻・時間・判定は原CSVと同じで、traceのパスだけをリポジトリ相対にし、revision列を加えた。
+原CSVも証拠書庫に保持した。初回の時間中央値は8,634 ms、最小7,346 ms、最大15,650 ms、
+追跡版は中央値8,245 ms、最小7,897 ms、最大9,980 msだった。
+各試行全体の時間であり、solver単独の性能比較ではない。
+再試行・skipped・unexpected・試験エラーは両方とも0だった。
+
+実行版はNode v24.22.3、Playwright 1.64.1、headed Chromium 156.0.8078.4。
+追跡版の配信・生成物・ソースの `ide.mjs` はすべて
+`d7fd9f6ce04673bef2fe2bf5b03311d33c9a89ea1b95e24d58e64b938675ba99` だった。
+favicon 404とSurfer/WebGL等の警告は残るが、波形を表示でき、4ボード補助のpageerrorは0だった。
+主録画はCSP反復の途中からのため、全5試行の操作は個別traceを根拠とする。
+この追加確認ではYices2・VHDL全経路を再走していない。
+
+### 編集回帰の再現と証拠
+
+COOP/COEP付きserverを起動し、新しい証拠先で
+[追跡版の起動スクリプト](../../tests/browser-acceptance/run-targeted.mjs)を使う。
+`--csp` は既存CSP試験を5回選び、省略時は従来のVHDL保存回帰2件を選ぶ。
+`--list` で選択件数を事前に確認できる。
+
+```sh
+node tests/browser-acceptance/run-targeted.mjs --csp \
+  --out build/formal-editor-csp --base-url http://127.0.0.1:8123/
+node tests/browser-acceptance/editor-ui.mjs \
+  --out build/formal-editor-boards --base-url http://127.0.0.1:8123/
+```
+
+[4ボードの編集補助](../../tests/browser-acceptance/editor-ui.mjs)には、READY後に
+`board tangnano1k`、`edit tangnano1k` を1行ずつ入力する。
+SAFEとDONEを確認してから、4K・9K・20Kも同じ順序で実行し、`finish`、`exit` で閉じる。
+入力・設定・保存は通常UIを使い、固定待機やWorkerの差し替えは行わない。
+失敗時は終了コード1となり、既存の出力先は空でも拒否する。
+
+[実施セッション](https://app.devin.ai/sessions/d978c0f0cabc4a0faac01e03c62e2cf8)の添付
+`pr28-editor-evidence.tar.gz` に、CI資料・原因調査・修正後2実行のJSON・CSV・trace・画像・録画と
+Web単体ログを保存した。129ファイルを `SHA256SUMS` から再照合した。
+
+| 原証拠 | SHA-256 |
+|---|---|
+| 証拠書庫 | `dcff65911081b575824dbd94f6456fea218564ed36f2e042a1242f4122344f9b` |
+| 追跡版CSPのJSON | `68ab3f201df9a014061944bdf958bfd430ee5cc307dbc80d459bf15db18f2475` |
+| 追跡版の原CSV | `db08b4a786718fba56598055ecd41468d7f6f9aab0d81002a46124bb21660d02` |
+| 修正直後の原CSV | `720020520fb24cc5cbd8448566b6199af174ab6478c269cdba259e0614d9724f` |
+
+## 未確認・対象外
+
+原VHDLの独立シミュレーション、独自の `.sby`、混在HDLの形式検証、
+複数clock、追加solver・engineは、この画面確認で有効にしていない。
+4ボード確認はWeb画面とSATの確認であり、合成・配置配線・USB書き込みの実機認定ではない。
+実機のTang Nanoは本リポジトリでは試していない。

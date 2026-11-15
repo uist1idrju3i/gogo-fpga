@@ -38,6 +38,24 @@ test("python bundle is absent when the manifest cannot be fetched", async () => 
   assert.equal(await loader.loadPython(), null);
 });
 
+test("GHDL is fetched only for VHDL and a failed load can be retried", async () => {
+  const files = { "yosys.wasm": new Uint8Array([0]), "yosys-share.tar": new Uint8Array([1]),
+    "ghdl-synth.wasm": new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0]) };
+  const synth = fakeSynthLoader(files);
+  const requested = [];
+  const loader = createFormalAssetLoader({ synthLoader: { ...synth, async fetchVerifiedAsset(manifest, path) {
+    requested.push(path);
+    return synth.fetchVerifiedAsset(manifest, path);
+  } } });
+  assert.equal((await loader.loadForEngine("yosys-sat")).ghdl, null);
+  assert.ok(!requested.includes("ghdl-synth.wasm"));
+  assert.equal((await loader.loadForEngine("yosys-sat", { vhdl: true })).ghdl, null);
+  files["libraries.tar"] = new Uint8Array([1, 2]);
+  const assets = await loader.loadForEngine("yosys-sat", { vhdl: true });
+  assert.equal(assets.ghdl.sha256, await sha256Hex(files["ghdl-synth.wasm"]));
+  assert.equal(assets.ghdl.shareSha256, await sha256Hex(files["libraries.tar"]));
+});
+
 test("python bundle loads hash-verified sources", async () => {
   const encoder = new TextEncoder();
   const files = {

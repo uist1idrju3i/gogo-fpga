@@ -198,10 +198,14 @@ class BuildTest(unittest.TestCase):
                     with self.assertRaises((ValueError, tarfile.TarError)):
                         BUILD.stage_dependency("cadical", dependency, Path(temp), {}, lambda *_: None)
 
-    def run_build(self, runtime):
+    def run_build(self, runtime, *, git_free=False):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         root = Path(tmp.name)
+        if git_free:
+            (root / "RELEASE-SOURCE.json").write_text(json.dumps({"commit": "3" * 40}))
+        else:
+            (root / ".git").mkdir()
         archive = root / "build/cache/fixture-sdk.tar.gz"
         archive.parent.mkdir(parents=True)
         archive.write_bytes(b"sdk")
@@ -219,6 +223,8 @@ class BuildTest(unittest.TestCase):
             return "34\t" + hashlib.sha256(b"sdk").hexdigest() + "\tfixture-sdk.tar.gz\thttps://example.invalid"
 
         def output(argv, **_kwargs):
+            if git_free and argv[0] == "git":
+                self.fail("Git-free build must not invoke Git")
             if argv[-2:] == ["rev-parse", "HEAD"]:
                 return "1" * 40
             if argv[-2:] == ["status", "--porcelain"]:
@@ -258,6 +264,12 @@ class BuildTest(unittest.TestCase):
         self.assertIn("-DCMAKE_CXX_STANDARD_LIBRARIES=-lc++abi -lunwind", configure)
         self.assertFalse(any("wasi-sdk-p1" in arg for arg in configure))
         self.assertEqual(info["artifact"]["path"], "objects/z3")
+        self.assertEqual(info["status"], "built")
+
+    def test_git_free_build_uses_release_source_identity_without_git(self):
+        info = self.run_build("wasi", git_free=True)
+        self.assertEqual(info["base_commit"], "3" * 40)
+        self.assertIsNone(info["worktree_status"])
         self.assertEqual(info["status"], "built")
 
 

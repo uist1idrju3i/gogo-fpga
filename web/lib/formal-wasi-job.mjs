@@ -4,6 +4,8 @@ import { readUstar } from "./ustar.mjs";
 import { safePath } from "./verified-assets.mjs";
 import { validateFormalToolCommand } from "./formal-tool-command.mjs";
 import { createMemoryTree, runWasiP1, setTreeEntry } from "./wasi-p1.mjs";
+import { runGhdlSynth } from "./ghdl-host.mjs";
+import { orderVhdlFiles } from "./vhdl-order.mjs";
 
 async function sha256(bytes) {
   return [...new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))]
@@ -65,7 +67,8 @@ export async function runFormalWasiJob({ jobId, wasm, sha256: binaryHash, share,
       throw new Error("Formal WASI asset hash mismatch");
     }
     status = "setup-error";
-    if (validateFormalToolCommand(args, cwd).runtime !== "wasi") {
+    const command = validateFormalToolCommand(args, cwd);
+    if (!["wasi", "ghdl"].includes(command.runtime)) {
       throw new Error("Unsupported formal WASI command");
     }
     const work = workspace(files);
@@ -78,6 +81,22 @@ export async function runFormalWasiJob({ jobId, wasm, sha256: binaryHash, share,
     status = "invalid-wasm";
     const module = new WebAssembly.Module(wasm);
     status = "runtime-error";
+    if (command.runtime === "ghdl") {
+      const sourceFiles = command.sources.map(path => {
+        const source = files.find(file => file.path === `${cwd}/${path}`);
+        if (!source) throw new Error("Missing formal VHDL source");
+        return { path, content: new TextDecoder("utf-8", { fatal: true }).decode(source.bytes), library: source.library };
+      });
+      const ordering = orderVhdlFiles(sourceFiles);
+      if (!ordering.ok) throw new Error("Formal VHDL source ordering failed");
+      const synthesis = runGhdlSynth({ module, librariesTree: readUstar(share), files: ordering.order,
+        top: command.top, standard: command.standard, formal: true, psl: true });
+      if (synthesis.log) errorOutput.writeSync(new TextEncoder().encode(synthesis.log));
+      const generated = synthesis.status === 0 ? [{ path: `${cwd}/__formal_vhdl.v`, bytes: new TextEncoder().encode(synthesis.verilog) }] : [];
+      const frame = await packWorkspaceDelta(files, [...files, ...generated]);
+      return { type: "exit", jobId, sha256: binaryHash, shareSha256, frame, integrityVerified: true,
+        result: { exitCode: synthesis.status === 0 ? 0 : 1 } };
+    }
     const result = runWasiP1(module, {
       args, env: { TMPDIR: "/tmp" },
       preopens: { "/": work, "/share": shared, "/tmp": work.entries.get("tmp") },

@@ -21,6 +21,14 @@ test("formal preflight compares Python assets and notices with independently reg
       resolve(repoRoot, "scripts/build-formal-python.py"),
       "--out", resolve(distRoot, "formal/python"),
     ]);
+    // Independent byte fixtures exercise preflight copying; execution is tested in product tests.
+    mkdirSync(resolve(distRoot, "formal-solvers"));
+    mkdirSync(resolve(distRoot, "formal/solvers"));
+    for (const name of ["manifest.json", "yices2.wasm", "yices2-build.json"]) {
+      const data = Buffer.from(`independent solver fixture ${name}`);
+      writeFileSync(resolve(distRoot, "formal-solvers", name), data);
+      writeFileSync(resolve(distRoot, "formal/solvers", name), data);
+    }
     const result = check();
     const manifest = JSON.parse(readFileSync(resolve(distRoot, "formal/python/manifest.json")));
     assert.deepEqual(result.python, new Set([
@@ -28,7 +36,8 @@ test("formal preflight compares Python assets and notices with independently reg
       ...manifest.assets.map(asset => `formal/python/${asset.path}`),
     ]));
     assert.ok(result.licenses.has("licenses/yosys-COPYING"));
-    for (const path of ["formal/python/manifest.json", "formal/python/sby.py", "licenses/yosys-COPYING"]) {
+    for (const path of ["formal/python/manifest.json", "formal/python/sby.py", "licenses/yosys-COPYING",
+      "formal/solvers/manifest.json", "formal/solvers/yices2.wasm", "formal/solvers/yices2-build.json", "licenses/gmp-COPYINGv3"]) {
       const target = resolve(distRoot, path);
       const original = readFileSync(target);
       try {

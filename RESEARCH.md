@@ -184,7 +184,8 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 | [公開版レビューと実装計画の再監査](docs/research/session-review-20261115.md) | 2セッションの会話・全2,710イベント・原添付7点を照合。ログ166行・画像90枚への訂正、形式検証の配信障害、Z3推奨の再評価、確認範囲と改善提案 |
 | [再監査の証拠台帳](docs/research/session-review-evidence-20261115.md) | 原資料のhash、取得と目視の範囲、未回収生成物、証拠書庫と再検査手順 |
 | [形式検証の公開障害と製品化境界](docs/research/session-review-formal-20261115.md) | 200 HTMLと404のloader診断、SAT/SBY/solverの配信・入力・UIの境界、既存S15との照合 |
-| [形式検証の資材取得とSAT・Python配信監査](docs/research/formal-asset-delivery.md) | engine別取得、停止・期限・再試行、Python/SBYの通常build接続、圧縮runtime、実HTTPでのpin・hash・原license照合、実WASI workerのSAT回帰。solverの製品配布と全実行の認定は残件 |
+| [形式検証の資材取得とSAT・Python配信監査](docs/research/formal-asset-delivery.md) | engine別取得、停止・期限・再試行、Python/SBYとYices2の通常build、実HTTPのpin・hash・原license、Git-free再生成、実workerのSATとSBY 6条件。言語・再実行・画面の全体認定は継続 |
+| [形式検証の画面と編集回帰](docs/experiments/S15-formal-browser-acceptance.md) | 4ボードと連続編集、原CSV、失敗証拠と再現手順 |
 | [CIのビルドキャッシュ](docs/research/ci-build-cache.md) | キーと全ファイル整合性検査、mainだけの保存、cold/warmの観察と未確認範囲 |
 | [Pages公開の承認と配信](docs/research/pages-delivery.md) | mainの成功runの成果物をpagesへ渡す承認PR、previewでの実機確認、管理者のGit連携・ruleset設定 |
 | [DeepWikiの構成と検査](docs/research/deepwiki.md) | 日本語のページ階層、実装・調査の参照方針、安全上の制約と設定の上限検査 |
@@ -207,6 +208,7 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 | [合成・配置配線のWASI調査](docs/research/yosys-nextpnr-wasi.md) | Yosysのshare・JSON比較、nextpnrの固定依存・chipdb・例外link・配置差と測定履歴 |
 | [形式検証の固定ソース・依存・配布条件](docs/research/formal-sources.md) | 採用releaseと初期snapshot、依存、SQLite、license、GMP、source closure |
 | [形式検証ソルバーのビルドと実行方式](docs/research/formal-solvers.md) | WASI CLI・C API・公式WASMの比較候補、GMP・timer・丸め・版表示・native ABIの制約、字句境界、終了0の構文エラーと実応答比較 |
+| [形式検証の言語・反例再実行・停止](docs/experiments/S15-formal-product-integration.md) | VHDL下位化、SAT/SBY、Icarus再実行。43条件5回と[画面4ボード](docs/experiments/S15-formal-browser-acceptance.md)を別に記録。原VHDL再実行は利用不可 |
 | [追加ソルバーの固定依存と診断](docs/experiments/S15-extra-solver-builds.md) | MPFRの固定archiveと署名、依存license、CaDiCaLのWASI patchと失敗試行。BoolectorのCLI 5条件は一致。[IDとtraceの境界](docs/experiments/S15-solver-portability.md)も正式5回・A/A 2回の全56行21列を監査。後続の追加候補SMTBMC/SBY認定は別記。製品配布は未完了 |
 | [BitwuzlaのMeson診断](docs/experiments/S15-bitwuzla-build.md) | 固定依存とWASI境界。[CLI正式5回・A/A 2回](docs/experiments/S15-bitwuzla-cli-qualification.md)の全203行14列を独立監査。後続のSMTBMC/SBY正式認定は別記。製品認定は残件 |
 | [追加候補と原本SMTBMC/SBYの接続](docs/experiments/S15-extra-solver-smtbmc.md) | Bitwuzlaの実help取得、Boolectorの終了10/20、native解決先とhash検査。予備比較と失敗の除外を保持。後続の正式結果と製品認定を区別 |

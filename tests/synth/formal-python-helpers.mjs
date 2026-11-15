@@ -2,8 +2,8 @@ import { Worker } from "node:worker_threads";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-export function nodeFormalWorker(url = new URL("../web/formal-python-node-worker.mjs", import.meta.url)) {
-  const worker = new Worker(url, { execArgv: [] });
+export function nodeFormalWorker(url = new URL("../web/formal-python-node-worker.mjs", import.meta.url), options = {}) {
+  const worker = new Worker(url, { ...options, execArgv: [] });
   const wrappers = new Map();
   worker.on("error", () => {});
   return {

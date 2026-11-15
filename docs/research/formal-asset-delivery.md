@@ -6,7 +6,7 @@
 
 [再監査で確認した200 HTML障害](session-review-formal-20261115.md)に対し、IDEの資材取得をengine別に分けました。Yosys SATはYosys本体とshareだけを取得し、Python/SBYの配信状態に依存しません。SBY/SMTBMCは両方を取得し、Pythonまたは選択solverの資材が不足すると実行前に `missing-assets` を返します。
 
-G1とG2のSAT監査に加え、Python/SBYを通常buildへ接続しました。固定ソースとpatchから44資材、合計807,139バイトを生成します。solverの製品配布・認定、VHDL、反例の独立再実行の画面統合は残件です。既定solverは決定していません。実機のTang Nanoは本リポジトリでは試していません。
+G1とG2のSAT監査に加え、Python/SBYとYices2を通常buildへ接続しました。Pythonは固定ソースとpatchから44資材、合計807,139バイトを生成します。Yices2の製品WASMは1,970,004バイトで、原license・対応ソース・来歴を含めて監査します。VHDL、Verilog反例の独立再実行、停止・期限の製品経路は[43条件5回](../experiments/S15-formal-product-integration.md)で認定し、[実ブラウザーの4ボード画面](../experiments/S15-formal-browser-acceptance.md)も別に確認しました。既定solverは決定していません。実機のTang Nanoは本リポジトリでは試していません。
 
 ## 取得時の動作
 
@@ -26,7 +26,7 @@ G1とG2のSAT監査に加え、Python/SBYを通常buildへ接続しました。�
 
 Python manifestにはJSONのContent-Type、UTF-8、256 KiB以下、資材1から256件、重複しない安全なpath、正の整数size、SHA-256を要求します。合計sizeはloaderで64 MiB以下、生成時とworkerで32 MiB以下とし、各bodyが宣言sizeを超えた段階で読み取りを終了します。名前をURLへ変換するときはpathの各要素をencodeします。Yosysは従来の圧縮size/hash、展開後size/hashとCache Storageの検証を維持します。
 
-SMTBMC用のsolver名と、実行するコマンド名は異なる場合があります。Yices2では `yices` と `yices-smt2` を区別し、runnerはprocess側と同じコマンド名で資材を検査します。IDEは選択したsolver IDをloaderへ渡します。loaderは `formal/solvers/manifest.json` と `<solver-id>.wasm` を既存の圧縮・hash検査で取得し、コマンド名で登録します。失敗・未認定のsolverは登録せず、取消後に遅れて完了しても成功cacheへ追加しません。製品solverはまだ配布していません。不正なWASMはPython起動前に拒否し、Python、solver、Yosysそれぞれのworker factoryをSBYと反例処理へ渡します。
+SMTBMC用のsolver名と、実行するコマンド名は異なる場合があります。Yices2では `yices` と `yices-smt2` を区別し、runnerはprocess側と同じコマンド名で資材を検査します。IDEは選択したsolver IDをloaderへ渡します。loaderは `formal/solvers/manifest.json` と `<solver-id>.wasm` を既存の圧縮・hash検査で取得し、コマンド名で登録します。失敗・未認定のsolverは登録せず、取消後に遅れて完了しても成功cacheへ追加しません。Yices2を製品配布へ追加しました。不正なWASMはPython起動前に拒否し、Python、solver、Yosysそれぞれのworker factoryをSBYと反例処理へ渡します。
 
 ## Python/SBYと圧縮runtimeの接続
 
@@ -54,9 +54,34 @@ handlerは `runpy.run_path()` で読み込み、配布先へPythonのbytecode ca
 
 通常buildでは不足していたYosys側の原licenseを追加し、Releaseにも `public_html/` 経由で含めます。SymFPUは上流の選択肢のうちBSD-3-Clauseを採り、選択を示す原文とBSD本文を両方保持します。固定submoduleと原文の対応は [第三者表記](../../THIRD_PARTY_NOTICES.md)から追えます。
 
-出力JSONは、Pythonのpin・patch・資材の照合結果を保存し、solverとブラウザー実行を `not-audited` と明記します。この監査の成功はSATの実行結果や、全ツールのlicense/source closureの認定ではありません。全配布物の照合には従来の `scripts/audit-release-closure.py` を併用します。
+出力JSONはPythonのpin・patch・資材の照合結果に加え、検証済みの独立したsolverビルドとのmanifest・WASM・build metadataのbyte一致を保存します。Yices2とGMPの原licenseを加えて計16件を照合し、共通HTTP取得でCORPも要求します。ブラウザー実行は `not-audited` です。この監査の成功はSATの実行結果や、全ツールのlicense/source closureの認定ではありません。全配布物の照合には従来の `scripts/audit-release-closure.py` を併用します。
+
+## Yices2の製品配信と再生成
+
+`scripts/build-formal-solvers.py` は、pin、GMP archive、SDK archive、patch、script、
+原license、source inventoryを照合してからWASIを生成します。異なる入力の古いcacheは退避し、
+同じ入力のcacheに改変があれば拒否します。検証前の部分出力は配信しません。
+Webにはmanifest、WASM、正規化したコマンドとcompilerを含むbuild metadataだけを配置します。
+原licenseとGMP原archive、Yices2の完全な固定ソース、patchと手順はsource Releaseへ収録します。
+Gitがないソースは `.gitcommit` と `vendor/formal-yices2-source.json` で照合し、
+変更・不足・追加・異なるリンクを拒否します。Release closureとE2E preflightもこれらを検査します。
+
+HTTPで配信した製品資材を使い、`createFormalRunner()`経由のVerilog 6条件が各5回成功しました。
+SQLite、反例VCD、実Yosys・SMTBMC・Yices2の子プロセスを確認しています。
+別出力先とGit-free sourceから同じWASMを再生成しました。
+[S15の生CSVと失敗試行](../experiments/S15-yices2-product.md)に条件と未確認範囲を記します。
+以下は前段の14条件を認定した時点の履歴であり、後続の30回とは分けて保持します。
 
 ## 回帰試験と再実行
+
+後続の製品接続では、VHDLを選択したときだけGHDLのWASMとlibrary archiveをhash照合して取得し、
+GHDLの形式出力をSATとSBYへ渡します。SMTBMCの起動前にもYosysでpropertyとclockを検査し、
+空のassert/cover、未対応state、複数clockを成功にしません。
+VerilogのSAT・SMT反例は製品Icarusで原文を再実行し、独立VCDと違反propertyを照合します。
+VHDL原文の独立再実行は利用不可と表示します。
+編集時は実行と取得を停止し、古い結果・波形を破棄します。プロジェクト切替も世代番号で古い結果を拒否します。
+[統合実験](../experiments/S15-formal-product-integration.md)に予備失敗、正式反復の基準と証拠を記録します。
+以下は初期の14条件の時点で得た結果です。
 
 ```sh
 node --test tests/web/formal-*.test.mjs tests/web/verified-assets.test.mjs
@@ -78,4 +103,4 @@ node --test --test-concurrency=1 tests/product/formal.test.mjs
 
 [CI run 43710045365](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43710045365)ではBuildが成功しましたが、E2E shard 2は監査が作成した `public_html/__pycache__/serve.cpython-314.pyc` を不要な配布物として拒否しました。監査でbytecodeを生成しない方式へ変更し、上記の配布照合も追加しました。ローカルでは関連単体試験150件と配信・書庫再生成11件が成功し、manifest・Pythonソース・原licenseの改変と欠損も拒否しました。画面操作は検査していません。
 
-4ボードのブラウザー操作と画面の目視は、ユーザーの指定により全実装後にまとめて実施します。この時点では未実施です。再監査時点の証拠書庫は変更せず、当時の障害記録と今回の実装を区別します。
+上記は配信監査を実装した時点の記録です。その後、全実装と自動回帰の完了後に4ボードの画面確認を実施し、[ブラウザー受入れ記録](../experiments/S15-formal-browser-acceptance.md)へ原証拠と失敗試行を保存しました。再監査時点の証拠書庫は変更せず、当時の障害記録と今回の実装を区別します。

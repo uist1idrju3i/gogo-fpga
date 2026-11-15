@@ -298,6 +298,7 @@ git -C "$root" archive --format=tar HEAD | tar -xf - -C "$source_root"
 mkdir -p "$source_root/vendor/formal-archives"
 cp "$work/formal-sources/"*.tar.xz "$work/formal-sources/manifest.json" "$source_root/vendor/formal-archives/"
 cp "$root/public_html/formal/python/manifest.json" "$source_root/vendor/formal-python-sources.json"
+python3 "$root/scripts/build-formal-solvers.py" snapshot --out "$source_root/vendor/formal-yices2-source.json"
 cp "$root/public_html/libraries/catalog.json" "$source_root/libraries/source-manifest.json"
 submodule_lines="$(git -C "$root" ls-tree HEAD -- "${submodules[@]}")"
 declare -A submodule_shas=()
@@ -311,7 +312,7 @@ while IFS=$'\t' read -r metadata path; do
   submodule_shas["$path"]="$sha"
   mkdir -p "$source_root/$path"
   git -C "$root/$path" archive --format=tar "$sha" | tar -xf - -C "$source_root/$path"
-  if [[ "$path" == third_party/* ]]; then
+  if [[ "$path" == third_party/* || "$path" == vendor/yices2 ]]; then
     printf '%s\n' "$sha" > "$source_root/$path/.gitcommit"
   fi
 done <<< "$submodule_lines"

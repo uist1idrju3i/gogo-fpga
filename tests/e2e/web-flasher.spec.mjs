@@ -336,6 +336,7 @@ function assertDistributionMatchesSources() {
     if (thirdPartyNoticePaths.delete(path)) continue;
     if (libraryPaths.delete(path)) continue;
     if (formalPaths.python.delete(path)) continue;
+    if (formalPaths.solvers.delete(path)) continue;
     throw new Error(`Playwright preflight: unexpected public_html/${path}`);
   }
   if (generatedFileAllowlist.size > 0) {
@@ -361,6 +362,7 @@ function assertDistributionMatchesSources() {
     thirdPartyNoticePaths,
     libraryPaths,
     formalPaths.python,
+    formalPaths.solvers,
   ]) {
     if (copiedPaths.size > 0) {
       throw new Error(

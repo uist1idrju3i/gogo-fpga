@@ -202,6 +202,7 @@ test("CSP permits real built-in SAT formal success and counterexamples", async (
     await page.locator(".cm-content").click();
     await page.keyboard.press("Control+A");
     await page.keyboard.type(source);
+    await expect(page.locator(".cm-content")).toHaveText(source);
     await page.locator("#right-tab-verify").click();
     await page.locator("#formal-engine").selectOption("yosys-sat");
     await page.locator("#formal-depth").fill("3");
@@ -209,4 +210,8 @@ test("CSP permits real built-in SAT formal success and counterexamples", async (
     await expect(page.locator("#formal-status")).toContainText(expected, { timeout: 120_000 });
     await expect(page.locator("#formal-button")).toBeEnabled();
   }
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.reload();
+  await expect(page.locator("#project-name")).toHaveText("blink");
+  await expect(page.locator(".cm-content")).toHaveText("module top(input wire a); always @* assert(a); endmodule");
 });
