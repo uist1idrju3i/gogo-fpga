@@ -1,4 +1,5 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import { relative, resolve } from "node:path";
 
 function listFiles(directory) {
@@ -14,6 +15,30 @@ function normalizePath(path) {
 
 function sourcePathLabel(repoRoot, sourcePath) {
   return normalizePath(relative(repoRoot, sourcePath));
+}
+
+export function assertFormalDistributionMatches({ repoRoot, distRoot, buildRoot }) {
+  const workdir = mkdtempSync(resolve(buildRoot, "e2e-formal-"));
+  try {
+    execFileSync("python3", [
+      resolve(repoRoot, "scripts/formal-distribution.py"), "stage-licenses", workdir,
+    ]);
+    const pythonRoot = resolve(workdir, "python");
+    execFileSync("python3", [
+      resolve(repoRoot, "scripts/build-formal-python.py"), "--out", pythonRoot,
+    ]);
+    return {
+      licenses: assertCopiedTreeMatches({
+        repoRoot, distRoot,
+        sourceRoot: resolve(workdir, "licenses"), distSubdir: "licenses",
+      }),
+      python: assertCopiedTreeMatches({
+        repoRoot, distRoot, sourceRoot: pythonRoot, distSubdir: "formal/python",
+      }),
+    };
+  } finally {
+    rmSync(workdir, { recursive: true, force: true });
+  }
 }
 
 export function assertCopiedTreeMatches({

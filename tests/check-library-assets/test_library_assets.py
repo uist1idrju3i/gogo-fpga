@@ -4,6 +4,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import tempfile
@@ -22,8 +23,12 @@ class LibraryAssetsTests(unittest.TestCase):
     def test_e2e_fetches_pinned_library_sources_before_web_server(self):
         workflow = (ROOT / ".github/workflows/build.yml").read_text(encoding="utf-8")
         e2e = workflow.split("\n  e2e-shards:\n", 1)[1].split("\n  e2e-coverage:\n", 1)[0]
+        e2e = e2e.replace("\\\n", " ")
         checkout = e2e.index("- uses: actions/checkout@")
-        sources = e2e.index("git submodule update --init --depth 1 -- vendor/zstd third_party/")
+        sources = e2e.index("git submodule update --init --depth 1 --")
+        source_args = shlex.split(e2e[sources:].splitlines()[0])
+        self.assertIn("vendor/zstd", source_args)
+        self.assertIn("third_party/", source_args)
         nested = e2e.index("git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv")
         browser = e2e.index("- name: Playwright E2E")
         execution = e2e.index('run: node scripts/run-ci-shard.mjs e2e "$E2E_SHARD"')

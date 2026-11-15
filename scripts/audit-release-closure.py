@@ -99,6 +99,8 @@ def audit(root: Path, source: Path, generated: Path, version: str, revision: str
                 "Formal source manifest mismatch")
     metadata = json.loads((source / "RELEASE-SOURCE.json").read_text())
     require(metadata["commit"] == revision and metadata["version"] == version, "Release metadata mismatch")
+    require((source / "vendor/formal-python-sources.json").read_bytes() ==
+            (root / "public_html/formal/python/manifest.json").read_bytes(), "Formal Python source provenance mismatch")
     catalog_bytes = (root / "public_html/libraries/catalog.json").read_bytes()
     entries = json.loads(catalog_bytes)["entries"]
     require(bool(entries) and len(entries) == len({entry["id"] for entry in entries}), "Empty or duplicate catalog")

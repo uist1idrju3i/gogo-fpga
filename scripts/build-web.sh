@@ -95,6 +95,9 @@ cp "$root/THIRD_PARTY_NOTICES.md" "$public_html/THIRD_PARTY_NOTICES.md"
 mkdir -p "$public_html/licenses"
 cp -R "$root/licenses/." "$public_html/licenses/"
 cp "$root/node_modules/diff/LICENSE" "$public_html/licenses/jsdiff-LICENSE"
+python3 "$root/scripts/formal-distribution.py" stage-licenses "$public_html"
+mkdir -p "$public_html/formal"
+python3 "$root/scripts/build-formal-python.py" --out "$public_html/formal/python"
 if ! grep -Eq '^/\*' "$public_html/_headers" ||
   ! grep -Eq 'Cross-Origin-Opener-Policy: same-origin' "$public_html/_headers" ||
   ! grep -Eq 'Cross-Origin-Embedder-Policy: require-corp' "$public_html/_headers"; then
@@ -106,5 +109,6 @@ if ! grep -Fxq "  Content-Security-Policy: connect-src 'self' https://openrouter
   exit 1
 fi
 python3 "$root/scripts/check-dist-size.py" "$public_html"
+python3 "$root/scripts/formal-distribution.py" audit "$public_html"
 
 printf 'Assembled web app in %s from %s\n' "$public_html" "$artifacts"

@@ -209,6 +209,7 @@ export function initializeIde({
   let buildRunning = false;
   let simulationRunning = false;
   let formalRunning = false;
+  let formalAssetController = null;
   let formalVersion = 0;
   let surferFrame = null;
   let surferBridgePromise = null;
@@ -257,9 +258,12 @@ export function initializeIde({
     beforeChange: () => {
       buildVersion += 1;
       simulationVersion += 1;
+      formalVersion += 1;
       buildRunner.cancel();
       simRunner.stop();
       formalRunner.stop();
+      formalAssetController?.abort();
+      formalAssetController = null;
       buildRunning = false;
       simulationRunning = false;
       formalRunning = false;
@@ -784,6 +788,7 @@ export function initializeIde({
   async function runProjectFormal() {
     if (libraryBusy) return;
     if (formalRunning) {
+      formalAssetController?.abort();
       formalRunner.stop();
       return;
     }
@@ -795,6 +800,8 @@ export function initializeIde({
     await flushPendingSave();
     if (project !== formalProject || formalRunning || buildRunning || simulationRunning) return;
     const version = ++formalVersion;
+    const controller = new AbortController();
+    formalAssetController = controller;
     clearWaveforms();
     formalRunning = true;
     updateSynthesisControls();
@@ -804,10 +811,14 @@ export function initializeIde({
     programLog.textContent = "";
     renderProblems();
     try {
-      const assets = await formalAssetLoader.loadAll();
+      const assets = await formalAssetLoader.loadForEngine(formalProject.formal.engine, {
+        signal: controller.signal,
+        solver: formalProject.formal.solver,
+      });
       if (version !== formalVersion) return;
       const hash = await snapshotHash(formalProject, fileContents);
       if (version !== formalVersion) return;
+      controller.signal.throwIfAborted();
       const outcome = await formalRunner.run({
         project: formalProject,
         files: fileContents,
@@ -841,12 +852,16 @@ export function initializeIde({
       }
     } catch (error) {
       if (version !== formalVersion) return;
-      formalStatus.dataset.outcome = "failed";
-      formalStatus.textContent = "形式検証に失敗しました。";
-      workflow.verify("失敗");
+      const cancelled = error.name === "AbortError";
+      formalStatus.dataset.outcome = cancelled ? "stopped" : "failed";
+      formalStatus.textContent = cancelled ? "形式検証を停止しました。"
+        : error.name === "TimeoutError" ? "形式検証の資材取得が時間上限に達しました。"
+        : "形式検証に失敗しました。";
+      workflow.verify(cancelled ? "警告" : "失敗");
       appendProjectLog(`形式検証エラー: ${error.message}`);
     } finally {
       if (version === formalVersion) {
+        formalAssetController = null;
         formalRunning = false;
         updateSynthesisControls();
       }
@@ -1496,6 +1511,8 @@ export function initializeIde({
     simulationRunning = false;
     onSimulationStateChange(false);
     formalVersion += 1;
+    formalAssetController?.abort();
+    formalAssetController = null;
     formalRunner.stop();
     formalRunning = false;
     clearWaveforms();

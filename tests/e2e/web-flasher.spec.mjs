@@ -15,6 +15,7 @@ import { relative, resolve } from "node:path";
 import {
   assertCopiedFileMatches,
   assertCopiedTreeMatches,
+  assertFormalDistributionMatches,
 } from "./distribution-preflight.mjs";
 import { routeWorkerWithFakeUsb, stubPageUsb } from "./fake-usb-helpers.mjs";
 
@@ -291,6 +292,8 @@ function assertDistributionMatchesSources() {
     sourceRoot: resolve(repoRoot, "licenses"),
     distSubdir: "licenses",
   });
+  const formalPaths = assertFormalDistributionMatches({ repoRoot, distRoot, buildRoot });
+  for (const path of formalPaths.licenses) licensePaths.add(path);
   for (const path of assertCopiedFileMatches({
     repoRoot,
     distRoot,
@@ -332,6 +335,7 @@ function assertDistributionMatchesSources() {
     if (iverilogPaths.delete(path)) continue;
     if (thirdPartyNoticePaths.delete(path)) continue;
     if (libraryPaths.delete(path)) continue;
+    if (formalPaths.python.delete(path)) continue;
     throw new Error(`Playwright preflight: unexpected public_html/${path}`);
   }
   if (generatedFileAllowlist.size > 0) {
@@ -356,6 +360,7 @@ function assertDistributionMatchesSources() {
     iverilogPaths,
     thirdPartyNoticePaths,
     libraryPaths,
+    formalPaths.python,
   ]) {
     if (copiedPaths.size > 0) {
       throw new Error(
@@ -424,6 +429,9 @@ test("built distribution matches sources and the build-root WASM", () => {
   for (const [path, message] of [
     ["lib/ai-chat-ui.bundle.mjs", /AI chat bundle differs from sources/],
     ["licenses/jsdiff-LICENSE", /public_html\/licenses\/jsdiff-LICENSE differs/],
+    ["formal/python/manifest.json", /public_html\/formal\/python\/manifest\.json differs/],
+    ["formal/python/sby.py", /public_html\/formal\/python\/sby\.py differs/],
+    ["licenses/yosys-COPYING", /public_html\/licenses\/yosys-COPYING differs/],
   ]) {
     const generatedPath = resolve(repoRoot, "public_html", path);
     const original = readFileSync(generatedPath);

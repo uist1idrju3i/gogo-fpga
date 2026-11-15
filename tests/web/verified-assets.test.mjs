@@ -36,6 +36,26 @@ test("download progress does not bypass missing-file and integrity failures", as
   await assert.rejects(loader.fetchVerifiedAsset(new Map(), "missing", null), /missing from manifest/);
   await assert.rejects(loader.fetchVerifiedAsset(new Map([["bad", { size: 2, sha256: digest }]]), "bad", null), /size mismatch/);
 });
+
+test("manifest and asset HTTP requests propagate cancellation to fetch", async (t) => {
+  let observedSignal;
+  t.mock.method(globalThis, "fetch", async (url, { signal }) => {
+    observedSignal = signal;
+    return new Promise((resolve, reject) => signal.addEventListener("abort", () => reject(signal.reason), { once: true }));
+  });
+  const loader = createVerifiedAssetLoader({ baseURL: new URL("https://example.test/"), cacheName: "test" });
+  const assets = new Map([["tool.wasm", { size: 1, sha256: digest }]]);
+  for (const start of [
+    (signal) => loader.loadManifest({ signal }),
+    (signal) => loader.fetchVerifiedAsset(assets, "tool.wasm", null, { signal }),
+  ]) {
+    const controller = new AbortController();
+    const request = start(controller.signal);
+    controller.abort();
+    await assert.rejects(request, { name: "AbortError" });
+    assert.equal(observedSignal, controller.signal);
+  }
+});
 const legacyAsset = {
   path: "yosys.wasm",
   size: 10,
