@@ -1,0 +1,56 @@
+{
+  "assets": [
+    {
+      "path": "yices2.wasm",
+      "sha256": "893f8d55b4d0a21bc61f311fa48806a0400cdc0e1f7be4b0073f24b0a7719c2d",
+      "size": 1970004
+    },
+    {
+      "path": "yices2-build.json",
+      "sha256": "c62c155b112d9016e0f28edcc7fc0562b0733eecb54d7c6278da3536c45ef731",
+      "size": 8186
+    }
+  ],
+  "format_version": 1,
+  "inputs": {
+    "command": "yices-smt2",
+    "gmp": {
+      "asset": "gmp-6.3.0.tar.xz",
+      "sha256": "a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898",
+      "url": "https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz",
+      "version": "6.3.0"
+    },
+    "licenses": {
+      "gmp-COPYING": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "gmp-COPYING.LESSERv3": "a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c",
+      "gmp-COPYINGv2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "gmp-COPYINGv3": "e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195",
+      "yices2-LICENSE.txt": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    "patches": {
+      "yices2/reproducible-version.patch": "c3636c8824d952041bc719e1445aa2b189efb7805a0aa03c9cf2d1c03e822573",
+      "yices2/unsupported-wasi-alarm.patch": "ae7cdb4e94677551455294cf01af1ddb85ae8ec3f4de7fcc4ecd43ee4de8343e"
+    },
+    "reproducible_paths": true,
+    "scripts": {
+      "build-formal-solvers.py": "d36f6d373faca058bd5dbb86377c493ccd83bc18868321cdc7baf8399c0f8cde",
+      "build-solver-probe.py": "a055375e6b0f81e724e628126d210aecaf783fdd26e20667c5bb096fee5a6d8f",
+      "prepare-formal-sources.py": "356dd51a1b73d337cee35433233f4fd681c79a88a0a47db1b1cf61212f9bcf60"
+    },
+    "smtbmc": "yices",
+    "solver": "yices2",
+    "source": {
+      "commit": "85cf17e44eac76b5d14b297c09fc9bfecf47ef65",
+      "url": "https://github.com/SRI-CSL/yices2.git",
+      "version": "yices-2.7.0"
+    },
+    "source_date_epoch": "0",
+    "source_snapshot_sha256": "167b8af129b4b31248ab9b46625ca3b9542a3f6f0882bc99be55ebab5996b8af",
+    "wasi_sdk": {
+      "asset": "wasi-sdk-34.0-x86_64-linux.tar.gz",
+      "sha256": "b761e3a0721dbae9c09a0059e5fdb2bf917d1b4a8a7b430fb3b5aafb0984b2c4",
+      "url": "https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-34/wasi-sdk-34.0-x86_64-linux.tar.gz",
+      "version": "34.0"
+    }
+  }
+}

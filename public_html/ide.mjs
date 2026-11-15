@@ -21,6 +21,7 @@ import { createLibrarySelector } from "./lib/library-selector.mjs";
 import { FORMAL_ENGINES, FORMAL_SOLVERS } from "./lib/formal-capabilities.mjs";
 import { createFormalAssetLoader, snapshotHash } from "./lib/formal-assets.mjs";
 import { createFormalRunner } from "./lib/formal-runner.mjs";
+import { createFormalReplaySimulator } from "./lib/formal-simulator.mjs";
 
 const UI_STATE_PREFIX = "toolchain.ide.";
 
@@ -204,7 +205,7 @@ export function initializeIde({
   let currentProblems = [];
   const buildRunner = createBuildRunner();
   const simRunner = createSimRunner();
-  const formalRunner = createFormalRunner();
+  const formalRunner = createFormalRunner({ simulateReplay: createFormalReplaySimulator() });
   const formalAssetLoader = createFormalAssetLoader();
   let buildRunning = false;
   let simulationRunning = false;
@@ -500,7 +501,7 @@ export function initializeIde({
 
   function renderFormalSettings() {
     if (!project) return;
-    const candidates = project.files.filter(({ path }) => !isLibraryPath(path) && /\.(?:v|vh)$/i.test(path));
+    const candidates = project.files.filter(({ path }) => !isLibraryPath(path) && /\.(?:v|vh|vhd|vhdl)$/i.test(path));
     project.formal ??= {
       engine: "yosys-sat",
       solver: null,
@@ -553,26 +554,26 @@ export function initializeIde({
     }
     if (candidates.length === 0) {
       const message = document.createElement("p");
-      message.textContent = "Verilog ファイルがありません。";
+      message.textContent = "Verilog または VHDL ファイルがありません。";
       formalFiles.append(message);
     }
-    formalFilesNote.textContent = `対象は選択した ${formal.files?.length ?? candidates.length} 件の Verilog ファイルです。*_tb.v は既定で対象外です。`;
+    formalFilesNote.textContent = `対象は選択した ${formal.files?.length ?? candidates.length} 件の HDL ファイルです。*_tb.v は既定で対象外です。`;
   }
 
   function updateFormalControls() {
     const paths = (project?.files ?? []).map(({ path }) => path);
-    const hasVerilog = paths.some((path) => /\.(?:v|vh)$/i.test(path));
+    const hasHdl = paths.some((path) => /\.(?:v|vh|vhd|vhdl)$/i.test(path));
     const depth = Number(formalDepth.value);
     const timeout = Number(formalTimeout.value);
     const top = formalTop.value.trim();
     const solverReady = formalEngine.value !== "smtbmc" || Boolean(formalSolver.value);
     formalButton.textContent = formalRunning ? "停止" : "形式検証";
-    formalReason.textContent = !hasVerilog
-      ? "形式検証には Verilog ファイルを含むプロジェクトを開いてください。"
+    formalReason.textContent = !hasHdl
+      ? "形式検証には Verilog または VHDL のプロジェクトを開いてください。"
       : "";
     formalButton.disabled = libraryBusy || (formalRunning
       ? false
-      : !hasVerilog || buildRunning || simulationRunning || !solverReady ||
+      : !hasHdl || buildRunning || simulationRunning || !solverReady ||
         !Number.isInteger(depth) || depth < 1 || depth > 1000 ||
         !Number.isInteger(timeout) || timeout < 1 || timeout > 300 ||
         !/^[A-Za-z_][A-Za-z0-9_$]*$/.test(top));
@@ -812,6 +813,7 @@ export function initializeIde({
     renderProblems();
     try {
       const assets = await formalAssetLoader.loadForEngine(formalProject.formal.engine, {
+        vhdl: (formalProject.formal.files ?? formalProject.files.map(file => file.path)).some(path => /\.vhdl?$/i.test(path)),
         signal: controller.signal,
         solver: formalProject.formal.solver,
       });
@@ -1230,7 +1232,21 @@ export function initializeIde({
 
   function persistEditorContent(text) {
     if (libraryBusy || !activeTab || isLibraryPath(activeTab) || !fileContents.has(activeTab)) return;
+    if (fileContents.get(activeTab) === text) return;
+    // 結果破棄の通知はエディターを同期的に再描画するため、先に内容を保存する。
     fileContents.set(activeTab, text);
+    if (formalRunning || (formalStatus.dataset.outcome && formalStatus.dataset.outcome !== "stopped")) {
+      formalVersion += 1;
+      formalAssetController?.abort();
+      formalAssetController = null;
+      formalRunner.stop();
+      formalRunning = false;
+      clearWaveforms();
+      formalStatus.dataset.outcome = "stopped";
+      formalStatus.textContent = "ソースを編集したため、形式検証の結果を破棄しました。";
+      workflow.verify("警告");
+      updateSynthesisControls();
+    }
     scheduleSave();
   }
 

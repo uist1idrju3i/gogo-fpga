@@ -15,6 +15,17 @@ export function validateFormalToolCommand(args, cwd) {
     }
     return { runtime: "wasi" };
   }
+  if (args[0] === "ghdl") {
+    const sources = args.slice(6, -2);
+    if (cwd !== "model" || args[1] !== "--synth" || !["--std=08", "--std=19"].includes(args[2]) ||
+        args[3] !== "--out=verilog" || args[4] !== "--formal" || args[5] !== "-fpsl" ||
+        args.at(-2) !== "-e" || !/^[A-Za-z][A-Za-z0-9_]*$/.test(args.at(-1)) ||
+        !sources.length || new Set(sources).size !== sources.length ||
+        sources.some(source => !path(source) || source.startsWith("-") || !/\.vhdl?$/i.test(source))) {
+      throw new Error("Unsupported formal GHDL command");
+    }
+    return { runtime: "ghdl", sources, top: args.at(-1), standard: args[2] === "--std=08" ? "2008" : "2019" };
+  }
   if (args[0] === "yosys-smtbmc") {
     if (!/^model\/design_smt2(?:_[a-z0-9]+)*\.smt2$/.test(args.at(-1))) throw new Error("Invalid SMTBMC model path");
     const flags = new Set(["--presat", "--unroll", "--noprogress", "-i", "-c"]);

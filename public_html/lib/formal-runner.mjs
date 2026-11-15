@@ -88,6 +88,7 @@ export function createFormalRunner({
     if (!active) return false;
     active.stopped = kind;
     try { active.process?.cancel?.(); } catch { /* The process may already be gone. */ }
+    try { simulateReplay?.cancel?.(); } catch { /* The replay may already be gone. */ }
     return true;
   }
 
@@ -97,12 +98,13 @@ export function createFormalRunner({
 
   function dispose() {
     stop();
+    simulateReplay?.dispose?.();
   }
 
   async function run(input) {
     if (active) throw new Error("A formal job is already running");
     const project = input?.project;
-    const formal = project?.formal;
+    let formal = project?.formal;
     if (!formal || typeof formal !== "object") {
       throw new Error("Formal verification is disabled for this project");
     }
@@ -134,11 +136,22 @@ export function createFormalRunner({
       cancelActive("timeout");
     }, formal.timeoutSeconds * 1000);
     try {
+      const base = { jobId, engine: engine.id, solver: solver?.id ?? null, mode: formal.mode, depth: formal.depth,
+        timeoutSeconds: formal.timeoutSeconds, snapshotHash: input.snapshotHash ?? null };
+      let { selected, error } = selectFormalSources(input, formal, base, started, now);
+      if (error) return error;
+      if (selected.some(file => /\.vhdl?$/i.test(file.path))) {
+        const lowered = await lowerVhdl({ input, formal, selected, context, base, started, deadline });
+        if (lowered.error) return lowered.error;
+        selected = lowered.selected;
+        formal = { ...formal, top: formal.top.toLowerCase(), clock: formal.clock?.toLowerCase() ?? null };
+        input = { ...input, vhdlLowered: true, files: new Map([...input.files, ...selected.map(file => [file.path, file.bytes])]) };
+      }
       if (engine.id === "yosys-sat") {
-        return await runSatEngine(input, formal, engine, solver, context, jobId, started, deadline);
+        return await runSatEngine(input, formal, engine, solver, context, jobId, started, deadline, selected);
       }
       if (engine.id === "smtbmc") {
-        return await runSmtEngine(input, formal, engine, solver, context, jobId, started, deadline);
+        return await runSmtEngine(input, formal, engine, solver, context, jobId, started, deadline, selected);
       }
       context.stopped = "unsupported-engine";
       return result({
@@ -153,13 +166,41 @@ export function createFormalRunner({
     }
   }
 
-  async function runSatEngine(input, formal, engine, solver, context, jobId, started, deadline) {
+  async function lowerVhdl({ input, formal, selected, context, base, started, deadline }) {
+    const fail = (status, message, kind = "tool-error") => ({ error: result({ ...base, elapsedMs: now() - started, kind, status, message }) });
+    if (selected.some(file => !/\.vhdl?$/i.test(file.path))) {
+      return fail("unsupported-input", "形式検証では VHDL と Verilog を混在させずに選んでください");
+    }
+    if (!input.assets?.ghdl || !input.assets?.yosys) return fail("missing-assets", "形式検証の GHDL 資材が読み込まれていません");
+    const standard = input.project.vhdlStandard ?? "2008";
+    if (!["2008", "2019"].includes(standard)) return fail("unsupported-input", "対応していない VHDL 規格です");
+    const files = selected.map(file => ({ ...file, path: `model/${file.path}` }));
+    const diagnostics = [];
+    const job = startTool({
+      data: { processId: `${context.jobId}:vhdl`, cwd: "model", files,
+        args: ["ghdl", "--synth", standard === "2008" ? "--std=08" : "--std=19", "--out=verilog", "--formal", "-fpsl",
+          ...selected.map(file => file.path), "-e", formal.top] },
+      ghdl: input.assets.ghdl, wasiWorkerFactory, timeoutMs: Math.max(1, Math.ceil(deadline - now())),
+      onStdout() {}, onStderr: chunk => diagnostics.push(chunk),
+    });
+    context.process = job;
+    let outcome;
+    try { outcome = await job.completion; }
+    finally { if (context.process === job) context.process = null; }
+    if (context.stopped) return fail(context.timedOut ? "timeout" : "cancelled", "", context.timedOut ? "timeout" : "cancelled");
+    if (outcome.status !== "exited" || outcome.exitCode !== 0 || outcome.integrityVerified !== true) {
+      return fail("ghdl-error", chunksText(diagnostics).slice(0, 4096) || outcome.error || `GHDL: ${outcome.status}`);
+    }
+    const lowered = (await applyWorkspaceDelta(files, outcome.frame)).find(file => file.path === "model/__formal_vhdl.v");
+    if (!lowered?.bytes.length) return fail("ghdl-error", "GHDL の変換結果がありません");
+    return { selected: [{ path: "__formal_vhdl.v", bytes: lowered.bytes }] };
+  }
+
+  async function runSatEngine(input, formal, engine, solver, context, jobId, started, deadline, selected) {
     const base = {
       jobId, engine: engine.id, solver: solver?.id ?? null, mode: formal.mode, depth: formal.depth,
       timeoutSeconds: formal.timeoutSeconds, snapshotHash: input.snapshotHash ?? null,
     };
-    const { selected, error } = selectFormalSources(input, formal, base, started, now, "Yosys SAT");
-    if (error) return error;
     const sources = selected.map(({ path }) => path);
     const workspace = [
       ...selected.map(({ path, bytes }) => ({ path: `model/${path}`, bytes })),
@@ -181,6 +222,7 @@ export function createFormalRunner({
       mode: formal.mode,
       depth: formal.depth,
       timeout: formal.timeoutSeconds,
+      internalCells: input.vhdlLowered === true,
     });
     if (context.stopped) {
       return result({ ...base, elapsedMs: now() - started,
@@ -195,7 +237,9 @@ export function createFormalRunner({
     }
     const inventory = sat.inventory ?? null;
     if (sat.status === "counterexample") {
-      const replay = await replaySatCounterexample({ input, formal, base, sat, sources, started, now, simulate: simulateReplay });
+      const replay = await replaySatCounterexample({ input, formal, base, sat, sources, started, now, deadline, simulate: simulateReplay });
+      if (context.stopped) return result({ ...base, elapsedMs: now() - started,
+        kind: context.timedOut ? "timeout" : "cancelled", status: context.timedOut ? "timeout" : "cancelled" });
       const vcdBytes = typeof sat.vcd === "string" ? encoder.encode(sat.vcd) : sat.vcd;
       return result({ ...base, elapsedMs: now() - started, kind: "counterexample", status: "counterexample",
         inventory, vcd: vcdBytes ? { name: "__formal/witness.vcd", bytes: vcdBytes } : null, replay });
@@ -257,7 +301,8 @@ export function createFormalRunner({
     return { exitCode: outcome.exitCode, stdout: mergedStdout, stderr, files };
   }
 
-  async function replaySatCounterexample({ input, formal, base, sat, sources, started, now, simulate }) {
+  async function replaySatCounterexample({ input, formal, base, sat, sources, started, now, deadline, simulate }) {
+    if (input.vhdlLowered) return { status: "unavailable", reason: "VHDL 原文の独立シミュレーターは製品に接続されていません" };
     const empty = { status: "unavailable", reason: "再実行シミュレーターが設定されていません" };
     if (!simulate) return empty;
     try {
@@ -275,7 +320,8 @@ export function createFormalRunner({
         mode: formal.mode,
         depth: formal.depth,
       });
-      const execution = await simulate({ replay, top: formal.top, sources, files: input.files });
+      const execution = await simulate({ replay, top: formal.top, sources, files: input.files,
+        timeoutMs: Math.max(1, Math.ceil(deadline - now())) });
       if (!execution || typeof execution !== "object") {
         return { status: "rejected", reason: "再実行が正常に終了しませんでした" };
       }
@@ -289,15 +335,13 @@ export function createFormalRunner({
     }
   }
 
-  async function runSmtEngine(input, formal, engine, solver, context, jobId, started, deadline) {
+  async function runSmtEngine(input, formal, engine, solver, context, jobId, started, deadline, selected) {
     const base = {
       jobId, engine: engine.id, solver: solver.id, mode: formal.mode, depth: formal.depth,
       timeoutSeconds: formal.timeoutSeconds, snapshotHash: input.snapshotHash ?? null,
     };
     const stopped = (kind) => result({ ...base, elapsedMs: now() - started,
       kind: context.timedOut ? "timeout" : kind, status: context.timedOut ? "timeout" : kind });
-    const { selected, error } = selectFormalSources(input, formal, base, started, now, "SBY/SMTBMC");
-    if (error) return error;
     const sources = selected.map(({ path }) => path);
     const basenames = new Map();
     for (const path of sources) {
@@ -326,7 +370,25 @@ export function createFormalRunner({
         message: `形式検証の ${solver.label} 資材が読み込まれていません` });
     }
     const sbyName = "formal.sby";
-    const files = [...selected, { path: sbyName, bytes: encoder.encode(generateSby({ sources, top: formal.top, mode: formal.mode, depth: formal.depth, solver })) }];
+    let document;
+    let checkedInventory;
+    try {
+      context.workspace = [...selected.map(file => ({ path: `model/${file.path}`, bytes: file.bytes })),
+        { path: "model/__formal/.keep", bytes: new Uint8Array() }];
+      const observation = await executeSatPhase({ context, input, phase: "inventory", deadline, now,
+        script: smtInventoryScript({ sources, top: formal.top, internalCells: input.vhdlLowered === true }) });
+      if (context.stopped) return stopped("cancelled");
+      if (observation.exitCode !== 0) throw new Error(observation.stderr || "Formal inventory failed");
+      document = JSON.parse(decoder.decode(observation.files.get("__formal/before.json")));
+      checkedInventory = validateFormalProperties(document, document, {
+        top: formal.top, clock: formal.clock, edge: formal.edge, mode: formal.mode });
+    } catch (error) {
+      if (context.stopped) return stopped("cancelled");
+      return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "invalid-properties",
+        message: String(error?.message ?? error).slice(0, 1024) });
+    }
+    const files = [...selected, { path: sbyName, bytes: encoder.encode(generateSby({ sources, top: formal.top, mode: formal.mode, depth: formal.depth, solver,
+      internalCells: input.vhdlLowered === true })) }];
     const stdoutParts = [];
     const stderrParts = [];
     const remaining = Math.ceil(deadline - now());
@@ -381,33 +443,25 @@ export function createFormalRunner({
     }
     const outputFiles = sby.files ?? [];
     if (kind !== "counterexample") {
-      return result({ ...base, elapsedMs: now() - started, kind, status: sbyStatus });
+      return result({ ...base, elapsedMs: now() - started, kind, status: sbyStatus, inventory: checkedInventory });
     }
     const { replay, inventory, vcd } = await replaySmtCounterexample({
-      input, formal, solver, selected, outputFiles, context, started, now, deadline, simulate: simulateReplay });
+      input, formal, solver, selected, outputFiles, context, started, now, deadline, document, simulate: simulateReplay });
+    if (context.stopped) return stopped("cancelled");
     return result({ ...base, elapsedMs: now() - started, kind: "counterexample", status: sbyStatus,
-      message: stderr.trim() ? stderr.trim().slice(0, 512) : "", inventory,
+      message: stderr.trim() ? stderr.trim().slice(0, 512) : "", inventory: inventory ?? checkedInventory,
       vcd: vcd ? { name: "formal/trace.vcd", bytes: vcd } : null, replay });
   }
 
-  async function replaySmtCounterexample({ input, formal, solver, selected, outputFiles, context, started, now, deadline, simulate }) {
+  async function replaySmtCounterexample({ input, formal, solver, selected, outputFiles, context, started, now, deadline, document, simulate }) {
     const witnessVcd = outputFiles.find((file) => file.path.endsWith("engine_0/trace.vcd"))?.bytes ?? null;
     const unavailableReplay = (reason) => ({ replay: { status: "unavailable", reason }, inventory: null, vcd: witnessVcd });
+    if (input.vhdlLowered) return unavailableReplay("VHDL 原文の独立シミュレーターは製品に接続されていません");
     if (!simulate) return unavailableReplay("再実行シミュレーターが設定されていません");
     try {
       const modelEntries = outputFiles.filter((file) => file.path.endsWith("model/design_smt2.smt2"));
       if (modelEntries.length !== 1) return unavailableReplay("SMT model is missing or ambiguous");
       const modelBytes = modelEntries[0].bytes;
-      context.workspace = selected.map(({ path, bytes }) => ({ path: `model/${path}`, bytes }));
-      const inventoryRun = await executeSatPhase({
-        context, input, phase: "inventory",
-        script: smtInventoryScript({ sources: selected.map(({ path }) => path), top: formal.top }),
-        deadline, now });
-      const documentBytes = inventoryRun.files.get("__formal/before.json");
-      if (inventoryRun.exitCode !== 0 || !documentBytes) {
-        return unavailableReplay(`formal property document failed: ${inventoryRun.stderr.trim().slice(0, 256) || "missing"}`);
-      }
-      const document = JSON.parse(decoder.decode(documentBytes));
       const inventory = validateFormalProperties(document, document, {
         top: formal.top, clock: formal.clock, edge: formal.edge, mode: formal.mode });
       const remaining = Math.ceil(deadline - now());
@@ -461,7 +515,8 @@ export function createFormalRunner({
         phase: formal.mode === "prove" ? "basecase" : "bmc",
         depth: formal.depth,
       });
-      const execution = await simulate({ replay, top: formal.top, sources: selected.map(({ path }) => path), files: input.files });
+      const execution = await simulate({ replay, top: formal.top, sources: selected.map(({ path }) => path), files: input.files,
+        timeoutMs: Math.max(1, Math.ceil(deadline - now())) });
       if (!execution || typeof execution !== "object") {
         return { replay: { status: "rejected", reason: "再実行が正常に終了しませんでした" }, inventory, vcd: witnessVcd };
       }
@@ -478,29 +533,26 @@ export function createFormalRunner({
   return { run, stop, dispose };
 }
 
-function selectFormalSources(input, formal, base, started, now, label) {
+function selectFormalSources(input, formal, base, started, now) {
   const paths = formal.files ?? projectFilePaths(input.project);
   const selected = [];
   for (const path of paths) {
     if (!HDL_PATTERN.test(path) || path.startsWith("libraries/")) continue;
-    if (!/\.v$/i.test(path) && !/\.vh$/i.test(path)) {
-      return { error: result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "unsupported-input",
-        message: `${label} の形式検証には Verilog ファイルを選んでください` }) };
-    }
     if (!input.files?.has?.(path)) {
       return { error: result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-source",
         message: `形式検証のソースが見つかりません: ${path}` }) };
     }
-    selected.push({ path, bytes: toBytes(input.files.get(path)) });
+    const library = input.project.files.find(file => file.path === path)?.library;
+    selected.push({ path, bytes: toBytes(input.files.get(path)), ...(library === undefined ? {} : { library }) });
   }
   if (!selected.length) {
     return { error: result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-source",
-      message: "形式検証に使える Verilog ファイルがありません" }) };
+      message: "形式検証に使える HDL ファイルがありません" }) };
   }
   return { selected };
 }
 
-function generateSby({ sources, top, mode, depth, solver }) {
+function generateSby({ sources, top, mode, depth, solver, internalCells = false }) {
   const basenames = sources.map((path) => path.split("/").at(-1));
   return [
     "[options]",
@@ -511,7 +563,7 @@ function generateSby({ sources, top, mode, depth, solver }) {
     `smtbmc ${solver.smtbmc}`,
     "",
     "[script]",
-    `read -formal ${basenames.map((name) => `"${name}"`).join(" ")}`,
+    `read -formal ${internalCells ? "-icells " : ""}${basenames.map((name) => `"${name}"`).join(" ")}`,
     `prep -top ${top}`,
     "",
     "[files]",
@@ -527,9 +579,9 @@ function smtTraceArgs(solver, depth) {
     "--dump-vlogtb", "trace_tb.v", "model.smt2"];
 }
 
-function smtInventoryScript({ sources, top }) {
+function smtInventoryScript({ sources, top, internalCells = false }) {
   return [
-    ...sources.map((path) => `read_verilog -formal "${path}"`),
+    ...sources.map((path) => `read_verilog -formal ${internalCells ? "-icells " : ""}"${path}"`),
     `hierarchy -check -top ${top}`,
     "proc",
     "flatten",
