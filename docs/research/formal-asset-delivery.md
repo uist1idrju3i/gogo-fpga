@@ -6,7 +6,7 @@
 
 [再監査で確認した200 HTML障害](session-review-formal-20261115.md)に対し、IDEの資材取得をengine別に分けました。Yosys SATはYosys本体とshareだけを取得し、Python/SBYの配信状態に依存しません。SBY/SMTBMCは両方を取得し、Pythonまたは選択solverの資材が不足すると実行前に `missing-assets` を返します。
 
-G1とG2のSAT監査に加え、Python/SBYとYices2を通常buildへ接続しました。Pythonは固定ソースとpatchから44資材、合計807,139バイトを生成します。Yices2の製品WASMは1,970,004バイトで、原license・対応ソース・来歴を含めて監査します。VHDL、反例の独立再実行の画面統合、全体の認定は残件です。既定solverは決定していません。実機のTang Nanoは本リポジトリでは試していません。
+G1とG2のSAT監査に加え、Python/SBYとYices2を通常buildへ接続しました。Pythonは固定ソースとpatchから44資材、合計807,139バイトを生成します。Yices2の製品WASMは1,970,004バイトで、原license・対応ソース・来歴を含めて監査します。VHDL、Verilog反例の独立再実行、停止・期限の製品経路は[43条件5回](../experiments/S15-formal-product-integration.md)で認定し、[実ブラウザーの4ボード画面](../experiments/S15-formal-browser-acceptance.md)も別に確認しました。既定solverは決定していません。実機のTang Nanoは本リポジトリでは試していません。
 
 ## 取得時の動作
 
@@ -103,4 +103,4 @@ node --test --test-concurrency=1 tests/product/formal.test.mjs
 
 [CI run 43710045365](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43710045365)ではBuildが成功しましたが、E2E shard 2は監査が作成した `public_html/__pycache__/serve.cpython-314.pyc` を不要な配布物として拒否しました。監査でbytecodeを生成しない方式へ変更し、上記の配布照合も追加しました。ローカルでは関連単体試験150件と配信・書庫再生成11件が成功し、manifest・Pythonソース・原licenseの改変と欠損も拒否しました。画面操作は検査していません。
 
-4ボードのブラウザー操作と画面の目視は、ユーザーの指定により全実装後にまとめて実施します。この時点では未実施です。再監査時点の証拠書庫は変更せず、当時の障害記録と今回の実装を区別します。
+上記は配信監査を実装した時点の記録です。その後、全実装と自動回帰の完了後に4ボードの画面確認を実施し、[ブラウザー受入れ記録](../experiments/S15-formal-browser-acceptance.md)へ原証拠と失敗試行を保存しました。再監査時点の証拠書庫は変更せず、当時の障害記録と今回の実装を区別します。

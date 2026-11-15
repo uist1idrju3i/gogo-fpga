@@ -1,0 +1,32 @@
+run,revision,browser,name,timestamp_utc,outcome,status,top,clock,elapsed_ms,evidence
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,Verilog SAT safe,2026-11-15T16:02:31.183Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,1856,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,tangnano1k SAT,2026-11-15T16:02:33.566Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,1205,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,tangnano4k SAT,2026-11-15T16:02:35.727Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,1166,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,tangnano9k SAT,2026-11-15T16:02:37.928Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,1229,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,tangnano20k SAT,2026-11-15T16:02:40.159Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,1223,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,Verilog SAT counterexample,2026-11-15T16:02:57.065Z,failed,反例が見つかりました。,top,,2286,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,edit discards result and waveform,2026-11-15T16:02:59.030Z,stopped,ソースを編集したため、形式検証の結果を破棄しました。,top,,,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,Yices2 BMC violation,2026-11-15T16:03:30.906Z,failed,反例が見つかりました。,top,clk,8815,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,Yices2 prove,2026-11-15T16:03:46.681Z,ok,証明できました。,top,clk,7051,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,Yices2 cover,2026-11-15T16:03:53.533Z,ok,cover の目標に到達しました。,top,clk,5690,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,VHDL TOP CLK SAT,2026-11-15T16:04:21.551Z,failed,反例が見つかりました。,TOP,CLK,3173,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,VHDL ToP CLK Yices2,2026-11-15T16:04:28.709Z,failed,反例が見つかりました。,ToP,CLK,5694,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,VHDL after reload,2026-11-15T16:04:48.622Z,failed,反例が見つかりました。,ToP,CLK,6494,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,worker stop,2026-11-15T16:05:09.832Z,failed,停止しました。,top,,,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,restart after stop,2026-11-15T16:05:12.455Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,1356,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,actual deadline,2026-11-15T16:05:27.147Z,failed,時間上限に達しました。,top,,1195,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,restart after timeout,2026-11-15T16:05:29.595Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,1239,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,active source edit,2026-11-15T16:05:54.130Z,stopped,ソースを編集したため、形式検証の結果を破棄しました。,top,,,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,restart after edit,2026-11-15T16:05:56.314Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,1192,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,cache corruption recovery,2026-11-15T16:06:26.794Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,2114,build/pr28-browser/final-run/browser-runtime.json
+final-run,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,cache invalidation recovery,2026-11-15T16:06:29.348Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,1950,build/pr28-browser/final-run/browser-runtime.json
+supplemental-final,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,"recursive solver stop, all workers closed",2026-11-15T16:11:32.436Z,failed,停止しました。,top,clk,,build/pr28-browser/supplemental-final/browser-runtime.json
+supplemental-final,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,Yices restart after recursive stop,2026-11-15T16:11:38.621Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,clk,5017,build/pr28-browser/supplemental-final/browser-runtime.json
+supplemental-final,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,"recursive solver timeout, all workers closed",2026-11-15T16:11:45.802Z,failed,時間上限に達しました。,top,clk,,build/pr28-browser/supplemental-final/browser-runtime.json
+supplemental-final,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,Yices restart after recursive timeout,2026-11-15T16:11:51.997Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,clk,5003,build/pr28-browser/supplemental-final/browser-runtime.json
+supplemental-final,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,"independent replay stop, all workers closed",2026-11-15T16:11:59.755Z,failed,停止しました。,top,clk,,build/pr28-browser/supplemental-final/browser-runtime.json
+supplemental-final,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,counterexample after replay stop,2026-11-15T16:12:02.168Z,failed,反例が見つかりました。,top,clk,2241,build/pr28-browser/supplemental-final/browser-runtime.json
+supplemental-final,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,"active project switch, all workers closed",2026-11-15T16:12:08.374Z,,,top,,,build/pr28-browser/supplemental-final/browser-runtime.json
+supplemental-final,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,new project after active switch,2026-11-15T16:12:11.625Z,ok,境界付きで安全を確認しました（bmc の範囲内です）,top,,1216,build/pr28-browser/supplemental-final/browser-runtime.json
+replay-deadline-final,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,"replay deadline, simulation worker closed",2026-11-15T16:17:22.402Z,failed,時間上限に達しました。,top,,,build/pr28-browser/replay-deadline-final/browser-runtime.json
+replay-deadline-final,1ab86d26ba68a54c983e5f2c1b77a4aee4372f46,156.0.8078.4,counterexample after replay timeout,2026-11-15T16:17:27.016Z,failed,反例が見つかりました。,top,,2541,build/pr28-browser/replay-deadline-final/browser-runtime.json
