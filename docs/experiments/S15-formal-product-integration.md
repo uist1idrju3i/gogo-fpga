@@ -144,6 +144,46 @@ node scripts/qualify-yices-product.mjs --scope all --web build/formal-product-we
 修正後CSVは `564b4ebf0fd168ea287652a115d0b67aa12cde39461431b6814936c49dd6e3d6`。
 画面確認は修正後の実装と自動回帰が完了してから再開する。
 
+## 対象一覧の修正先を訂正した後の再認定
+
+再レビューで、前節の対象一覧の修正が `renderSimulationSettings()` に誤適用され、
+`renderFormalSettings()` の候補はVerilog限定のままだったことを確認した。
+VHDLとVerilogの混在プロジェクトでシミュレーションの選択を変更すると、
+VHDLが `simulation.files` に入り、以後の保存をschema検査が拒否した。
+前節の215判定はNodeの製品runnerの結果であり、対象一覧の修正を検証した証拠にはならない。
+ブラウザー操作は再び中断し、旧revisionの録画を最終の画面証拠には使用しない。
+
+commit `d2a16d854aba8ca4a2f6d243d3d99906a0601981` で、シミュレーション候補をVerilog限定へ戻し、
+形式検証の候補と空表示だけをVHDL対応へ修正し直した。
+混在プロジェクトの選択変更・保存・再読込・再編集を既存E2Eへ追加した。
+VHDL対象のE2Eも、再読込後に検証タブを開いてから操作するよう直した。
+これらの画面操作はNodeで代用せず、最終実装のブラウザー検査で実行する。
+
+このcommitの清浄な作業ツリーから同じ43条件を各5回実行し、
+[対象一覧修正後の生CSV](S15-formal-product-integration-ui-fixed.csv)の215判定に不一致はなかった。
+Verilog反例25/25の独立再実行と、VHDL原文再実行70/70の利用不可分類も維持した。
+ホストとNode、ビルド設定、配信binaryは前節と同じで、実装のhashを再記録した。
+
+```sh
+node scripts/qualify-yices-product.mjs --scope all --web build/formal-product-web --out build/formal-product-integration-ui-fixed --repeats 5
+```
+
+| 条件（秒） | 最小 | 中央値 | 最大 |
+|---|---:|---:|---:|
+| SAT identity | 0.942 | 0.947 | 0.999 |
+| SBY bmc-violation | 6.026 | 6.073 | 6.090 |
+| VHDL depth-n | 4.453 | 4.459 | 5.694 |
+| 製品回帰1回の総時間 | 121.031 | 122.304 | 136.150 |
+
+全Web単体は、案内placeholderを配置した状態の初回に451件中2件が失敗した。
+`scripts/build-web.sh` でアプリを組み立てた後は451件すべて成功した。
+初回ログのhashも失敗・予備記録へ追記した。
+実施セッションの添付 `formal-product-integration-ui-fixed-evidence.tar.gz` に、
+5回分の原証拠、metadata、単体の失敗・成功ログと組立てログを保存した。
+書庫のSHA-256は `80f86552938a51d6e9075e4354c8529a3735c8a959ba9ded927b1ad1add0b8e3`、
+CSVは `c76bc055c95406a0b0d79030b6cb3f1a4604e0ac9fa301d5fb1c3a595d53fa30`。
+当該commitの再レビューは新規指摘0件だった。CI全体と画面確認は引き続き別に確認する。
+
 ## 未確認の点
 
 Nodeでの製品経路の確認と、ブラウザーの操作・画面の目視・実機を区別する。
