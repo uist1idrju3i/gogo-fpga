@@ -6,9 +6,10 @@ import { prepareEvidence } from "./evidence.mjs";
 const { values } = parseArgs({ options: {
   out: { type: "string" }, "base-url": { type: "string" },
   list: { type: "boolean" }, help: { type: "boolean", short: "h" },
+  csp: { type: "boolean" },
 } });
 if (values.help) {
-  console.log("node tests/browser-acceptance/run-targeted.mjs --out <新しい出力先> [--base-url <配信URL>] [--list]");
+  console.log("node tests/browser-acceptance/run-targeted.mjs --out <新しい出力先> [--base-url <配信URL>] [--list] [--csp]");
   process.exit(0);
 }
 
@@ -20,7 +21,8 @@ const result = spawnSync(process.execPath, [
   ...(values.list ? ["--list"] : []),
 ], {
   cwd: new URL("../../", import.meta.url),
-  env: { ...process.env, FORMAL_BROWSER_OUT: out, FORMAL_BROWSER_BASE_URL: baseURL },
+  env: { ...process.env, FORMAL_BROWSER_OUT: out, FORMAL_BROWSER_BASE_URL: baseURL,
+    FORMAL_BROWSER_SUITE: values.csp ? "csp" : "vhdl" },
   stdio: "inherit",
 });
 if (result.error) console.error(result.error);
