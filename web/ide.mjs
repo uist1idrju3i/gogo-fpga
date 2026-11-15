@@ -1233,7 +1233,9 @@ export function initializeIde({
   function persistEditorContent(text) {
     if (libraryBusy || !activeTab || isLibraryPath(activeTab) || !fileContents.has(activeTab)) return;
     if (fileContents.get(activeTab) === text) return;
-    if (formalRunning || formalStatus.dataset.outcome) {
+    // 結果破棄の通知はエディターを同期的に再描画するため、先に内容を保存する。
+    fileContents.set(activeTab, text);
+    if (formalRunning || (formalStatus.dataset.outcome && formalStatus.dataset.outcome !== "stopped")) {
       formalVersion += 1;
       formalAssetController?.abort();
       formalAssetController = null;
@@ -1245,7 +1247,6 @@ export function initializeIde({
       workflow.verify("警告");
       updateSynthesisControls();
     }
-    fileContents.set(activeTab, text);
     scheduleSave();
   }
 

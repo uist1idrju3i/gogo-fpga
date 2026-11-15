@@ -172,6 +172,31 @@ Webを再構築し、新しい出力先で実行した結果だけを採用し�
 | 対象2件のログ | `3a73c810a3c2655e9988d8400f3c46d17bfc2f320fc2a69b527b0840348868bf` |
 | CLI・実worker読込の確認ログ | `99d5f27e6a154209d1ec89183359dc3f72be0bd68b86073eb8d5e22ede94c5a7` |
 
+## CIで見つかった結果表示後の編集不具合
+
+`5d5b82bba3439f0198720c6d252e0459653689da` の
+[Playwright shard 1](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43737891752/job/132894371675)で、
+SAT成功後に入力し直すCSP試験が `Formal preparation failed` となった。
+同じblink projectと入力順序を保ち、追跡済み試験を変更せずheaded Chromiumで再現した。
+以前の画面受入れでは、この連続入力の破損を検出できていなかった。
+
+非改変のWorker観測で、2回目の `model/src/top.v` が
+`eludomdne ;)a(tressa *@ syawla ;)a eriw tupnimodule top()` に崩れ、
+Yosysのstderrが `syntax error, unexpected TOK_ID`、終了値が1であることを確認した。
+最初のprepare・presat・proofはすべて終了値0だった。
+追加観測は原因確定後に中断し、成功試行に数えない。
+
+原因は `persistEditorContent` が新しい内容を保存する前に `workflow.verify` を呼び、
+同期的な `flow-change` から古い内容でエディターを再描画する順序だった。
+`stopped` も結果ありと扱うため、入力のたびにこの処理が繰り返された。
+内容を先に保存し、破棄済みの結果は再び破棄しないよう修正する。
+回帰試験には入力全文の一致と保存後のreloadによる一致を加える。
+
+修正後の採用条件は、CSP試験の5回すべてで入力一致・安全判定・反例・保存の再読込が成功し、
+4ボードの画面確認で編集と結果破棄に問題がないこととする。
+対象はWebの編集経路であり、solverの性能比較や実機認定ではない。
+修正前のログ・実入力・終了値・編集イベントは、後述する証拠書庫に保存する。
+
 ## 未確認・対象外
 
 原VHDLの独立シミュレーション、独自の `.sby`、混在HDLの形式検証、
