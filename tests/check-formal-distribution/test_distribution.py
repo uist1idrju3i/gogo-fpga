@@ -105,7 +105,13 @@ class FormalDistributionTest(unittest.TestCase):
         (self.synth / "manifest.json").write_text(json.dumps(self.manifest))
 
     def test_real_http_checks_assets_headers_and_exact_original_licenses(self):
-        result = DIST.audit(self.directory)
+        def inventory():
+            return {str(path.relative_to(self.directory)): DIST.sha256(path.read_bytes())
+                    for path in self.directory.rglob("*") if path.is_file()}
+        before = inventory()
+        with patch.object(sys, "dont_write_bytecode", False):
+            result = DIST.audit(self.directory)
+        self.assertEqual(inventory(), before, "The HTTP audit must not mutate its Web root")
         self.assertEqual(len(result["sat_assets"]), 2)
         self.assertEqual(len(result["licenses_checked"]), len(DIST.LICENSES))
         self.assertGreater(len(result["python"]["assets"]), 0)

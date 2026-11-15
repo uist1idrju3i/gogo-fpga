@@ -8,6 +8,7 @@ import importlib.util
 import json
 from pathlib import Path
 import re
+import runpy
 import shutil
 import subprocess
 import sys
@@ -142,11 +143,9 @@ def audit_url(base_url, root=ROOT):
 
 
 def audit(directory, root=ROOT):
-    spec = importlib.util.spec_from_file_location("formal_distribution_server", directory / "serve.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    handler = partial(module.WebHandler, directory=str(directory))
-    with module.ThreadingHTTPServer(("127.0.0.1", 0), handler) as server:
+    module = runpy.run_path(str(directory / "serve.py"))
+    handler = partial(module["WebHandler"], directory=str(directory))
+    with module["ThreadingHTTPServer"](("127.0.0.1", 0), handler) as server:
         thread = Thread(target=server.serve_forever, kwargs={"poll_interval": 0.01}, daemon=True)
         thread.start()
         try:
