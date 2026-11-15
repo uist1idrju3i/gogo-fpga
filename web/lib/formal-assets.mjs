@@ -82,6 +82,7 @@ export function createFormalAssetLoader({
   });
 
   let cachedYosys = null;
+  let cachedGhdl = null;
   let cachedPython = null;
   const cachedSolvers = new Map();
 
@@ -156,6 +157,21 @@ export function createFormalAssetLoader({
     return cachedPython;
   }
 
+  async function loadGhdl(signal) {
+    if (cachedGhdl) return cachedGhdl;
+    const manifest = await synth.loadManifest({ signal });
+    const cache = await synth.openCache();
+    const [wasm, share] = await Promise.all([
+      synth.fetchVerifiedAsset(manifest, "ghdl-synth.wasm", cache, { signal }),
+      synth.fetchVerifiedAsset(manifest, "libraries.tar", cache, { signal }),
+    ]);
+    if (!WebAssembly.validate(wasm)) throw new Error("Invalid formal GHDL WebAssembly");
+    const asset = { wasm, sha256: await sha256Hex(wasm), share, shareSha256: await sha256Hex(share) };
+    signal.throwIfAborted();
+    cachedGhdl = asset;
+    return asset;
+  }
+
   async function optional(work, signal) {
     try {
       return await work(signal);
@@ -167,12 +183,13 @@ export function createFormalAssetLoader({
 
   async function loadAssets(includePython, options) {
     return loadWithin(async (signal) => {
-      const [yosys, python, solvers] = await Promise.all([
+      const [yosys, python, solvers, ghdl] = await Promise.all([
         optional(loadYosys, signal),
         includePython ? optional(loadPythonBundle, signal) : null,
         includePython ? optional(signal => loadSolver(options?.solver, signal), signal) : null,
+        options?.vhdl === true ? optional(loadGhdl, signal) : null,
       ]);
-      return { yosys, sources: python?.sources ?? [], manifest: python?.manifest ?? null, solvers: solvers ?? {} };
+      return { yosys, sources: python?.sources ?? [], manifest: python?.manifest ?? null, solvers: solvers ?? {}, ghdl };
     }, options);
   }
   return Object.freeze({

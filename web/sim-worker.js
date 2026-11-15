@@ -58,6 +58,7 @@ self.addEventListener("message", async ({ data }) => {
       top: data.top,
       includeDirs: [...new Set([...options.includeDirectories, ...data.files.map(({ path }) => directoryOf(path)).filter(Boolean)])],
       defines: options.defines,
+      formal: data.formal === true,
     });
     const diagnosticText = Object.entries(result.stages).map(([tool, stage]) => ({
       tool,

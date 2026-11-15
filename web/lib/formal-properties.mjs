@@ -58,7 +58,7 @@ export function inspectFormalDesign(document, top) {
 }
 
 export function validateFormalProperties(before, after, { top, clock = null, edge = "posedge", mode = "bmc" }) {
-  if (!["bmc", "prove"].includes(mode)) throw new Error("Unsupported formal mode");
+  if (!["bmc", "prove", "cover"].includes(mode)) throw new Error("Unsupported formal mode");
   if (!["posedge", "negedge"].includes(edge)) throw new Error("Unsupported formal clock edge");
   const original = inspectFormalDesign(before, top);
   const prepared = inspectFormalDesign(after, top);
@@ -68,8 +68,9 @@ export function validateFormalProperties(before, after, { top, clock = null, edg
   if (JSON.stringify(expected) !== JSON.stringify(actual)) {
     throw new Error("Formal property identity, type, or source changed during preparation");
   }
-  if (!prepared.properties.some(({ kind }) => kind === "assert")) {
-    throw new Error("No assertion targets in formal design");
+  const target = mode === "cover" ? "cover" : "assert";
+  if (!prepared.properties.some(({ kind }) => kind === target)) {
+    throw new Error(target === "assert" ? "No assertion targets in formal design" : "No cover targets in formal design");
   }
   if (clock !== null) {
     const port = prepared.ports[clock];

@@ -10,6 +10,9 @@ HTTP から得た製品 binary で Verilog の BMC・prove・cover 6 条件を�
 status・SQLite・反例 VCD・実 solver の hash を照合済みです。
 [製品配信の実験記録](../experiments/S15-yices2-product.md)に生 CSV、失敗試行、
 別出力先と Git-free source の再生成、残る言語・再実行・画面の範囲を記録しています。
+後続の[言語・再実行・停止の製品接続](../experiments/S15-formal-product-integration.md)では、
+VHDLの形式出力とVerilog原文のIcarus再実行も接続しています。
+VHDL原文の独立シミュレーションと画面確認は別の範囲です。
 既定 solver はまだ確定していません。以下の記述は先行する診断時点の履歴として保持します。
 
 全候補の選択肢と無効理由、Bitwuzla・Boolectorの追加依存とprocess境界は、[候補と有効化条件](formal-capabilities.md)に整理しています。実測したYices2・Z3と、ソース登録だけの候補、モデル生成・診断用のbackendを区別します。

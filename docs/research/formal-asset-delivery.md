@@ -74,6 +74,15 @@ SQLite、反例VCD、実Yosys・SMTBMC・Yices2の子プロセスを確認して
 
 ## 回帰試験と再実行
 
+後続の製品接続では、VHDLを選択したときだけGHDLのWASMとlibrary archiveをhash照合して取得し、
+GHDLの形式出力をSATとSBYへ渡します。SMTBMCの起動前にもYosysでpropertyとclockを検査し、
+空のassert/cover、未対応state、複数clockを成功にしません。
+VerilogのSAT・SMT反例は製品Icarusで原文を再実行し、独立VCDと違反propertyを照合します。
+VHDL原文の独立再実行は利用不可と表示します。
+編集時は実行と取得を停止し、古い結果・波形を破棄します。プロジェクト切替も世代番号で古い結果を拒否します。
+[統合実験](../experiments/S15-formal-product-integration.md)に予備失敗、正式反復の基準と証拠を記録します。
+以下は初期の14条件の時点で得た結果です。
+
 ```sh
 node --test tests/web/formal-*.test.mjs tests/web/verified-assets.test.mjs
 python3 -m unittest discover -s tests/check-formal-distribution -v

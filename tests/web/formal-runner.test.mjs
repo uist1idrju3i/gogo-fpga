@@ -220,6 +220,26 @@ test("SAT counterexample without a simulator stays unverified", async () => {
   assert.equal(outcome.replay.status, "unavailable");
 });
 
+test("stopping independent replay cannot publish an old counterexample as verified", async () => {
+  const tool = fakeTool({ phases: { ...satPhases(replayDocument), proof: { exitCode: 1,
+    stdout: "SAT proof finished - model found: FAIL!\n", files: {
+      "__formal/witness.json": jsonBytes(witness), "__formal/witness.vcd": "$enddefinitions $end\n#0\n1!\n",
+    } } } });
+  let entered;
+  let complete;
+  const started = new Promise(resolve => { entered = resolve; });
+  const simulate = async () => { entered(); return new Promise(resolve => { complete = resolve; }); };
+  simulate.cancel = () => complete?.(verifiedExecution);
+  const runner = createFormalRunner({ startTool: tool.startTool, simulateReplay: simulate });
+  const running = runner.run(input({ project: project({ formal: { ...project().formal, clock: "clk" } }) }));
+  await started;
+  runner.stop();
+  const outcome = await running;
+  assert.equal(outcome.kind, "cancelled");
+  assert.equal(outcome.vcd, null);
+  assert.equal(outcome.replay, null);
+});
+
 test("SAT counterexample with a rejecting replay stays unverified", async () => {
   const counterexample = {
     proof: {
@@ -261,7 +281,7 @@ test("SAT tool errors, missing assets and unsupported inputs fail closed", async
     files: new Map([["src/top.vhd", "entity top is end;"]]),
   }));
   assert.equal(unsupported.kind, "tool-error");
-  assert.equal(unsupported.status, "unsupported-input");
+  assert.equal(unsupported.status, "missing-assets");
 });
 
 test("formal runner stops and times out a hanging job", async () => {
@@ -330,6 +350,29 @@ function smtProject(overrides = {}) {
 function smtInput(overrides = {}) {
   return input({ project: smtProject(), assets: smtAssets(), ...overrides });
 }
+
+function smtInventoryTool() {
+  const document = structuredClone(smtDocument);
+  document.modules.top.cells.C = { type: "$cover", attributes: { src: "top.v:4.1-4.20" }, connections: { A: [5], EN: ["1"] } };
+  return fakeTool({ phases: { inventory: { exitCode: 0, files: { "__formal/before.json": jsonBytes(document) } } } }).startTool;
+}
+
+test("SMT rejects empty targets, unsupported state and multiple clocks before Python starts", async () => {
+  for (const mutate of [
+    document => { delete document.modules.top.cells.P; },
+    document => { document.modules.top.cells.state.type = "$mem_v2"; },
+    document => { document.modules.top.cells.other = { ...document.modules.top.cells.state, connections: { CLK: [9] } }; },
+  ]) {
+    const document = structuredClone(smtDocument);
+    mutate(document);
+    const tool = fakeTool({ phases: { inventory: { exitCode: 0, files: { "__formal/before.json": jsonBytes(document) } } } });
+    const runner = createFormalRunner({ startTool: tool.startTool,
+      startPython: () => assert.fail("Invalid formal properties must not launch Python") });
+    const outcome = await runner.run(smtInput());
+    assert.equal(outcome.status, "invalid-properties");
+    assert.equal(outcome.kind, "tool-error");
+  }
+});
 
 test("SMT rejects an absent or malformed selected solver before starting Python", async () => {
   for (const solvers of [{}, { z3: smtAssets().solvers["yices-smt2"] }, { yices: smtAssets().solvers["yices-smt2"] },
@@ -410,7 +453,7 @@ function smtTraceFiles(model, vcd) {
 test("SMT bounded run passes SBY status through and generates the .sby", async () => {
   const python = fakePython({ sby: sbyStatus("PASS", 0) });
   const factories = { workerFactory() {}, solverWorkerFactory() {}, wasiWorkerFactory() {} };
-  const runner = createFormalRunner({ startPython: python.startPython, ...factories });
+  const runner = createFormalRunner({ startTool: smtInventoryTool(), startPython: python.startPython, ...factories });
   const outcome = await runner.run(smtInput());
   assert.equal(outcome.kind, "bounded-pass");
   assert.equal(outcome.status, "PASS");
@@ -435,7 +478,7 @@ test("SMT prove and cover statuses map to their kinds", async () => {
     ["cover", "FAIL", 2, "unreached"],
   ]) {
     const python = fakePython({ sby: sbyStatus(status, code) });
-    const runner = createFormalRunner({ startPython: python.startPython });
+    const runner = createFormalRunner({ startTool: smtInventoryTool(), startPython: python.startPython });
     const outcome = await runner.run(input({
       project: smtProject({ mode }),
       assets: smtAssets(),
@@ -511,7 +554,7 @@ test("SMT counterexample without a simulator stays unverified", async () => {
 
 test("SMT unsupported inputs and user .sby files fail closed", async () => {
   const python = fakePython({ sby: sbyStatus("PASS", 0) });
-  const runner = createFormalRunner({ startPython: python.startPython });
+  const runner = createFormalRunner({ startTool: smtInventoryTool(), startPython: python.startPython });
 
   const sby = await runner.run(input({
     project: smtProject({ sby: "custom.sby" }),
@@ -534,14 +577,14 @@ test("SMT unsupported inputs and user .sby files fail closed", async () => {
     assets: smtAssets(),
   }));
   assert.equal(vhdl.kind, "tool-error");
-  assert.equal(vhdl.status, "unsupported-input");
+  assert.equal(vhdl.status, "missing-assets");
 
   assert.equal(python.calls.length, 0);
 });
 
 test("SMT runner stops a hanging python job", async () => {
   const python = fakePython({ hang: true });
-  const runner = createFormalRunner({ startPython: python.startPython });
+  const runner = createFormalRunner({ startTool: smtInventoryTool(), startPython: python.startPython });
   const pending = runner.run(smtInput());
   await new Promise((resolve) => setTimeout(resolve, 50));
   assert.equal(runner.stop(), true);

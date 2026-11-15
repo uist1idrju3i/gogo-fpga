@@ -7,6 +7,7 @@
 | 記録 | 内容 | 状態 |
 |---|---|---|
 | [S15 Yices2の製品配信とSBY実行](S15-yices2-product.md) | 固定ソース・GMP・SDK、HTTP配信、Git-free再生成、実runnerとSQLite・反例 | Verilog 6条件を各5回。言語・再実行・画面の全体認定は継続 |
+| [S15 形式検証の言語・反例再実行・停止](S15-formal-product-integration.md) | GHDLからSAT/SBYへの接続、Icarusの原文再実行、実workerの停止・期限と負の対照 | 予備39件成功。43条件の正式5回反復の基準を固定 |
 | [S16 CIの出力キャッシュと検査の分割](S16-ci-build-cache.md) | 成功5 runと個別時間、mainのみのcache保存、CPU 4・HDL 2・E2E 2 shardと網羅性検査 | 改善前を収集。分割後のCI時間・cold/warm公開物一致は未確認 |
 | [S8B Pyodide parityのCI分割](S8B-pyodide-parity-shards.md) | 旧CIの60分中止とdarkriscv/9K nativeの5回再現 | HDL/CPUとPlaywrightが成功。Cloudflare以外の20 checkが成功 |
 | [S0 WASMビルド](S0-wasm-build.md) | 旧書き込みアプリのビルドと仮想USB検出 | 当時の記録。書き込みと実機は対象外 |

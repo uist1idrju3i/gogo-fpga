@@ -11,6 +11,19 @@ const smtbmc = ["yosys-smtbmc", "-s", "yices", "--presat", "--unroll", "--noprog
   "--dump-vcd", "engine_0/trace%.vcd", "--dump-yw", "engine_0/trace%.yw", "--dump-vlogtb", "engine_0/trace%_tb.v",
   "--dump-smtc", "engine_0/trace%.smtc", "model/design_smt2.smt2"];
 
+test("GHDL formal synthesis accepts ordered VHDL inputs and rejects command or path substitution", () => {
+  const prefix = ["ghdl", "--synth", "--std=08", "--out=verilog", "--formal", "-fpsl"];
+  assert.deepEqual(validateFormalToolCommand([...prefix, "lib/package.vhd", "top.vhdl", "-e", "top"], "model"),
+    { runtime: "ghdl", sources: ["lib/package.vhd", "top.vhdl"], top: "top", standard: "2008" });
+  assert.deepEqual(validateFormalToolCommand([...prefix.map(arg => arg === "--std=08" ? "--std=19" : arg), "top.vhd", "-e", "top"], "model"),
+    { runtime: "ghdl", sources: ["top.vhd"], top: "top", standard: "2019" });
+  for (const sources of [["../top.vhd"], ["top.v"], ["top.vhd", "top.vhd"], ["-Pother.vhd"], []]) {
+    assert.throws(() => validateFormalToolCommand([...prefix, ...sources, "-e", "top"], "model"));
+  }
+  assert.throws(() => validateFormalToolCommand([...prefix, "top.vhd", "-e", "top;exec"], "model"));
+  assert.throws(() => validateFormalToolCommand([...prefix, "top.vhd", "-e", "top"], "result"));
+});
+
 test("formal commands preserve upstream BMC, induction, cover and witness argv without invoking a shell", () => {
   for (const extra of [[], ["-i"], ["-c"]]) {
     const args = [...smtbmc.slice(0, -1), ...extra, smtbmc.at(-1)];

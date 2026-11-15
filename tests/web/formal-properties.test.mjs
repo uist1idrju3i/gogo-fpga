@@ -60,7 +60,8 @@ test("formal validation refuses empty targets and unsupported or malformed desig
   const hierarchy = design();
   hierarchy.modules.child = { cells: {}, ports: {} };
   assert.throws(() => inspectFormalDesign(hierarchy, "top"), /flattened/);
-  assert.throws(() => validateFormalProperties(design(), design(), { top: "top", mode: "cover" }));
+  assert.equal(validateFormalProperties(design(), design(), { top: "top", mode: "cover" }).counts.cover, 1);
+  assert.throws(() => validateFormalProperties(design(), design(), { top: "top", mode: "live" }));
 });
 
 test("sequential formal validation requires the same explicit clock and edge on every register", () => {
