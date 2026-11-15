@@ -4,7 +4,7 @@
 
 ## 形式検証の候補ソース
 
-以下はT6の調査・ビルド候補のソース登録です。形式検証バイナリーはまだ含めません。採用commitはRESEARCHとgitlink、GMPの版とSHA-256はRESEARCHのarchive表を正とします。[固定ソース・依存・配布条件](docs/research/formal-sources.md)に、取得失敗、署名鍵の期限切れ、未採用の補助依存も記録しています。
+以下はT6の調査・ビルド候補のソース登録です。製品配布には、Yices2 と静的リンクした GMP を含めます。採用commitはRESEARCHとgitlink、GMPの版とSHA-256はRESEARCHのarchive表を正とします。[固定ソース・依存・配布条件](docs/research/formal-sources.md)に、取得失敗、署名鍵の期限切れ、未採用の補助依存も記録しています。Yices2 の対応ソース、GMP の原 archive、patch、ビルド手順は同じ版の source Release に含めます。Yices2 は GPL-3.0-or-later、GMP は同梱の原 license に従って再ビルドできます。[製品認定の記録](docs/experiments/S15-yices2-product.md)に確認範囲を記します。
 
 | ソース | 原本の著作権表示とライセンス | Web ZIPの原文 |
 |---|---|---|

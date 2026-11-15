@@ -298,6 +298,7 @@ git -C "$root" archive --format=tar HEAD | tar -xf - -C "$source_root"
 mkdir -p "$source_root/vendor/formal-archives"
 cp "$work/formal-sources/"*.tar.xz "$work/formal-sources/manifest.json" "$source_root/vendor/formal-archives/"
 cp "$root/public_html/formal/python/manifest.json" "$source_root/vendor/formal-python-sources.json"
+python3 "$root/scripts/build-formal-solvers.py" snapshot --out "$source_root/vendor/formal-yices2-source.json"
 cp "$root/public_html/libraries/catalog.json" "$source_root/libraries/source-manifest.json"
 submodule_lines="$(git -C "$root" ls-tree HEAD -- "${submodules[@]}")"
 declare -A submodule_shas=()

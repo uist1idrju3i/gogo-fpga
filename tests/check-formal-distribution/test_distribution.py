@@ -100,6 +100,17 @@ class FormalDistributionTest(unittest.TestCase):
         self.python.parent.mkdir()
         subprocess.run([sys.executable, str(ROOT / "scripts/build-formal-python.py"), "--out", str(self.python)],
                        capture_output=True, check=True)
+        solver = self.directory / "formal/solvers"
+        solver.mkdir()
+        self.solver_files = {"yices2.wasm": b"\x00asm\x01\x00\x00\x00", "yices2-build.json": b'{"fixture":true}'}
+        self.solver_manifest = {"format_version": 1, "inputs": {"fixture": True}, "assets": [
+            {"path": name, "size": len(data), "sha256": DIST.sha256(data)} for name, data in self.solver_files.items()]}
+        self.solver_files["manifest.json"] = json.dumps(self.solver_manifest).encode()
+        for name, data in self.solver_files.items():
+            (solver / name).write_bytes(data)
+        reference = patch.object(DIST, "solver_reference", return_value=(self.solver_manifest, self.solver_files))
+        reference.start()
+        self.addCleanup(reference.stop)
 
     def write_manifest(self):
         (self.synth / "manifest.json").write_text(json.dumps(self.manifest))
@@ -115,7 +126,7 @@ class FormalDistributionTest(unittest.TestCase):
         self.assertEqual(len(result["sat_assets"]), 2)
         self.assertEqual(len(result["licenses_checked"]), len(DIST.LICENSES))
         self.assertGreater(len(result["python"]["assets"]), 0)
-        self.assertEqual(result["solvers"], "not-audited")
+        self.assertEqual(result["solvers"]["assets"], self.solver_manifest["assets"])
         self.assertEqual(result["browser_execution"], "not-audited")
 
     def test_200_html_and_malformed_json_cannot_pass(self):
@@ -123,6 +134,31 @@ class FormalDistributionTest(unittest.TestCase):
             with self.subTest(body=body):
                 (self.synth / "manifest.json").write_text(body)
                 with self.assertRaises(ValueError):
+                    DIST.audit(self.directory)
+
+    def test_solver_manifest_binary_proof_and_licenses_must_match_independent_reference(self):
+        for name in ("formal/solvers/manifest.json", "formal/solvers/yices2.wasm", "formal/solvers/yices2-build.json",
+                     "licenses/yices2-LICENSE.txt", "licenses/gmp-COPYINGv3"):
+            file = self.directory / name
+            original = file.read_bytes()
+            for data in (b"<!doctype html>", b"", None):
+                with self.subTest(name=name, data=data):
+                    if data is None:
+                        file.unlink()
+                    else:
+                        file.write_bytes(data)
+                    with self.assertRaises((OSError, ValueError)):
+                        DIST.audit(self.directory)
+                    file.write_bytes(original)
+
+    def test_solver_mime_is_checked_separately_from_sat_and_python(self):
+        original_get = DIST.get
+        for path in self.solver_files:
+            def changed(base_url, name, limit):
+                data, mime = original_get(base_url, name, limit)
+                return data, "text/html" if name == "formal/solvers/" + path else mime
+            with self.subTest(path=path), patch.object(DIST, "get", side_effect=changed):
+                with self.assertRaisesRegex(ValueError, "solver Content-Type"):
                     DIST.audit(self.directory)
 
     def test_missing_file_and_truncated_or_changed_downloads_cannot_pass(self):

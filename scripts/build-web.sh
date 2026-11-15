@@ -98,6 +98,8 @@ cp "$root/node_modules/diff/LICENSE" "$public_html/licenses/jsdiff-LICENSE"
 python3 "$root/scripts/formal-distribution.py" stage-licenses "$public_html"
 mkdir -p "$public_html/formal"
 python3 "$root/scripts/build-formal-python.py" --out "$public_html/formal/python"
+python3 "$root/scripts/build-formal-solvers.py" build --out "$build_root/formal-solvers"
+python3 "$root/scripts/build-formal-solvers.py" stage --out "$build_root/formal-solvers" --web "$public_html"
 if ! grep -Eq '^/\*' "$public_html/_headers" ||
   ! grep -Eq 'Cross-Origin-Opener-Policy: same-origin' "$public_html/_headers" ||
   ! grep -Eq 'Cross-Origin-Embedder-Policy: require-corp' "$public_html/_headers"; then

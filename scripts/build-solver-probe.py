@@ -369,8 +369,14 @@ def build(args):
         metadata["script_snapshot"] = snapshot.name
         solver_pin = json.loads(pin("formal-pins"))[args.solver]
         metadata["source"] = solver_pin
-        metadata["base_commit"] = subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True).strip()
-        metadata["worktree_status"] = subprocess.check_output(["git", "-C", str(ROOT), "status", "--porcelain"], text=True)
+        if (ROOT / ".git").exists():
+            metadata["base_commit"] = subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True).strip()
+            metadata["worktree_status"] = subprocess.check_output(["git", "-C", str(ROOT), "status", "--porcelain"], text=True)
+        else:
+            metadata["base_commit"] = json.loads((ROOT / "RELEASE-SOURCE.json").read_text())["commit"]
+            if not re.fullmatch(r"[0-9a-f]{40}", metadata["base_commit"]):
+                raise ValueError("Invalid release source revision")
+            metadata["worktree_status"] = None
         source = output / "source"
         stage_source(args.solver, solver_pin["commit"], source)
         for index, patch_name in enumerate(args.patch or []):
@@ -378,6 +384,8 @@ def build(args):
             metadata["patches"].append({"path": str(patch_name), "sha256": digest(patch)})
             run(f"patch-{index}", ["patch", "--batch", "--fuzz=0", "-p1", "-i", patch], cwd=source)
         c_flags = "-O2 -DNDEBUG -std=gnu17"
+        if getattr(args, "reproducible_paths", False):
+            c_flags += f" -ffile-prefix-map={output}=/formal-build"
         link_flags = ""
         compiler = os.environ.get("CC", "gcc")
         compiler_cxx = os.environ.get("CXX", "g++")
@@ -492,6 +500,7 @@ def main():
     parser.add_argument("--cmake", default="cmake")
     parser.add_argument("--meson", default="meson")
     parser.add_argument("--jobs", type=int, default=1)
+    parser.add_argument("--reproducible-paths", action="store_true")
     parser.add_argument("--patch", type=Path, action="append")
     parser.add_argument("--cxx-flags", default=os.environ.get("CXXFLAGS", ""))
     parser.add_argument("--cxx-link-flags", default="")

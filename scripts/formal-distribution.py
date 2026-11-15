@@ -34,6 +34,8 @@ LICENSES = {
     "zstd-LICENSE": "vendor/zstd/LICENSE",
     "sby-COPYING": "vendor/sby/COPYING",
     "click-LICENSE.txt": "vendor/click/LICENSE.txt",
+    "yices2-LICENSE.txt": "vendor/yices2/LICENSE.txt",
+    **{f"gmp-{name}": f"licenses/gmp-{name}" for name in ("COPYING", "COPYINGv2", "COPYINGv3", "COPYING.LESSERv3")},
 }
 
 
@@ -60,6 +62,7 @@ def get(base_url, path, limit):
         require(response.status == 200, f"HTTP failure: {path}")
         require(response.headers.get("Cross-Origin-Opener-Policy") == "same-origin", f"Missing COOP: {path}")
         require(response.headers.get("Cross-Origin-Embedder-Policy") == "require-corp", f"Missing COEP: {path}")
+        require(response.headers.get("Cross-Origin-Resource-Policy") == "same-origin", f"Missing CORP: {path}")
         data = response.read(limit + 1)
         require(len(data) <= limit, f"Oversized HTTP response: {path}")
         return data, response.headers.get_content_type()
@@ -89,6 +92,25 @@ def audit_python(base_url, root):
         checked.append(entry)
     return {"assets": checked, "manifest_sha256": sha256(raw), "pins": reference["pins"],
             "patches": reference["patches"]}
+
+
+def solver_reference(root):
+    module = runpy.run_path(str(root / "scripts/build-formal-solvers.py"))
+    directory = module["build_directory"](root)
+    manifest = module["read_bundle"](root, directory)
+    return manifest, {name: (directory / name).read_bytes() for name in
+                      ("manifest.json", *[entry["path"] for entry in manifest["assets"]])}
+
+
+def audit_solvers(base_url, root):
+    reference, files = solver_reference(root)
+    for name, original in files.items():
+        served, mime = get(base_url, "formal/solvers/" + name, len(original))
+        require(mime == ("application/json" if name.endswith(".json") else "application/wasm"),
+                f"Unexpected solver Content-Type: {name}")
+        require(served == original, f"Solver distribution differs from pinned build: {name}")
+    return {"assets": reference["assets"], "inputs": reference["inputs"],
+            "manifest_sha256": sha256(files["manifest.json"])}
 
 
 def audit_url(base_url, root=ROOT):
@@ -138,7 +160,7 @@ def audit_url(base_url, root=ROOT):
         served, _ = get(base_url, "licenses/" + name, LIMIT - 1)
         require(bool(original) and served == original, f"Formal license differs from source: {name}")
     return {"format_version": 1, "sat_assets": checked, "manifest_sha256": sha256(raw),
-            "licenses_checked": sorted(LICENSES), "python": audit_python(base_url, root), "solvers": "not-audited",
+            "licenses_checked": sorted(LICENSES), "python": audit_python(base_url, root), "solvers": audit_solvers(base_url, root),
             "browser_execution": "not-audited"}
 
 

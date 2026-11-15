@@ -35,6 +35,9 @@ export function assertFormalDistributionMatches({ repoRoot, distRoot, buildRoot 
       python: assertCopiedTreeMatches({
         repoRoot, distRoot, sourceRoot: pythonRoot, distSubdir: "formal/python",
       }),
+      solvers: new Set(["manifest.json", "yices2.wasm", "yices2-build.json"].flatMap(name =>
+        [...assertCopiedFileMatches({ repoRoot, distRoot,
+          sourcePath: resolve(buildRoot, "formal-solvers", name), distPath: `formal/solvers/${name}` })])),
     };
   } finally {
     rmSync(workdir, { recursive: true, force: true });

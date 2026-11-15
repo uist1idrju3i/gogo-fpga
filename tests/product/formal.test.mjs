@@ -13,6 +13,8 @@ import { createVerifiedAssetLoader } from "../../web/lib/verified-assets.mjs";
 import { nodeFormalWorker, nodeFormalWasiWorker } from "../synth/formal-python-helpers.mjs";
 import { satFormalCases } from "../synth/formal-sat-cases.mjs";
 import { sbyCases, sbyConfig } from "../synth/formal-sby-cases.mjs";
+import { nodeSolverWorker } from "../web/solver-process-helpers.mjs";
+import { readSbyStatus, classifySbyStatus } from "../../web/lib/formal-sby-status.mjs";
 
 globalThis.crossOriginIsolated = true;
 const root = path.resolve(import.meta.dirname, "../..");
@@ -33,7 +35,7 @@ test("HTTP-delivered SAT assets run through the product runner and actual WASI w
     if (!file.startsWith(web + path.sep)) { response.writeHead(400).end(); return; }
     try {
       const bytes = readFileSync(file);
-      response.writeHead(200, { "Content-Type": file.endsWith(".json") ? "application/json" : "application/octet-stream",
+      response.writeHead(200, { "Content-Type": file.endsWith(".json") ? "application/json" : file.endsWith(".wasm") ? "application/wasm" : "application/octet-stream",
         "Cross-Origin-Opener-Policy": "same-origin", "Cross-Origin-Embedder-Policy": "require-corp" });
       response.end(bytes);
     } catch { response.writeHead(404).end(); }
@@ -112,4 +114,55 @@ test("HTTP-delivered SAT assets run through the product runner and actual WASI w
     assert.ok(result.files.some(file => file.path === "result/src/top.v"));
     assert.ok(result.files.some(file => file.path === "result/config.sby"));
   });
+  const smtAssets = await loader.loadForEngine("smtbmc", { solver: "yices2" });
+  assert.ok(smtAssets.solvers?.["yices-smt2"], "Product Yices2 delivery is required");
+  save("yices2-identity.json", { sha256: smtAssets.solvers["yices-smt2"].sha256,
+    manifest: JSON.parse(readFileSync(path.join(web, "formal/solvers/manifest.json"))) });
+  for (const fixture of sbyCases) {
+    await t.test(`delivered Yices2 executes SBY ${fixture.name}`, async () => {
+      const stdout = [], stderr = [];
+      let execution;
+      const runner = createFormalRunner({
+        workerFactory: nodeFormalWorker, solverWorkerFactory: nodeSolverWorker, wasiWorkerFactory: nodeFormalWasiWorker,
+        startPython(options) {
+          const job = startFormalPython({ ...options,
+            onStdout: text => { stdout.push(text); options.onStdout(text); },
+            onStderr: text => { stderr.push(text); options.onStderr(text); } });
+          job.completion.then(value => { execution = value; });
+          return job;
+        },
+      });
+      const project = { version: 4, name: "yices2-product", board: "tangnano9k", top: "top", files: [{ path: "top.v" }],
+        libraries: [], formal: { engine: "smtbmc", solver: "yices2", top: "top", mode: fixture.mode, depth: fixture.depth,
+          clock: "clk", edge: "posedge", timeoutSeconds: 60, memoryMiB: 512, files: null, sby: null } };
+      const inputs = new Map([["top.v", fixture.source]]);
+      const outcome = await runner.run({ project, files: inputs, assets: smtAssets, snapshotHash: await snapshotHash(project, inputs) });
+      assert.ok(execution, "The product runner must launch actual SBY");
+      const { files = [], ...transport } = execution;
+      save(`sby-${fixture.name}.json`, { ...transport, stdout, stderr, outcome,
+        files: files.map(file => ({ path: file.path, size: file.bytes.length, sha256: sha256(file.bytes) })) });
+      for (const file of files) {
+        const target = path.join(evidence, `sby-${fixture.name}`, file.path);
+        mkdirSync(path.dirname(target), { recursive: true });
+        writeFileSync(target, file.bytes);
+      }
+      assert.equal(execution.status, "exited", JSON.stringify({ transport, stdout, stderr }));
+      assert.equal(execution.integrityVerified, true);
+      const status = readSbyStatus(new TextDecoder().decode(files.find(file => file.path === "result/status")?.bytes), execution.exitCode, stdout.join(""));
+      assert.equal(status, fixture.status);
+      assert.equal(classifySbyStatus(fixture.mode, status), fixture.kind);
+      assert.equal(outcome.status, fixture.status);
+      assert.equal(outcome.kind, fixture.kind);
+      assert.ok(execution.children.some(child => child.args[0] === "yosys"));
+      assert.ok(execution.children.some(child => child.args[0] === "yosys-smtbmc"));
+      assert.ok(execution.children.every(child => child.expectedTermination || (child.status === "exited" && child.integrityVerified)));
+      const solvers = execution.children.flatMap(child => child.children ?? []).filter(child => child.args[0] === "yices-smt2");
+      assert.ok(solvers.length > 0, "SMTBMC must spawn real Yices2");
+      assert.ok(solvers.every(child => child.status === "exited" && child.exitCode === 0 && child.integrityVerified &&
+        child.sha256 === smtAssets.solvers["yices-smt2"].sha256));
+      const database = execFileSync("python3", [path.join(root, "scripts/read-sby-status-db.py"), path.join(evidence, `sby-${fixture.name}/result/status.sqlite`)], { encoding: "utf8" });
+      save(`sby-${fixture.name}-sqlite.json`, JSON.parse(database));
+      if (fixture.witness) assert.ok(files.some(file => /engine_0\/trace\d*\.vcd$/.test(file.path) && file.bytes.length > 0));
+    });
+  }
 });

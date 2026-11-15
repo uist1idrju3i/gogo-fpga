@@ -4,6 +4,14 @@
 
 ## 方式の比較と現在の制約
 
+Yices2 の先行認定では、固定ソースと静的 GMP から製品 WASM を生成し、通常 Web build の
+`formal/solvers/`、HTTP 監査、原 license、Release の対応ソース照合へ接続しました。
+HTTP から得た製品 binary で Verilog の BMC・prove・cover 6 条件を各 5 回実行し、
+status・SQLite・反例 VCD・実 solver の hash を照合済みです。
+[製品配信の実験記録](../experiments/S15-yices2-product.md)に生 CSV、失敗試行、
+別出力先と Git-free source の再生成、残る言語・再実行・画面の範囲を記録しています。
+既定 solver はまだ確定していません。以下の記述は先行する診断時点の履歴として保持します。
+
 全候補の選択肢と無効理由、Bitwuzla・Boolectorの追加依存とprocess境界は、[候補と有効化条件](formal-capabilities.md)に整理しています。実測したYices2・Z3と、ソース登録だけの候補、モデル生成・診断用のbackendを区別します。
 
 固定したYices2とZ3のCLIをWASI Preview 1で動かし、既存のshimへ双方向入力を接続する方式を先に調べています。SMT-LIBの意味、parser、判定処理をJavaScriptへ移植しません。原本のC APIと公式のEmscripten経路も比較候補ですが、まだ製品の既定方式を変更していません。
