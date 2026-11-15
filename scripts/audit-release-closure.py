@@ -81,6 +81,17 @@ def compare_git_archive(repository: Path, revision: str, destination: Path) -> N
                     require(local.is_symlink() and str(local.readlink()) == member.linkname, "Source Git archive link mismatch")
 
 
+def audit_solver_closure(root: Path, source: Path) -> None:
+    solvers = runpy.run_path(str(root / "scripts/build-formal-solvers.py"))
+    solver_directory = solvers["build_directory"](root)
+    solver_manifest = solvers["read_bundle"](root, solver_directory)
+    require(solvers["source_snapshot"](source) == solvers["source_snapshot"](root), "Yices2 source provenance mismatch")
+    require(solvers["inputs"](source) == solver_manifest["inputs"], "Archived solver build inputs mismatch")
+    for name in ["manifest.json", *[entry["path"] for entry in solver_manifest["assets"]]]:
+        require((root / "public_html/formal/solvers" / name).read_bytes() == (solver_directory / name).read_bytes(),
+                "Solver Web distribution differs from pinned build")
+
+
 def audit(root: Path, source: Path, generated: Path, version: str, revision: str) -> dict:
     require(bool(re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9._+-]*", version)), "Invalid release version")
     require(bool(re.fullmatch(r"[0-9a-f]{40}", revision)), "Expected full source revision")
@@ -98,14 +109,7 @@ def audit(root: Path, source: Path, generated: Path, version: str, revision: str
         formal_source_licenses = formal.pin_checker(root).FORMAL_SOURCES
         require(json.loads((archive_root / "manifest.json").read_text()) == {"gmp": formal_archive},
                 "Formal source manifest mismatch")
-        solvers = runpy.run_path(str(root / "scripts/build-formal-solvers.py"))
-        solver_directory = solvers["build_directory"](root)
-        solver_manifest = solvers["read_bundle"](root, solver_directory)
-        require(solvers["source_snapshot"](source) == solvers["source_snapshot"](root), "Yices2 source provenance mismatch")
-        require(solvers["inputs"](source) == solver_manifest["inputs"], "Archived solver build inputs mismatch")
-        for name in ["manifest.json", *[entry["path"] for entry in solver_manifest["assets"]]]:
-            require((root / "public_html/formal/solvers" / name).read_bytes() == (solver_directory / name).read_bytes(),
-                    "Solver Web distribution differs from pinned build")
+        audit_solver_closure(root, source)
     metadata = json.loads((source / "RELEASE-SOURCE.json").read_text())
     require(metadata["commit"] == revision and metadata["version"] == version, "Release metadata mismatch")
     require((source / "vendor/formal-python-sources.json").read_bytes() ==

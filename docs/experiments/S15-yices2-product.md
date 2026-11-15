@@ -113,6 +113,12 @@ SHA-256、Node の版、試行ごとの結果と solver の identity を JSON �
 
 ## 未確認の点
 
+PR レビューで、Release 試験の submodule 取得対象に Yices2 がなく、対応ソース書庫に
+`vendor/yices2/.gitcommit` を保存していない不備を確認した。取得対象と書庫生成を修正し、
+solver closure の正常系、固定 commit の欠落・改変、ソース・patch・配信物の改変拒否を
+専用の単体試験 6 件へ追加した。最小の Git-free 再生成試験と、実際の Release 書庫全体の
+再組立ては別の確認であり、後者は引き続き確認する。
+
 この記録だけで、VHDL、独立した HDL 反例再実行、製品全体の停止・編集・再読込を認定しない。
 Node worker_threads の結果は、ブラウザーでの操作や 4 ボードの目視確認に置き換えない。
 実機の Tang Nano は本リポジトリでは試していない。
