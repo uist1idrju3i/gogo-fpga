@@ -242,7 +242,7 @@ test("VHDL-only is disabled and mixed projects log VHDL exclusion", async ({ pag
   await expect(page.locator("#simulation-reason")).toHaveText(
     "VHDL のシミュレーションはできません（Verilog の testbench を使ってください）",
   );
-  await createProject(page, "tangnano1k", "verilog");
+  const projectName = await createProject(page, "tangnano1k", "verilog");
   await page.locator("#add-file-button").click();
   await page.locator("#file-path-input").fill("src/ignored.vhd");
   await page.locator("#file-path-save").click();
@@ -253,6 +253,9 @@ test("VHDL-only is disabled and mixed projects log VHDL exclusion", async ({ pag
   await testbench.uncheck();
   await expect(page.locator("#project-status")).toHaveText("保存しました。");
   await page.reload();
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.locator("#project-select").selectOption(projectName);
+  await expect(page.locator("#project-name")).toHaveText(projectName);
   await page.locator("#right-tab-verify").click();
   await expect(testbench).not.toBeChecked();
   await expect(page.locator('#simulation-files input[value="src/ignored.vhd"]')).toHaveCount(0);
