@@ -65,6 +65,8 @@ class ReleaseClosureTest(unittest.TestCase):
         self.write(self.source / "libraries/source-manifest.json", catalog_bytes)
         self.write(self.source / "third_party/sample/.gitcommit", self.pin.encode())
         self.write(self.source / "RELEASE-SOURCE.json", json.dumps({"commit": self.revision, "version": self.version}).encode())
+        self.write(self.root / "public_html/formal/python/manifest.json", b'{"provenance":"fixture"}')
+        self.write(self.source / "vendor/formal-python-sources.json", b'{"provenance":"fixture"}')
         self.write(self.source / "ordinary.txt", b"Source file\n")
         self.write(self.root / "public_html/index.html", b"<title>Fixture</title>\n")
         self.write(self.root / "licenses/root.txt", b"Root license\n")
@@ -113,7 +115,8 @@ class ReleaseClosureTest(unittest.TestCase):
                  (self.source / "NOTICE", "Source notice mismatch"),
                  (self.source / "code.txt", "Source snapshot mismatch"),
                  (self.source / "third_party/sample/.gitcommit", "Source gitlink mismatch"),
-                 (self.generated / "catalog.json", "Catalog mismatch")]
+                 (self.generated / "catalog.json", "Catalog mismatch"),
+                 (self.source / "vendor/formal-python-sources.json", "Formal Python source provenance mismatch")]
         for file, reason in cases:
             with self.subTest(file=str(file.relative_to(self.base))):
                 original = file.read_bytes()

@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -13,6 +14,70 @@ sys.path.insert(0, str(ROOT / "scripts"))
 SPEC = importlib.util.spec_from_file_location("formal_distribution", ROOT / "scripts/formal-distribution.py")
 DIST = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(DIST)
+PYTHON_SPEC = importlib.util.spec_from_file_location("formal_python", ROOT / "scripts/build-formal-python.py")
+PYTHON = importlib.util.module_from_spec(PYTHON_SPEC)
+PYTHON_SPEC.loader.exec_module(PYTHON)
+
+
+class FormalPythonArchiveTest(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.directory = Path(temporary.name)
+        self.reference = self.directory / "reference"
+        PYTHON.build(ROOT, self.reference)
+        self.manifest = json.loads((self.reference / "manifest.json").read_text())
+        self.archive = self.directory / "archive"
+        for origin in self.manifest["origins"].values():
+            name, source = origin["submodule"], origin["source"]
+            target = self.archive / "vendor" / name / source
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(PYTHON.git(ROOT / "vendor" / name, "show", f"{self.manifest['pins'][name]}:{source}"))
+        shutil.copytree(ROOT / "patches", self.archive / "patches")
+        (self.archive / "web").mkdir()
+        for name in ("formal_process.py", "formal_trace.py"):
+            shutil.copyfile(ROOT / "web" / name, self.archive / "web" / name)
+        self.provenance = self.archive / "vendor/formal-python-sources.json"
+        self.provenance.write_text(json.dumps(self.manifest))
+
+    def build(self):
+        with patch.object(PYTHON, "git", side_effect=AssertionError("Source archive must not use Git")):
+            output = self.directory / "rebuilt"
+            PYTHON.build(self.archive, output)
+        return output
+
+    def test_git_free_rebuild_is_byte_identical_to_pinned_git_objects(self):
+        output = self.build()
+        self.assertEqual({path.relative_to(output): path.read_bytes() for path in output.rglob("*") if path.is_file()},
+                         {path.relative_to(self.reference): path.read_bytes() for path in self.reference.rglob("*") if path.is_file()})
+
+    def test_missing_or_invalid_archive_provenance_fails_closed(self):
+        self.provenance.unlink()
+        with self.assertRaises(OSError):
+            self.build()
+        for change in ({"format_version": True}, {"pins": {}}, {"pins": {"yosys": "invalid"}},
+                       {"origins": {}}, {"origins": {**self.manifest["origins"], "extra.py": {}}}):
+            shutil.rmtree(self.directory / "rebuilt")
+            self.provenance.write_text(json.dumps({**self.manifest, **change}))
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                self.build()
+
+    def test_modified_missing_or_linked_archive_sources_fail_closed(self):
+        source = self.archive / "vendor/yosys/backends/smt2/smtio.py"
+        original = source.read_bytes()
+        source.write_bytes(original + b"\n# modified\n")
+        with self.assertRaisesRegex(ValueError, "identity mismatch"):
+            self.build()
+        shutil.rmtree(self.directory / "rebuilt")
+        source.unlink()
+        with self.assertRaisesRegex(ValueError, "inventory mismatch"):
+            self.build()
+        shutil.rmtree(self.directory / "rebuilt")
+        outside = self.directory / "smtio.py"
+        outside.write_bytes(original)
+        source.symlink_to(outside)
+        with self.assertRaisesRegex(ValueError, "Linked"):
+            self.build()
 
 
 class FormalDistributionTest(unittest.TestCase):

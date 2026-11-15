@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
 
 
@@ -19,27 +20,51 @@ def build(root, output):
     output.mkdir()
     origins = {}
     pins = {}
+    archive = None
+    if not (root / ".git").exists():
+        archive = json.loads((root / "vendor/formal-python-sources.json").read_text())
+        if (not isinstance(archive, dict) or type(archive.get("format_version")) is not int or
+                archive["format_version"] != 1 or not isinstance(archive.get("pins"), dict) or
+                set(archive["pins"]) != {"yosys", "sby", "click"} or
+                not all(isinstance(pin, str) and re.fullmatch("[0-9a-f]{40}", pin) for pin in archive["pins"].values()) or
+                not isinstance(archive.get("origins"), dict)):
+            raise ValueError("Invalid archived formal Python provenance")
     for name, prefix, destination, license_file in [
         ("yosys", "backends/smt2/", "", "COPYING"),
         ("sby", "sbysrc/", "", "COPYING"),
         ("click", "src/click/", "click/", "LICENSE.txt"),
     ]:
         module = root / "vendor" / name
-        tree = git(root, "ls-tree", "HEAD", f"vendor/{name}").decode().split()
-        if len(tree) != 4 or tree[:2] != ["160000", "commit"]:
-            raise ValueError("Missing pinned formal Python source")
-        commit = tree[2]
+        if archive is None:
+            tree = git(root, "ls-tree", "HEAD", f"vendor/{name}").decode().split()
+            if len(tree) != 4 or tree[:2] != ["160000", "commit"]:
+                raise ValueError("Missing pinned formal Python source")
+            commit = tree[2]
+            paths = git(module, "ls-tree", "-r", "--name-only", commit, prefix).decode().splitlines()
+        else:
+            commit = archive["pins"][name]
+            paths = sorted(path.relative_to(module).as_posix() for path in (module / prefix).rglob("*.py"))
         pins[name] = commit
-        paths = git(module, "ls-tree", "-r", "--name-only", commit, prefix).decode().splitlines()
         for source in [p for p in paths if p.endswith(".py")] + [license_file]:
             target = f"licenses/{name}-{license_file}" if source == license_file else destination + source.removeprefix(prefix)
             file = output / target
             if file.exists() or not target or ".." in Path(target).parts:
                 raise ValueError("Duplicate or unsafe formal Python path")
-            data = git(module, "show", f"{commit}:{source}")
+            if archive is None:
+                data = git(module, "show", f"{commit}:{source}")
+            else:
+                original = module / source
+                if original.resolve() != original:
+                    raise ValueError("Linked archived formal Python source")
+                data = original.read_bytes()
+            origin = {"submodule": name, "source": source, "original_sha256": hashlib.sha256(data).hexdigest()}
+            if archive is not None and archive["origins"].get(target) != origin:
+                raise ValueError("Archived formal Python source identity mismatch")
             file.parent.mkdir(parents=True, exist_ok=True)
             file.write_bytes(data)
-            origins[target] = {"submodule": name, "source": source, "original_sha256": hashlib.sha256(data).hexdigest()}
+            origins[target] = origin
+    if archive is not None and archive["origins"] != origins:
+        raise ValueError("Archived formal Python source inventory mismatch")
     patch = root / "patches/yosys-smtio-process.patch"
     patches = {}
     for name in ("yosys-smtio-process.patch", "sby-process.patch"):
