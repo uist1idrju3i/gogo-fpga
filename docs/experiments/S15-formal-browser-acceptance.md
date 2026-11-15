@@ -95,15 +95,37 @@ scripts/build-web.sh
 python3 public_html/serve.py --port 8123
 ```
 
-別端末で、通常E2Eの対象2件を実行できる。既存serverの利用には書庫内の
-`targeted.config.mjs` を使った。重い合成fixture用globalSetupはこの2件に使用していない。
-書庫の `pr28-browser` をcheckoutの `build/` へ展開した場合のコマンドは次のとおり。
+別端末で、通常E2Eの対象2件を実行できる。実施時は書庫内の
+`targeted.config.mjs` を使い、重い合成fixture用globalSetupは使用していない。
+後のレビューで試験器の収録漏れを訂正し、
+[追跡対象の設定](../../tests/browser-acceptance/targeted.config.mjs)と
+[主経路](../../tests/browser-acceptance/manual-ui.mjs)、
+[停止・切替](../../tests/browser-acceptance/supplemental-ui.mjs)、
+[再実行期限](../../tests/browser-acceptance/replay-deadline-ui.mjs)を保存した。
+同じ受入れ条件を、添付書庫なしで再実行できる。
+追跡版では配信URLと新しい出力先を指定でき、既存の出力先は空でも拒否する。
+記録のrevisionは再実行時のcheckoutから取得し、対話操作が失敗した場合の終了コードは1とする。
+製品コードと各条件の操作・判定は変更していない。
+
+リポジトリのrootで、既存serverに対する対象2件を実行する。
+出力先は未使用のものに変える。`FORMAL_BROWSER_BASE_URL` を省略すると8123番を使う。
 
 ```sh
-npx playwright test --config build/pr28-browser/targeted.config.mjs
+FORMAL_BROWSER_OUT=build/browser-acceptance-targeted \
+  npx playwright test --config tests/browser-acceptance/targeted.config.mjs
 ```
 
-一時試験器の `manual-ui.mjs` は同ディレクトリーで対話的に実行し、
+対話的な補助は、別々の出力先で次のように起動する。
+配信先を変えるときは `--base-url http://127.0.0.1:8123/` を加える。
+
+```sh
+node tests/browser-acceptance/manual-ui.mjs --out build/browser-acceptance-main
+node tests/browser-acceptance/supplemental-ui.mjs --out build/browser-acceptance-supplemental
+node tests/browser-acceptance/replay-deadline-ui.mjs --out build/browser-acceptance-deadline
+```
+
+各scriptの起動後に、次のコマンドを標準入力へ1行ずつ入力する。
+実施時の `manual-ui.mjs` は
 `primary`、`boards`、`counterexample`、`edit`、`bmc`、`prove`、`cover`、
 `vhdl`、`vhdlsmt`、`switchreload`、`stop`、`timeout`、`activeedit`、`cache`、`finish` を順に入力した。
 追加の `supplemental-ui.mjs` は `recursive`、`recursivetimeout`、`replaystop`、`activeswitch`、`finish`、
