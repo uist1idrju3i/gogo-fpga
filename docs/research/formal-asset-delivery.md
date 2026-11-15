@@ -32,6 +32,8 @@ SMTBMC用のsolver名と、実行するコマンド名は異なる場合があ�
 
 `scripts/build-web.sh` は `scripts/build-formal-python.py` を呼び、固定したYosys、SBY、Clickのソースと原license、process patch、adapterを `formal/python/` へ配置します。manifestにはsource pin、patch hash、原ファイルの出所とhash、配信する各ファイルのsize/hashを保持します。通常buildのCIでもSBYとClickを固定commitから取得します。
 
+Playwrightのserver起動でもWebを再生成するため、各shardとRelease testsでYosys・SBY・ClickとYosys内の依存ソースを取得します。原licenseが欠けている場合は、ブラウザーの起動前に配信監査で停止します。
+
 Releaseのソース書庫には `vendor/formal-python-sources.json` として来歴を同梱します。Gitがないときは、そのpinと元ソースのhashを照合してからpatchを適用し、同じbundleを再生成します。ソースの改変・欠損・リンクや来歴の欠落は拒否します。Release closureでも同梱した来歴と配信manifestのbyte一致を検査します。
 
 Python workerには `web/lib/formal-pyodide.mjs` を接続しました。従来の直接起動では、通常配信でzstdにしたPyodide WASMの未圧縮URLを要求していました。修正後はpack manifestを読み、検証済みのlockを渡し、WASMと標準ライブラリーを取得するときに既存のhash検査とブラウザー用展開器を通します。runtimeの準備に失敗した場合は再試行でき、workerの準備例外もhostへ通知します。
@@ -68,4 +70,6 @@ node --test --test-concurrency=1 tests/product/formal.test.mjs
 
 ローカルでは、[CI run 43700337952](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43700337952)のSAT資材と、現行のPython bundle・展開器を合わせた `FORMAL_WEB_ROOT=build/formal-product-web` で、この検査14件が成功しました。Yosys WASMのSHA-256は `11ee003141aa7c05b8413f77f44e7a1e54c124a66bb338ff38fd47028387b5c3` です。この検査はNode worker_threads上の回帰試験で、ブラウザー操作、solverの実行、SQLiteを含むSBY全実行、VHDL、反例の独立再実行の認定ではありません。製品の生成物はCIの通常buildで別途監査・実行します。
 
-全Web単体試験は初回のローカル実行で、未生成のflasher資材と製品 `public_html/` により5件失敗しました。資材を要する検査の最終判定は、生成後のCIで行います。4ボードのブラウザー操作と画面の目視は、ユーザーの指定により全実装後にまとめて実施します。この時点では未実施です。再監査時点の証拠書庫は変更せず、当時の障害記録と今回の実装を区別します。
+全Web単体試験は初回のローカル実行で、未生成のflasher資材と製品 `public_html/` により5件失敗しました。[CI run 43704401597](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43704401597)では、通常Web build、SAT・Python配信監査、製品回帰14件とWeb単体試験440件が成功しました。[製品試験の原記録](https://github.com/uist1idrju3i/gogo-fpga/actions/runs/43704401597/artifacts/14158384493)には、検査したmerge commit `e17c88c64429a43d885c8b18ae123a85350641ba` と同じYosys WASMのhashを保存しています。別jobのE2E shardでは、Yosysの原licenseを取得しておらずWeb再生成が停止しました。上記のソース取得を追加し、清浄な取得先で原license11件の配置とPythonの44資材・manifestのbyte一致を確認しました。
+
+4ボードのブラウザー操作と画面の目視は、ユーザーの指定により全実装後にまとめて実施します。この時点では未実施です。再監査時点の証拠書庫は変更せず、当時の障害記録と今回の実装を区別します。

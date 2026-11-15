@@ -148,8 +148,13 @@ jobs:
           submodules: false
           persist-credentials: false
 
-      - name: zstd の submodule を取得
-        run: git submodule update --init --depth 1 -- vendor/zstd
+      - name: Web 配布物の組立に必要な submodule を取得
+        run: |
+          git submodule update --init --depth 1 -- \
+            vendor/zstd vendor/yosys vendor/sby vendor/click third_party/
+          git -C vendor/yosys submodule update --init --depth 1 -- \
+            abc libs/cxxopts libs/fmt libs/tomlplusplus libs/boost_regex libs/symfpu
+          git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv
 
       - name: Node.js を設定
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0

@@ -2481,7 +2481,10 @@ jobs:
 
       - name: Web 配布物の組立に必要な submodule を取得
         run: |
-          git submodule update --init --depth 1 -- vendor/zstd third_party/
+          git submodule update --init --depth 1 -- \
+            vendor/zstd vendor/yosys vendor/sby vendor/click third_party/
+          git -C vendor/yosys submodule update --init --depth 1 -- \
+            abc libs/cxxopts libs/fmt libs/tomlplusplus libs/boost_regex libs/symfpu
           git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv
 
       - name: Node.js を設定
