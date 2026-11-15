@@ -189,13 +189,67 @@ Yosysのstderrが `syntax error, unexpected TOK_ID`、終了値が1であるこ�
 原因は `persistEditorContent` が新しい内容を保存する前に `workflow.verify` を呼び、
 同期的な `flow-change` から古い内容でエディターを再描画する順序だった。
 `stopped` も結果ありと扱うため、入力のたびにこの処理が繰り返された。
-内容を先に保存し、破棄済みの結果は再び破棄しないよう修正する。
-回帰試験には入力全文の一致と保存後のreloadによる一致を加える。
+内容を先に保存し、破棄済みの結果は再び破棄しないよう修正した。
+回帰試験には入力全文の一致と保存後のreloadによる一致を加えた。
 
 修正後の採用条件は、CSP試験の5回すべてで入力一致・安全判定・反例・保存の再読込が成功し、
 4ボードの画面確認で編集と結果破棄に問題がないこととする。
 対象はWebの編集経路であり、solverの性能比較や実機認定ではない。
-修正前のログ・実入力・終了値・編集イベントは、後述する証拠書庫に保存する。
+修正前のログ・実入力・終了値・編集イベントも、次の証拠書庫へ保存した。
+
+### 修正後と追跡版の結果
+
+製品修正の `b5cc4a8c762d383cfd45f7fb59c150913fda3b5f` と、補助試験器を収録した
+`7bd4e361198c98056b440a4941d6775178e4d91e` で、それぞれCSP試験5/5と4ボード4/4が成功した。
+各ボードで安全判定後の分割入力、途中・最終の全文一致、結果破棄、新runの反例、保存・reloadを確認した。
+4枚ずつの全画面画像を目視し、追加の製品・試験器不具合は検出しなかった。
+追跡版の実行ではWebを作り直さず、修正直後と同じ配信hashを確認して再利用した。
+Web単体451件も成功した。
+
+[生CSV](S15-formal-browser-editor.csv)に両実行の10行を保存した。
+時刻・時間・判定は原CSVと同じで、traceのパスだけをリポジトリ相対にし、revision列を加えた。
+原CSVも証拠書庫に保持した。初回の時間中央値は8,634 ms、最小7,346 ms、最大15,650 ms、
+追跡版は中央値8,245 ms、最小7,897 ms、最大9,980 msだった。
+各試行全体の時間であり、solver単独の性能比較ではない。
+再試行・skipped・unexpected・試験エラーは両方とも0だった。
+
+実行版はNode v24.22.3、Playwright 1.64.1、headed Chromium 156.0.8078.4。
+追跡版の配信・生成物・ソースの `ide.mjs` はすべて
+`d7fd9f6ce04673bef2fe2bf5b03311d33c9a89ea1b95e24d58e64b938675ba99` だった。
+favicon 404とSurfer/WebGL等の警告は残るが、波形を表示でき、4ボード補助のpageerrorは0だった。
+主録画はCSP反復の途中からのため、全5試行の操作は個別traceを根拠とする。
+この追加確認ではYices2・VHDL全経路を再走していない。
+
+### 編集回帰の再現と証拠
+
+COOP/COEP付きserverを起動し、新しい証拠先で
+[追跡版の起動スクリプト](../../tests/browser-acceptance/run-targeted.mjs)を使う。
+`--csp` は既存CSP試験を5回選び、省略時は従来のVHDL保存回帰2件を選ぶ。
+`--list` で選択件数を事前に確認できる。
+
+```sh
+node tests/browser-acceptance/run-targeted.mjs --csp \
+  --out build/formal-editor-csp --base-url http://127.0.0.1:8123/
+node tests/browser-acceptance/editor-ui.mjs \
+  --out build/formal-editor-boards --base-url http://127.0.0.1:8123/
+```
+
+[4ボードの編集補助](../../tests/browser-acceptance/editor-ui.mjs)には、READY後に
+`board tangnano1k`、`edit tangnano1k` を1行ずつ入力する。
+SAFEとDONEを確認してから、4K・9K・20Kも同じ順序で実行し、`finish`、`exit` で閉じる。
+入力・設定・保存は通常UIを使い、固定待機やWorkerの差し替えは行わない。
+失敗時は終了コード1となり、既存の出力先は空でも拒否する。
+
+[実施セッション](https://app.devin.ai/sessions/d978c0f0cabc4a0faac01e03c62e2cf8)の添付
+`pr28-editor-evidence.tar.gz` に、CI資料・原因調査・修正後2実行のJSON・CSV・trace・画像・録画と
+Web単体ログを保存した。129ファイルを `SHA256SUMS` から再照合した。
+
+| 原証拠 | SHA-256 |
+|---|---|
+| 証拠書庫 | `dcff65911081b575824dbd94f6456fea218564ed36f2e042a1242f4122344f9b` |
+| 追跡版CSPのJSON | `68ab3f201df9a014061944bdf958bfd430ee5cc307dbc80d459bf15db18f2475` |
+| 追跡版の原CSV | `db08b4a786718fba56598055ecd41468d7f6f9aab0d81002a46124bb21660d02` |
+| 修正直後の原CSV | `720020520fb24cc5cbd8448566b6199af174ab6478c269cdba259e0614d9724f` |
 
 ## 未確認・対象外
 

@@ -1,0 +1,11 @@
+revision,trial,duration_ms,verdict,error_count,retry,worker_index,start_time,trace
+b5cc4a8c762d383cfd45f7fb59c150913fda3b5f,1,7346,passed,0,0,0,2026-11-15T17:50:07.156Z,build/pr28-edit-b5cc4a8/csp-results/openrouter-auth-CSP-permit-4e491-success-and-counterexamples/trace.zip
+b5cc4a8c762d383cfd45f7fb59c150913fda3b5f,2,8419,passed,0,0,1,2026-11-15T17:50:16.241Z,build/pr28-edit-b5cc4a8/csp-results/openrouter-auth-CSP-permit-4e491-success-and-counterexamples-repeat1/trace.zip
+b5cc4a8c762d383cfd45f7fb59c150913fda3b5f,3,8634,passed,0,0,2,2026-11-15T17:50:26.517Z,build/pr28-edit-b5cc4a8/csp-results/openrouter-auth-CSP-permit-4e491-success-and-counterexamples-repeat2/trace.zip
+b5cc4a8c762d383cfd45f7fb59c150913fda3b5f,4,15650,passed,0,0,3,2026-11-15T17:50:37.024Z,build/pr28-edit-b5cc4a8/csp-results/openrouter-auth-CSP-permit-4e491-success-and-counterexamples-repeat3/trace.zip
+b5cc4a8c762d383cfd45f7fb59c150913fda3b5f,5,9576,passed,0,0,4,2026-11-15T17:50:54.785Z,build/pr28-edit-b5cc4a8/csp-results/openrouter-auth-CSP-permit-4e491-success-and-counterexamples-repeat4/trace.zip
+7bd4e361198c98056b440a4941d6775178e4d91e,1,8027,passed,0,0,0,2026-11-15T17:59:35.477Z,build/pr28-tracked-7bd4e36/csp/results/openrouter-auth-CSP-permit-4e491-success-and-counterexamples/trace.zip
+7bd4e361198c98056b440a4941d6775178e4d91e,2,7897,passed,0,0,1,2026-11-15T17:59:45.256Z,build/pr28-tracked-7bd4e36/csp/results/openrouter-auth-CSP-permit-4e491-success-and-counterexamples-repeat1/trace.zip
+7bd4e361198c98056b440a4941d6775178e4d91e,3,8245,passed,0,0,2,2026-11-15T17:59:54.886Z,build/pr28-tracked-7bd4e36/csp/results/openrouter-auth-CSP-permit-4e491-success-and-counterexamples-repeat2/trace.zip
+7bd4e361198c98056b440a4941d6775178e4d91e,4,9135,passed,0,0,3,2026-11-15T18:00:04.916Z,build/pr28-tracked-7bd4e36/csp/results/openrouter-auth-CSP-permit-4e491-success-and-counterexamples-repeat3/trace.zip
+7bd4e361198c98056b440a4941d6775178e4d91e,5,9980,passed,0,0,4,2026-11-15T18:00:15.911Z,build/pr28-tracked-7bd4e36/csp/results/openrouter-auth-CSP-permit-4e491-success-and-counterexamples-repeat4/trace.zip

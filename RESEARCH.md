@@ -185,6 +185,7 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 | [再監査の証拠台帳](docs/research/session-review-evidence-20261115.md) | 原資料のhash、取得と目視の範囲、未回収生成物、証拠書庫と再検査手順 |
 | [形式検証の公開障害と製品化境界](docs/research/session-review-formal-20261115.md) | 200 HTMLと404のloader診断、SAT/SBY/solverの配信・入力・UIの境界、既存S15との照合 |
 | [形式検証の資材取得とSAT・Python配信監査](docs/research/formal-asset-delivery.md) | engine別取得、停止・期限・再試行、Python/SBYとYices2の通常build、実HTTPのpin・hash・原license、Git-free再生成、実workerのSATとSBY 6条件。言語・再実行・画面の全体認定は継続 |
+| [形式検証の画面と編集回帰](docs/experiments/S15-formal-browser-acceptance.md) | 4ボードと連続編集、原CSV、失敗証拠と再現手順 |
 | [CIのビルドキャッシュ](docs/research/ci-build-cache.md) | キーと全ファイル整合性検査、mainだけの保存、cold/warmの観察と未確認範囲 |
 | [Pages公開の承認と配信](docs/research/pages-delivery.md) | mainの成功runの成果物をpagesへ渡す承認PR、previewでの実機確認、管理者のGit連携・ruleset設定 |
 | [DeepWikiの構成と検査](docs/research/deepwiki.md) | 日本語のページ階層、実装・調査の参照方針、安全上の制約と設定の上限検査 |
