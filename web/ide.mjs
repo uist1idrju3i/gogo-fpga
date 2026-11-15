@@ -813,6 +813,7 @@ export function initializeIde({
     try {
       const assets = await formalAssetLoader.loadForEngine(formalProject.formal.engine, {
         signal: controller.signal,
+        solver: formalProject.formal.solver,
       });
       if (version !== formalVersion) return;
       const hash = await snapshotHash(formalProject, fileContents);

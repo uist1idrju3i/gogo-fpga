@@ -310,7 +310,7 @@ function smtAssets() {
     yosys: input().assets.yosys,
     sources: [{ path: "upstream/sby.py", bytes: new Uint8Array([1]) }],
     manifest: { format: "formal-python/v1", files: {} },
-    solvers: { yices: { wasm: new Uint8Array([1]), sha256: "d".repeat(64) } },
+    solvers: { "yices-smt2": { wasm: new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0]), sha256: "d".repeat(64) } },
   };
 }
 
@@ -332,9 +332,10 @@ function smtInput(overrides = {}) {
 }
 
 test("SMT rejects an absent or malformed selected solver before starting Python", async () => {
-  for (const solvers of [{}, { z3: smtAssets().solvers.yices }, { yices: {} },
-    { yices: { wasm: new Uint8Array(), sha256: "a".repeat(64) } },
-    { yices: { wasm: new Uint8Array([1]), sha256: "invalid" } }]) {
+  for (const solvers of [{}, { z3: smtAssets().solvers["yices-smt2"] }, { yices: smtAssets().solvers["yices-smt2"] },
+    { "yices-smt2": {} }, { "yices-smt2": { wasm: new Uint8Array(), sha256: "a".repeat(64) } },
+    { "yices-smt2": { ...smtAssets().solvers["yices-smt2"], wasm: new Uint8Array([1]) } },
+    { "yices-smt2": { ...smtAssets().solvers["yices-smt2"], sha256: "invalid" } }]) {
     const runner = createFormalRunner({ startPython: () => assert.fail("Python started without solver assets") });
     const outcome = await runner.run(smtInput({ assets: { ...smtAssets(), solvers } }));
     assert.equal(outcome.kind, "tool-error");
@@ -347,9 +348,10 @@ function fakePython({ sby, trace, hang = false } = {}) {
   const calls = [];
   return {
     calls,
-    startPython({ entrypoint, args, files, onStdout, onStderr }) {
+    startPython({ entrypoint, args, files, onStdout, onStderr, workerFactory, solverWorkerFactory, wasiWorkerFactory }) {
       calls.push({
         entrypoint,
+        workerFactory, solverWorkerFactory, wasiWorkerFactory,
         args: [...args],
         files: files.map(({ path, bytes }) => ({ path, text: new TextDecoder().decode(bytes) })),
       });
@@ -407,7 +409,8 @@ function smtTraceFiles(model, vcd) {
 
 test("SMT bounded run passes SBY status through and generates the .sby", async () => {
   const python = fakePython({ sby: sbyStatus("PASS", 0) });
-  const runner = createFormalRunner({ startPython: python.startPython });
+  const factories = { workerFactory() {}, solverWorkerFactory() {}, wasiWorkerFactory() {} };
+  const runner = createFormalRunner({ startPython: python.startPython, ...factories });
   const outcome = await runner.run(smtInput());
   assert.equal(outcome.kind, "bounded-pass");
   assert.equal(outcome.status, "PASS");
@@ -415,6 +418,7 @@ test("SMT bounded run passes SBY status through and generates the .sby", async (
   assert.equal(outcome.solver, "yices2");
   assert.equal(python.calls.length, 1);
   assert.equal(python.calls[0].entrypoint, "sby");
+  for (const [name, factory] of Object.entries(factories)) assert.equal(python.calls[0][name], factory);
   assert.deepEqual(python.calls[0].args.slice(-1), ["formal.sby"]);
   const sbyFile = python.calls[0].files.find(({ path }) => path === "formal.sby");
   assert.match(sbyFile.text, /mode bmc/);

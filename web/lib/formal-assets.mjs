@@ -1,4 +1,5 @@
 import { createVerifiedAssetLoader, safePath } from "./verified-assets.mjs";
+import { FORMAL_SOLVERS } from "./formal-capabilities.mjs";
 
 const encoder = new TextEncoder();
 const MAX_PYTHON_BYTES = 64 * 1024 * 1024;
@@ -69,15 +70,34 @@ export function createFormalAssetLoader({
   formalURL = new URL("../formal/", import.meta.url),
   fetchImpl = (...args) => fetch(...args),
   synthLoader = null,
+  solverLoader = null,
 } = {}) {
   const synth = synthLoader ?? createVerifiedAssetLoader({
     baseURL: synthURL,
     cacheName: "gogo-fpga-synth-v1",
     label: "Synthesis asset",
   });
+  const solverAssets = solverLoader ?? createVerifiedAssetLoader({
+    baseURL: new URL("solvers/", formalURL), cacheName: "gogo-fpga-formal-solvers-v1", label: "Formal solver asset",
+  });
 
   let cachedYosys = null;
   let cachedPython = null;
+  const cachedSolvers = new Map();
+
+  async function loadSolver(id, signal) {
+    const solver = FORMAL_SOLVERS.find(entry => entry.id === id && entry.status === "probe-verified");
+    if (!solver) return null;
+    if (cachedSolvers.has(id)) return cachedSolvers.get(id);
+    const manifest = await solverAssets.loadManifest({ signal });
+    const cache = await solverAssets.openCache();
+    const wasm = await solverAssets.fetchVerifiedAsset(manifest, `${id}.wasm`, cache, { signal });
+    if (!(wasm instanceof Uint8Array) || !WebAssembly.validate(wasm)) throw new Error("Invalid formal solver WebAssembly");
+    const asset = { [solver.command]: { wasm, sha256: await sha256Hex(wasm), exitCodes: [0] } };
+    signal.throwIfAborted();
+    cachedSolvers.set(id, asset);
+    return asset;
+  }
 
   async function loadYosys(signal) {
     if (cachedYosys) return cachedYosys;
@@ -147,11 +167,12 @@ export function createFormalAssetLoader({
 
   async function loadAssets(includePython, options) {
     return loadWithin(async (signal) => {
-      const [yosys, python] = await Promise.all([
+      const [yosys, python, solvers] = await Promise.all([
         optional(loadYosys, signal),
         includePython ? optional(loadPythonBundle, signal) : null,
+        includePython ? optional(signal => loadSolver(options?.solver, signal), signal) : null,
       ]);
-      return { yosys, sources: python?.sources ?? [], manifest: python?.manifest ?? null, solvers: {} };
+      return { yosys, sources: python?.sources ?? [], manifest: python?.manifest ?? null, solvers: solvers ?? {} };
     }, options);
   }
   return Object.freeze({

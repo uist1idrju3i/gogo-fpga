@@ -317,9 +317,10 @@ export function createFormalRunner({
       return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-assets",
         message: "形式検証の Python/SBY 資材が読み込まれていません" });
     }
-    const solverAsset = input.assets.solvers[solver.smtbmc];
-    if (!Object.hasOwn(input.assets.solvers, solver.smtbmc) ||
+    const solverAsset = input.assets.solvers[solver.command];
+    if (!Object.hasOwn(input.assets.solvers, solver.command) ||
         !(solverAsset?.wasm instanceof Uint8Array) || solverAsset.wasm.length === 0 ||
+        !WebAssembly.validate(solverAsset.wasm) ||
         !/^[0-9a-f]{64}$/.test(solverAsset.sha256 ?? "")) {
       return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "missing-assets",
         message: `形式検証の ${solver.label} 資材が読み込まれていません` });
@@ -339,6 +340,9 @@ export function createFormalRunner({
       files,
       solvers: input.assets.solvers,
       yosys: input.assets.yosys,
+      workerFactory,
+      solverWorkerFactory,
+      wasiWorkerFactory,
       cwd: null,
       timeoutMs: Math.min(300_000, remaining),
       onStdout: (text) => stdoutParts.push(text),
@@ -420,6 +424,9 @@ export function createFormalRunner({
         files: [...selected, { path: "model.smt2", bytes: modelBytes }],
         solvers: input.assets.solvers,
         yosys: input.assets.yosys,
+        workerFactory,
+        solverWorkerFactory,
+        wasiWorkerFactory,
         cwd: null,
         timeoutMs: Math.min(300_000, remaining),
         onStdout: (text) => traceStdout.push(text),

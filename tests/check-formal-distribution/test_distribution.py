@@ -31,6 +31,10 @@ class FormalDistributionTest(unittest.TestCase):
             self.manifest["assets"].append({"path": path, "size": len(data), "sha256": DIST.sha256(data)})
         self.write_manifest()
         DIST.stage_licenses(self.directory)
+        self.python = self.directory / "formal/python"
+        self.python.parent.mkdir()
+        subprocess.run([sys.executable, str(ROOT / "scripts/build-formal-python.py"), "--out", str(self.python)],
+                       capture_output=True, check=True)
 
     def write_manifest(self):
         (self.synth / "manifest.json").write_text(json.dumps(self.manifest))
@@ -39,7 +43,8 @@ class FormalDistributionTest(unittest.TestCase):
         result = DIST.audit(self.directory)
         self.assertEqual(len(result["sat_assets"]), 2)
         self.assertEqual(len(result["licenses_checked"]), len(DIST.LICENSES))
-        self.assertEqual(result["python_and_solvers"], "not-audited")
+        self.assertGreater(len(result["python"]["assets"]), 0)
+        self.assertEqual(result["solvers"], "not-audited")
         self.assertEqual(result["browser_execution"], "not-audited")
 
     def test_200_html_and_malformed_json_cannot_pass(self):
@@ -115,6 +120,27 @@ class FormalDistributionTest(unittest.TestCase):
                 DIST.audit(self.directory)
             entry.clear()
             entry.update(saved)
+
+    def test_python_html_modified_source_and_metadata_or_missing_license_cannot_pass(self):
+        path = self.python / "manifest.json"
+        original = path.read_bytes()
+        manifest = json.loads(original)
+        changed_pin = json.loads(original)
+        changed_pin["pins"]["sby"] = "0" * 40
+        for data in (b"<html>app</html>", b'{"assets":', json.dumps(changed_pin).encode()):
+            path.write_bytes(data)
+            with self.assertRaises(ValueError):
+                DIST.audit(self.directory)
+        path.write_bytes(original)
+        source = self.python / manifest["assets"][0]["path"]
+        original_source = source.read_bytes()
+        source.write_bytes(b"changed")
+        with self.assertRaisesRegex(ValueError, "Python asset identity mismatch"):
+            DIST.audit(self.directory)
+        source.write_bytes(original_source)
+        (self.python / "licenses/sby-COPYING").unlink()
+        with self.assertRaises((OSError, ValueError)):
+            DIST.audit(self.directory)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Stage Yosys notices and audit the generated SAT assets over real local HTTP."""
+"""Stage formal notices and audit SAT and Python assets over real local HTTP."""
 
 import argparse
 from functools import partial
@@ -11,6 +11,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from threading import Thread
 from urllib.parse import quote
 from urllib.request import urlopen
@@ -30,6 +31,8 @@ LICENSES = {
     "symfpu-LICENSE-BSD": "vendor/yosys/libs/symfpu/LICENSE-BSD",
     "boost-LICENSE_1_0.txt": "licenses/boost-LICENSE_1_0.txt",
     "zstd-LICENSE": "vendor/zstd/LICENSE",
+    "sby-COPYING": "vendor/sby/COPYING",
+    "click-LICENSE.txt": "vendor/click/LICENSE.txt",
 }
 
 
@@ -47,7 +50,7 @@ def stage_licenses(directory, root=ROOT):
     destination.mkdir(parents=True, exist_ok=True)
     for name, source in LICENSES.items():
         original = root / source
-        require(original.is_file() and original.stat().st_size > 0, f"Missing SAT license: {source}")
+        require(original.is_file() and original.stat().st_size > 0, f"Missing formal license: {source}")
         shutil.copyfile(original, destination / name)
 
 
@@ -59,6 +62,32 @@ def get(base_url, path, limit):
         data = response.read(limit + 1)
         require(len(data) <= limit, f"Oversized HTTP response: {path}")
         return data, response.headers.get_content_type()
+
+
+def audit_python(base_url, root):
+    raw, mime = get(base_url, "formal/python/manifest.json", 256 * 1024)
+    require(mime == "application/json", "Python manifest Content-Type is not JSON")
+    manifest = json.loads(raw)
+    # Rebuild the expected identities from pinned git objects and current patches.
+    # Never derive trust solely from the manifest being served by the Web root.
+    spec = importlib.util.spec_from_file_location("formal_python_bundle", root / "scripts/build-formal-python.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    with tempfile.TemporaryDirectory() as temporary:
+        expected = Path(temporary) / "python"
+        module.build(root, expected)
+        reference = json.loads((expected / "manifest.json").read_text())
+    require(manifest == reference and type(manifest.get("format_version")) is int,
+            "Python manifest differs from pinned sources and patches")
+    checked = []
+    for entry in reference["assets"]:
+        path, size = entry["path"], entry["size"]
+        require(0 < size < LIMIT, f"Python asset exceeds Pages file limit: {path}")
+        data, _ = get(base_url, "formal/python/" + path, size)
+        require(len(data) == size and sha256(data) == entry["sha256"], f"Python asset identity mismatch: {path}")
+        checked.append(entry)
+    return {"assets": checked, "manifest_sha256": sha256(raw), "pins": reference["pins"],
+            "patches": reference["patches"]}
 
 
 def audit_url(base_url, root=ROOT):
@@ -106,9 +135,9 @@ def audit_url(base_url, root=ROOT):
     for name, source in LICENSES.items():
         original = (root / source).read_bytes()
         served, _ = get(base_url, "licenses/" + name, LIMIT - 1)
-        require(bool(original) and served == original, f"SAT license differs from source: {name}")
+        require(bool(original) and served == original, f"Formal license differs from source: {name}")
     return {"format_version": 1, "sat_assets": checked, "manifest_sha256": sha256(raw),
-            "licenses_checked": sorted(LICENSES), "python_and_solvers": "not-audited",
+            "licenses_checked": sorted(LICENSES), "python": audit_python(base_url, root), "solvers": "not-audited",
             "browser_execution": "not-audited"}
 
 

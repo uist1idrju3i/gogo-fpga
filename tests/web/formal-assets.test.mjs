@@ -281,3 +281,68 @@ test("a pre-aborted request performs no fetches", async () => {
   const loader = createFormalAssetLoader({ fetchImpl: () => assert.fail("unexpected fetch") });
   await assert.rejects(loader.loadPython({ signal: controller.signal }), { name: "AbortError" });
 });
+
+test("SAT never requests a solver, even when a solver selection is present", async () => {
+  const loader = createFormalAssetLoader({ synthLoader: fakeSynthLoader(yosysFiles),
+    solverLoader: { loadManifest: () => assert.fail("SAT requested solver assets") },
+    fetchImpl: () => assert.fail("SAT requested Python assets") });
+  assert.deepEqual((await loader.loadForEngine("yosys-sat", { solver: "yices2" })).solvers, {});
+});
+
+test("SMTBMC acquires only the selected solver and registers its executable name", async () => {
+  const files = { "yices2.wasm": new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0]),
+    "z3.wasm": new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0]) };
+  const requests = [];
+  const solver = fakeSynthLoader(files);
+  const loader = createFormalAssetLoader({ synthLoader: fakeSynthLoader(yosysFiles),
+    fetchImpl: async () => new Response("missing", { status: 404 }), solverLoader: { ...solver,
+      async fetchVerifiedAsset(manifest, path, cache, { signal }) {
+        assert.ok(signal instanceof AbortSignal);
+        requests.push(path);
+        return solver.fetchVerifiedAsset(manifest, path, cache);
+      } } });
+  const first = await loader.loadForEngine("smtbmc", { solver: "yices2" });
+  assert.deepEqual(Object.keys(first.solvers), ["yices-smt2"]);
+  assert.equal(first.solvers["yices-smt2"].sha256, await sha256Hex(files["yices2.wasm"]));
+  assert.equal((await loader.loadForEngine("smtbmc", { solver: "yices2" })).solvers, first.solvers);
+  assert.deepEqual(Object.keys((await loader.loadForEngine("smtbmc", { solver: "z3" })).solvers), ["z3"]);
+  assert.deepEqual(requests, ["yices2.wasm", "z3.wasm"]);
+});
+
+test("solver acquisition fails closed on missing or malformed assets and retries failures", async () => {
+  let attempts = 0;
+  const files = { "yices2.wasm": new Uint8Array([1]) };
+  const solver = fakeSynthLoader(files);
+  const loader = createFormalAssetLoader({ synthLoader: fakeSynthLoader(yosysFiles),
+    fetchImpl: async () => new Response("missing", { status: 404 }), solverLoader: { ...solver,
+      async loadManifest(options) { attempts++; return solver.loadManifest(options); } } });
+  for (const id of [undefined, "dummy", "bitwuzla", "../z3"]) {
+    assert.deepEqual((await loader.loadForEngine("smtbmc", { solver: id })).solvers, {});
+  }
+  assert.equal(attempts, 0);
+  for (const id of ["z3", "yices2"]) {
+    assert.deepEqual((await loader.loadForEngine("smtbmc", { solver: id })).solvers, {});
+  }
+  files["yices2.wasm"] = new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0]);
+  assert.ok((await loader.loadForEngine("smtbmc", { solver: "yices2" })).solvers["yices-smt2"]);
+  assert.equal(attempts, 3);
+});
+
+test("cancelled solver acquisition cannot populate the cache after a successful retry", async () => {
+  let release, attempts = 0;
+  const solver = fakeSynthLoader({ "yices2.wasm": new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0]) });
+  const loader = createFormalAssetLoader({ synthLoader: fakeSynthLoader(yosysFiles),
+    fetchImpl: async () => new Response("missing", { status: 404 }), solverLoader: { ...solver,
+      async loadManifest(options) {
+        if (++attempts === 1) await new Promise(resolve => { release = resolve; });
+        return solver.loadManifest(options);
+      } } });
+  const controller = new AbortController();
+  const pending = loader.loadForEngine("smtbmc", { solver: "yices2", signal: controller.signal });
+  controller.abort();
+  await assert.rejects(pending, { name: "AbortError" });
+  const success = await loader.loadForEngine("smtbmc", { solver: "yices2" });
+  release();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal((await loader.loadForEngine("smtbmc", { solver: "yices2" })).solvers, success.solvers);
+});

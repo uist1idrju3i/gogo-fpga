@@ -129,7 +129,7 @@ jobs:
         run: |
           git submodule update --init --depth 1 -- \
             vendor/emsdk vendor/iverilog vendor/libftdi vendor/libusb vendor/openFPGALoader \
-            vendor/yomiyasu vendor/zlib vendor/zstd vendor/yosys vendor/nextpnr vendor/surfer
+            vendor/yomiyasu vendor/zlib vendor/zstd vendor/yosys vendor/nextpnr vendor/surfer vendor/sby vendor/click
           git submodule update --init --depth 1 -- third_party/
           git -C third_party/vexriscv submodule update --init --depth 1 -- pythondata_cpu_vexriscv/verilog/ext/VexRiscv
           git -C vendor/yosys submodule update --init --depth 1 -- \
@@ -308,8 +308,21 @@ jobs:
       - name: Web アプリを組み立て
         run: scripts/build-web.sh
 
-      - name: SAT配信監査の負の対照
+      - name: SATとPython配信監査の負の対照
         run: python3 -m unittest discover -s tests/check-formal-distribution -v
+
+      - id: formal-product
+        name: 配信したSATの実worker実行とPythonの初期化を検査
+        run: node --test --test-concurrency=1 tests/synth/formal-product.test.mjs
+
+      - name: 形式検証の配信資材と実workerの検査記録を保存
+        if: always() && steps.formal-product.outcome != 'skipped'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ci-formal-product-${{ github.run_id }}
+          path: build/formal-product-results-*/
+          if-no-files-found: error
+          retention-days: 14
 
       - id: fixture-cache-restore-key
         name: fixtures cache key

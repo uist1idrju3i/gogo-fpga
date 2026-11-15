@@ -44,16 +44,22 @@ def build(root, output):
     patches = {}
     for name in ("yosys-smtio-process.patch", "sby-process.patch"):
         source = root / "patches" / name
-        subprocess.run(["patch", "--batch", "--fuzz=0", "--no-backup-if-mismatch", "-p1", "-i", str(source)], cwd=output, check=True)
+        subprocess.run(["patch", "--batch", "--fuzz=0", "--no-backup-if-mismatch", "-p1", "-i", str(source)],
+                       cwd=output, capture_output=True, check=True)
         patches[name] = hashlib.sha256(source.read_bytes()).hexdigest()
     for name in ("formal_process.py", "formal_trace.py"):
         adapter = root / "web" / name
         (output / name).write_bytes(adapter.read_bytes())
     files = sorted(p for p in output.rglob("*") if p.is_file())
+    if not 0 < len(files) <= 256 or sum(p.stat().st_size for p in files) > 32 * 1024 * 1024:
+        raise ValueError("Formal Python bundle exceeds worker limits")
     manifest = {"format_version": 1, "pins": pins, "patch_sha256": hashlib.sha256(patch.read_bytes()).hexdigest(), "patches": patches,
         "origins": origins, "assets": [{"path": p.relative_to(output).as_posix(), "size": p.stat().st_size,
         "sha256": hashlib.sha256(p.read_bytes()).hexdigest()} for p in files]}
-    (output / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    encoded = (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    if len(encoded) > 256 * 1024:
+        raise ValueError("Formal Python manifest exceeds loader limits")
+    (output / "manifest.json").write_bytes(encoded)
 
 
 if __name__ == "__main__":
