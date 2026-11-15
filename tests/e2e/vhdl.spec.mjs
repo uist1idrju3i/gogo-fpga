@@ -98,6 +98,7 @@ for (const board of BOARDS) {
 
 test("VHDL formal sources remain selectable after saving and reloading", async ({ page }) => {
   await createProject(page, BOARDS[0]);
+  await page.locator("#right-tab-verify").click();
   const source = page.locator('#formal-files input[value="src/top.vhd"]');
   await expect(source).toBeChecked();
   await expect(page.locator("#formal-files-note")).toContainText("HDL ファイル");
@@ -105,10 +106,12 @@ test("VHDL formal sources remain selectable after saving and reloading", async (
   await expect(source).not.toBeChecked();
   await expect(page.locator("#project-status")).toHaveText("保存しました。");
   await page.reload();
+  await page.locator("#right-tab-verify").click();
   await expect(source).not.toBeChecked();
   await source.check();
   await expect(page.locator("#project-status")).toHaveText("保存しました。");
   await page.reload();
+  await page.locator("#right-tab-verify").click();
   await expect(source).toBeChecked();
   await expect(page.locator("#formal-button")).toBeEnabled();
 });
