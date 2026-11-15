@@ -308,6 +308,9 @@ jobs:
       - name: Web アプリを組み立て
         run: scripts/build-web.sh
 
+      - name: SAT配信監査の負の対照
+        run: python3 -m unittest discover -s tests/check-formal-distribution -v
+
       - id: fixture-cache-restore-key
         name: fixtures cache key
         env:

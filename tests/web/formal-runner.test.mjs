@@ -331,6 +331,18 @@ function smtInput(overrides = {}) {
   return input({ project: smtProject(), assets: smtAssets(), ...overrides });
 }
 
+test("SMT rejects an absent or malformed selected solver before starting Python", async () => {
+  for (const solvers of [{}, { z3: smtAssets().solvers.yices }, { yices: {} },
+    { yices: { wasm: new Uint8Array(), sha256: "a".repeat(64) } },
+    { yices: { wasm: new Uint8Array([1]), sha256: "invalid" } }]) {
+    const runner = createFormalRunner({ startPython: () => assert.fail("Python started without solver assets") });
+    const outcome = await runner.run(smtInput({ assets: { ...smtAssets(), solvers } }));
+    assert.equal(outcome.kind, "tool-error");
+    assert.equal(outcome.status, "missing-assets");
+    assert.match(outcome.message, /Yices2/);
+  }
+});
+
 function fakePython({ sby, trace, hang = false } = {}) {
   const calls = [];
   return {
