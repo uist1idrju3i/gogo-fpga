@@ -106,6 +106,44 @@ CI由来の配信資材と現行Webソースを配置し、artifact metadataを�
 `formal-product-integration-evidence.tar.gz` にも保存した。
 書庫のSHA-256は `d24341c12a972a7d1bd101a1d1abf88e820e12774a8d2a20ac9fbb2dc328cdef`。
 
+## レビュー修正後の再認定
+
+初回の正式反復後、VHDLだけのプロジェクトで画面の対象一覧が空になる問題と、
+`TOP` や `ToP` を指定すると下位化後の `top` を見つけられない問題をレビューで検出した。
+画面の対象を `.v`、`.vh`、`.vhd`、`.vhdl` とし、選択の保存・再読込を検査するE2Eを追加した。
+GHDL下位化後は、後続のSAT・SMTBMCへ渡すtopとclockを小文字へそろえる。
+元のプロジェクトと入力の設定は変更しない。
+
+大小文字の回帰4件は修正前にすべて `Missing formal top module` で失敗し、
+修正後のformal-runner単体は21件、全Web単体は451件が成功した。
+修正前のログとhashを[失敗・予備記録](S15-formal-product-integration-failures.csv)へ追記した。
+画面確認はこの修正のため、アプリ操作前に中断した。
+
+修正commit `1207b400264a8d85e7e45c59bb8814743cd73bd4` の清浄な作業ツリーで、
+同じ43条件を各5回、計215判定として再実行した。
+今回は実GHDLを使うVHDL条件も `formal.top: "ToP"` と大文字のclockで実行した。
+[修正後の生CSV](S15-formal-product-integration-reviewed.csv)は初回と別に保存し、不一致は0件だった。
+各回の製品回帰39件、Verilog反例25/25の独立再実行、VHDL原文再実行70/70の利用不可分類も成功した。
+ホスト、Node、配信binary、SDKとビルド設定は初回と同じで、実装と試験器のhashは再記録した。
+
+```sh
+node scripts/qualify-yices-product.mjs --scope all --web build/formal-product-web --out build/formal-product-integration-reviewed --repeats 5
+```
+
+| 条件（秒） | 最小 | 中央値 | 最大 |
+|---|---:|---:|---:|
+| SAT identity | 0.948 | 0.976 | 1.111 |
+| SBY bmc-violation | 6.028 | 6.050 | 7.142 |
+| VHDL depth-n | 4.379 | 4.429 | 5.296 |
+| 製品回帰1回の総時間 | 120.875 | 121.927 | 130.816 |
+
+時間の範囲は初回と同じで、solver単体の比較ではない。
+5回分のログ、metadata、SQLite、VCD、入力、大小文字の修正前後とWeb単体のログを、
+実施セッションの添付 `formal-product-integration-reviewed-evidence.tar.gz` に保存した。
+書庫のSHA-256は `1b958c1ae5e55aca6dafea00fa4e609abe0da7362e76e167986d94b5a60bcdf1`、
+修正後CSVは `564b4ebf0fd168ea287652a115d0b67aa12cde39461431b6814936c49dd6e3d6`。
+画面確認は修正後の実装と自動回帰が完了してから再開する。
+
 ## 未確認の点
 
 Nodeでの製品経路の確認と、ブラウザーの操作・画面の目視・実機を区別する。
