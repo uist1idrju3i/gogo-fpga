@@ -96,6 +96,23 @@ for (const board of BOARDS) {
   });
 }
 
+test("VHDL formal sources remain selectable after saving and reloading", async ({ page }) => {
+  await createProject(page, BOARDS[0]);
+  const source = page.locator('#formal-files input[value="src/top.vhd"]');
+  await expect(source).toBeChecked();
+  await expect(page.locator("#formal-files-note")).toContainText("HDL ファイル");
+  await source.uncheck();
+  await expect(source).not.toBeChecked();
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.reload();
+  await expect(source).not.toBeChecked();
+  await source.check();
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.reload();
+  await expect(source).toBeChecked();
+  await expect(page.locator("#formal-button")).toBeEnabled();
+});
+
 test("VHDL-2019 named return builds with the selected standard", async ({ page }) => {
   const projectName = await createProject(page, BOARDS[0]);
   await page.locator("#vhdl-standard").selectOption("2019");

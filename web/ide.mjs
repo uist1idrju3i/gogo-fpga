@@ -421,7 +421,7 @@ export function initializeIde({
     simulationTop.value = project.simulation.top;
     simulationTimeLimit.value = String(project.simulation.timeLimitSeconds);
     simulationFiles.replaceChildren();
-    const candidates = project.files.filter(({ path }) => !isLibraryPath(path) && /\.(?:v|vh)$/i.test(path));
+    const candidates = project.files.filter(({ path }) => !isLibraryPath(path) && /\.(?:v|vh|vhd|vhdl)$/i.test(path));
     for (const { path } of candidates) {
       const label = document.createElement("label");
       label.className = "simulation-file";
@@ -442,7 +442,7 @@ export function initializeIde({
     }
     if (candidates.length === 0) {
       const message = document.createElement("p");
-      message.textContent = "Verilog ファイルがありません。";
+      message.textContent = "Verilog または VHDL ファイルがありません。";
       simulationFiles.append(message);
     }
   }
@@ -557,7 +557,7 @@ export function initializeIde({
       message.textContent = "Verilog ファイルがありません。";
       formalFiles.append(message);
     }
-    formalFilesNote.textContent = `対象は選択した ${formal.files?.length ?? candidates.length} 件の Verilog ファイルです。*_tb.v は既定で対象外です。`;
+    formalFilesNote.textContent = `対象は選択した ${formal.files?.length ?? candidates.length} 件の HDL ファイルです。*_tb.v は既定で対象外です。`;
   }
 
   function updateFormalControls() {
