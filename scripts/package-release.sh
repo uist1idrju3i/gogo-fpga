@@ -312,7 +312,7 @@ while IFS=$'\t' read -r metadata path; do
   submodule_shas["$path"]="$sha"
   mkdir -p "$source_root/$path"
   git -C "$root/$path" archive --format=tar "$sha" | tar -xf - -C "$source_root/$path"
-  if [[ "$path" == third_party/* ]]; then
+  if [[ "$path" == third_party/* || "$path" == vendor/yices2 ]]; then
     printf '%s\n' "$sha" > "$source_root/$path/.gitcommit"
   fi
 done <<< "$submodule_lines"
