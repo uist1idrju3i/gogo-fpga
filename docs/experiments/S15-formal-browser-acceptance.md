@@ -107,12 +107,17 @@ python3 public_html/serve.py --port 8123
 記録のrevisionは再実行時のcheckoutから取得し、対話操作が失敗した場合の終了コードは1とする。
 製品コードと各条件の操作・判定は変更していない。
 
-リポジトリのrootで、既存serverに対する対象2件を実行する。
-出力先は未使用のものに変える。`FORMAL_BROWSER_BASE_URL` を省略すると8123番を使う。
+リポジトリのrootで、[起動スクリプト](../../tests/browser-acceptance/run-targeted.mjs)から
+既存serverに対する対象2件を実行する。出力先は未使用のものに変える。
+Playwrightが出力を消去する前に起動側で出力先を確保し、設定再読込時には作り直さない。
+初版の追跡設定はworkerでの再評価時に既存出力を拒否したため、この方式へ訂正した。
+旧設定を別processで2回読むと2回目に `EEXIST` となることを再現し、
+訂正後はブラウザーを使わない実Playwright workerで設定を再読込できた。
+同じ出力先で起動を繰り返した場合は、Playwrightの開始前に拒否し、保存済み証拠を保持した。
+`--base-url` を省略すると8123番を使う。`--list` で対象2件だけを表示できる。
 
 ```sh
-FORMAL_BROWSER_OUT=build/browser-acceptance-targeted \
-  npx playwright test --config tests/browser-acceptance/targeted.config.mjs
+node tests/browser-acceptance/run-targeted.mjs --out build/browser-acceptance-targeted
 ```
 
 対話的な補助は、別々の出力先で次のように起動する。

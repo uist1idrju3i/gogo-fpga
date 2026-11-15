@@ -1,8 +1,7 @@
 import { defineConfig } from "@playwright/test";
-import { prepareEvidence } from "./evidence.mjs";
-const { out, baseURL } = prepareEvidence(
-  process.env.FORMAL_BROWSER_OUT, process.env.FORMAL_BROWSER_BASE_URL,
-);
+const out = process.env.FORMAL_BROWSER_OUT;
+const baseURL = process.env.FORMAL_BROWSER_BASE_URL;
+if (!out || !baseURL) throw new Error("run-targeted.mjsから起動してください。");
 export default defineConfig({
   testDir: "../../tests/e2e",
   testMatch: ["vhdl.spec.mjs", "simulation.spec.mjs"],
