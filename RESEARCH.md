@@ -32,7 +32,7 @@ vendor submodule の commit は次のとおりです。pin checker がこの表�
 | zstd | v1.5.7 | `f8745da6ff1ad1e7bab384bd1f9d742439278e99` | `https://github.com/facebook/zstd.git` |
 | xz-embedded | v20240322 | `62d5603b5114c5aa8bb5f6bb461efbe0e3b51891` | `https://github.com/tukaani-project/xz-embedded.git` |
 | emsdk | 6.0.13 | `35659964bc2762fffec0d257997fb61475f765b7` | `https://github.com/emscripten-core/emsdk.git` |
-| yomiyasu | 未確認 | `552c12c472ddfb79e2ee7a15219847782686a945` | `https://github.com/nanaism/yomiyasu.git` |
+| yomiyasu | 3.1.0 | `db78b9bc5e868549b517a037df7a4d1c93edac23` | `https://github.com/nanaism/yomiyasu.git` |
 | yosys | v0.70 | `28ba3cb926fe376fa05ebfc1b921747d011d4557` | `https://github.com/YosysHQ/yosys.git` |
 | nextpnr | nextpnr-0.11.1 | `62e659ed6748e9f60b2a4aa25dd4fe79a9605881` | `https://github.com/YosysHQ/nextpnr.git` |
 | ghdl | v6.0.0 | `e589c698c351369ac5bcfe7abe1f1152ac5d4727` | `https://github.com/ghdl/ghdl.git` |
@@ -191,6 +191,7 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 | [DeepWikiの構成と検査](docs/research/deepwiki.md) | 日本語のページ階層、実装・調査の参照方針、安全上の制約と設定の上限検査 |
 | [UX契約と状態遷移](docs/ux/README.md) | DSLの生成手順、design_flowとUIの接続、U2の主操作・tab・安全側の判断、画面確認。実機確認は未実施 |
 | [依存の版の検出と負の対照](docs/research/dependency-version-detection.md) | GHDLの公開安定タグの選択、Rust channel TOMLの構造化読取り、欠落と不正入力の扱い |
+| [yomiyasu](docs/research/yomiyasu.md) | 更新と監視 |
 | [書き込み部の移植とビルド選定](docs/research/flasher-integration.md) | 移植元の原典、JSPIとWebUSB、S7の選定とhash照合、asyncifyの失敗と未確認範囲 |
 | [GHDL WASM の調査と合成の検証](docs/research/ghdl-wasm.md) | Ada API、VHDL の合成、最適化と配布・ライセンスの記録 |
 | [リポジトリー統合と配信の確認事項](docs/research/repository-consolidation.md) | 正規リポジトリー、旧参照の例外、第三者license、Cloudflareの記録と未確認の設定 |
