@@ -201,7 +201,8 @@ def audit(directory, evidence_root=None, git_repo=ROOT):
                 data = hashed(build / "source" / file, dependency["diff_files"][relative])
                 require(data == upstream_bytes(file), "Upstream Meson diff differs")
                 commands = [command for command in info["commands"] if command["label"] == f"{name}-upstream-diff-{number}"]
-                require(len(commands) == 1 and commands[0]["argv"] == ["patch", "--batch", "--fuzz=0", "-p1", "-i", str(original_build / "source" / file)], "Missing upstream Meson diff application")
+                require(len(commands) == 1 and commands[0]["argv"] == ["patch", "--batch", "--fuzz=0", "-p1", "-i", str(original_build / "source" / file)]
+                        and commands[0].get("cwd") == str(original_build / "source/subprojects" / target), "Missing upstream Meson diff application")
         hashed(build / "meson-machine.ini", info["meson_machine_sha256"])
         if index:
             require(info["bitwuzla_native_rss_available"] is False and info["cadical_native_rss_available"] is False, "RSS boundary missing")

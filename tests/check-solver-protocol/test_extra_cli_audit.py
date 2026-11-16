@@ -116,6 +116,7 @@ class ExtraCliAuditTest(unittest.TestCase):
                     info["dependencies"][name]["diff_files"] = {"cadical/fix.patch": AUDIT.sha(data)}
                     self.write(directory / "cadical-upstream-diff-0.log", b"patched\n")
                     info["commands"].append({"label": "cadical-upstream-diff-0", "exit_status": 0,
+                        "cwd": str(directory / "source/subprojects/cadical"),
                         "log_sha256": AUDIT.sha(b"patched\n"), "argv": ["patch", "--batch", "--fuzz=0", "-p1", "-i", str(directory / "source" / file)]})
             payload = (b"\x7fELF" if index == 0 else b"\0asm\x01\0\0\0") + f"binary-{index}".encode()
             self.write(directory / "objects/src/main/bitwuzla", payload)
@@ -299,6 +300,7 @@ class ExtraCliAuditTest(unittest.TestCase):
             lambda i: i["meson_dependencies"][0].update(compile_args=["-I/usr/include"]),
             lambda i: i["meson_dependencies"][0].update(compile_args=["-isystem/usr/include"]),
             lambda i: i["dependencies"]["cadical"].update(diff_files={}),
+            lambda i: i["commands"][1].update(cwd=str(self.root / "build/binary-0/source/subprojects/symfpu")),
             lambda i: i["commands"].pop(),
             lambda i: i["gmp"].update(version="99.0"),
             lambda i: i["gmp"].update(library_sha256="wrong"),
