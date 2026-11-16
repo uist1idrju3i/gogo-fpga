@@ -60,6 +60,8 @@ branchの先端は正式なreleaseと同じ意味ではありません。Issue�
 
 更新なしのverilog-axis、verilog-uart、libfpga、SERV、PicoRV32、Hazard3、VexRiscv、CV32E40P、FemtoRV、OSVVM、verilog-axi、verilog-ethernet、Taxiは据え置きます。新しいSystemVerilog、CPU生成器、VHDLシミュレーターの対応は今回の更新に含めません。
 
+NEORV32のCPU単体では`ifence_o/dfence_o`が`fence_r_o/fence_w_o/fence_x_o`と完了入力`fenced_i`へ変わりました。試験用のbridgeはcacheとwrite queueを持たないため、上流の[`neorv32_core_complex.vhd`](https://github.com/stnolting/neorv32/blob/87c8c98bc34e/rtl/core/neorv32_core_complex.vhd)のcacheなし構成と同じく完了入力を`1`へ接続します。ZIPへ収録する試験ROMの先頭に`fence`と`fence.i`を加え、RAMの書き込み・読み戻しとGPIOの実行まで検査します。cacheを持つ利用者の設計へ、この固定入力を流用する判断はしていません。
+
 ## ライセンス
 
 zlib、emsdk、Yosys、ABC、xz-embedded、Click、Z3、Bitwuzlaと更新する外部HDLのライセンス原文を、旧commitと候補commitで照合しました。ライセンスの種類を変更する差分は確認していません。Colibriはrootの`LICENSE`だけで判断せず、`LICENSES/`のCERN-OHL-W-2.0、Apache-2.0、CC-BY-SA-4.0と、配布する各ソースのSPDX表記を確認します。

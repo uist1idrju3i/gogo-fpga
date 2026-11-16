@@ -127,6 +127,12 @@ test("pinned CPU programs execute RAM and GPIO checks after portable ZIP import"
         for (const name of ["memory.v", "bus.vh", "program.hex"]) {
           template.files.set(`src/${name}`, readFileSync(path.join(fixtureRoot, name)));
         }
+        if (id === "neorv32") {
+          // Execute fence and fence.i first; relative branches in the existing loop stay valid.
+          template.files.set("src/program.hex", Buffer.concat([
+            Buffer.from("0ff0000f\n0000100f\n"), template.files.get("src/program.hex"),
+          ]));
+        }
         template.project.files = [...template.files.keys()].map((path) => ({ path }));
         const installed = await changeProjectLibraries(template.project, template.files, { add: added });
         const zip = await exportProjectZip(installed.project, installed.files);
@@ -158,8 +164,9 @@ test("pinned CPU programs execute RAM and GPIO checks after portable ZIP import"
             const rom = files.find((file) => file.path === "src/program.hex");
             assert.ok(rom);
             const words = new TextDecoder().decode(rom.content).trim().split("\n");
-            assert.equal(words[5], "0551c313");
-            words[5] = "0541c313";
+            const operation = 5 + (id === "neorv32" ? 2 : 0);
+            assert.equal(words[operation], "0551c313");
+            words[operation] = "0541c313";
             rom.content = new TextEncoder().encode(`${words.join("\n")}\n`);
           }
           const workdir = path.join(directory, id, control.name);
