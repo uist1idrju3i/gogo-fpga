@@ -31,15 +31,17 @@ function assertProjectName(name) {
   }
 }
 
+const initializedMemoryWorkspaces = new WeakSet();
+
 export function createMemoryStore({ records = new Map() } = {}) {
   if (!(records instanceof Map)) {
     throw new TypeError("records must be a Map");
   }
-  let initialized = records.size > 0;
+  if (records.size > 0) initializedMemoryWorkspaces.add(records);
 
   return {
     async hasWorkspace() {
-      return initialized;
+      return initializedMemoryWorkspaces.has(records);
     },
 
     async listProjects() {
@@ -60,7 +62,7 @@ export function createMemoryStore({ records = new Map() } = {}) {
     async save(project, files) {
       const record = await createProjectSnapshot(project, files);
       records.set(record.project.name, { projectJson: record.projectJson, files: record.files });
-      initialized = true;
+      initializedMemoryWorkspaces.add(records);
     },
 
     async remove(name) {

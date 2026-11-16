@@ -231,6 +231,21 @@ test("a failed first OPFS save does not mark the workspace initialized", async (
   assert.equal(await reloaded.hasWorkspace(), true);
 });
 
+test("memory stores sharing records preserve the empty workspace after reconstruction", async () => {
+  const records = new Map();
+  const first = createMemoryStore({ records });
+  const observer = createMemoryStore({ records });
+  const { project, files } = await createLibraryProject();
+  assert.equal(await observer.hasWorkspace(), false);
+  await first.save(project, files);
+  await first.remove(project.name);
+  assert.equal(await observer.hasWorkspace(), true);
+  const reloaded = createMemoryStore({ records });
+  assert.equal(await reloaded.hasWorkspace(), true);
+  assert.deepEqual(await reloaded.listProjects(), []);
+  assert.equal(await createMemoryStore().hasWorkspace(), false);
+});
+
 test("removing a project preserves its neighbours and rejects invalid names", async () => {
   const mock = memoryStorage();
   const { project, files } = await createLibraryProject();
