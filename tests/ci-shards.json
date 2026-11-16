@@ -39,6 +39,7 @@
       "web-flasher.spec.mjs",
       "ai-chat.spec.mjs",
       "ide.spec.mjs",
+      "project-deletion.spec.mjs",
       "publication-info.spec.mjs",
       "s5-synthesis.spec.mjs"
     ]

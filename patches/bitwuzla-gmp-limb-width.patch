@@ -3,8 +3,8 @@
 @@ -123,1 +123,1 @@
 -      uint64_t hi = (limb >> 32);
 +      uint64_t hi = (static_cast<uint64_t>(limb) >> 32);
---- a/src/solver/fp/floating_point.cpp
-+++ b/src/solver/fp/floating_point.cpp
-@@ -450,1 +450,1 @@
+--- a/src/fp/floating_point.cpp
++++ b/src/fp/floating_point.cpp
+@@ -457,1 +457,1 @@
 -      uint64_t hi = (limb >> 32);
 +      uint64_t hi = (static_cast<uint64_t>(limb) >> 32);

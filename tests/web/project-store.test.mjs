@@ -81,6 +81,9 @@ function memoryStorage() {
     return {
       kind: "directory", children,
       async getDirectoryHandle(name, { create = false } = {}) {
+        if (children.has(name) && children.get(name).kind !== "directory") {
+          throw new DOMException("Not a directory", "TypeMismatchError");
+        }
         if (!children.has(name)) {
           if (!create) throw missing();
           children.set(name, directory());
@@ -90,6 +93,9 @@ function memoryStorage() {
         return child;
       },
       async getFileHandle(name, { create = false } = {}) {
+        if (children.has(name) && children.get(name).kind !== "file") {
+          throw new DOMException("Not a file", "TypeMismatchError");
+        }
         if (!children.has(name)) {
           if (!create) throw missing();
           const file = {
@@ -196,4 +202,93 @@ test("asynchronous snapshot hashing does not expose subsequent caller edits", as
   const loaded = await store.load(project.name);
   assert.equal(loaded.project.top, "top");
   assert.notDeepEqual(loaded.files.get("libraries/primary/sources/LICENSE"), files.get("libraries/primary/sources/LICENSE"));
+});
+
+test("deleting the last project preserves an initialized empty workspace across OPFS reloads", async () => {
+  const mock = memoryStorage();
+  const opfs = createOpfsStore(mock.storage);
+  const { project, files } = await createLibraryProject();
+  for (const store of [createMemoryStore(), opfs]) {
+    assert.equal(await store.hasWorkspace(), false);
+    await store.save(project, files);
+    assert.equal(await store.hasWorkspace(), true);
+    assert.equal(await store.remove(project.name), true);
+    assert.deepEqual(await store.listProjects(), []);
+    assert.equal(await store.hasWorkspace(), true);
+    assert.equal(await store.remove(project.name), false);
+    await assert.rejects(store.load(project.name));
+  }
+  assert.equal(await createOpfsStore(mock.storage).hasWorkspace(), true);
+  assert.deepEqual(await createOpfsStore(mock.storage).listProjects(), []);
+});
+
+test("a failed first OPFS save does not mark the workspace initialized", async () => {
+  const mock = memoryStorage();
+  const { project, files } = await createLibraryProject();
+  mock.state.failClose = true;
+  await assert.rejects(createOpfsStore(mock.storage).save(project, files), /保存できません/);
+  const reloaded = createOpfsStore(mock.storage);
+  assert.deepEqual(await reloaded.listProjects(), []);
+  assert.equal(await reloaded.hasWorkspace(), false);
+  assert.equal(await reloaded.remove("missing"), false);
+  assert.equal(await reloaded.hasWorkspace(), false);
+  mock.state.failClose = false;
+  await reloaded.save(project, files);
+  assert.equal(await reloaded.hasWorkspace(), true);
+});
+
+test("memory stores sharing records preserve the empty workspace after reconstruction", async () => {
+  const records = new Map();
+  const first = createMemoryStore({ records });
+  const observer = createMemoryStore({ records });
+  const { project, files } = await createLibraryProject();
+  assert.equal(await observer.hasWorkspace(), false);
+  await first.save(project, files);
+  await first.remove(project.name);
+  assert.equal(await observer.hasWorkspace(), true);
+  const reloaded = createMemoryStore({ records });
+  assert.equal(await reloaded.hasWorkspace(), true);
+  assert.deepEqual(await reloaded.listProjects(), []);
+  assert.equal(await createMemoryStore().hasWorkspace(), false);
+});
+
+test("workspace metadata does not reserve any valid project names", async () => {
+  const mock = memoryStorage();
+  const { project, files } = await createLibraryProject();
+  for (const name of [".initialized", ".workspace-initialized"]) {
+    const store = createOpfsStore(mock.storage);
+    await store.save({ ...project, name }, files);
+    assert.deepEqual(await store.listProjects(), [name]);
+    assert.equal(await store.remove(name), true);
+    assert.equal(await createOpfsStore(mock.storage).hasWorkspace(), true);
+    await createOpfsStore(mock.storage).save({ ...project, name }, files);
+    assert.equal((await store.load(name)).project.name, name);
+    await store.remove(name);
+  }
+});
+
+test("removing a project preserves its neighbours and rejects invalid names", async () => {
+  const mock = memoryStorage();
+  const { project, files } = await createLibraryProject();
+  for (const store of [createMemoryStore(), createOpfsStore(mock.storage)]) {
+    await store.save(project, files);
+    await store.save({ ...project, name: "keep" }, files);
+    await assert.rejects(store.remove("../keep"));
+    await store.remove(project.name);
+    assert.deepEqual(await store.listProjects(), ["keep"]);
+    assert.equal((await store.load("keep")).project.name, "keep");
+  }
+});
+
+test("OPFS workspace checks and deletion fail closed on storage errors", async () => {
+  const mock = memoryStorage();
+  const store = createOpfsStore(mock.storage);
+  const { project, files } = await createLibraryProject();
+  await store.save(project, files);
+  const projects = await mock.root.getDirectoryHandle("projects");
+  projects.removeEntry = async () => { throw new DOMException("Denied", "NotAllowedError"); };
+  await assert.rejects(store.remove(project.name), /削除できません/);
+  assert.equal((await store.load(project.name)).project.name, project.name);
+  const denied = createOpfsStore({ async getDirectory() { throw new DOMException("Denied", "NotAllowedError"); } });
+  await assert.rejects(denied.hasWorkspace(), /保存先を確認できません/);
 });

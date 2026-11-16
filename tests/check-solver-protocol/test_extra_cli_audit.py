@@ -88,7 +88,7 @@ class ExtraCliAuditTest(unittest.TestCase):
             for name in ("cadical", "symfpu"):
                 archive = self.archive({f"{name}/LICENSE" if name == "cadical" else "LICENSE": b"license fixture\n"}, "d" * 40 if name == "symfpu" else None)
                 if name == "cadical":
-                    wrap = {"directory": name, "source_url": "https://fixture.test/cadical.tar.gz", "source_filename": "cadical.tar.gz", "source_hash": AUDIT.sha(archive), "patch_directory": name}
+                    wrap = {"directory": name, "source_url": "https://fixture.test/cadical.tar.gz", "source_filename": "cadical.tar.gz", "source_hash": AUDIT.sha(archive), "patch_directory": name, "diff_files": "cadical/fix.patch"}
                     section = "wrap-file"
                 else:
                     wrap = {"url": "https://fixture.test/symfpu.git", "revision": "d" * 40, "depth": "1", "patch_directory": name}
@@ -106,6 +106,18 @@ class ExtraCliAuditTest(unittest.TestCase):
                 self.write(directory / f"source/subprojects/{name}/meson.build", b"overlay fixture\n")
                 self.write(directory / f"source/subprojects/packagefiles/{name}/meson.build", b"overlay fixture\n")
                 self.committed[f"subprojects/packagefiles/{name}/meson.build"] = b"overlay fixture\n"
+                if name == "cadical":
+                    data = b"upstream diff fixture\n"
+                    file = "subprojects/packagefiles/cadical/fix.patch"
+                    self.committed[file] = data
+                    self.write(directory / "source" / file, data)
+                    self.write(directory / "source/subprojects/cadical/fix.patch", data)
+                    info["dependencies"][name]["overlay"]["fix.patch"] = AUDIT.sha(data)
+                    info["dependencies"][name]["diff_files"] = {"cadical/fix.patch": AUDIT.sha(data)}
+                    self.write(directory / "cadical-upstream-diff-0.log", b"patched\n")
+                    info["commands"].append({"label": "cadical-upstream-diff-0", "exit_status": 0,
+                        "cwd": str(directory / "source/subprojects/cadical"),
+                        "log_sha256": AUDIT.sha(b"patched\n"), "argv": ["patch", "--batch", "--fuzz=0", "-p1", "-i", str(directory / "source" / file)]})
             payload = (b"\x7fELF" if index == 0 else b"\0asm\x01\0\0\0") + f"binary-{index}".encode()
             self.write(directory / "objects/src/main/bitwuzla", payload)
             info["artifact"] = {"path": "objects/src/main/bitwuzla", "bytes": len(payload), "sha256": AUDIT.sha(payload)}
@@ -286,6 +298,10 @@ class ExtraCliAuditTest(unittest.TestCase):
             lambda i: i["commands"][0]["argv"].remove("--wrap-mode=nodownload"),
             lambda i: i["patches"].append(i["patches"][0]),
             lambda i: i["meson_dependencies"][0].update(compile_args=["-I/usr/include"]),
+            lambda i: i["meson_dependencies"][0].update(compile_args=["-isystem/usr/include"]),
+            lambda i: i["dependencies"]["cadical"].update(diff_files={}),
+            lambda i: i["commands"][1].update(cwd=str(self.root / "build/binary-0/source/subprojects/symfpu")),
+            lambda i: i["commands"].pop(),
             lambda i: i["gmp"].update(version="99.0"),
             lambda i: i["gmp"].update(library_sha256="wrong"),
             lambda i: i["wraps"]["symfpu"].update(revision="e" * 40),
@@ -297,6 +313,13 @@ class ExtraCliAuditTest(unittest.TestCase):
             self.replace_build_metadata(info)
             with self.subTest(index=index), self.assertRaises(ValueError):
                 AUDIT.audit(self.directory)
+
+    def test_accepts_staged_system_includes_without_accepting_host_headers(self):
+        info = json.loads((self.root / "build/binary-0/metadata.json").read_bytes())
+        for entry in info["meson_dependencies"]:
+            entry["compile_args"] = [f"-isystem{self.root}/build/binary-0/dependencies/include"]
+        self.replace_build_metadata(info)
+        AUDIT.audit(self.directory)
 
     def test_rejects_invalid_elapsed_time_arguments_and_pipe_error(self):
         file = self.directory / "wasi-syntax.json"

@@ -42,9 +42,12 @@ function createFixture() {
   const root = mkdtempSync(join(tmpdir(), "toolchain-build-info-artifacts-"));
   const artifacts = join(root, "build/jspi-pthread");
   mkdirSync(join(root, "scripts"), { recursive: true });
+  mkdirSync(join(root, "patches"));
   mkdirSync(artifacts, { recursive: true });
   const buildScript = "#!/bin/sh\nprintf fixture\\n";
   writeFileSync(join(root, "scripts/build-wasm.sh"), buildScript);
+  const libusbPatch = "libusb atomics fixture\n";
+  writeFileSync(join(root, "patches/libusb-webusb-cxx-atomics.patch"), libusbPatch);
   writeFileSync(join(artifacts, "openFPGALoader.mjs"), "export default 1;\n");
   writeFileSync(join(artifacts, "openFPGALoader.wasm"), "fake wasm bytes\n");
 
@@ -64,6 +67,7 @@ function createFixture() {
     variant: "C",
     async_mode: "jspi",
     build_script_sha256: sha256(buildScript),
+    libusb_patch_sha256: sha256(libusbPatch),
     submodule_shas: submoduleShas,
     emcc_version: "emcc test version",
     zstd_version: zstdVersion,
@@ -200,6 +204,12 @@ testFailure(
     metadata.zstd_version = "0.0.0";
     writeFileSync(infoPath, `${JSON.stringify(metadata)}\n`);
   },
+);
+
+testFailure(
+  "check-artifacts rejects a modified libusb patch",
+  /libusb_patch_sha256 does not match current patch/,
+  ({ root }) => writeFileSync(join(root, "patches/libusb-webusb-cxx-atomics.patch"), "tampered\n"),
 );
 
 test("build-web rejects an unknown BUILD_INFO_CHECK value", () => {

@@ -65,7 +65,7 @@
 +#endif
 --- a/src/resources.cpp
 +++ b/src/resources.cpp
-@@ -129,2 +129,5 @@
+@@ -129,10 +129,14 @@
 -uint64_t maximum_resident_set_size () {
 -  struct rusage u;
 +uint64_t maximum_resident_set_size () {
@@ -73,12 +73,15 @@
 +  return 0;
 +#else
 +  struct rusage u;
-@@ -133,2 +136,3 @@
--  return ((uint64_t) u.ru_maxrss) << 10;
--}
-+  return ((uint64_t) u.ru_maxrss) << 10;
+   if (getrusage (RUSAGE_SELF, &u))
+     return 0;
+ #ifndef __APPLE__
+   return ((uint64_t) u.ru_maxrss) << 10;
+ #else
+   return ((uint64_t) u.ru_maxrss);
+ #endif
 +#endif
-+}
+ }
 @@ -143,2 +147,5 @@
 -uint64_t current_resident_set_size () {
 -  char path[64];

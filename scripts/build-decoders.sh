@@ -100,6 +100,7 @@ for source in \
   "$root/vendor/zstd/build/single_file_libs/zstddeclib-in.c" \
   "$root/vendor/xz-embedded/linux/lib/xz/xz_crc32.c" \
   "$root/vendor/xz-embedded/linux/lib/xz/xz_crc64.c" \
+  "$root/vendor/xz-embedded/linux/lib/xz/xz_sha256.c" \
   "$root/vendor/xz-embedded/linux/lib/xz/xz_dec_stream.c" \
   "$root/vendor/xz-embedded/linux/lib/xz/xz_dec_lzma2.c"; do
   if [[ ! -f "$source" ]]; then
@@ -161,13 +162,14 @@ build_decoder zstd "$decoder_dir/zstd-decoder.wasm" \
   "$root/scripts/zstd-decoder.c" "$decoder_dir/zstddeclib.c"
 
 build_decoder xz "$decoder_dir/xz-decoder.wasm" \
-  -DXZ_USE_CRC64 \
+  -DXZ_USE_CRC64 -DXZ_USE_SHA256 \
   -I"$root/vendor/xz-embedded/linux/include" \
   -I"$root/vendor/xz-embedded/linux/include/linux" \
   -I"$root/vendor/xz-embedded/userspace" \
   "$root/scripts/xz-decoder.c" \
   "$root/vendor/xz-embedded/linux/lib/xz/xz_crc32.c" \
   "$root/vendor/xz-embedded/linux/lib/xz/xz_crc64.c" \
+  "$root/vendor/xz-embedded/linux/lib/xz/xz_sha256.c" \
   "$root/vendor/xz-embedded/linux/lib/xz/xz_dec_stream.c" \
   "$root/vendor/xz-embedded/linux/lib/xz/xz_dec_lzma2.c"
 

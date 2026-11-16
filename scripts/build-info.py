@@ -152,6 +152,7 @@ def collect_build_info(root, artifacts, variant, async_mode):
         "variant": variant,
         "async_mode": async_mode,
         "build_script_sha256": sha256_file(root / "scripts/build-wasm.sh"),
+        "libusb_patch_sha256": sha256_file(root / "patches/libusb-webusb-cxx-atomics.patch"),
         "submodule_shas": submodule_shas(root),
         "emcc_version": emcc_version(root),
         "zstd_version": zstd_version(),
@@ -236,6 +237,7 @@ def check_artifacts(root, artifacts):
         "variant",
         "async_mode",
         "build_script_sha256",
+        "libusb_patch_sha256",
         "submodule_shas",
         "emcc_version",
         "zstd_version",
@@ -254,6 +256,8 @@ def check_artifacts(root, artifacts):
         )
     if actual["build_script_sha256"] != sha256_file(root / "scripts/build-wasm.sh"):
         raise RuntimeError("Build metadata build_script_sha256 does not match current build script")
+    if actual["libusb_patch_sha256"] != sha256_file(root / "patches/libusb-webusb-cxx-atomics.patch"):
+        raise RuntimeError("Build metadata libusb_patch_sha256 does not match current patch")
     if actual["submodule_shas"] != submodule_gitlinks(root):
         raise RuntimeError("Build metadata submodule_shas does not match superproject gitlinks")
     if not isinstance(actual["emcc_version"], str) or not actual["emcc_version"].strip():

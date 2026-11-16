@@ -31,12 +31,19 @@ function assertProjectName(name) {
   }
 }
 
+const initializedMemoryWorkspaces = new WeakSet();
+
 export function createMemoryStore({ records = new Map() } = {}) {
   if (!(records instanceof Map)) {
     throw new TypeError("records must be a Map");
   }
+  if (records.size > 0) initializedMemoryWorkspaces.add(records);
 
   return {
+    async hasWorkspace() {
+      return initializedMemoryWorkspaces.has(records);
+    },
+
     async listProjects() {
       return [...records.keys()].sort();
     },
@@ -55,6 +62,7 @@ export function createMemoryStore({ records = new Map() } = {}) {
     async save(project, files) {
       const record = await createProjectSnapshot(project, files);
       records.set(record.project.name, { projectJson: record.projectJson, files: record.files });
+      initializedMemoryWorkspaces.add(records);
     },
 
     async remove(name) {
@@ -70,6 +78,11 @@ async function getProjectsDirectory(storage, create) {
   }
   const root = await storage.getDirectory();
   return root.getDirectoryHandle("projects", { create });
+}
+
+async function getWorkspaceMarker(storage, create) {
+  const root = await storage.getDirectory();
+  return root.getFileHandle(".workspace-initialized", { create });
 }
 
 async function getFileDirectory(projectDirectory, path, create) {
@@ -91,8 +104,44 @@ async function readOpfsFile(projectDirectory, path) {
   return new Uint8Array(await (await handle.getFile()).arrayBuffer());
 }
 
+async function listStoredProjects(projects) {
+  const names = [];
+  for await (const [name, handle] of projects.entries()) {
+    if (handle.kind === "directory" && validateProjectName(name).ok) {
+      for (const manifest of ["workspace.zip", "project.json"]) {
+        try {
+          const file = await (await handle.getFileHandle(manifest)).getFile();
+          if (file.size > 0) {
+            names.push(name);
+            break;
+          }
+        } catch (error) {
+          if (error?.name !== "NotFoundError") throw error;
+        }
+      }
+    }
+  }
+  return names.sort();
+}
+
 export function createOpfsStore(storage) {
   return {
+    async hasWorkspace() {
+      try {
+        const projects = await getProjectsDirectory(storage, false);
+        try {
+          await getWorkspaceMarker(storage, false);
+          return true;
+        } catch (error) {
+          if (error?.name !== "NotFoundError") throw error;
+        }
+        return (await listStoredProjects(projects)).length > 0;
+      } catch (error) {
+        if (error?.name === "NotFoundError") return false;
+        throw new Error("プロジェクトの保存先を確認できません。", { cause: error });
+      }
+    },
+
     async listProjects() {
       let projects;
       try {
@@ -102,23 +151,7 @@ export function createOpfsStore(storage) {
         throw new Error("プロジェクト一覧を読み込めません。", { cause: error });
       }
 
-      const names = [];
-      for await (const [name, handle] of projects.entries()) {
-        if (handle.kind === "directory" && validateProjectName(name).ok) {
-          for (const manifest of ["workspace.zip", "project.json"]) {
-            try {
-              const file = await (await handle.getFileHandle(manifest)).getFile();
-              if (file.size > 0) {
-                names.push(name);
-                break;
-              }
-            } catch (error) {
-              if (error?.name !== "NotFoundError") throw error;
-            }
-          }
-        }
-      }
-      return names.sort();
+      return listStoredProjects(projects);
     },
 
     async load(name) {
@@ -191,6 +224,8 @@ export function createOpfsStore(storage) {
       assertProjectName(name);
       try {
         const projects = await getProjectsDirectory(storage, false);
+        await projects.getDirectoryHandle(name);
+        await getWorkspaceMarker(storage, true);
         await projects.removeEntry(name, { recursive: true });
         return true;
       } catch (error) {

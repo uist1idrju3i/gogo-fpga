@@ -28,22 +28,22 @@ vendor submodule の commit は次のとおりです。pin checker がこの表�
 | openFPGALoader | v1.2.0 | `befbab4f646207dbaf1daf8b144dd980ad283dd5` | `https://github.com/trabucayre/openFPGALoader.git` |
 | libusb | v1.0.30 | `87a55632db62c9bdc58cd31d3ccfa673f1bb017f` | `https://github.com/libusb/libusb.git` |
 | libftdi | 1.6rc1 | `92d657bcb543a9622947d984d4a8e725fb680e8c` | `git://developer.intra2net.com/libftdi` |
-| zlib | v1.3.2 | `da607da739fa6047df13e66a2af6b8bec7c2a498` | `https://github.com/madler/zlib.git` |
+| zlib | v1.4 | `99623ef7097352da7993ba614161fd6a311e046e` | `https://github.com/madler/zlib.git` |
 | zstd | v1.5.7 | `f8745da6ff1ad1e7bab384bd1f9d742439278e99` | `https://github.com/facebook/zstd.git` |
-| xz-embedded | v20240322 | `62d5603b5114c5aa8bb5f6bb461efbe0e3b51891` | `https://github.com/tukaani-project/xz-embedded.git` |
-| emsdk | 6.0.13 | `35659964bc2762fffec0d257997fb61475f765b7` | `https://github.com/emscripten-core/emsdk.git` |
+| xz-embedded | v2024-12-30 | `ae63ae3a36ed01724674e8f3d750dc47bf125410` | `https://github.com/tukaani-project/xz-embedded.git` |
+| emsdk | 7.0.0 | `1693ce7359fc9694f198694f902a2cc061239b86` | `https://github.com/emscripten-core/emsdk.git` |
 | yomiyasu | 3.1.0 | `db78b9bc5e868549b517a037df7a4d1c93edac23` | `https://github.com/nanaism/yomiyasu.git` |
-| yosys | v0.70 | `28ba3cb926fe376fa05ebfc1b921747d011d4557` | `https://github.com/YosysHQ/yosys.git` |
+| yosys | v0.71 | `b4c586fd37d0ec61bb38fc1a85fd6a2fde48fcd1` | `https://github.com/YosysHQ/yosys.git` |
 | nextpnr | nextpnr-0.11.1 | `62e659ed6748e9f60b2a4aa25dd4fe79a9605881` | `https://github.com/YosysHQ/nextpnr.git` |
 | ghdl | v6.0.0 | `e589c698c351369ac5bcfe7abe1f1152ac5d4727` | `https://github.com/ghdl/ghdl.git` |
 | iverilog | v13_0 | `dfeee909ed9f20b4870dd93423156c0170c0e1ff` | `https://github.com/steveicarus/iverilog.git` |
 | surfer | v0.7.0 | `bd749b1f786c1c62cd67893ca71346cbe6983915` | `https://gitlab.com/surfer-project/surfer.git` |
 | sby | snapshot | `79fc9eddca5e33a28cc2f2cd19c9825efd9a7255` | `https://github.com/YosysHQ/sby.git` |
 | yices2 | yices-2.7.0 | `85cf17e44eac76b5d14b297c09fc9bfecf47ef65` | `https://github.com/SRI-CSL/yices2.git` |
-| z3 | z3-5.3.3 | `430d19e697e2ec9bad79ff210d41b4a7a5fcfa3e` | `https://github.com/Z3Prover/z3.git` |
+| z3 | z3-5.4.1 | `145c0c51570a357cc558ce898ce77573ba9d4fbf` | `https://github.com/Z3Prover/z3.git` |
 | boolector | 3.2.4 | `393cdfba3735d334bb4e6525500b8a0280dd41e6` | `https://github.com/Boolector/boolector.git` |
-| bitwuzla | 0.9.1 | `8d1eb01093ae54d9b4586456b69c3bf31000a4c2` | `https://github.com/bitwuzla/bitwuzla.git` |
-| click | 8.3.1 | `1d038f270701498433cb432f54db89f95f07a845` | `https://github.com/pallets/click.git` |
+| bitwuzla | 0.10.0 | `d25226df00650ae2006769c03ba9533b1a658698` | `https://github.com/bitwuzla/bitwuzla.git` |
+| click | 8.5.1 | `cf19179e8e2fd54c601378cec9e0d21bb12b6fb1` | `https://github.com/pallets/click.git` |
 
 WASI SDK の固定値は pin checker とビルドスクリプトが読む次の表を正とします。
 
@@ -60,10 +60,10 @@ Surfer WASM build tools:
 
 | Tool | Version | SHA-256 | URL |
 |---|---|---|---|
-| rust | 1.99.1 | - | `https://static.rust-lang.org/dist/channel-rust-stable.toml` |
-| trunk | 0.21.14 | `f2b4680cd239693a646a2795e4633c625328d7b2a044fbe749fa3a2fe9e7036b` | `https://github.com/trunk-rs/trunk/releases/download/v0.21.14/trunk-x86_64-unknown-linux-gnu.tar.gz` |
+| rust | 1.100.0 | - | `https://static.rust-lang.org/dist/channel-rust-stable.toml` |
+| trunk | 0.22.1 | `2ab8d548fd5ed9cda50906f61fd8654204e7893bd52ebbfd90533862b7d71ee1` | `https://github.com/trunk-rs/trunk/releases/download/v0.22.1/trunk-x86_64-unknown-linux-gnu.tar.gz` |
 | wasm-bindgen-cli | 0.2.118 | `00b519c9fc2d6e087265da1a00f29160bfcc6a823993482bc2e691910287427b` | `https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.118/wasm-bindgen-0.2.118-x86_64-unknown-linux-musl.tar.gz` |
-| binaryen | version_123 | `e959f2170af4c20c552e9de3a0253704d6a9d2766e8fdb88e4d6ac4bae9388fe` | `https://github.com/WebAssembly/binaryen/releases/download/version_123/binaryen-version_123-x86_64-linux.tar.gz` |
+| binaryen | version_133 | `2dc9c7813f5375db93d96ead4b78222fcc3e2677bbb832297af4797782a37489` | `https://github.com/WebAssembly/binaryen/releases/download/version_133/binaryen-version_133-x86_64-linux.tar.gz` |
 
 Surfer の版と日付は午後のFPGA の HEAD ではなく、Surfer の pin とその commit 日時から作ります。
 コピーした source が親の Git を参照していた問題と再現ビルドの条件は
@@ -171,7 +171,13 @@ GHDL、NVC、Icarus Verilog など GPL のツールを WASM にビルドして R
 
 配布前に、各ツールと HDL ライブラリーの正確なライセンス、改変の有無、ソース提供方法、著作権表示を確認します。各ツールを導入する際は、そのバージョンのライセンス本文を読み、義務を最終確認します。
 
+Emscripten 7のlibusb用patchとcxxoptsのinclude指定、その理由と照合方法は、[依存更新の互換性確認](docs/research/issue21-dependency-update.md#正式版の候補と互換性)に記録します。
+
 ## 7. 分割した調査
+
+[Issue #21の依存更新の確認](docs/research/issue21-dependency-update.md)に、正式版とbranchの候補、誤検出、互換性、ライセンス、単独更新を見送る理由を記録しました。
+
+資材比較、再現ビルド、各ツールの回帰と失敗試行は[S17の互換性確認](docs/experiments/S17-issue21-dependencies.md)に記録します。Tang Nano実機は本リポジトリでは試していません。
 
 Z3 WASIのlink失敗とSDK例外library・fork登録の対処は、[ソルバー調査](docs/research/formal-solvers.md)と[S15の診断記録](docs/experiments/S15-z3-wasi-link.md)に保存しました。手動18条件を経てclean buildと[両solverの正式反復](docs/experiments/S15-solver-native-wasi.md)まで実施しました。
 
@@ -231,9 +237,9 @@ T6は上流SBY・SMTBMCの再利用を選び、[S15の事前基準](docs/experim
 
 Actions.lock は今回は導入を見送り、現行の完全長 SHA 固定を維持します。取得元 ID と推移依存の保護という追加価値、導入の制限、未確認の事項は上記の調査に記録しました。
 
-T6 P2では、WASI shimの同期stdin reader、容量を制限した共有buffer、期限・整合性・終了を管理する専用workerを追加しました。予備Yices2 WASMでは5 byteの入力chunkと7 byteのbufferで双方向SMT通信を確認しました。この段階は正式反復ではありません。GMP検索先、cross makeのarch、alarm、SDKとEmscriptenの丸め、C++標準ライブラリー、setjmp/longjmp、版表示の由来を[ソルバー調査](docs/research/formal-solvers.md)と[S15 P2](docs/experiments/S15-solver-build-and-transport.md)に残します。hardware丸めの単独compile後、実Z3 WASIでも非対応要求を明示拒否できました。
+T6 P2の同期stdin、共有buffer、専用workerの予備接続と依存の制約は、[ソルバー調査](docs/research/formal-solvers.md#製品化前の接続と正式比較)に保持します。
 
-両solverのnative/WASIは各5回・A/A 2回で全329行31列と294負の対照を監査しました。[正式比較と圧縮配信の制約](docs/research/formal-solvers.md#正式比較と圧縮配信の制約)へ条件・証拠・未完了の範囲を分けます。
+両solverの正式比較と配信の制約も、同じ調査に原記録へのリンクとともに残します。
 
 ## 8. 未確認の事項
 

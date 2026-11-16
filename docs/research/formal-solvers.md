@@ -86,3 +86,9 @@ Yices2の値の表示では、問い合わせたarrayの式は入力の`#x2`を�
 容量を制限した共有bufferの基盤を追加し、EOF、終了後のwrite、cancel、backpressureをNodeの実workerを含む11件で検査しました。`crossOriginIsolated`と非同期Atomicsが使えなければ開始を拒否します。Nodeのfixtureではisolation flagを設定しており、ブラウザーのヘッダーを検証したものではありません。
 
 その後、専用workerの期限・終了管理とjob IDの照合を追加しました。古いjobの終了通知は無視し、現在のjobのSHA-256照合と終了通知、stdoutとstderr双方のEOFを要求します。破損、trap、timeout、cancel、crash、出力上限、consumerの停止を非成功へ分類し、528,384 byteの分割出力も検査しました。これはSMTの意味判定とは別のprocessの管理です。SMT framing、nativeとWASMの正式なsolver比較・反復は残っています。hostの共有bufferと、WASMのpthreadは区別します。ブラウザーの画面操作・実機確認・P3のSBY接続は、この予備調査では試していません。
+
+## 製品化前の接続と正式比較
+
+以下は依存更新前の調査記録です。T6 P2では、WASI shimの同期stdin reader、容量を制限した共有buffer、期限・整合性・終了を管理する専用workerを追加しました。予備Yices2 WASMでは5 byteの入力chunkと7 byteのbufferで双方向SMT通信を確認しました。この段階は正式反復ではありません。GMP検索先、cross makeのarch、alarm、SDKとEmscriptenの丸め、C++標準ライブラリー、setjmp/longjmp、版表示の由来を本書と[S15 P2](../experiments/S15-solver-build-and-transport.md)に残します。hardware丸めの単独compile後、実Z3 WASIでも非対応要求を明示拒否できました。
+
+両solverのnative/WASIは各5回・A/A 2回で全329行31列と294負の対照を監査しました。[正式比較と圧縮配信の制約](#正式比較と圧縮配信の制約)へ条件・証拠・未完了の範囲を分けます。

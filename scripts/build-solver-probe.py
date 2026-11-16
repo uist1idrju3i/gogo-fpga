@@ -192,7 +192,7 @@ def check_bitwuzla_meson_dependencies(entries, prefix, versions):
         if name == "mpfr":
             libraries.append(str(prefix / "lib/libgmp.a"))
         if (entry.get("version") != versions[name]
-                or entry.get("compile_args") != [f"-I{prefix}/include"]
+                or entry.get("compile_args") not in ([f"-I{prefix}/include"], [f"-isystem{prefix}/include"])
                 or entry.get("link_args") != libraries):
             raise ValueError(f"Meson did not select the staged {name} headers and libraries")
     return entries
@@ -279,6 +279,18 @@ def build_bitwuzla(args, output, source, metadata, run, environment, compiler, c
         metadata["dependencies"][name]["overlay"] = {
             str(p.relative_to(overlay)): digest(p) for p in files}
         shutil.copytree(overlay, target, dirs_exist_ok=True)
+        for index, relative in enumerate(wraps[name].get("diff_files", "").split(",")):
+            relative = relative.strip()
+            if not relative:
+                continue
+            if not re.fullmatch(rf"{name}/[A-Za-z0-9_.-]+\.patch", relative):
+                raise ValueError("Invalid upstream Meson diff path")
+            patch = source / "subprojects/packagefiles" / relative
+            if patch.is_symlink() or not patch.is_file() or not patch.stat().st_size:
+                raise ValueError("Missing or unsafe upstream Meson diff")
+            metadata["dependencies"][name].setdefault("diff_files", {})[relative] = digest(patch)
+            run(f"{name}-upstream-diff-{index}",
+                ["patch", "--batch", "--fuzz=0", "-p1", "-i", patch], target)
 
     apply_source_patch("bitwuzla-gmp-limb-width.patch", source, output, metadata, run, "bitwuzla-limb-patch")
     if sdk:
