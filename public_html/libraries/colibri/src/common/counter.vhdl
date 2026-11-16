@@ -45,6 +45,10 @@ begin
     report "ERROR: counter width not sufficient for selected modulo"
     severity failure;
 
+  assert g_COUNTER_WIDTH > 0
+    report "ERROR: counter width nis set to zero. The entity will not be synthesized"
+    severity failure;
+
   proc_cnt : process (clk_i) is
   begin
 

@@ -57,20 +57,20 @@
       "size": 27884826
     },
     {
-      "compressed_sha256": "8e5064b14c23570f75929d9fc25be6250bf85649dfa1967e58ee83e06018d5c1",
-      "compressed_size": 482855,
+      "compressed_sha256": "7c4ec3a617ae29b12039402a186e468e30fb13885ed235a642862a1033b0e9de",
+      "compressed_size": 487282,
       "encoding": "zstd",
       "path": "yosys-share.tar",
-      "sha256": "2458187ec88af6b6b6d4ff3069ff1021c02815cdae88955184d3e194a9c94bec",
-      "size": 10567680
+      "sha256": "82f0432564a0e1f680f511aabc308bad756655a07507f9625f75ad47b3757b7e",
+      "size": 10598400
     },
     {
-      "compressed_sha256": "2449beacc39c67c8ea338864258125678f267bf506b37cb4888a9c6e1cb9fe0f",
-      "compressed_size": 7156916,
+      "compressed_sha256": "b5c5976b7f3dc4cef716bd96761e26237732715dcbf44bc430d1c6d69763aeaa",
+      "compressed_size": 8030740,
       "encoding": "zstd",
       "path": "yosys.wasm",
-      "sha256": "11ee003141aa7c05b8413f77f44e7a1e54c124a66bb338ff38fd47028387b5c3",
-      "size": 35038277
+      "sha256": "de66b572aa737ca2ef14c93f9379559fe79c570987202ab558a87ef675e91786",
+      "size": 40215289
     }
   ],
   "format_version": 1

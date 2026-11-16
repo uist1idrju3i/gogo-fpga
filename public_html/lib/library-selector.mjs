@@ -71,7 +71,11 @@ export function createLibrarySelector(container, { getWorkspace, getBoard, canCh
   async function refresh(updateStatus = true) {
     const current = ++version;
     const workspace = getWorkspace();
-    if (!workspace.project) return;
+    if (!workspace.project) {
+      list.replaceChildren();
+      status.textContent = "プロジェクトを作成するか、zipから読み込んでください。";
+      return;
+    }
     try {
       let catalog = null;
       let catalogError = null;

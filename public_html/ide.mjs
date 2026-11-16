@@ -108,6 +108,7 @@ export function initializeIde({
   const projectSelect = document.querySelector("#project-select");
   const projectActionStatus = document.querySelector("#project-action-status");
   const newProjectButton = document.querySelector("#new-project-button");
+  const deleteProjectButton = document.querySelector("#delete-project-button");
   const exportProjectButton = document.querySelector("#export-project-button");
   const importProjectButton = document.querySelector("#import-project-button");
   const projectZipInput = document.querySelector("#project-zip-input");
@@ -197,6 +198,8 @@ export function initializeIde({
   let editor = null;
   let saveTimer = null;
   let pendingSave = Promise.resolve();
+  const projectWrites = new Set();
+  let projectDeleting = false;
   let projectSaveCount = 0;
   let fileDialogMode = "add";
   let projectSwitchVersion = 0;
@@ -229,7 +232,7 @@ export function initializeIde({
   function setWorkspaceBusy(busy) {
     libraryBusy = busy;
     for (const control of [
-      newProjectButton, newProjectCreateButton, projectSelect,
+      newProjectButton, newProjectCreateButton, deleteProjectButton, projectSelect,
       importProjectButton, projectZipInput, exportProjectButton,
       boardSelect, addFileButton, filePathSaveButton, vhdlStandardSelect,
     ]) control.disabled = busy;
@@ -241,7 +244,7 @@ export function initializeIde({
   }
 
   async function withWorkspaceChange(action) {
-    if (libraryBusy || !project) return;
+    if (libraryBusy) return;
     setWorkspaceBusy(true);
     void librarySelector.refresh(false);
     try {
@@ -367,7 +370,15 @@ export function initializeIde({
     }
   }
 
+  function updateProjectDeletionControl() {
+    deleteProjectButton.disabled = !canDeleteProject();
+  }
+
   function updateSynthesisControls() {
+    updateProjectDeletionControl();
+    for (const control of [projectSelect, exportProjectButton, addFileButton]) {
+      control.disabled = libraryBusy || !project;
+    }
     const hasVerilog = (project?.files ?? []).some(({ path }) =>
       /\.(?:v|sv)$/i.test(path)
     );
@@ -412,7 +423,10 @@ export function initializeIde({
   }
 
   function renderSimulationSettings() {
-    if (!project) return;
+    if (!project) {
+      simulationFiles.replaceChildren();
+      return;
+    }
     project.simulation ??= {
       top: "top_tb",
       files: null,
@@ -465,8 +479,8 @@ export function initializeIde({
         !Number.isInteger(Number(simulationTimeLimit.value)) ||
         Number(simulationTimeLimit.value) < 1 ||
         Number(simulationTimeLimit.value) > 120);
-    simulationTop.disabled = simulationRunning || buildRunning || libraryBusy;
-    simulationTimeLimit.disabled = simulationRunning || buildRunning || libraryBusy;
+    simulationTop.disabled = !project || simulationRunning || buildRunning || libraryBusy;
+    simulationTimeLimit.disabled = !project || simulationRunning || buildRunning || libraryBusy;
     renderSimulationSettings();
   }
 
@@ -500,7 +514,11 @@ export function initializeIde({
   }
 
   function renderFormalSettings() {
-    if (!project) return;
+    if (!project) {
+      formalFiles.replaceChildren();
+      formalFilesNote.textContent = "";
+      return;
+    }
     const candidates = project.files.filter(({ path }) => !isLibraryPath(path) && /\.(?:v|vh|vhd|vhdl)$/i.test(path));
     project.formal ??= {
       engine: "yosys-sat",
@@ -577,7 +595,7 @@ export function initializeIde({
         !Number.isInteger(depth) || depth < 1 || depth > 1000 ||
         !Number.isInteger(timeout) || timeout < 1 || timeout > 300 ||
         !/^[A-Za-z_][A-Za-z0-9_$]*$/.test(top));
-    const editing = formalRunning || buildRunning || simulationRunning || libraryBusy;
+    const editing = !project || formalRunning || buildRunning || simulationRunning || libraryBusy;
     formalEngine.disabled = editing;
     formalMode.disabled = editing;
     formalDepth.disabled = editing;
@@ -1170,7 +1188,7 @@ export function initializeIde({
   }
 
   function scheduleSave(designChanged = true) {
-    if (!project) return;
+    if (!project || projectDeleting) return;
     if (buildRunning) {
       buildVersion += 1;
       buildRunner.cancel();
@@ -1191,14 +1209,17 @@ export function initializeIde({
   }
 
   async function saveProject() {
-    if (!project) return;
+    if (!project || projectDeleting) return;
     clearTimeout(saveTimer);
     saveTimer = null;
     project.board = boardSelect.value;
     projectSaveCount++;
     document.dispatchEvent(new Event("toolchain:ai-busy-change"));
+    let write;
     try {
-      await store.save(project, fileContents);
+      write = store.save(project, fileContents);
+      projectWrites.add(write);
+      await write;
       setProjectStatus("保存しました。");
       return true;
     } catch (error) {
@@ -1206,6 +1227,7 @@ export function initializeIde({
       appendProjectLog(`プロジェクト保存エラー: ${error.message}`);
       return false;
     } finally {
+      projectWrites.delete(write);
       projectSaveCount--;
       document.dispatchEvent(new Event("toolchain:ai-busy-change"));
     }
@@ -1225,7 +1247,7 @@ export function initializeIde({
   }
 
   function projectTexts() {
-    return project.files
+    return (project?.files ?? [])
       .filter(({ path }) => !isBinaryPath(path))
       .map(({ path }) => textForPath(path));
   }
@@ -1536,25 +1558,25 @@ export function initializeIde({
     simulationStatus.dataset.outcome = "";
     formalStatus.textContent = "";
     formalStatus.dataset.outcome = "";
-    project = loaded.project;
-    project.vhdlStandard ??= "2008";
-    fileContents = loaded.files;
-    if (project.files.some(({ path }) => path.startsWith("build/") && path.endsWith(".fs"))) {
+    project = loaded?.project ?? null;
+    if (project) project.vhdlStandard ??= "2008";
+    fileContents = loaded?.files ?? new Map();
+    if (project?.files.some(({ path }) => path.startsWith("build/") && path.endsWith(".fs"))) {
       workflow.restoreArtifact();
     }
-    projectName.textContent = project.name;
-    boardSelect.value = project.board;
-    const savedState = readUiState(project.name, project);
+    projectName.textContent = project?.name ?? "なし";
+    if (project) boardSelect.value = project.board;
+    const savedState = project ? readUiState(project.name, project) : { openTabs: [], activeTab: null };
     openTabs = savedState.openTabs;
     activeTab = savedState.activeTab;
     if (!activeTab) {
-      const firstTextFile = project.files.find(({ path }) => !isBinaryPath(path));
+      const firstTextFile = project?.files.find(({ path }) => !isBinaryPath(path));
       if (firstTextFile) {
         openTabs = [firstTextFile.path];
         activeTab = firstTextFile.path;
       }
     }
-    selectedPath = activeTab ?? project.files[0]?.path ?? null;
+    selectedPath = activeTab ?? project?.files[0]?.path ?? null;
     renderFileList();
     renderFileTabs();
     if (!editor) {
@@ -1574,7 +1596,7 @@ export function initializeIde({
     renderFsSource(true);
     void refreshProjectSwitcher();
     boardSelect.dispatchEvent(new Event("change", { bubbles: true }));
-    setProjectStatus("保存しました。");
+    setProjectStatus(project ? "保存しました。" : "プロジェクトがありません。新しいプロジェクトを作成してください。");
     void librarySelector.refresh();
     notifyAiContext();
   }
@@ -1590,6 +1612,8 @@ export function initializeIde({
       const names = await store.listProjects();
       if (names.length > 0) {
         activateProject(await store.load(names[0]));
+      } else if (await store.hasWorkspace()) {
+        activateProject(null);
       } else {
         const initial = createBlinkTemplate(boardSelect.value, "verilog");
         await store.save(initial.project, initial.files);
@@ -1632,6 +1656,44 @@ export function initializeIde({
       activateProject(created);
     } catch (error) {
       newProjectError.textContent = error.message;
+    }
+  }
+
+  function canDeleteProject() {
+    return Boolean(project) && !libraryBusy && !buildRunning && !simulationRunning &&
+      !formalRunning && workflow.state !== "writing" && canChangeLibraries();
+  }
+
+  async function deleteCurrentProject() {
+    if (!canDeleteProject()) return;
+    const name = project.name;
+    if (!window.confirm(`「${name}」を削除しますか。\n保存済みのファイルとビルド結果も削除します。この操作は取り消せません。`)) return;
+    const hadPendingSave = saveTimer !== null;
+    try {
+      await withWorkspaceChange(async () => {
+        projectDeleting = true;
+        clearTimeout(saveTimer);
+        saveTimer = null;
+        try {
+          // 手動保存も待ち、削除後に古い保存処理がプロジェクトを作り直すのを防ぐ。
+          await Promise.allSettled([...projectWrites]);
+          const names = await store.listProjects();
+          const nextName = names.find((candidate) => candidate !== name);
+          const next = nextName ? await store.load(nextName) : null;
+          await store.remove(name);
+          try { localStorage.removeItem(`${UI_STATE_PREFIX}${name}`); } catch { /* タブ状態の削除失敗はOPFSの削除を取り消さない。 */ }
+          pendingSave = Promise.resolve();
+          activateProject(next);
+          await refreshProjectSwitcher();
+          projectActionStatus.dataset.outcome = "success";
+          projectActionStatus.textContent = `「${name}」を削除しました。`;
+        } finally {
+          projectDeleting = false;
+        }
+      });
+    } catch (error) {
+      if (hadPendingSave && project?.name === name) scheduleSave(false);
+      setProjectActionStatus(`プロジェクトを削除できません: ${error.message}`);
     }
   }
 
@@ -1711,6 +1773,7 @@ export function initializeIde({
       void refreshProjectSwitcher();
     });
   });
+  deleteProjectButton.addEventListener("click", () => { void deleteCurrentProject(); });
   newProjectButton.addEventListener("click", () => {
     newProjectError.textContent = "";
     newProjectBoardSelect.value = boardSelect.value;
@@ -1903,6 +1966,7 @@ export function initializeIde({
     } catch (error) { projectActionStatus.dataset.outcome = "error"; projectActionStatus.textContent = error.message; }
   });
   renderFsSource(true);
+  document.addEventListener("toolchain:device-busy-change", updateProjectDeletionControl);
   document.addEventListener("toolchain:flow-change", () => {
     if (editor) updateEditor();
     updateBoardInformation();

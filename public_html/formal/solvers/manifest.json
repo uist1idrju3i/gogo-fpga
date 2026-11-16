@@ -7,7 +7,7 @@
     },
     {
       "path": "yices2-build.json",
-      "sha256": "c62c155b112d9016e0f28edcc7fc0562b0733eecb54d7c6278da3536c45ef731",
+      "sha256": "3822f819d4b00adc3870b33d9a90e61e30911c2435b06d676eccad72483b18c1",
       "size": 8186
     }
   ],
@@ -34,7 +34,7 @@
     "reproducible_paths": true,
     "scripts": {
       "build-formal-solvers.py": "d36f6d373faca058bd5dbb86377c493ccd83bc18868321cdc7baf8399c0f8cde",
-      "build-solver-probe.py": "a055375e6b0f81e724e628126d210aecaf783fdd26e20667c5bb096fee5a6d8f",
+      "build-solver-probe.py": "fb471a6273bcb5db592c840e57d437f4457df2215287dd9cf07d22284f02a113",
       "prepare-formal-sources.py": "356dd51a1b73d337cee35433233f4fd681c79a88a0a47db1b1cf61212f9bcf60"
     },
     "smtbmc": "yices",

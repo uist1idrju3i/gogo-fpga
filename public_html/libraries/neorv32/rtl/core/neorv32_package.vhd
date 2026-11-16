@@ -3,7 +3,7 @@
 -- -------------------------------------------------------------------------------- --
 -- The NEORV32 RISC-V Processor - https://github.com/stnolting/neorv32              --
 -- Copyright (c) NEORV32 contributors.                                              --
--- Copyright (c) 2020 - 2026 Stephan Nolting. All rights reserved.                  --
+-- Copyright (c) Stephan Nolting. All rights reserved.                              --
 -- Licensed under the BSD-3-Clause license, see LICENSE for details.                --
 -- SPDX-License-Identifier: BSD-3-Clause                                            --
 -- ================================================================================ --
@@ -20,7 +20,7 @@ package neorv32_package is
 
   -- Architecture Constants -----------------------------------------------------------------
   -- -------------------------------------------------------------------------------------------
-  constant hw_version_c  : std_ulogic_vector(31 downto 0) := x"01130604"; -- hardware version
+  constant hw_version_c  : std_ulogic_vector(31 downto 0) := x"01130800"; -- hardware version
   constant int_bus_tmo_c : natural := 16; -- internal bus timeout window; has to be a power of two
   constant alu_cp_tmo_c  : natural := 9;  -- log2 of max ALU co-processor execution cycles
 
@@ -29,7 +29,7 @@ package neorv32_package is
   constant is_simulation_c : boolean := false -- seems like we're on real hardware
 -- pragma translate_off
 -- RTL_SYNTHESIS OFF
-  or true -- this MIGHT be a simulation
+    or true -- this MIGHT be a simulation
 -- RTL_SYNTHESIS ON
 -- pragma translate_on
   ;
@@ -156,9 +156,9 @@ package neorv32_package is
   );
 
   -- request operation --
-  constant dmi_req_nop_c : std_ulogic_vector(1 downto 0) := "00"; -- no operation
-  constant dmi_req_rd_c  : std_ulogic_vector(1 downto 0) := "01"; -- read access
-  constant dmi_req_wr_c  : std_ulogic_vector(1 downto 0) := "10"; -- write access
+  constant dmi_op_nop_c : std_ulogic_vector(1 downto 0) := "00"; -- no operation
+  constant dmi_op_rd_c  : std_ulogic_vector(1 downto 0) := "01"; -- read access
+  constant dmi_op_wr_c  : std_ulogic_vector(1 downto 0) := "10"; -- write access
 
   -- response --
   type dmi_rsp_t is record
@@ -656,7 +656,6 @@ package neorv32_package is
     -- instruction fetch --
     if_reset     : std_ulogic;                     -- restart instruction fetch
     if_ready     : std_ulogic;                     -- ready for next instruction
-    if_fence     : std_ulogic;                     -- instruction fence
     -- program counter --
     pc_cur       : std_ulogic_vector(31 downto 0); -- address of current instruction
     pc_nxt       : std_ulogic_vector(31 downto 0); -- address of next instruction
@@ -684,7 +683,10 @@ package neorv32_package is
     lsu_mo_en    : std_ulogic;                     -- output register write enable
     lsu_mi_en    : std_ulogic;                     -- input register write enable
     lsu_priv     : std_ulogic;                     -- effective privilege mode for load/store
-    lsu_fence    : std_ulogic;                     -- data fence
+    -- memory ordering --
+    fence_r      : std_ulogic;                     -- data read/load (acquire)
+    fence_w      : std_ulogic;                     -- data write/store (release)
+    fence_x      : std_ulogic;                     -- instruction execute/fetch
     -- control and status registers --
     csr_we       : std_ulogic;                     -- write-enable
     csr_re       : std_ulogic;                     -- read-enable
@@ -709,7 +711,6 @@ package neorv32_package is
   constant ctrl_bus_terminate_c : ctrl_bus_t := (
     if_reset     => '0',
     if_ready     => '0',
-    if_fence     => '0',
     pc_cur       => (others => '0'),
     pc_nxt       => (others => '0'),
     pc_ret       => (others => '0'),
@@ -733,7 +734,9 @@ package neorv32_package is
     lsu_mo_en    => '0',
     lsu_mi_en    => '0',
     lsu_priv     => '0',
-    lsu_fence    => '0',
+    fence_r      => '0',
+    fence_w      => '0',
+    fence_x      => '0',
     csr_we       => '0',
     csr_re       => '0',
     csr_addr     => (others => '0'),
@@ -901,6 +904,7 @@ package neorv32_package is
     BOOT_ADDR_CUSTOM    : std_ulogic_vector(31 downto 0) := x"00000000";
     -- On-Chip Debugger (OCD) --
     OCD_EN              : boolean                        := false;
+    OCD_EXT_DTM         : boolean                        := false;
     OCD_NUM_HW_TRIGGERS : natural range 0 to 16          := 0;
     OCD_AUTHENTICATION  : boolean                        := false;
     OCD_JEDEC_ID        : std_ulogic_vector(10 downto 0) := "00000000000";
@@ -1036,6 +1040,12 @@ package neorv32_package is
     -- Execution trace (available if TRACE_PORT_EN = true) --
     trace_cpu0_o   : out trace_port_t;
     trace_cpu1_o   : out trace_port_t;
+    -- External debug module interface (available if OCD_EXT_DTM = true) --
+    dmi_req_op_i   : in  std_ulogic_vector(1 downto 0)  := (others => 'L');
+    dmi_req_addr_i : in  std_ulogic_vector(6 downto 0)  := (others => 'L');
+    dmi_req_data_i : in  std_ulogic_vector(31 downto 0) := (others => 'L');
+    dmi_rsp_data_o : out std_ulogic_vector(31 downto 0);
+    dmi_rsp_ack_o  : out std_ulogic;
     -- JTAG on-chip debugger interface (available if OCD_EN = true) --
     jtag_tck_i     : in  std_ulogic := 'L';
     jtag_tdi_i     : in  std_ulogic := 'L';
@@ -1061,12 +1071,10 @@ package neorv32_package is
     xbus_err_i     : in  std_ulogic := 'L';
     -- Stream link interface (available if IO_SLINK_EN = true) --
     slink_rx_dat_i : in  std_ulogic_vector(31 downto 0) := (others => 'L');
-    slink_rx_src_i : in  std_ulogic_vector(3 downto 0)  := (others => 'L');
     slink_rx_val_i : in  std_ulogic := 'L';
     slink_rx_lst_i : in  std_ulogic := 'L';
     slink_rx_rdy_o : out std_ulogic;
     slink_tx_dat_o : out std_ulogic_vector(31 downto 0);
-    slink_tx_dst_o : out std_ulogic_vector(3 downto 0);
     slink_tx_val_o : out std_ulogic;
     slink_tx_lst_o : out std_ulogic;
     slink_tx_rdy_i : in  std_ulogic := 'L';
@@ -1262,7 +1270,7 @@ package body neorv32_package is
   function index_size_f(n : natural) return natural is
   begin
     for i in 0 to 31 loop
-      if (2**i >= n) then
+      if ((2**i) >= n) then
         return i;
       end if;
     end loop;
@@ -1391,7 +1399,7 @@ package body neorv32_package is
     variable v : string(1 to d'length/4);
   begin
     for i in 0 to (d'length/4)-1 loop
-      v(i+1) := to_hexchar_f(d(d'high-i*4 downto (d'high-i*4)-3));
+      v(i+1) := to_hexchar_f(d(d'high-(i*4) downto (d'high-(i*4))-3));
     end loop;
     return v;
   end function;

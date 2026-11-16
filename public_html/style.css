@@ -1289,6 +1289,8 @@ button.secondary:not(.danger):hover:not(:disabled),
   .project-toolbar select { width: 100%; min-width: 0; max-width: 100%; }
   #new-project-button { font-size: 0; min-width: 44px; padding: 0.3rem; }
   #new-project-button::after { content: "新規"; font-size: 0.75rem; }
+  #delete-project-button { font-size: 0; min-width: 44px; padding: 0.3rem; }
+  #delete-project-button::after { content: "削除"; font-size: 0.75rem; }
   #project-action-status { grid-column: 1 / -1; }
   .header-controls { display: block; }
   .header-actions { position: fixed; bottom: 0; left: 0; right: 0; z-index: 80; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 0.4rem; padding: 0.5rem 0.5rem calc(0.5rem + env(safe-area-inset-bottom)); border-top: 1px solid #98a2b3; background: #fff; }
