@@ -81,6 +81,9 @@ function memoryStorage() {
     return {
       kind: "directory", children,
       async getDirectoryHandle(name, { create = false } = {}) {
+        if (children.has(name) && children.get(name).kind !== "directory") {
+          throw new DOMException("Not a directory", "TypeMismatchError");
+        }
         if (!children.has(name)) {
           if (!create) throw missing();
           children.set(name, directory());
@@ -90,6 +93,9 @@ function memoryStorage() {
         return child;
       },
       async getFileHandle(name, { create = false } = {}) {
+        if (children.has(name) && children.get(name).kind !== "file") {
+          throw new DOMException("Not a file", "TypeMismatchError");
+        }
         if (!children.has(name)) {
           if (!create) throw missing();
           const file = {
@@ -244,6 +250,21 @@ test("memory stores sharing records preserve the empty workspace after reconstru
   assert.equal(await reloaded.hasWorkspace(), true);
   assert.deepEqual(await reloaded.listProjects(), []);
   assert.equal(await createMemoryStore().hasWorkspace(), false);
+});
+
+test("workspace metadata does not reserve any valid project names", async () => {
+  const mock = memoryStorage();
+  const { project, files } = await createLibraryProject();
+  for (const name of [".initialized", ".workspace-initialized"]) {
+    const store = createOpfsStore(mock.storage);
+    await store.save({ ...project, name }, files);
+    assert.deepEqual(await store.listProjects(), [name]);
+    assert.equal(await store.remove(name), true);
+    assert.equal(await createOpfsStore(mock.storage).hasWorkspace(), true);
+    await createOpfsStore(mock.storage).save({ ...project, name }, files);
+    assert.equal((await store.load(name)).project.name, name);
+    await store.remove(name);
+  }
 });
 
 test("removing a project preserves its neighbours and rejects invalid names", async () => {

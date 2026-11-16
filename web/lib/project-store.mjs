@@ -80,6 +80,11 @@ async function getProjectsDirectory(storage, create) {
   return root.getDirectoryHandle("projects", { create });
 }
 
+async function getWorkspaceMarker(storage, create) {
+  const root = await storage.getDirectory();
+  return root.getFileHandle(".workspace-initialized", { create });
+}
+
 async function getFileDirectory(projectDirectory, path, create) {
   const segments = path.split("/");
   let directory = projectDirectory;
@@ -125,7 +130,7 @@ export function createOpfsStore(storage) {
       try {
         const projects = await getProjectsDirectory(storage, false);
         try {
-          await projects.getFileHandle(".initialized");
+          await getWorkspaceMarker(storage, false);
           return true;
         } catch (error) {
           if (error?.name !== "NotFoundError") throw error;
@@ -220,7 +225,7 @@ export function createOpfsStore(storage) {
       try {
         const projects = await getProjectsDirectory(storage, false);
         await projects.getDirectoryHandle(name);
-        await projects.getFileHandle(".initialized", { create: true });
+        await getWorkspaceMarker(storage, true);
         await projects.removeEntry(name, { recursive: true });
         return true;
       } catch (error) {
