@@ -441,6 +441,58 @@ class CheckPinsTests(unittest.TestCase):
                 self.assertIsNone(check_pins.latest_stable_tag(remote, "ghdl"))
                 self.assertIsNone(check_pins.fixed_stable_tag("a" * 40, remote, "ghdl"))
 
+    def test_formal_release_tags_exclude_unrelated_and_prerelease_tags(self):
+        cases = (
+            ("yices2", "yices-2.7.0", "yices-2.8.0", "2021-02-19"),
+            ("z3", "z3-5.3.3", "z3-5.4.1", "bisim-study-smart-20260926"),
+            ("boolector", "3.2.3", "3.2.4", "smtcomp-2018"),
+            ("bitwuzla", "0.9.1", "0.10.0", "smtcomp-2021"),
+            ("click", "8.3.1", "8.5.1", "archive-20261116"),
+        )
+        for dependency, fixed, latest, unrelated in cases:
+            with self.subTest(dependency=dependency):
+                tags = "\n".join((
+                    "a" * 40 + "\trefs/tags/" + fixed,
+                    "b" * 40 + "\trefs/tags/" + latest,
+                    "c" * 40 + "\trefs/tags/" + latest + "^{}",
+                    "a" * 40 + "\trefs/tags/" + unrelated,
+                    "d" * 40 + "\trefs/tags/" + latest + "-dev",
+                    "e" * 40 + "\trefs/tags/" + latest + "-rc1",
+                ))
+                self.assertEqual(latest, check_pins.latest_stable_tag(tags, dependency))
+                self.assertEqual(fixed, check_pins.fixed_stable_tag("a" * 40, tags, dependency))
+                self.assertEqual(latest, check_pins.fixed_stable_tag("c" * 40, tags, dependency))
+                self.assertIsNone(check_pins.fixed_stable_tag("b" * 40, tags, dependency))
+                for invalid in (unrelated, latest + "-dev", latest + "-rc1",
+                                latest + "-alpha", latest + "-beta", "release-999.0.0"):
+                    remote = "a" * 40 + "\trefs/tags/" + invalid
+                    self.assertIsNone(check_pins.latest_stable_tag(remote, dependency))
+                    self.assertIsNone(check_pins.fixed_stable_tag("a" * 40, remote, dependency))
+
+    def test_formal_report_keeps_real_updates_and_rejects_competition_dates(self):
+        tags = self.prepare_upstream_fixture()
+        candidates = {"yices2": ("2021-02-19", None),
+                      "z3": ("bisim-study-smart-20260926", "z3-1.1.0"),
+                      "boolector": ("smtcomp-2018", None),
+                      "bitwuzla": ("smtcomp-2021", "1.1.0")}
+        for name, (unrelated, release) in candidates.items():
+            tags[name] += "f" * 40 + "\trefs/tags/" + unrelated + "\n"
+            if release:
+                tags[name] += "e" * 40 + "\trefs/tags/" + release + "\n"
+        rows, _ = self.upstream_report(tags, self.pinned["libftdi"] + "\tHEAD\n")
+        for name, (_, release) in candidates.items():
+            row = next(row for row in rows if row[0] == name)
+            fixed = {"yices2": "yices-1.0.0", "z3": "z3-1.0.0"}.get(name, "1.0.0")
+            self.assertEqual((name, fixed, release or fixed, "更新あり" if release else "最新"), row)
+
+    def test_formal_report_without_release_tags_requires_confirmation(self):
+        tags = self.prepare_upstream_fixture()
+        for name in ("yices2", "z3", "boolector", "bitwuzla"):
+            tags[name] = self.pinned[name] + "\trefs/tags/smtcomp-2021\n"
+        rows, _ = self.upstream_report(tags, self.pinned["libftdi"] + "\tHEAD\n")
+        for name in ("yices2", "z3", "boolector", "bitwuzla"):
+            self.assertEqual("要確認", next(row for row in rows if row[0] == name)[3])
+
     def test_rust_version_uses_rust_package_in_either_table_order(self):
         cargo = '[pkg.cargo]\nversion = "0.99.0"\n'
         rust = '[pkg.rust]\nversion = "1.99.1 (abcdef012 2026-10-29)"\n'
