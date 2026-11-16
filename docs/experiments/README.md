@@ -6,6 +6,7 @@
 
 | 記録 | 内容 | 状態 |
 |---|---|---|
+| [S17 Issue #21の依存更新](S17-issue21-dependencies.md) | 正式版・branchの採否、資材サイズとhash、再現ビルド、仮想USB、合成・HDL・CPU・形式検証と失敗試行 | 候補の仮想USB43件、Yosys比較19件、VHDL・HDL28件、CPU9件、製品形式検証39件が成功。基準の9K失敗と追試を保持。実機は未確認 |
 | [S15 Yices2の製品配信とSBY実行](S15-yices2-product.md) | 固定ソース・GMP・SDK、HTTP配信、Git-free再生成、実runnerとSQLite・反例 | Verilog 6条件を各5回。言語・再実行・画面の全体認定は継続 |
 | [S15 形式検証の言語・反例再実行・停止](S15-formal-product-integration.md) | GHDLからSAT/SBYへの接続、Icarusの原文再実行、実workerの停止・期限と負の対照 | 43条件を各5回、215判定成功。大小文字・対象一覧の修正後も同数成功。画面は次の記録へ分離 |
 | [S15 形式検証のブラウザー受入れ](S15-formal-browser-acceptance.md) | 4ボード目視、対象保存、Yices2、VHDL、独立再実行、停止・期限・編集・切替・キャッシュ | 対象E2E 2件と4/4ボードを確認。CIで見つかった連続編集の不具合を修正し、修正後と追跡版で各5/5・4/4成功。原CSVと失敗・録画・画像を保存。実機は未確認 |

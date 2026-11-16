@@ -28,6 +28,8 @@ Bitwuzla 0.10.0で移動した`src/fp/floating_point.cpp`に合わせて、GMP�
 
 新版のMeson構成は、固定したGMP・MPFRのヘッダーを`-isystem`で参照します。依存検査と独立監査は、同じ固定先への`-I`と`-isystem`だけを許可し、hostのincludeや静的archive以外への切替を拒否します。上流の`diff_files`は本文のhashに加え、適用コマンドとログも監査します。host参照、適用記録の欠落、metadataを書き換えた場合の負の対照も検査します。
 
+BitwuzlaのWASIビルドとNode.js 24でのCLI比較は成立しましたが、Node.js 26は新旧の例外命令が混在するWASMを拒否しました。この資材は製品へ配布しません。Z3もビルドの終了137が残ります。両者を既定solverへ昇格させず、Yices2を維持します。失敗内容と適用範囲は[S17](../experiments/S17-issue21-dependencies.md)へ記録します。
+
 ## 誤検出と据置き
 
 | 依存 | Issueの表示 | 判断 |
@@ -71,6 +73,8 @@ UVVMの大きいライセンス差分は、追加された`p2l2_vip_mdio/LICENSE
 外部ソースのcheckoutは直接編集しません。libusbのinclude修正とsolverの互換性パッチを`patches/`で管理し、ビルド用コピーへ適用します。配布物のmetadataでpatchのSHA-256も照合します。ライセンスと対応ソースの配布要件は[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)に従います。
 
 ## 検査の範囲
+
+更新前後の測定値、ビルドの再現性、互換性試験、失敗試行と再実行手順は[S17の実験記録](../experiments/S17-issue21-dependencies.md)へ保存します。
 
 版の確認、原文の取得、candidate checkoutだけでは製品認定を完了した扱いにしません。書き込み部の再現ビルド、4ボードの仮想USB、YosysのWASI/native比較、Pyodide pack、ライブラリーの実行と負の対照、配信物の監査、全実装後の画面確認を更新候補の検査対象とします。
 

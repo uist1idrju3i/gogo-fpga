@@ -1,0 +1,176 @@
+phase,kind,variant,board,case,repeat,elapsed_ms,elapsed_source,verdict,source_log_sha256
+baseline,detect,jspi-pthread,Tang Nano 1K,detect,1,190.176,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 1K,detect,2,103.267,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 1K,detect,3,102.672,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 1K,detect,4,107.051,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 1K,detect,5,216.808,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano1k --detect,detect,1,187.435,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano1k --detect,detect,2,101.290,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano1k --detect,detect,3,204.289,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano1k --detect,detect,4,191.661,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano1k --detect,detect,5,111.330,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 4K,detect,1,103.784,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 4K,detect,2,205.072,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 4K,detect,3,109.700,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 4K,detect,4,104.639,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 4K,detect,5,197.643,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano4k --detect,detect,1,104.888,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano4k --detect,detect,2,190.951,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano4k --detect,detect,3,102.099,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano4k --detect,detect,4,198.119,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano4k --detect,detect,5,206.617,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 9K,detect,1,112.393,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 9K,detect,2,98.351,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 9K,detect,3,103.731,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 9K,detect,4,191.822,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 9K,detect,5,185.264,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano9k --detect,detect,1,184.501,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano9k --detect,detect,2,121.771,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano9k --detect,detect,3,199.419,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano9k --detect,detect,4,97.273,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano9k --detect,detect,5,89.849,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 20K,detect,1,90.379,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 20K,detect,2,158.173,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 20K,detect,3,181.935,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 20K,detect,4,151.607,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,Tang Nano 20K,detect,5,173.178,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano20k --detect,detect,1,168.028,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano20k --detect,detect,2,90.740,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano20k --detect,detect,3,179.794,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano20k --detect,detect,4,86.878,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,tangnano20k --detect,detect,5,90.250,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,detect,jspi-pthread,no-device,detect,,111.036,wall,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 1K,sram,1,123.126,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 1K,sram,2,138.735,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 1K,sram,3,136.925,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 1K,sram,4,129.701,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 1K,sram,5,120.702,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 1K,flash,1,1413.257,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 1K,flash,2,1398.130,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 1K,flash,3,1403.468,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 1K,flash,4,1412.605,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 1K,flash,5,1405.530,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,sram,1,182.801,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,sram,2,181.660,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,sram,3,177.601,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,sram,4,247.724,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,sram,5,249.488,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,flash,1,1768.577,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,flash,2,1761.945,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,flash,3,1824.736,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,flash,4,1783.252,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,flash,5,1841.749,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,sram,1,272.869,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,sram,2,265.636,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,sram,3,323.206,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,sram,4,407.856,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,sram,5,256.939,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,flash,1,2533.137,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,flash,2,3107.913,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,flash,3,2757.078,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,flash,4,2117.489,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,flash,5,2543.986,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 20K,sram,1,601.574,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 20K,sram,2,748.261,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 20K,sram,3,981.679,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 20K,sram,4,1137.783,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 20K,sram,5,931.902,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 20K,flash,1,740.321,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 20K,flash,2,801.927,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 20K,flash,3,1106.965,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 20K,flash,4,1039.840,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 20K,flash,5,974.167,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 4K,bscan-4k-external-write-verify,1,491200.737,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,bscan-9k-corrupt-readback,1,417892.956,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,bscan-9k-offset-write,1,368699.976,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,bscan-9k-unprotect-write,1,352695.521,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,bscan-9k-offset-dump,1,663.023,program,test-passed,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+baseline,program,jspi-pthread,Tang Nano 9K,bscan-9k-external-write-verify,1,421368.232045,node-test,subprocess-returned-null,adb437b5c14183b01cf09901425c3f4065130b12b864ef87907b54e09a4ad19e
+candidate,detect,jspi-pthread,Tang Nano 1K,detect,1,282.158,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 1K,detect,2,230.549,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 1K,detect,3,321.908,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 1K,detect,4,239.593,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 1K,detect,5,234.803,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano1k --detect,detect,1,257.025,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano1k --detect,detect,2,179.745,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano1k --detect,detect,3,283.208,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano1k --detect,detect,4,324.085,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano1k --detect,detect,5,253.144,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 4K,detect,1,251.797,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 4K,detect,2,320.784,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 4K,detect,3,213.153,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 4K,detect,4,248.431,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 4K,detect,5,264.427,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano4k --detect,detect,1,342.236,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano4k --detect,detect,2,228.774,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano4k --detect,detect,3,308.355,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano4k --detect,detect,4,323.105,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano4k --detect,detect,5,305.648,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 9K,detect,1,151.418,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 9K,detect,2,130.453,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 9K,detect,3,175.881,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 9K,detect,4,334.392,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 9K,detect,5,234.852,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano9k --detect,detect,1,232.045,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano9k --detect,detect,2,284.373,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano9k --detect,detect,3,214.400,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano9k --detect,detect,4,316.083,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano9k --detect,detect,5,268.252,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 20K,detect,1,338.500,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 20K,detect,2,235.175,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 20K,detect,3,277.225,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 20K,detect,4,244.835,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,Tang Nano 20K,detect,5,242.940,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano20k --detect,detect,1,392.192,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano20k --detect,detect,2,221.881,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano20k --detect,detect,3,253.028,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano20k --detect,detect,4,201.198,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,tangnano20k --detect,detect,5,187.265,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,detect,jspi-pthread,no-device,detect,,265.034,wall,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 1K,sram,1,360.404,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 1K,sram,2,521.199,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 1K,sram,3,358.875,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 1K,sram,4,318.545,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 1K,sram,5,318.038,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 1K,flash,1,1839.257,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 1K,flash,2,1932.792,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 1K,flash,3,2239.232,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 1K,flash,4,1841.922,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 1K,flash,5,1922.137,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,sram,1,463.949,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,sram,2,442.586,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,sram,3,476.479,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,sram,4,460.694,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,sram,5,631.636,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,flash,1,3152.725,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,flash,2,2754.758,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,flash,3,2913.546,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,flash,4,2748.784,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,flash,5,2958.790,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,sram,1,784.635,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,sram,2,809.358,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,sram,3,735.947,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,sram,4,715.480,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,sram,5,518.981,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,flash,1,3500.949,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,flash,2,3970.735,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,flash,3,3929.005,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,flash,4,4404.136,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,flash,5,3678.447,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 20K,sram,1,1018.230,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 20K,sram,2,970.228,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 20K,sram,3,1224.544,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 20K,sram,4,1191.022,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 20K,sram,5,901.380,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 20K,flash,1,1816.219,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 20K,flash,2,1859.798,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 20K,flash,3,2142.763,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 20K,flash,4,2181.991,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 20K,flash,5,2285.564,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,bscan-9k-external-write-verify,1,178844.180,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 4K,bscan-4k-external-write-verify,1,111638.011,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,bscan-9k-corrupt-readback,1,147847.064,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,bscan-9k-offset-write,1,89747.619,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,bscan-9k-unprotect-write,1,55962.055,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+candidate,program,jspi-pthread,Tang Nano 9K,bscan-9k-offset-dump,1,161.413,program,test-passed,36cf220b9e7507d1324d0f24bba5a2b4756a699ae0d0af53ceaf5941ae209bfe
+baseline-follow-up,program,jspi-pthread,Tang Nano 9K,bscan-9k-external-write-verify,1,183975.667,program,test-passed,f450e80fe3d5866df100499dd92d6bee3ae702f8b12b99921b59d0485db9025e

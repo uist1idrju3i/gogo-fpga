@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { BOARDS } from "../../web/lib/boards.mjs";
 
 async function openIde(page) {
   await page.goto("/");
@@ -26,6 +27,21 @@ async function confirmDeletion(page) {
   await page.locator("#delete-project-button").click();
 }
 
+async function expectProjectDirectoryAbsent(page, name) {
+  const absent = await page.evaluate(async (projectName) => {
+    const root = await navigator.storage.getDirectory();
+    const projects = await root.getDirectoryHandle("projects");
+    try {
+      await projects.getDirectoryHandle(projectName);
+      return false;
+    } catch (error) {
+      if (error.name === "NotFoundError") return true;
+      throw error;
+    }
+  }, name);
+  expect(absent, `OPFS directory ${name} must be absent`).toBe(true);
+}
+
 test("project deletion can be cancelled and removes only the confirmed project", async ({ page }) => {
   await openIde(page);
   await createProject(page, "zz-delete");
@@ -37,6 +53,7 @@ test("project deletion can be cancelled and removes only the confirmed project",
   await expect(page.locator("#project-action-status")).toHaveText("「zz-delete」を削除しました。");
   await expect(page.locator("#project-name")).toHaveText("blink");
   expect(await storedProjects(page)).toEqual(["blink"]);
+  await expectProjectDirectoryAbsent(page, "zz-delete");
   await page.reload();
   await expect(page.locator("#project-name")).toHaveText("blink");
   await expect(page.locator("#project-select option")).toHaveCount(1);
@@ -53,6 +70,7 @@ test("deleting the last project stays empty after reload and permits creating a 
   await expect(page.locator("#add-file-button")).toBeDisabled();
   await expect(page.locator("#file-list")).toBeEmpty();
   expect(await storedProjects(page)).toEqual([]);
+  await expectProjectDirectoryAbsent(page, "blink");
   await page.reload();
   await expect(page.locator("#project-name")).toHaveText("なし");
   await expect(page.locator("#project-select option")).toHaveCount(0);
@@ -73,12 +91,19 @@ test("failed OPFS deletion keeps the project editable and reports the failure", 
       return remove.call(this, name, options);
     };
   });
+  await page.locator(".cm-content").press("Control+End");
+  await page.keyboard.insertText("\n// 削除失敗後にも残る編集\n");
+  const edited = await page.locator(".cm-content").textContent();
   await confirmDeletion(page);
   await expect(page.locator("#project-action-status")).toContainText("プロジェクトを削除できません");
   await expect(page.locator("#project-name")).toHaveText("blink");
   await expect(page.locator("#delete-project-button")).toBeEnabled();
   await expect(page.locator(".cm-content")).toHaveAttribute("contenteditable", "true");
+  expect(await page.locator(".cm-content").textContent()).toBe(edited);
   expect(await storedProjects(page)).toEqual(["blink"]);
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.reload();
+  await expect(page.locator(".cm-content")).toContainText("削除失敗後にも残る編集");
 });
 
 test("deletion drains manual saves and prevents a late save from recreating the project", async ({ page }) => {
@@ -102,7 +127,21 @@ test("deletion drains manual saves and prevents a late save from recreating the 
   await page.evaluate(() => window.releaseProjectSave());
   await expect(page.locator("#project-action-status")).toHaveText("「zz-pending」を削除しました。");
   expect(await storedProjects(page)).toEqual(["blink"]);
+  await expectProjectDirectoryAbsent(page, "zz-pending");
   await page.reload();
   await expect(page.locator("#project-name")).toHaveText("blink");
   expect(await storedProjects(page)).toEqual(["blink"]);
+});
+
+test("project deletion controls remain visible on all supported boards", async ({ page }, testInfo) => {
+  await openIde(page);
+  for (const board of BOARDS) {
+    await page.locator("#board-select").selectOption(board.id);
+    await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await expect(page.locator("#delete-project-button")).toBeVisible();
+    await expect(page.locator("#delete-project-button")).toBeEnabled();
+    const screenshot = testInfo.outputPath(`${board.id}.png`);
+    await page.screenshot({ path: screenshot, fullPage: true });
+    await testInfo.attach(board.id, { path: screenshot, contentType: "image/png" });
+  }
 });
