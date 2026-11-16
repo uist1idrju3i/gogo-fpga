@@ -58,6 +58,12 @@ package utils is
   --! return compiler used
   function get_compiler return compiler_t;
 
+  --! pointer advancement (unsigned)
+  function advance (arg : unsigned; max_val : unsigned) return unsigned;
+
+  --! pointer advancement (integer)
+  function advance (arg : integer; max_val : integer) return integer;
+
   -- BIT/BYTE MANIPULATION
   --! count ones in std_logic_vector
   function count_ones (arg : std_logic_vector) return natural;
@@ -100,6 +106,9 @@ package utils is
 
   --! and all bits in std_logic_vector (to be used in Xilinx)
   function andvec (vec : std_logic_vector) return std_logic;
+
+  --! pad with zeros (MSB left)
+  function pad_zero (arg : std_logic_vector; padded_size : integer) return std_logic_vector;
 
   -- PATTERNS
   --! generate word with even bits to 1 odd bits to 0
@@ -297,6 +306,40 @@ package body utils is
 
   end function get_compiler;
 
+  --! pointer advancement
+  function advance (arg : unsigned; max_val : unsigned) return unsigned is
+
+    variable v_res : arg'subtype;
+
+  begin
+
+    if (arg < max_val) then
+      v_res := arg + 1;
+    else
+      v_res := (others => '0');
+    end if;
+
+    return v_res;
+
+  end function advance;
+
+  --! pointer advancement
+  function advance (arg : integer; max_val : integer) return integer is
+
+    variable v_res : arg'subtype;
+
+  begin
+
+    if (arg < max_val) then
+      v_res := arg + 1;
+    else
+      v_res := 0;
+    end if;
+
+    return v_res;
+
+  end function advance;
+
   -- BIT/BYTE MANIPULATION
   -- count ones
   function count_ones (arg : std_logic_vector) return natural is
@@ -322,12 +365,14 @@ package body utils is
   -- invert bit order
   function invert_bit_order (word : std_logic_vector) return std_logic_vector is
 
-    variable v_res : std_logic_vector(word'range);
+    -- any index range of word (e.g. 1 to N, the result of the logical operators)
+    alias    a_word : std_logic_vector(word'length - 1 downto 0) is word;
+    variable v_res  : std_logic_vector(word'length - 1 downto 0);
 
   begin
 
-    for i in 0 to word'length - 1 loop
-      v_res(i) := word(word'length - i - 1);
+    for i in v_res'range loop
+      v_res(i) := a_word(word'length - i - 1);
     end loop;
 
     return v_res;
@@ -527,6 +572,17 @@ package body utils is
     return v_ret;
 
   end function andvec;
+
+  function pad_zero (arg : std_logic_vector; padded_size : integer) return std_logic_vector is
+
+    variable v_res : std_logic_vector(padded_size - 1 downto 0) := (others => '0');
+
+  begin
+
+    v_res(arg'left downto 0) := arg;
+    return v_res;
+
+  end function pad_zero;
 
   --! generate word with even bits to 1 odd bits to 0
   function gen_even (len : natural) return std_logic_vector is

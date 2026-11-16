@@ -48,16 +48,16 @@
               "language": "vhdl",
               "library": "colibri",
               "asset": "colibri/src/common/utils.vhdl",
-              "size": 16027,
-              "sha256": "7aca8e6d3b7771233eba9df5e5cda6bec1bb9639c20502f5ffb48be8c5f7d84a"
+              "size": 17382,
+              "sha256": "00f549cab16c8f6bf9f3376bebc93323a2953bc236f2cf1043def46db8dfc729"
             },
             {
               "path": "src/common/counter.vhdl",
               "language": "vhdl",
               "library": "colibri",
               "asset": "colibri/src/common/counter.vhdl",
-              "size": 1845,
-              "sha256": "45eec185d30f13ef3aa81391ee5992c90bd44b7d8e083af1f7085b44efbc5c24"
+              "size": 1983,
+              "sha256": "4c3d9bfdbc3e518325c8663fda9a91d104b1383372378bd1acb9a11ab0650726"
             }
           ],
           "data": [],
@@ -74,7 +74,7 @@
       ],
       "source": {
         "url": "https://gitlab.cern.ch/colibri/colibri.git",
-        "revision": "3fa784121ccea86d9e65b2e0dc08d2a3327f5f2f"
+        "revision": "98b83819debd08cb1b61c9aba9bd7b1f0e13ca3d"
       }
     },
     {
@@ -142,7 +142,7 @@
       ],
       "source": {
         "url": "https://github.com/open-logic/open-logic.git",
-        "revision": "d9f123aae1c6022288782668067311f9794da0a2"
+        "revision": "5136eedce163fb23fecb647d7a00fc6861e4d6d0"
       }
     },
     {
@@ -199,7 +199,7 @@
       ],
       "source": {
         "url": "https://github.com/hdl-modules/hdl-modules.git",
-        "revision": "8142d3a1d878651811427e609293946e699c5cb7"
+        "revision": "2bdb03032345a72b2cff17d2ab5ab6af422b636b"
       }
     },
     {
@@ -636,40 +636,40 @@
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_package.vhd",
-              "size": 78871,
-              "sha256": "10f74fe35dede65267414ed83aabe2d300a3421aefff8491da8e0d0a572bcca7"
+              "size": 79363,
+              "sha256": "d9bc0767529d9910d0b852a9a62834a48e14378cd829974473a062bb6edafb8d"
             },
             {
               "path": "rtl/core/neorv32_prim.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_prim.vhd",
-              "size": 19302,
-              "sha256": "2aa574538aaecbd9b502818fb73d2e78abfe16d040c7396662755725731ab1a5"
+              "size": 19375,
+              "sha256": "5aef323546602c1f7a4783c633e3d3bd74a4e85be94383ea843185b62aa33189"
             },
             {
               "path": "rtl/core/neorv32_cpu.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu.vhd",
-              "size": 32613,
-              "sha256": "77e44b422b07b6d827479bd44dc4240feaab38ed0adc1dab53f33a44a2504917"
+              "size": 33205,
+              "sha256": "91d186b86ce3d1ce76d4059fd88985b25c7caa3ad8f5e7b24d6a05f79953ed6f"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_alu.vhd",
-              "size": 17440,
-              "sha256": "e1cbe0044f470c78dd3c83003d62c3487d8ddcaa72fe05b2f41b50712cfe8cb4"
+              "size": 17555,
+              "sha256": "e7ac5507bbac1b0b9e28b2e92dd4395ef12e4ace5b00d7b9894cb684a1e334a5"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu_bitmanip.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_alu_bitmanip.vhd",
-              "size": 27495,
-              "sha256": "02f59104a768a6317e7a12872d9e6ca76961679bb4f807dd38ccf8662174d4a7"
+              "size": 27512,
+              "sha256": "1dfa74d93ce327db71d11f22baecf0a4afcec6e1211d679f33e6961c50a8d104"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu_cfu.vhd",
@@ -677,7 +677,7 @@
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_alu_cfu.vhd",
               "size": 9708,
-              "sha256": "83d442fce2e8f4ba5cc87f70dfbcfa7e501bd81c57ba3d19558b066a35e02b59"
+              "sha256": "f6172da1bee4fc4750187833f4492f3d38a1121524a64518a62122a6a79627e0"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu_cond.vhd",
@@ -685,7 +685,7 @@
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_alu_cond.vhd",
               "size": 2233,
-              "sha256": "47874dce2f222a3d526e179f0bbadab0a5cc8a25879be6029813d580c39aaec6"
+              "sha256": "572b5e364f19d2a48ceb5ba3e4956eafd1e4607bb590a425bc754991bf4426ef"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu_crypto.vhd",
@@ -693,15 +693,15 @@
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_alu_crypto.vhd",
               "size": 22902,
-              "sha256": "4e3989e94ec1669ca37844e444c0dc9be868b4dcd6ba37fff9ea729667f2546d"
+              "sha256": "7b10a3e934cb865946b55b2c679752b209aa64df15a34eb4ae3ee8c4cd26e757"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu_fpu.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_alu_fpu.vhd",
-              "size": 118813,
-              "sha256": "632d93286e9714e6e2616e1ed5c0e2c29cf2588d137c1f25206559223b7943fd"
+              "size": 119698,
+              "sha256": "dc985a5813fc774e05772925d9aa3ffb8b15b3a02711a7ae69bda53d461c52ad"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu_muldiv.vhd",
@@ -709,7 +709,7 @@
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_alu_muldiv.vhd",
               "size": 12505,
-              "sha256": "fedd9a1f750b1f7c18f732290a9e6a79ff638b992e4171ab64f9c93ab5eefcbe"
+              "sha256": "e74eb5bd8c0912e30216009ea44896d47302098045cdd4a0359a73abf1b07d71"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu_shifter.vhd",
@@ -717,23 +717,23 @@
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_alu_shifter.vhd",
               "size": 5893,
-              "sha256": "94213127a23b31e301b35e93f9a43d4b70adb6c553e31dadcfddfd6fabbcf050"
+              "sha256": "ca89fcc20fb851e9ced54fb443cf954a3db55be6bebf18c7ba757566e57eaa79"
             },
             {
               "path": "rtl/core/neorv32_cpu_control.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_control.vhd",
-              "size": 75517,
-              "sha256": "d476c4b577c6523979645dca69707e30b5f0b8ae6e8c8fb72c3223d5f808fe21"
+              "size": 76427,
+              "sha256": "f4a4f823c58714dddda8d99eb803af4a08d11a74cbef7af89e77e7dfbb2bb056"
             },
             {
               "path": "rtl/core/neorv32_cpu_counters.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_counters.vhd",
-              "size": 12190,
-              "sha256": "fbb85384911d6f29025c5c904bcd038df1e740989b0f1cd953ae3595e6fc6084"
+              "size": 12237,
+              "sha256": "ba652e836f1f514db61686a0db38545f612f43e997553c377680143956776ee6"
             },
             {
               "path": "rtl/core/neorv32_cpu_decompressor.vhd",
@@ -741,15 +741,15 @@
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_decompressor.vhd",
               "size": 24371,
-              "sha256": "f30761a981cab7bae0156d990bcb43f46094753f02644fb27494137023c1c206"
+              "sha256": "17680229b51e25f90b12c658d5660345d5b2d28b0bc28021932830c4d6902e90"
             },
             {
               "path": "rtl/core/neorv32_cpu_frontend.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_frontend.vhd",
-              "size": 11667,
-              "sha256": "5a6e1681ad160980b820ab05498e59ce85a902c9e8c298fd0b295fbdfcdfb43d"
+              "size": 11690,
+              "sha256": "ec4aa6d852a81aa9aa9c20310b30a1685449e5ac3e4d9acf097e7e57e9f98c05"
             },
             {
               "path": "rtl/core/neorv32_cpu_hwtrig.vhd",
@@ -757,15 +757,15 @@
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_hwtrig.vhd",
               "size": 9799,
-              "sha256": "ddec6f31be354f1028be5db0b8b8867299623abfe00a068d1ba1c3f1a28ef15c"
+              "sha256": "231e845a8d91db975e01315fb2ba49e37da5488084a00422f68f502c0e125f07"
             },
             {
               "path": "rtl/core/neorv32_cpu_lsu.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_lsu.vhd",
-              "size": 8529,
-              "sha256": "5db91374038ab7c677ee24991f086203dfa7d5ae99583a10665faf9af5b84666"
+              "size": 8590,
+              "sha256": "a4d844bd4fa0f0fa32b5e9b7f9845b35b2013ff29ffdcfd905b7aace064ab5b0"
             },
             {
               "path": "rtl/core/neorv32_cpu_pmp.vhd",
@@ -773,7 +773,7 @@
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_pmp.vhd",
               "size": 15630,
-              "sha256": "aa812d40a8f0fc3598d36a6da9ecd1bf109c99dd693351aac0b6e7e190e61a9c"
+              "sha256": "d0ee17dee16ac1c4b79d9ffa8a5226daa6f965f94c3826ce4d7b22863af99267"
             },
             {
               "path": "rtl/core/neorv32_cpu_regfile.vhd",
@@ -781,15 +781,15 @@
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_regfile.vhd",
               "size": 8510,
-              "sha256": "3ab615409ca5f0ed99c60daabda6dec0fac6ef06cb5140da183199c82ab07247"
+              "sha256": "77a1469117ea0bc6f0a4ffe9f684c6e388d4dd24415755e1ae36110dfef801b1"
             },
             {
               "path": "rtl/core/neorv32_cpu_trace.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_trace.vhd",
-              "size": 46219,
-              "sha256": "4bb86223d40efe7406b1f00eaae38c85797fdbcf09640b22914cecf971ed69a1"
+              "size": 46173,
+              "sha256": "eee14fe00c643076751b7d7e6322fc1179e95b874d307ca2de5a94bcaf6362e1"
             }
           ],
           "data": [],
@@ -814,7 +814,7 @@
       ],
       "source": {
         "url": "https://github.com/stnolting/neorv32.git",
-        "revision": "84743cdbeefccb531f836d66933c8478f1d9bf71"
+        "revision": "87c8c98bc34e858dea7255245a1e615053337ef1"
       }
     },
     {
@@ -1291,7 +1291,7 @@
       ],
       "source": {
         "url": "https://github.com/darklife/darkriscv.git",
-        "revision": "955511961f139c54d3385063cd9bf40f4dddadd8"
+        "revision": "bb6b483cc61a2886a0602c7e62b14f5995ddfbb9"
       }
     },
     {
@@ -1379,7 +1379,7 @@
       "components": [],
       "source": {
         "url": "https://github.com/lowRISC/ibex.git",
-        "revision": "f4515520c0045bb8ef1e72d46ed82499a6ac5f18"
+        "revision": "3d524f19ee8e464b3fb0e29c77dc9ff45934815a"
       }
     },
     {
@@ -1431,7 +1431,7 @@
       "components": [],
       "source": {
         "url": "https://github.com/SpinalHDL/VexiiRiscv.git",
-        "revision": "9f70315deb3390b283995c5b8f1bd38215ecf52b"
+        "revision": "22510fc004a6e817e2aa293bdd2877d897f5b8ce"
       }
     },
     {
@@ -1483,7 +1483,7 @@
       "components": [],
       "source": {
         "url": "https://github.com/UVVM/UVVM.git",
-        "revision": "825072572dbf2d6079c9ca07a55964271b724664"
+        "revision": "b38e32d0d2857620c8fde2d524edd9769fe6ca82"
       }
     },
     {
@@ -1510,7 +1510,7 @@
       "components": [],
       "source": {
         "url": "https://github.com/VUnit/vunit.git",
-        "revision": "6c2f49f0ec4c4e2a84013a987901c8fce848c654"
+        "revision": "3fff9e52c7ba7aa1b2753c1783f146238b361493"
       }
     },
     {

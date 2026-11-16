@@ -18,7 +18,7 @@
 -- -------------------------------------------------------------------------------- --
 -- The NEORV32 RISC-V Processor - https://github.com/stnolting/neorv32              --
 -- Copyright (c) NEORV32 contributors.                                              --
--- Copyright (c) 2020 - 2026 Stephan Nolting. All rights reserved.                  --
+-- Copyright (c) Stephan Nolting. All rights reserved.                              --
 -- Licensed under the BSD-3-Clause license, see LICENSE for details.                --
 -- SPDX-License-Identifier: BSD-3-Clause                                            --
 -- ================================================================================ --
@@ -807,7 +807,8 @@ begin
   -- integer multiplier (unsigned only) --
   multiplier_core_inst: entity neorv32.neorv32_prim_mul
   generic map (
-    DWIDTH => 24
+    DWIDTH   => 24,
+    NUM_REGS => 1
   )
   port map (
     -- global control --
@@ -1227,11 +1228,13 @@ begin
     variable a_pos_zero_v, a_neg_zero_v, b_pos_zero_v, b_neg_zero_v : std_ulogic;
     variable a_pos_inf_v,  a_neg_inf_v,  b_pos_inf_v,  b_neg_inf_v  : std_ulogic;
     variable a_snan_v,     a_qnan_v,     b_snan_v,     b_qnan_v     : std_ulogic;
+    variable rdn_v : std_ulogic;
   begin
     if (rstn_i = '0') then
       addsub.res_class <= (others => '0');
     elsif rising_edge(clk_i) then
       -- shortcuts --
+      rdn_v := bool_to_ulogic_f(fpu_operands.frm = "010"); -- round down (towards -infinity): exact zero sum is -0
       a_pos_norm_v := fpu_operands.rs1_class(fp_class_pos_norm_c);
       b_pos_norm_v := fpu_operands.rs2_class(fp_class_pos_norm_c);
       a_neg_norm_v := fpu_operands.rs1_class(fp_class_neg_norm_c);
@@ -1302,12 +1305,14 @@ begin
 
         -- +zero --
         addsub.res_class(fp_class_pos_zero_c) <=
-          (a_pos_zero_v and b_pos_zero_v) or -- +zero + +zero
-          (a_pos_zero_v and b_neg_zero_v) or -- +zero + -zero
-          (a_neg_zero_v and b_pos_zero_v);   -- -zero + +zero
+          (a_pos_zero_v and b_pos_zero_v) or                    -- +zero + +zero
+          (a_pos_zero_v and b_neg_zero_v and (not rdn_v)) or    -- +zero + -zero (not round-down)
+          (a_neg_zero_v and b_pos_zero_v and (not rdn_v));      -- -zero + +zero (not round-down)
         -- -zero --
         addsub.res_class(fp_class_neg_zero_c) <=
-          (a_neg_zero_v and b_neg_zero_v);   -- -zero + -zero
+          (a_neg_zero_v and b_neg_zero_v) or                    -- -zero + -zero
+          (a_pos_zero_v and b_neg_zero_v and rdn_v) or          -- +zero + -zero (round-down)
+          (a_neg_zero_v and b_pos_zero_v and rdn_v);            -- -zero + +zero (round-down)
 
         -- qNaN --
         addsub.res_class(fp_class_qnan_c) <=
@@ -1354,12 +1359,14 @@ begin
 
         -- +zero --
         addsub.res_class(fp_class_pos_zero_c) <=
-          (a_pos_zero_v and b_pos_zero_v) or -- +zero - +zero
-          (a_pos_zero_v and b_neg_zero_v) or -- +zero - -zero
-          (a_neg_zero_v and b_neg_zero_v);   -- -zero - -zero
+          (a_pos_zero_v and b_neg_zero_v) or                    -- +zero - -zero
+          (a_pos_zero_v and b_pos_zero_v and (not rdn_v)) or    -- +zero - +zero (not round-down)
+          (a_neg_zero_v and b_neg_zero_v and (not rdn_v));      -- -zero - -zero (not round-down)
         -- -zero --
         addsub.res_class(fp_class_neg_zero_c) <=
-          (a_neg_zero_v and b_pos_zero_v);   -- -zero - +zero
+          (a_neg_zero_v and b_pos_zero_v) or                    -- -zero - +zero
+          (a_pos_zero_v and b_pos_zero_v and rdn_v) or          -- +zero - +zero (round-down)
+          (a_neg_zero_v and b_neg_zero_v and rdn_v);            -- -zero - -zero (round-down)
 
         -- qNaN --
         addsub.res_class(fp_class_qnan_c) <=
@@ -1504,7 +1511,7 @@ end architecture;
 -- -------------------------------------------------------------------------------- --
 -- The NEORV32 RISC-V Processor - https://github.com/stnolting/neorv32              --
 -- Copyright (c) NEORV32 contributors.                                              --
--- Copyright (c) 2020 - 2026 Stephan Nolting. All rights reserved.                  --
+-- Copyright (c) Stephan Nolting. All rights reserved.                              --
 -- Licensed under the BSD-3-Clause license, see LICENSE for details.                --
 -- SPDX-License-Identifier: BSD-3-Clause                                            --
 -- ================================================================================ --
@@ -1938,7 +1945,7 @@ end architecture;
 -- -------------------------------------------------------------------------------- --
 -- The NEORV32 RISC-V Processor - https://github.com/stnolting/neorv32              --
 -- Copyright (c) NEORV32 contributors.                                              --
--- Copyright (c) 2020 - 2026 Stephan Nolting. All rights reserved.                  --
+-- Copyright (c) Stephan Nolting. All rights reserved.                              --
 -- Licensed under the BSD-3-Clause license, see LICENSE for details.                --
 -- SPDX-License-Identifier: BSD-3-Clause                                            --
 -- ================================================================================ --
@@ -2079,6 +2086,7 @@ begin
           elsif (unsigned(ctrl.cnt) = 126) then -- num < 1.0 but num >= 0.5
             sreg.int    <= (others => '0');
             sreg.mant   <= '1' & sreg.mant(sreg.mant'left downto 1);
+            sreg.ext_s  <= sreg.mant(0); -- keep the shifted-out LSB as sticky bit (otherwise 0.5+ulp looks like a tie)
             ctrl.under  <= '1'; -- as the number cannot be represented correctly it will be an underflow
             ctrl.cnt    <= (others => '0');
           else

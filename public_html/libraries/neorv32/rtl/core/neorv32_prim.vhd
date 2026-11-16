@@ -7,7 +7,7 @@
 -- -------------------------------------------------------------------------------- --
 -- The NEORV32 RISC-V Processor - https://github.com/stnolting/neorv32              --
 -- Copyright (c) NEORV32 contributors.                                              --
--- Copyright (c) 2020 - 2026 Stephan Nolting. All rights reserved.                  --
+-- Copyright (c) Stephan Nolting. All rights reserved.                              --
 -- Licensed under the BSD-3-Clause license, see LICENSE for details.                --
 -- SPDX-License-Identifier: BSD-3-Clause                                            --
 -- ================================================================================ --
@@ -28,6 +28,7 @@ entity neorv32_prim_fifo is
     clk_i   : in  std_ulogic;                           -- clock, rising edge
     rstn_i  : in  std_ulogic;                           -- async reset, low-active
     clear_i : in  std_ulogic;                           -- sync reset, high-active
+    level_o : out std_ulogic_vector(AWIDTH downto 0);   -- fill level
     -- write port --
     wdata_i : in  std_ulogic_vector(DWIDTH-1 downto 0); -- write data
     we_i    : in  std_ulogic;                           -- write enable
@@ -73,6 +74,9 @@ begin
   w_nxt <= (others => '0') when (clear_i = '1') else std_ulogic_vector(unsigned(w_pnt) + 1) when (we = '1') else w_pnt;
   r_nxt <= (others => '0') when (clear_i = '1') else std_ulogic_vector(unsigned(r_pnt) + 1) when (re = '1') else r_pnt;
 
+  -- fill level --
+  level_o <= std_ulogic_vector(unsigned(w_pnt) - unsigned(r_pnt));
+
   -- Status ---------------------------------------------------------------------------------
   -- -------------------------------------------------------------------------------------------
   -- more than 1 FIFO entry --
@@ -88,7 +92,7 @@ begin
       avail_reg: process(clk_i)
       begin
         if rising_edge(clk_i) then
-          avail <= not empty;
+          avail <= (not empty) and (not clear_i);
         end if;
       end process;
     end generate;
@@ -185,7 +189,7 @@ end architecture;
 -- -------------------------------------------------------------------------------- --
 -- The NEORV32 RISC-V Processor - https://github.com/stnolting/neorv32              --
 -- Copyright (c) NEORV32 contributors.                                              --
--- Copyright (c) 2020 - 2026 Stephan Nolting. All rights reserved.                  --
+-- Copyright (c) Stephan Nolting. All rights reserved.                              --
 -- Licensed under the BSD-3-Clause license, see LICENSE for details.                --
 -- SPDX-License-Identifier: BSD-3-Clause                                            --
 -- ================================================================================ --
@@ -284,7 +288,7 @@ end architecture;
 -- -------------------------------------------------------------------------------- --
 -- The NEORV32 RISC-V Processor - https://github.com/stnolting/neorv32              --
 -- Copyright (c) NEORV32 contributors.                                              --
--- Copyright (c) 2020 - 2026 Stephan Nolting. All rights reserved.                  --
+-- Copyright (c) Stephan Nolting. All rights reserved.                              --
 -- Licensed under the BSD-3-Clause license, see LICENSE for details.                --
 -- SPDX-License-Identifier: BSD-3-Clause                                            --
 -- ================================================================================ --
@@ -417,7 +421,7 @@ end architecture;
 -- -------------------------------------------------------------------------------- --
 -- The NEORV32 RISC-V Processor - https://github.com/stnolting/neorv32              --
 -- Copyright (c) NEORV32 contributors.                                              --
--- Copyright (c) 2020 - 2026 Stephan Nolting. All rights reserved.                  --
+-- Copyright (c) Stephan Nolting. All rights reserved.                              --
 -- Licensed under the BSD-3-Clause license, see LICENSE for details.                --
 -- SPDX-License-Identifier: BSD-3-Clause                                            --
 -- ================================================================================ --
@@ -446,8 +450,8 @@ end entity;
 architecture neorv32_prim_cnt_rtl of neorv32_prim_cnt is
 
   signal count : std_ulogic_vector(63 downto 0);
-  signal carry, incen : std_ulogic_vector(0 downto 0);
-  signal inc_lo, inc_hi : std_ulogic_vector(32 downto 0);
+  signal carry : std_ulogic_vector(0 downto 0);
+  signal inc   : std_ulogic_vector(32 downto 0);
 
 begin
 
@@ -456,32 +460,28 @@ begin
   counter_core: process(rstn_i, clk_i)
   begin
     if (rstn_i = '0') then
-      incen <= (others => '0');
       count <= (others => '0');
       carry <= (others => '0');
     elsif rising_edge(clk_i) then
-      -- increment enable --
-      incen(0) <= inc_i;
       -- low-word --
       if (we_i(0) = '1') then
         count(31 downto 0) <= data_i;
       else
-        count(31 downto 0) <= inc_lo(31 downto 0);
+        count(31 downto 0) <= inc(31 downto 0);
       end if;
       -- low-to-high carry --
-      carry(0) <= inc_lo(32);
+      carry(0) <= inc(32);
       -- high-word --
       if (we_i(1) = '1') then
         count(63 downto 32) <= data_i;
       else
-        count(63 downto 32) <= inc_hi(31 downto 0);
+        count(63 downto 32) <= std_ulogic_vector(unsigned(count(63 downto 32)) + unsigned(carry));
       end if;
     end if;
   end process;
 
-  -- increments --
-  inc_lo <= std_ulogic_vector(unsigned('0' & count(31 downto  0)) + unsigned(incen));
-  inc_hi <= std_ulogic_vector(unsigned('0' & count(63 downto 32)) + unsigned(carry));
+  -- low-word increment --
+  inc <= (std_ulogic_vector(unsigned('0' & count(31 downto 0)) + 1)) when (inc_i = '1') else ('0' & count(31 downto 0));
 
   -- Output Gating and Trimming -------------------------------------------------------------
   -- -------------------------------------------------------------------------------------------
