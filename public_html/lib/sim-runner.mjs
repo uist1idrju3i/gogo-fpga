@@ -106,11 +106,11 @@ export function createSimRunner({
     return worker;
   }
 
-  function run({ files, top, timeLimitMs, includeDirectories, defines }) {
+  function run({ files, top, timeLimitMs, includeDirectories, defines, formal = false }) {
     if (active) {
       return Promise.reject(new Error("A simulation is already running"));
     }
-    if (!Number.isFinite(timeLimitMs) || timeLimitMs <= 0) {
+    if (!Number.isFinite(timeLimitMs) || timeLimitMs <= 0 || typeof formal !== "boolean") {
       return Promise.resolve(emptyResult("failed", "Invalid simulation time limit"));
     }
     const operation = {
@@ -170,7 +170,7 @@ export function createSimRunner({
         );
       }, moduleLoadTimeoutMs);
       try {
-        operation.worker.postMessage({ files, top, includeDirectories, defines });
+        operation.worker.postMessage({ files, top, includeDirectories, defines, ...(formal ? { formal: true } : {}) });
       } catch (error) {
         finish(emptyResult("failed", String(error)), true);
       }

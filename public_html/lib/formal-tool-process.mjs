@@ -2,7 +2,7 @@ import { attachBytePipe, createBytePipe } from "./byte-pipe.mjs";
 import { applyWorkspaceDelta, packWorkspaceDelta } from "./formal-workspace.mjs";
 import { validateFormalToolCommand } from "./formal-tool-command.mjs";
 
-export function startFormalToolProcess({ data, sources, manifest, solvers, yosys, pythonFactory,
+export function startFormalToolProcess({ data, sources, manifest, solvers, yosys, ghdl, pythonFactory,
   workerFactory, solverWorkerFactory, wasiWorkerFactory = () => new Worker(new URL("../formal-wasi-worker.mjs", import.meta.url), { type: "module" }),
   timeoutMs, onStdout, onStderr }) {
   const command = validateFormalToolCommand(data.args, data.cwd);
@@ -31,7 +31,8 @@ export function startFormalToolProcess({ data, sources, manifest, solvers, yosys
       finish({ status: "exited", exitCode: result.exitCode, integrityVerified: true, frame, children: result.children });
     }).catch(error => finish({ status: "transport-error", error: String(error.message).slice(0, 1024) }));
   } else {
-    if (!yosys) throw new Error("Missing pinned formal Yosys assets");
+    const assets = command.runtime === "ghdl" ? ghdl : yosys;
+    if (!assets) throw new Error("Missing pinned formal tool assets");
     worker = wasiWorkerFactory();
     if (!worker || !["postMessage", "terminate", "addEventListener", "removeEventListener"].every(name => typeof worker[name] === "function")) {
       worker?.terminate?.(); throw new Error("Invalid formal WASI worker");
@@ -53,7 +54,7 @@ export function startFormalToolProcess({ data, sources, manifest, solvers, yosys
       if (terminal) return;
       void (async () => {
         if (result?.type !== "exit" || result.jobId !== data.processId || result.integrityVerified !== true ||
-            result.sha256 !== yosys.sha256 || result.shareSha256 !== yosys.shareSha256 ||
+            result.sha256 !== assets.sha256 || result.shareSha256 !== assets.shareSha256 ||
             !Number.isInteger(result.result?.exitCode) || result.result.exitCode < 0 || result.result.exitCode > 255 ||
             !(result.frame instanceof Uint8Array)) throw new Error(result?.error ?? "Invalid formal WASI result");
         await applyWorkspaceDelta(data.files, result.frame);
@@ -63,7 +64,7 @@ export function startFormalToolProcess({ data, sources, manifest, solvers, yosys
     });
     worker.addEventListener("error", event => { event.preventDefault?.(); finish({ status: "crashed", error: String(event.message).slice(0, 1024) }); });
     worker.addEventListener("messageerror", () => finish({ status: "protocol-error" }));
-    try { worker.postMessage({ ...yosys, jobId: data.processId, args: data.args, cwd: data.cwd, files: data.files, channels }); }
+    try { worker.postMessage({ ...assets, jobId: data.processId, args: data.args, cwd: data.cwd, files: data.files, channels }); }
     catch (error) { finish({ status: "setup-error", error: String(error.message).slice(0, 1024) }); }
   }
   return Object.freeze({ completion, cancel() { child?.cancel(); finish({ status: "cancelled" }); } });
