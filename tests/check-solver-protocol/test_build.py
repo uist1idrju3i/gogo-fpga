@@ -25,7 +25,11 @@ class BuildTest(unittest.TestCase):
                    for name in ("gmp", "mpfr")]
         versions = dict(gmp="fixture", mpfr="fixture")
         self.assertEqual(BUILD.check_bitwuzla_meson_dependencies(entries, prefix, versions), entries)
+        system_entries = [{**item, "compile_args": ["-isystem/staged/include"]} for item in entries]
+        self.assertEqual(BUILD.check_bitwuzla_meson_dependencies(system_entries, prefix, versions), system_entries)
         for name, key, value in (("gmp", "version", "host"), ("gmp", "compile_args", ["-I/usr/include"]),
+                                  ("gmp", "compile_args", ["-isystem/usr/include"]),
+                                  ("gmp", "compile_args", ["-isystem/staged/include", "-I/usr/include"]),
                                   ("mpfr", "link_args", ["-lmpfr", "-lgmp"])):
             changed = [{**item, **({key: value} if item["name"] == name else {})} for item in entries]
             with self.subTest(name=name, key=key), self.assertRaises(ValueError):

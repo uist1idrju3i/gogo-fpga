@@ -26,6 +26,8 @@ Bitwuzlaのnative releaseではLTOとmimallocの既定値も変わりました�
 
 Bitwuzla 0.10.0で移動した`src/fp/floating_point.cpp`に合わせて、GMPの32-bit limb用パッチを更新します。CaDiCaL 3.0.1のRSS処理ではnativeのmacOS向け分岐を保持します。また、上流のMeson wrapに加わった2件の`diff_files`も、ビルド用コピーに適用してhashを記録します。手動で展開したsubprojectでも、上流が必要とする修正を落とさないためです。
 
+新版のMeson構成は、固定したGMP・MPFRのヘッダーを`-isystem`で参照します。依存検査と独立監査は、同じ固定先への`-I`と`-isystem`だけを許可し、hostのincludeや静的archive以外への切替を拒否します。上流の`diff_files`は本文のhashに加え、適用コマンドとログも監査します。host参照、適用記録の欠落、metadataを書き換えた場合の負の対照も検査します。
+
 ## 誤検出と据置き
 
 | 依存 | Issueの表示 | 判断 |

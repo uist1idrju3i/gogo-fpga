@@ -192,7 +192,7 @@ def check_bitwuzla_meson_dependencies(entries, prefix, versions):
         if name == "mpfr":
             libraries.append(str(prefix / "lib/libgmp.a"))
         if (entry.get("version") != versions[name]
-                or entry.get("compile_args") != [f"-I{prefix}/include"]
+                or entry.get("compile_args") not in ([f"-I{prefix}/include"], [f"-isystem{prefix}/include"])
                 or entry.get("link_args") != libraries):
             raise ValueError(f"Meson did not select the staged {name} headers and libraries")
     return entries
