@@ -216,6 +216,21 @@ test("deleting the last project preserves an initialized empty workspace across 
   assert.deepEqual(await createOpfsStore(mock.storage).listProjects(), []);
 });
 
+test("a failed first OPFS save does not mark the workspace initialized", async () => {
+  const mock = memoryStorage();
+  const { project, files } = await createLibraryProject();
+  mock.state.failClose = true;
+  await assert.rejects(createOpfsStore(mock.storage).save(project, files), /保存できません/);
+  const reloaded = createOpfsStore(mock.storage);
+  assert.deepEqual(await reloaded.listProjects(), []);
+  assert.equal(await reloaded.hasWorkspace(), false);
+  assert.equal(await reloaded.remove("missing"), false);
+  assert.equal(await reloaded.hasWorkspace(), false);
+  mock.state.failClose = false;
+  await reloaded.save(project, files);
+  assert.equal(await reloaded.hasWorkspace(), true);
+});
+
 test("removing a project preserves its neighbours and rejects invalid names", async () => {
   const mock = memoryStorage();
   const { project, files } = await createLibraryProject();
