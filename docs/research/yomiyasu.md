@@ -10,7 +10,7 @@
 | submoduleのcommit | `552c12c472ddfb79e2ee7a15219847782686a945` | `db78b9bc5e868549b517a037df7a4d1c93edac23` |
 | ライセンス | MIT | MIT、原文の差分なし |
 
-[全8コミットの比較](https://github.com/nanaism/yomiyasu/compare/552c12c472ddfb79e2ee7a15219847782686a945...db78b9bc5e868549b517a037df7a4d1c93edac23)と、[固定した変更履歴の全文](https://github.com/nanaism/yomiyasu/blob/db78b9bc5e868549b517a037df7a4d1c93edac23/CHANGELOG.md#L5-L445)を読みました。2.5.0、3.0.0、3.0.1、3.1.0の機能、移行上の注意、上流の測定と限界を確認しています。MITの表示はsubmoduleの[LICENSE](../../vendor/yomiyasu/LICENSE)に保持します。
+[全8コミットの比較](https://github.com/nanaism/yomiyasu/compare/552c12c472ddfb79e2ee7a15219847782686a945...db78b9bc5e868549b517a037df7a4d1c93edac23)と、[固定した変更履歴の全文](https://github.com/nanaism/yomiyasu/blob/db78b9bc5e868549b517a037df7a4d1c93edac23/CHANGELOG.md#L5-L445)を読みました。2.5.0、3.0.0、3.0.1、3.1.0の機能、移行上の注意、上流の測定と限界を確認しています。MITの表示はsubmoduleの[LICENSE](https://github.com/nanaism/yomiyasu/blob/db78b9bc5e868549b517a037df7a4d1c93edac23/LICENSE)に保持します。
 
 | commit | 変更 |
 |---|---|
@@ -63,3 +63,14 @@ MITの原文と著作権表示に変更はありません。vendorのファイ�
 | dependency-version-detection.md | 0 / 2 / 3 | 0 / 2 / 3 | 終了コード0、指摘の内容も一致 |
 
 これは既存2文書の検査結果です。すべての文章で判定や推敲結果が同じになることの証明ではありません。CodexとClaude Codeの実ホストからの呼出し、Windows、Python 3.9と3.14はこの更新では未確認です。
+
+上流の試験はUbuntu、Python 3.12.16、pytest 8.4.2、pytest-xdist 3.8.0で実行しました。時間を測らない試験は4並列で2,520件が成功し、9件はOSやファイルシステムの条件でskipされました。時間のしきい値を含む試験は別に直列で実行し、72件が成功しました。合計は2,592件成功、9件skipです。skipはWindowsのパス5件、macOSのF_GETPATH 3件、NFCとNFDを同一名として扱うファイルシステム1件です。
+
+submodule内での再実行コマンドは次のとおりです。
+
+```sh
+uv run --no-project --with pytest==8.4.2 --with pytest-xdist==3.8.0 python -m pytest -q -ra -n 4 --dist worksteal -m 'not timing'
+uv run --no-project --with pytest==8.4.2 --with pytest-xdist==3.8.0 python -m pytest -q -ra --durations=10 -m timing
+```
+
+本リポジトリのpin整合性とpin checkerの回帰、文字・リンク・サイズ・個人環境のパスの検査、変更文書のlintとcheck・verifyはいずれも成功しました。初回のpin整合性検査はcommit前のgitlinkを参照して不一致になったため、gitlinkの更新をcommitして再検査しました。初回のリンク検査はsubmodule内のLICENSEを未追跡として拒否したため、上流の固定commitのURLへ直しています。
