@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-module cpu_memory(
+module cpu_memory #(parameter ROM_WORDS = 18)(
   input wire clk, resetn,
   input wire [7:0] sample,
   input wire [31:0] i_addr,
@@ -13,16 +13,16 @@ module cpu_memory(
   output wire d_ack,
   output reg [31:0] gpio = 0
 );
-  reg [31:0] rom [0:17];
+  reg [31:0] rom [0:ROM_WORDS-1];
   reg [31:0] ram [0:7];
   integer lane;
   initial $readmemh("src/program.hex", rom);
-  assign i_rdata = i_addr < 72 ? rom[i_addr[6:2]] : 32'h0000006f;
+  assign i_rdata = i_addr < ROM_WORDS * 4 ? rom[i_addr[6:2]] : 32'h0000006f;
   assign i_ack = i_req && resetn;
   assign d_ack = d_req && resetn;
   assign d_rdata = d_addr == 516 ? {24'b0, sample} :
                    d_addr >= 256 && d_addr < 288 ? ram[d_addr[4:2]] :
-                   d_addr < 72 ? rom[d_addr[6:2]] : 32'b0;
+                   d_addr < ROM_WORDS * 4 ? rom[d_addr[6:2]] : 32'b0;
   always @(posedge clk) begin
     if (!resetn) gpio <= 0;
     else if (d_req && d_ack) begin

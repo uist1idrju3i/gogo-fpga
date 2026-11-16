@@ -117,7 +117,6 @@ test("pinned CPU programs execute RAM and GPIO checks after portable ZIP import"
         const added = await prepareLibrarySelection(catalog, { id, component },
           (asset) => readFileSync(path.join(assets, asset.asset)), { requireConfirmed: false });
         const template = createBlinkTemplate("tangnano20k", "verilog");
-        template.files.set("src/top_tb.v", cpuBench());
         template.project.simulation.top = "tb";
         template.project.simulation.files = null;
         template.files.set("src/top.v", readFileSync(path.join(fixtureRoot, fixture)));
@@ -133,6 +132,8 @@ test("pinned CPU programs execute RAM and GPIO checks after portable ZIP import"
             Buffer.from("0ff0000f\n0000100f\n"), template.files.get("src/program.hex"),
           ]));
         }
+        const romWords = new TextDecoder().decode(template.files.get("src/program.hex")).trim().split(/\s+/).length;
+        template.files.set("src/top_tb.v", cpuBench({ romWords }));
         template.project.files = [...template.files.keys()].map((path) => ({ path }));
         const installed = await changeProjectLibraries(template.project, template.files, { add: added });
         const zip = await exportProjectZip(installed.project, installed.files);
@@ -153,20 +154,22 @@ test("pinned CPU programs execute RAM and GPIO checks after portable ZIP import"
         const controls = [
           { name: "positive", status: 0, marker: /CPU_FUNCTION_OK writes=16 stores=16 reads=16 samples=2/ },
           { name: "program-corrupted", status: 1, marker: /CPU_MEMORY_WRITE/ },
+          { name: "program-failure-branch", status: 1, marker: /CPU_GPIO_MISMATCH/ },
           { name: "reset-held", status: 1, marker: /CPU_TIMEOUT/, resetHeld: true },
           { name: "wrong-expectation", status: 1, marker: /CPU_GPIO_MISMATCH/, wrongExpected: true },
           { name: "sample-stuck", status: 1, marker: /CPU_SAMPLE_STATIC/, sampleHeld: true },
           { name: "led-stuck", status: 1, marker: /CPU_GPIO_OUTPUT/, ledHeld: true },
         ];
         for (const control of controls) {
-          const files = [...sources, { path: "src/tb.v", content: cpuBench(control) }].map((file) => ({ ...file }));
-          if (control.name === "program-corrupted") {
+          const files = [...sources, { path: "src/tb.v", content: cpuBench({ ...control, romWords }) }].map((file) => ({ ...file }));
+          if (["program-corrupted", "program-failure-branch"].includes(control.name)) {
             const rom = files.find((file) => file.path === "src/program.hex");
             assert.ok(rom);
             const words = new TextDecoder().decode(rom.content).trim().split("\n");
-            const operation = 5 + (id === "neorv32" ? 2 : 0);
-            assert.equal(words[operation], "0551c313");
-            words[operation] = "0541c313";
+            const failureBranch = control.name === "program-failure-branch";
+            const operation = (failureBranch ? 9 : 5) + (id === "neorv32" ? 2 : 0);
+            assert.equal(words[operation], failureBranch ? "00731c63" : "0551c313");
+            words[operation] = failureBranch ? "00730c63" : "0541c313";
             rom.content = new TextEncoder().encode(`${words.join("\n")}\n`);
           }
           const workdir = path.join(directory, id, control.name);

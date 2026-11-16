@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: BSD-3-Clause
-export function cpuBench({ resetHeld = false, wrongExpected = false, sampleHeld = false, ledHeld = false } = {}) {
+export function cpuBench({ resetHeld = false, wrongExpected = false, sampleHeld = false, ledHeld = false, romWords = 18 } = {}) {
   return `\`timescale 1ns/1ps
 module tb;
   reg clk = 0;
   wire led;
   top dut(.clk(clk), .led(led));
+  defparam dut.memory.ROM_WORDS = ${romWords};
   integer cycles = 0, writes = 0, stores = 0, reads = 0, fetches = 0;
   integer index = 0, seed = 0, samples = 0;
   reg [31:0] expected, last_gpio = 0;
