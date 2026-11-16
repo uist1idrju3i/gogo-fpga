@@ -148,14 +148,18 @@ def parse_research_dependency(text: str, dependency: str) -> dict[str, str]:
     raise RuntimeError(f"RESEARCH.md に {dependency} の pin がありません")
 
 
+def formal_release_pattern(dependency: str) -> str:
+    prefix = {"yices2": "yices-", "z3": "z3-"}.get(dependency, "")
+    return re.escape(prefix) + r"\d+\.\d+\.\d+"
+
+
 def parse_formal_pins(text: str) -> dict[str, dict[str, str]]:
     pins = {}
     for name in FORMAL_SOURCES:
         pin = parse_research_dependency(text, name)
         if not FULL_SHA.fullmatch(pin["commit"]):
             raise RuntimeError(f"{name}: formal source pin requires a full commit SHA")
-        prefix = {"yices2": "yices-", "z3": "z3-"}.get(name, "")
-        pattern = "snapshot" if name == "sby" else re.escape(prefix) + r"\d+\.\d+\.\d+"
+        pattern = "snapshot" if name == "sby" else formal_release_pattern(name)
         if not re.fullmatch(pattern, pin["version"]):
             raise RuntimeError(f"{name}: invalid formal source release tag")
         pins[name] = pin
@@ -381,6 +385,8 @@ def parse_version(value: str) -> tuple[int, ...] | None:
 def is_stable_tag(tag: str, dependency: str | None = None) -> bool:
     if dependency == "ghdl":
         return re.fullmatch(r"v\d+\.\d+\.\d+", tag) is not None
+    if dependency in FORMAL_SOURCES and dependency != "sby":
+        return re.fullmatch(formal_release_pattern(dependency), tag) is not None
     return not re.search(r"(?i)(?:rc|alpha|beta|pre)", tag)
 
 
