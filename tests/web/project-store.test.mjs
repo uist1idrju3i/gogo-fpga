@@ -197,3 +197,47 @@ test("asynchronous snapshot hashing does not expose subsequent caller edits", as
   assert.equal(loaded.project.top, "top");
   assert.notDeepEqual(loaded.files.get("libraries/primary/sources/LICENSE"), files.get("libraries/primary/sources/LICENSE"));
 });
+
+test("deleting the last project preserves an initialized empty workspace across OPFS reloads", async () => {
+  const mock = memoryStorage();
+  const opfs = createOpfsStore(mock.storage);
+  const { project, files } = await createLibraryProject();
+  for (const store of [createMemoryStore(), opfs]) {
+    assert.equal(await store.hasWorkspace(), false);
+    await store.save(project, files);
+    assert.equal(await store.hasWorkspace(), true);
+    assert.equal(await store.remove(project.name), true);
+    assert.deepEqual(await store.listProjects(), []);
+    assert.equal(await store.hasWorkspace(), true);
+    assert.equal(await store.remove(project.name), false);
+    await assert.rejects(store.load(project.name));
+  }
+  assert.equal(await createOpfsStore(mock.storage).hasWorkspace(), true);
+  assert.deepEqual(await createOpfsStore(mock.storage).listProjects(), []);
+});
+
+test("removing a project preserves its neighbours and rejects invalid names", async () => {
+  const mock = memoryStorage();
+  const { project, files } = await createLibraryProject();
+  for (const store of [createMemoryStore(), createOpfsStore(mock.storage)]) {
+    await store.save(project, files);
+    await store.save({ ...project, name: "keep" }, files);
+    await assert.rejects(store.remove("../keep"));
+    await store.remove(project.name);
+    assert.deepEqual(await store.listProjects(), ["keep"]);
+    assert.equal((await store.load("keep")).project.name, "keep");
+  }
+});
+
+test("OPFS workspace checks and deletion fail closed on storage errors", async () => {
+  const mock = memoryStorage();
+  const store = createOpfsStore(mock.storage);
+  const { project, files } = await createLibraryProject();
+  await store.save(project, files);
+  const projects = await mock.root.getDirectoryHandle("projects");
+  projects.removeEntry = async () => { throw new DOMException("Denied", "NotAllowedError"); };
+  await assert.rejects(store.remove(project.name), /削除できません/);
+  assert.equal((await store.load(project.name)).project.name, project.name);
+  const denied = createOpfsStore({ async getDirectory() { throw new DOMException("Denied", "NotAllowedError"); } });
+  await assert.rejects(denied.hasWorkspace(), /保存先を確認できません/);
+});

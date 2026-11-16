@@ -76,6 +76,7 @@ test("syntax errors fail the build and appear in the problems panel", async ({
   await page.keyboard.type("module top(\nendmodule\n");
   await expect(page.locator("#synthesis-button")).toBeEnabled();
   await page.locator("#synthesis-button").click();
+  await expect(page.locator("#delete-project-button")).toBeDisabled();
   await expect(page.locator("#synthesis-stage")).toHaveText("ビルド失敗", {
     timeout: 120_000,
   });
@@ -225,6 +226,7 @@ test("board screenshots show the selected FPGA and IDCODE", async ({ page }) => 
     await expect(page.locator("#board-idcode")).toHaveText(idcode);
     await expect(page.locator("#board-target")).toHaveText(targets);
     await expect(page.locator("#board-constraint-warning")).toBeHidden();
+    await expect(page.locator("#delete-project-button")).toBeVisible();
     await expect(page.locator(".cm-content")).not.toContainText("// 保存済み");
     await page.screenshot({
       path: resolve(screenshots, `ide-${id}.png`),

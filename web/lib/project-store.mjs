@@ -35,8 +35,13 @@ export function createMemoryStore({ records = new Map() } = {}) {
   if (!(records instanceof Map)) {
     throw new TypeError("records must be a Map");
   }
+  let initialized = records.size > 0;
 
   return {
+    async hasWorkspace() {
+      return initialized;
+    },
+
     async listProjects() {
       return [...records.keys()].sort();
     },
@@ -55,6 +60,7 @@ export function createMemoryStore({ records = new Map() } = {}) {
     async save(project, files) {
       const record = await createProjectSnapshot(project, files);
       records.set(record.project.name, { projectJson: record.projectJson, files: record.files });
+      initialized = true;
     },
 
     async remove(name) {
@@ -93,6 +99,16 @@ async function readOpfsFile(projectDirectory, path) {
 
 export function createOpfsStore(storage) {
   return {
+    async hasWorkspace() {
+      try {
+        await getProjectsDirectory(storage, false);
+        return true;
+      } catch (error) {
+        if (error?.name === "NotFoundError") return false;
+        throw new Error("プロジェクトの保存先を確認できません。", { cause: error });
+      }
+    },
+
     async listProjects() {
       let projects;
       try {
