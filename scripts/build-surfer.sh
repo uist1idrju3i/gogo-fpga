@@ -196,7 +196,7 @@ trunk_log="$build_root/trunk-build.log"
 (
   cd "$source_dir/surfer"
   trunk build --locked --release --features accesskit --public-url ./ \
-    --dist "$dist_dir" --offline=true --verbose 2>&1
+    --dist "$dist_dir" --offline=true --log error,trunk=debug 2>&1
 ) | tee "$trunk_log"
 rm -f -- "$dist_dir/sw.js" "$dist_dir/manifest.json"
 mkdir -p "$dist_dir/licenses"

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { gzipSync } from "node:zlib";
@@ -74,6 +75,18 @@ for (const format of ["gzip", "zstd", "xz"]) {
     );
   });
 }
+
+test("xz validates SHA-256 checksums and rejects a corrupted checksum", async () => {
+  const compressed = execFileSync("xz", ["-9e", "--check=sha256", "--stdout"], { input: synthetic });
+  const injection = { decoderBytes: decoderBytes.xz };
+  assert.deepEqual(await decompress("xz", compressed, synthetic.byteLength, injection), synthetic);
+  const checksum = createHash("sha256").update(synthetic).digest();
+  const checksumOffset = compressed.indexOf(checksum);
+  assert.ok(checksumOffset >= 0, "SHA-256 check must be present in the stream");
+  const corrupted = Buffer.from(compressed);
+  corrupted[checksumOffset] ^= 1;
+  await assert.rejects(decompress("xz", corrupted, synthetic.byteLength, injection));
+});
 
 test("zstd decodes concatenated frames", async () => {
   const first = synthetic.subarray(0, 4096);

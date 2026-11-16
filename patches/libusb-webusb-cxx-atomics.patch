@@ -1,0 +1,6 @@
+--- a/libusb/os/emscripten_webusb.cpp
++++ b/libusb/os/emscripten_webusb.cpp
+@@ -33,2 +33,3 @@
++#include <thread>
+ #include <type_traits>
+ #include <utility>

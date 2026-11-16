@@ -29,7 +29,7 @@ for arg in "$@"; do
   esac
 done
 
-for tool in autoreconf aclocal autoconf automake libtoolize; do
+for tool in autoreconf aclocal autoconf automake libtoolize patch; do
   if ! command -v "$tool" >/dev/null 2>&1; then
     printf 'Required Autotools command not found: %s\n' "$tool" >&2
     exit 1
@@ -277,6 +277,8 @@ if [[ "$release_source_mode" == true ]]; then
 else
   git -C "$root/vendor/libusb" archive HEAD | tar -x -C "$libusb_source"
 fi
+patch --batch --fuzz=0 --directory="$libusb_source" -p1 \
+  < "$root/patches/libusb-webusb-cxx-atomics.patch"
 (
   cd "$libusb_source"
   ./bootstrap.sh
@@ -336,7 +338,7 @@ build_openfpgaloader() {
     -DCMAKE_CXX_FLAGS_RELEASE= \
     -DCMAKE_INSTALL_PREFIX="$prefix" \
     -DCMAKE_C_FLAGS="$loader_c_flags" \
-    -DCMAKE_CXX_FLAGS="$loader_c_flags" \
+    -DCMAKE_CXX_FLAGS="$loader_c_flags -include algorithm" \
     -DCMAKE_EXE_LINKER_FLAGS="$link_string" \
     "-DCMAKE_CXX_LINKER_LAUNCHER=/usr/bin/time;-v;-o;$build_dir/link-time.txt" \
     -DCMAKE_EXECUTABLE_SUFFIX_CXX=.mjs \

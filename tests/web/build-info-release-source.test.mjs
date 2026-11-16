@@ -39,6 +39,8 @@ function createFixture() {
     submodules.map((path, index) => [path, String(index + 1).repeat(40)]),
   );
   mkdirSync(join(root, "scripts"), { recursive: true });
+  mkdirSync(join(root, "patches"));
+  writeFileSync(join(root, "patches/libusb-webusb-cxx-atomics.patch"), "libusb atomics fixture\n");
   mkdirSync(artifacts, { recursive: true });
   writeFileSync(join(root, "scripts/build-wasm.sh"), buildScript);
   writeFileSync(join(artifacts, "openFPGALoader.mjs"), "export default 1;\n");
