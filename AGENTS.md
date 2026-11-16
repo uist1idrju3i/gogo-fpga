@@ -79,9 +79,12 @@ Dependabot の PR を含むすべての更新で「vendor-update」スキルの�
 `vendor/yomiyasu` にある、AI が生成した日本語を読みやすく整えるスキルです。意味と条件を保ったまま、不自然な比喩、曖昧な主述関係、不要な装飾を直します。
 
 - 呼び出し方: `/yomiyasu`、`$yomiyasu:yomiyasu`（Codex 系）、`yomiyasu:yomiyasu`（Claude Code）。依頼の文に「yomiyasu で」と書いても呼べます。
+- このリポジトリは vendor 内へのシンボリックリンクを使うため、3.1.0でもCodexの名前は `yomiyasu:yomiyasu` です。スキルだけをコピーする導入方法とは名前が異なります。
 - 検査ツールは Python の標準ライブラリだけで動き、外部へ通信しません。
   - `python3 .agents/skills/yomiyasu/scripts/yomiyasu_lint.py <file>`: AI の文章に多い表現の候補を出します。
   - `python3 .agents/skills/yomiyasu/scripts/yomiyasu_check.py run --source <原文> --final <最終稿>`: 推敲の前後を比べ、数値・否定・主述が変わっていないかを確かめます。記録は git 最上位の `.yomiyasu/` に残ります（gitignore 済み）。
+- 3.0.0以降、検査対象は作業フォルダ内のファイルに限り、点で始まる部分を含むパスも拒否します。隠しフォルダ内の文書は標準入力で渡します。検査スクリプト自体を `.agents/skills/` から呼ぶ方法は使えます。
+- 更新前の検査記録を `verify` すると `tool_changed` になります。更新後に `run` をやり直します。変更履歴と更新監視は[調査記録](docs/research/yomiyasu.md)を参照してください。
 - 自動フックの `yomiyasu_hook.py` は各開発者の個人設定でだけ有効にし、リポジトリにはコミットしません。
 
 ## 9. 作業の進め方
