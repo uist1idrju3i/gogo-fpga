@@ -13,7 +13,7 @@
     "vendor/libusb": "87a55632db62c9bdc58cd31d3ccfa673f1bb017f",
     "vendor/openFPGALoader": "befbab4f646207dbaf1daf8b144dd980ad283dd5",
     "vendor/surfer": "bd749b1f786c1c62cd67893ca71346cbe6983915",
-    "vendor/yomiyasu": "552c12c472ddfb79e2ee7a15219847782686a945",
+    "vendor/yomiyasu": "db78b9bc5e868549b517a037df7a4d1c93edac23",
     "vendor/yosys": "28ba3cb926fe376fa05ebfc1b921747d011d4557",
     "vendor/zlib": "da607da739fa6047df13e66a2af6b8bec7c2a498"
   },
