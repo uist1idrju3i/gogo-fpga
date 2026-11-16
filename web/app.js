@@ -308,6 +308,7 @@ function updateForm() {
     (options.operation === "write" && (!workflow.canWrite() ||
       !fsIdcodeMatchesBoard(selectedFileIdcode, board)));
   renderWorkflow();
+  document.dispatchEvent(new Event("toolchain:device-busy-change"));
 }
 
 function setResult(text, succeeded = false) {

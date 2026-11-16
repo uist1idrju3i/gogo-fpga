@@ -370,8 +370,12 @@ export function initializeIde({
     }
   }
 
-  function updateSynthesisControls() {
+  function updateProjectDeletionControl() {
     deleteProjectButton.disabled = !canDeleteProject();
+  }
+
+  function updateSynthesisControls() {
+    updateProjectDeletionControl();
     for (const control of [projectSelect, exportProjectButton, addFileButton]) {
       control.disabled = libraryBusy || !project;
     }
@@ -1962,6 +1966,7 @@ export function initializeIde({
     } catch (error) { projectActionStatus.dataset.outcome = "error"; projectActionStatus.textContent = error.message; }
   });
   renderFsSource(true);
+  document.addEventListener("toolchain:device-busy-change", updateProjectDeletionControl);
   document.addEventListener("toolchain:flow-change", () => {
     if (editor) updateEditor();
     updateBoardInformation();

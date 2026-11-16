@@ -822,15 +822,29 @@ test("erase confirmation cancel and Escape never request USB", async ({ page }) 
 
 test("confirmed erase requests USB and completes", async ({ page }) => {
   await routeWorkerWithFakeUsb(page, { idcode: 0x0000081b });
+  let releaseWorker;
+  await page.route("**/worker.js", async (route) => {
+    await new Promise((resolve) => { releaseWorker = resolve; });
+    await route.fallback();
+  });
   await openSupportedPage(page);
+  await expect(page.locator("#project-name")).toHaveText("blink");
+  await expect(page.locator("#delete-project-button")).toBeEnabled();
   await page.locator("#board-select").selectOption("tangnano20k");
   await page.locator("#advanced-settings summary").click();
   await page.locator('input[name="operation"][value="erase"]').check();
   await page.getByRole("button", { name: "消去する" }).click();
   await page.locator("#erase-confirm").click();
+  try {
+    await expect(page.locator("#delete-project-button")).toBeDisabled();
+    await expect.poll(() => typeof releaseWorker).toBe("function");
+  } finally {
+    releaseWorker?.();
+  }
   await expect(page.locator("#result-status")).toHaveText("成功", {
     timeout: 30_000,
   });
+  await expect(page.locator("#delete-project-button")).toBeEnabled();
   expect(await page.evaluate(() => window.__usbRequestCount)).toBe(1);
   expect(await page.evaluate(() => window.__workerMessages[0].args)).toEqual([
     "-b",
