@@ -24,6 +24,8 @@ Yosysの新しい`shuffle`、`write_verilog -nodec_attr/-dec_param`、実験的�
 
 Bitwuzlaのnative releaseではLTOとmimallocの既定値も変わりました。WASIで利用可能と判断する根拠にはしません。実験的な浮動小数点形式の修正、term managerより長生きしたtermのクラッシュ修正、ゼロ除算からの変換拒否も確認対象です。ABI変更後の古いバイナリーを使い回して認定しません。
 
+Bitwuzla 0.10.0で移動した`src/fp/floating_point.cpp`に合わせて、GMPの32-bit limb用パッチを更新します。CaDiCaL 3.0.1のRSS処理ではnativeのmacOS向け分岐を保持します。また、上流のMeson wrapに加わった2件の`diff_files`も、ビルド用コピーに適用してhashを記録します。手動で展開したsubprojectでも、上流が必要とする修正を落とさないためです。
+
 ## 誤検出と据置き
 
 | 依存 | Issueの表示 | 判断 |
@@ -62,7 +64,7 @@ zlib、emsdk、Yosys、ABC、xz-embedded、Click、Z3、Bitwuzlaと更新する�
 
 UVVMの大きいライセンス差分は、追加された`p2l2_vip_mdio/LICENSE.TXT`のApache-2.0本文でした。既存本文の削除や条件変更ではありません。このVIPはWebの選択項目へ追加しません。対応ソース書庫では上流のライセンスを保持します。
 
-外部ソースのcheckoutは直接編集しません。libusbのinclude修正だけを`patches/`で管理し、ビルド用コピーへ適用します。配布物のmetadataでpatchのSHA-256も照合します。ライセンスと対応ソースの配布要件は[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)に従います。
+外部ソースのcheckoutは直接編集しません。libusbのinclude修正とsolverの互換性パッチを`patches/`で管理し、ビルド用コピーへ適用します。配布物のmetadataでpatchのSHA-256も照合します。ライセンスと対応ソースの配布要件は[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)に従います。
 
 ## 検査の範囲
 
