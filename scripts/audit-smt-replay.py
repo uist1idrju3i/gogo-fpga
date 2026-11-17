@@ -388,8 +388,12 @@ def audit(directory, formal=False):
                     captures.append(evidence.read(files + "formal-trace.json"))
                     fields = {**base, "origin": origin, "sourceSha256": digest(source), "modelSha256": digest(model), "captureSha256": sha, "sourceVcdSha256": digest(b"" if no_trace else artifacts["trace.vcd"])}
                     if case in REJECTED:
-                        require(evidence.data(prefix + "rejection.json") == {"reason": REJECTED[case]}, "unsupported replay rejection reason")
-                        derived.append({**fields, "runtime": "none", "expected": "rejected", "actual": "rejected", "exitCode": code, "elapsedMs": process["elapsedMs"], "error": REJECTED[case]})
+                        reason = evidence.data(prefix + "rejection.json")
+                        reasons = [REJECTED[case]]
+                        if case == "no-property":
+                            reasons.append("検証対象が見つかりません。assert の性質を追加するか、性質に合うモードを選んでください。")
+                        require(reason in [{"reason": value} for value in reasons], "unsupported replay rejection reason")
+                        derived.append({**fields, "runtime": "none", "expected": "rejected", "actual": "rejected", "exitCode": code, "elapsedMs": process["elapsedMs"], "error": reason["reason"]})
                         continue
                     plan, signals, values, observations = expected_plan(document, capture, case)
                     require(TRACE.encoded(evidence.data(prefix + "plan.json")) == TRACE.encoded(plan) and evidence.read(prefix + "replay.v") == plan["content"].encode(), "complete independently derived read-only replay testbench")

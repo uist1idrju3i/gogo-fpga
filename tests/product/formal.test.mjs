@@ -207,8 +207,8 @@ test("HTTP-delivered SAT assets run through the product runner and actual WASI w
       save(`vhdl-${fixture.name}.json`, { fixture, project, outcome, workers, ghdlSha256: vhdlAssets.ghdl.sha256,
         librariesSha256: vhdlAssets.ghdl.shareSha256 });
       const rejected = fixture.name === "no-property";
-      assert.equal(outcome.status, rejected ? "invalid-properties" : fixture.status, JSON.stringify(outcome));
-      assert.equal(outcome.kind, rejected ? "tool-error" : classifySbyStatus(fixture.mode, fixture.status));
+      assert.equal(outcome.status, rejected ? "no-targets" : fixture.status, JSON.stringify(outcome));
+      assert.equal(outcome.kind, rejected ? "no-targets" : classifySbyStatus(fixture.mode, fixture.status));
       assert.ok(workers.some(worker => worker.args[0] === "ghdl" && worker.status === "exited" && worker.integrityVerified));
       if (outcome.kind === "counterexample") {
         assert.ok(outcome.vcd?.bytes.length);

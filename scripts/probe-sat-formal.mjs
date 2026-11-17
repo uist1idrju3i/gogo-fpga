@@ -129,7 +129,7 @@ for (const { kind: _kind, expected, ...scenario } of cases) {
       sourceSha256: hash(scenario.source),
       phases: observations,
     });
-    if (result.status === "error") failures.push({ case: scenario.name, runtime, phase: result.phase, message: result.message });
+    if (["error", "no-targets"].includes(result.status)) failures.push({ case: scenario.name, runtime, phase: result.phase, message: result.message });
     if (result.status !== "counterexample") continue;
 
     const document = JSON.parse(new TextDecoder().decode(result.observations[0].files.get("__formal/before.json")));
