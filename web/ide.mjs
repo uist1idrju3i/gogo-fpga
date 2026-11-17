@@ -1,4 +1,5 @@
 import { createOpfsStore } from "./lib/project-store.mjs";
+import { lastProjectName, rememberProject } from "./lib/last-project.mjs";
 import {
   findConstraintBoardMismatch,
   prepareProjectInputs,
@@ -1560,6 +1561,7 @@ export function initializeIde({
     formalStatus.textContent = "";
     formalStatus.dataset.outcome = "";
     project = loaded?.project ?? null;
+    rememberProject(project?.name ?? null);
     if (project) project.vhdlStandard ??= "2008";
     fileContents = loaded?.files ?? new Map();
     if (project?.files.some(({ path }) => path.startsWith("build/") && path.endsWith(".fs"))) {
@@ -1612,7 +1614,7 @@ export function initializeIde({
     try {
       const names = await store.listProjects();
       if (names.length > 0) {
-        activateProject(await store.load(names[0]));
+        activateProject(await store.load(lastProjectName(names)));
       } else if (await store.hasWorkspace()) {
         activateProject(null);
       } else {
