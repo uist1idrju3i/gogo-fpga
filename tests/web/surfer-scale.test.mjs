@@ -23,6 +23,12 @@ test("empty, hidden and invalid canvas dimensions never inject zoom", () => {
   assert.equal(surferZoomFactor({ width: 390, clientWidth: 390 }, 0), null);
 });
 
+test("normal scaling resets a previous correction but invalid dimensions retain it", () => {
+  assert.equal(surferZoomFactor({ width: 101, clientWidth: 100 }, 1, 1 / 3), 1);
+  assert.equal(surferZoomFactor({ width: 100, clientWidth: 100 }, 1, 1), null);
+  assert.equal(surferZoomFactor({ width: 100, clientWidth: 0 }, 1, 1 / 3), null);
+});
+
 test("scale observers refresh on resize, orientation and DPR changes and dispose on reset", t => {
   const originalWindow = globalThis.window;
   const originalObserver = globalThis.ResizeObserver;
@@ -74,7 +80,10 @@ test("scale observers refresh on resize, orientation and DPR changes and dispose
   queries[0].media.dispatchEvent(new Event("change"));
   render();
   assert.equal(queries.at(-1).query, "(resolution: 1dppx)");
+  assert.equal(messages.at(-1).message.SetUIZoomFactor, 1);
   const count = messages.length;
+  scale.refresh(); render();
+  assert.equal(messages.length, count);
   scale.refresh();
   scale.dispose();
   assert.equal(frames.size, 0);

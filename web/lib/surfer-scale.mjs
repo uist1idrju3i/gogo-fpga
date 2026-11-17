@@ -1,7 +1,8 @@
-export function surferZoomFactor(canvas, dpr) {
+export function surferZoomFactor(canvas, dpr, lastFactor = 1) {
   const ratio = canvas?.width / (canvas?.clientWidth * dpr);
-  return Number.isFinite(ratio) && ratio > 0 && Math.abs(ratio - 1) > 0.02
-    ? ratio : null;
+  if (!Number.isFinite(ratio) || ratio <= 0) return null;
+  if (Math.abs(ratio - 1) > 0.02) return ratio;
+  return lastFactor !== 1 ? 1 : null;
 }
 
 export function observeSurferScale(frame) {
@@ -9,6 +10,7 @@ export function observeSurferScale(frame) {
   const canvas = frame.contentDocument.querySelector("canvas");
   let pending = null;
   let disposed = false;
+  let lastFactor = 1;
   let resolution;
   function refresh() {
     if (disposed || pending !== null) return;
@@ -16,9 +18,12 @@ export function observeSurferScale(frame) {
       pending = view.requestAnimationFrame(() => {
         pending = null;
         if (disposed) return;
-        const ratio = surferZoomFactor(canvas, view.devicePixelRatio);
-        if (ratio !== null) view.postMessage({ command: "InjectMessage",
-          message: JSON.stringify({ SetUIZoomFactor: ratio }) }, view.location.origin);
+        const ratio = surferZoomFactor(canvas, view.devicePixelRatio, lastFactor);
+        if (ratio !== null) {
+          view.postMessage({ command: "InjectMessage",
+            message: JSON.stringify({ SetUIZoomFactor: ratio }) }, view.location.origin);
+          lastFactor = ratio;
+        }
       });
     });
   }
