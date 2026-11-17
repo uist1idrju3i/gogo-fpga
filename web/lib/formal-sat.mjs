@@ -1,5 +1,5 @@
 import { validatePath } from "./project.mjs";
-import { validateFormalProperties } from "./formal-properties.mjs";
+import { NoFormalTargetsError, validateFormalProperties } from "./formal-properties.mjs";
 
 const prefix = "__formal/";
 const decoder = new TextDecoder("utf-8", { fatal: true });
@@ -124,6 +124,9 @@ export async function runSatFormal({ execute, clock = null, edge = "posedge", ..
     }
     throw new Error("Unverified or ambiguous SAT proof result");
   } catch (error) {
+    if (error instanceof NoFormalTargetsError) {
+      return { status: "no-targets", phase, message: error.message, inventory, observations };
+    }
     return { status: "error", phase, message: String(error.message ?? error), inventory, observations };
   }
 }

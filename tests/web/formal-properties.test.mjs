@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { inspectFormalDesign, validateFormalProperties } from "../../web/lib/formal-properties.mjs";
+import { NoFormalTargetsError, inspectFormalDesign, validateFormalProperties } from "../../web/lib/formal-properties.mjs";
 
 function design({ sequential = false } = {}) {
   const cells = {
@@ -46,9 +46,16 @@ test("formal preparation rejects lost, renamed, changed, duplicated, or invented
 });
 
 test("formal validation refuses empty targets and unsupported or malformed designs", () => {
-  const empty = design();
-  delete empty.modules.top.cells.invariant;
-  assert.throws(() => validateFormalProperties(empty, empty, { top: "top" }), /No assertion/);
+  for (const mode of ["bmc", "prove", "cover"]) {
+    const target = mode === "cover" ? "cover" : "assert";
+    const missing = design();
+    for (const [id, cell] of Object.entries(missing.modules.top.cells)) {
+      if (cell.type === `$${target}`) delete missing.modules.top.cells[id];
+    }
+    assert.throws(() => validateFormalProperties(missing, missing, { top: "top", mode }),
+      error => error instanceof NoFormalTargetsError && error.target === target &&
+        error.message.includes(`${target} の性質を追加`));
+  }
   for (const document of [null, {}, { modules: [] }, { modules: {} }, { modules: { top: {} } }]) {
     assert.throws(() => inspectFormalDesign(document, "top"));
   }

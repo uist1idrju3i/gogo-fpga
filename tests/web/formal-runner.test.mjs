@@ -383,9 +383,39 @@ for (const engine of ["yosys-sat", "smtbmc"]) {
   }
 }
 
-test("SMT rejects empty targets, unsupported state and multiple clocks before Python starts", async () => {
+test("SAT reports absent assertion targets without a tool error or proof", async () => {
+  for (const mode of ["bmc", "prove"]) {
+    const document = { modules: { top: { cells: {}, ports: {} } } };
+    const tool = fakeTool({ phases: satPhases(document) });
+    const runner = createFormalRunner({ startTool: tool.startTool });
+    const data = input();
+    data.project.formal.mode = mode;
+    const outcome = await runner.run(data);
+    assert.equal(outcome.kind, "no-targets");
+    assert.equal(outcome.status, "no-targets");
+    assert.match(outcome.message, /assert の性質を追加/);
+    assert.equal(tool.calls.length, 1);
+  }
+});
+
+test("SMT reports absent targets for every mode before Python starts", async () => {
+  for (const mode of ["bmc", "prove", "cover"]) {
+    const document = structuredClone(smtDocument);
+    delete document.modules.top.cells.P;
+    const tool = fakeTool({ phases: { inventory: { exitCode: 0, files: { "__formal/before.json": jsonBytes(document) } } } });
+    const runner = createFormalRunner({ startTool: tool.startTool,
+      startPython: () => assert.fail("Absent targets must not launch Python") });
+    const data = smtInput();
+    data.project.formal.mode = mode;
+    const outcome = await runner.run(data);
+    assert.equal(outcome.kind, "no-targets");
+    assert.equal(outcome.status, "no-targets");
+    assert.match(outcome.message, new RegExp(`${mode === "cover" ? "cover" : "assert"} の性質を追加`));
+  }
+});
+
+test("SMT rejects unsupported state and multiple clocks before Python starts", async () => {
   for (const mutate of [
-    document => { delete document.modules.top.cells.P; },
     document => { document.modules.top.cells.state.type = "$mem_v2"; },
     document => { document.modules.top.cells.other = { ...document.modules.top.cells.state, connections: { CLK: [9] } }; },
   ]) {

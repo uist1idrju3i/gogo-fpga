@@ -62,8 +62,12 @@ test("inconsistent assumptions and zero properties stop before proof", async () 
   const empty = execution({ mutate(result) {
     for (const name of ["before", "after"]) result.files.set(`__formal/${name}.json`, '{"modules":{"top":{"cells":{},"ports":{}}}}');
   } });
-  assert.equal((await runSatFormal({ ...config, ...empty })).status, "error");
-  assert.deepEqual(empty.phases, ["prepare"]);
+  for (const mode of ["bmc", "prove"]) {
+    const outcome = await runSatFormal({ ...config, mode, ...empty });
+    assert.equal(outcome.status, "no-targets");
+    assert.match(outcome.message, /assert の性質を追加/);
+  }
+  assert.deepEqual(empty.phases, ["prepare", "prepare"]);
 });
 
 test("counterexamples need failure exit status, witness and VCD, and remain unverified until replay", async () => {

@@ -1,7 +1,7 @@
 import { FORMAL_ENGINES, FORMAL_SOLVERS } from "./formal-capabilities.mjs";
 import { runSatFormal } from "./formal-sat.mjs";
 import { createSatReplay, createSmtReplay, verifySatReplay } from "./formal-replay.mjs";
-import { validateFormalProperties } from "./formal-properties.mjs";
+import { NoFormalTargetsError, validateFormalProperties } from "./formal-properties.mjs";
 import { readSbyStatus, classifySbyStatus } from "./formal-sby-status.mjs";
 import { startFormalPython } from "./formal-python-process.mjs";
 import { startFormalToolProcess } from "./formal-tool-process.mjs";
@@ -229,6 +229,10 @@ export function createFormalRunner({
         kind: context.timedOut ? "timeout" : context.stopped === "cancelled" ? "cancelled" : context.stopped,
         status: context.timedOut ? "timeout" : context.stopped });
     }
+    if (sat.status === "no-targets") {
+      return result({ ...base, elapsedMs: now() - started, kind: "no-targets", status: "no-targets",
+        message: sat.message });
+    }
     if (sat.status === "error") {
       return result({ ...base, elapsedMs: now() - started,
         kind: context.timedOut ? "timeout" : "tool-error",
@@ -384,6 +388,10 @@ export function createFormalRunner({
         top: formal.top, clock: formal.clock, edge: formal.edge, mode: formal.mode });
     } catch (error) {
       if (context.stopped) return stopped("cancelled");
+      if (error instanceof NoFormalTargetsError) {
+        return result({ ...base, elapsedMs: now() - started, kind: "no-targets", status: "no-targets",
+          message: error.message });
+      }
       return result({ ...base, elapsedMs: now() - started, kind: "tool-error", status: "invalid-properties",
         message: String(error?.message ?? error).slice(0, 1024) });
     }

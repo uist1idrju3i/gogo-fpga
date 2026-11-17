@@ -2,6 +2,14 @@ const propertyTypes = new Map([
   ["$assert", "assert"], ["$assume", "assume"], ["$cover", "cover"],
 ]);
 
+export class NoFormalTargetsError extends Error {
+  constructor(target) {
+    super(`検証対象が見つかりません。${target} の性質を追加するか、性質に合うモードを選んでください。`);
+    this.name = "NoFormalTargetsError";
+    this.target = target;
+  }
+}
+
 function requireObject(value, description) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     throw new TypeError(`Invalid formal ${description}`);
@@ -70,7 +78,7 @@ export function validateFormalProperties(before, after, { top, clock = null, edg
   }
   const target = mode === "cover" ? "cover" : "assert";
   if (!prepared.properties.some(({ kind }) => kind === target)) {
-    throw new Error(target === "assert" ? "No assertion targets in formal design" : "No cover targets in formal design");
+    throw new NoFormalTargetsError(target);
   }
   if (clock !== null) {
     const port = prepared.ports[clock];
