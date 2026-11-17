@@ -131,7 +131,7 @@ test("each board template simulates and loads a top_tb waveform", async ({ page 
   await openIde(page);
   for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
     if (board !== "tangnano1k") {
-      await page.goto("/");
+      await page.evaluate(() => localStorage.removeItem("toolchain.ide.settings/last-project"));
       await openIde(page);
     }
     await createProject(page, board);
