@@ -33,6 +33,7 @@
       "workflow.spec.mjs",
       "last-project.spec.mjs",
       "openrouter-auth.spec.mjs",
+      "browser-guidance.spec.mjs",
       "surfer.spec.mjs"
     ],
     [
