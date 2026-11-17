@@ -1,5 +1,34 @@
 import { expect, test } from "@playwright/test";
 import { prepareChat, previewAndSend, projectFile, proposalReply, slowChat } from "./ai-chat-helpers.mjs";
+import { homedir } from "node:os";
+import { resolve } from "node:path";
+
+for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
+  test(`AI skill selector and project summary for ${board}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 1100 });
+    const requests = await prepareChat(page);
+    await page.locator("#new-project-button").click();
+    await page.locator("#new-project-name").fill(`ai-${board}`);
+    await page.locator("#new-project-board").selectOption(board);
+    await page.locator("#new-project-create").click();
+    await expect(page.locator("#project-name")).toHaveText(`ai-${board}`);
+    await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await page.locator("#right-tab-ai").click();
+    await expect(page.locator("#ai-skill")).toHaveValue("consult");
+    await expect(page.locator("#ai-skill option")).toHaveCount(6);
+    await page.locator("#ai-skill").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-skill-${board}.png`) });
+    await page.locator("#ai-skill").selectOption("formal");
+    await page.locator("#ai-prompt").fill("性質を提案してください。");
+    await page.locator("#ai-preview-button").click();
+    const body = JSON.parse(await page.locator("#ai-preview-body").inputValue());
+    const user = JSON.parse(body.messages.at(-1).content);
+    expect(user.skill).toBe("formal");
+    expect(user.project.board.id).toBe(board);
+    expect(user.project.files.every(file => !Object.hasOwn(file, "content"))).toBe(true);
+    expect(requests).toHaveLength(0);
+  });
+}
 
 test("connection comes first, disconnected chat collapses, and mobile diffs scroll above the action bar", async ({ page }) => {
   await prepareChat(page, { reply: proposalReply([{ path: "src/top.v", content: `module top; // ${"long line ".repeat(80)}\nendmodule\n` }]) });
@@ -53,10 +82,16 @@ test("preview is inert, exposes exact bytes/history/headers, and every edit requ
   expect(await page.locator("#ai-preview-body").evaluate((element) => element.scrollTop)).toBe(0);
   const first = await page.locator("#ai-preview-body").inputValue();
   const firstBody = JSON.parse(first);
-  expect(firstBody.messages[0].content).toContain("gogo-fpga-changes");
+  expect(firstBody.messages[0].content).not.toContain("gogo-fpga-changes");
+  expect(JSON.parse(firstBody.messages.at(-1).content).skill).toBe("consult");
+  expect(JSON.parse(firstBody.messages.at(-1).content).project.board.id).toBe("tangnano1k");
+  await expect(page.locator("#ai-preview-target")).toContainText(String(Buffer.byteLength(first)));
+  await page.locator("#ai-skill").selectOption("change", { force: true });
+  await expect(page.locator("#ai-preview")).toBeHidden();
+  await page.locator("#ai-preview-button").click();
+  expect(JSON.parse(await page.locator("#ai-preview-body").inputValue()).messages[0].content).toContain("gogo-fpga-changes");
   expect(JSON.parse(firstBody.messages.at(-1).content).files.map((f) => f.path)).toEqual(["src/top.v"]);
   await expect(page.locator("#ai-preview-headers")).toContainText("午後のFPGA");
-  await expect(page.locator("#ai-preview-target")).toContainText(String(Buffer.byteLength(first)));
   expect(requests).toHaveLength(0);
   await page.locator("#ai-preview-cancel").click(); await page.locator("#ai-model").fill("test/model");
   await expect(page.locator("#ai-preview")).toBeHidden();
@@ -157,13 +192,14 @@ test("build failure offers explanation with the problem, source and tool log but
   await page.locator("#synthesis-button").click(); await expect(page.locator("#synthesis-stage")).toHaveText("ビルド失敗", { timeout: 120000 });
   await page.locator("#bottom-tab-problems").click();
   await page.locator("#ai-explain-build").click();
-  expect(await page.locator("#ai-prompt").inputValue()).toContain("原因と修正案");
+  await expect(page.locator("#ai-skill")).toHaveValue("explain");
+  expect(await page.locator("#ai-prompt").inputValue()).toContain("原因、根拠、修正の手順");
   await page.locator("#ai-preview-button").click();
   const body = JSON.parse(await page.locator("#ai-preview-body").inputValue()); const context = JSON.parse(body.messages.at(-1).content);
   expect(context.problems.length).toBeGreaterThan(0); expect(context.logs.length).toBeGreaterThan(0); expect(context.files.map((f) => f.path)).toContain("src/top.v");
   await page.locator("#ai-preview-cancel").click();
   await page.locator("#problem-list").getByRole("button", { name: "エラーを AI に説明してもらう", exact: true }).first().click();
-  await expect(page.locator("#ai-prompt")).toHaveValue(/原因と修正案/);
+  await expect(page.locator("#ai-prompt")).toHaveValue(/原因、根拠、修正の手順/);
   await page.locator("#ai-preview-button").click();
   const problemContext = JSON.parse(JSON.parse(await page.locator("#ai-preview-body").inputValue()).messages.at(-1).content);
   expect(problemContext.problems).toHaveLength(1); expect(problemContext.logs.length).toBeGreaterThan(0);
