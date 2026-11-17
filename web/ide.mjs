@@ -13,7 +13,7 @@ import {
 import { createHdlEditor, languageForPath } from "./editor/editor.bundle.mjs";
 import { createBuildRunner } from "./lib/build-runner.mjs";
 import { parseToolDiagnostics } from "./lib/tool-diagnostics.mjs";
-import { selectableFiles } from "./lib/openrouter-chat.mjs";
+import { selectableFiles } from "./lib/ai-chat-ui.bundle.mjs";
 import { parseBuildSummary } from "./lib/build-summary.mjs";
 import { createSimRunner, vcdRootScopes } from "./lib/sim-runner.mjs";
 import { isLibraryPath } from "./lib/libraries.mjs";

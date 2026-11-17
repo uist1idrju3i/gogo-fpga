@@ -5,6 +5,20 @@ import { CHAT_URL, createChatPreview, createSseParser, sendChatPreview, selectab
 const token = (text) => `data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\r\n\r\n`;
 const data = `: OPENROUTER PROCESSING\r\n\r\n${token("午後")}${token("のFPGA")}data: [DONE]\r\n\r\n`;
 const preview = () => createChatPreview({ model: "openrouter/auto", prompt: "説明してください", origin: "https://example.test", files: [["src/top.v", "module top; endmodule"]] });
+test("preview includes skill and content-free project summary, exposing only selected file contents", () => {
+  const files = new Map([["src/top.v", "module top; endmodule"], ["tests/private.v", "unselected secret"]]);
+  const p = createChatPreview({ model: "x", prompt: "相談", skill: "review", project: { name: "blink", board: "tangnano1k", top: "top", files }, files: [["src/top.v", files.get("src/top.v")]], origin: "https://example.test" });
+  const user = JSON.parse(p.user);
+  assert.equal(user.skill, "review");
+  assert.equal(user.project.name, "blink");
+  assert.equal(user.project.files.length, 2);
+  assert.equal(user.files.length, 1);
+  assert.ok(!p.body.includes("unselected secret"));
+  assert.ok(!JSON.parse(p.body).messages[0].content.includes("gogo-fpga-changes"));
+  assert.equal(JSON.parse(preview().user).skill, "consult");
+  assert.equal(JSON.parse(preview().user).project, null);
+  assert.throws(() => createChatPreview({ model: "x", prompt: "相談", skill: "unknown", origin: "https://example.test" }), RangeError);
+});
 function response(bytes, headers = { "content-type": "text/event-stream" }) {
   return new Response(new ReadableStream({ start(c) { for (const b of bytes) c.enqueue(b); c.close(); } }), { headers });
 }
