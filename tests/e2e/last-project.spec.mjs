@@ -14,7 +14,7 @@ test("reload restores the selected project and deletion falls back", async ({ pa
   await expect(page.locator("#project-name")).toHaveText("blink");
   await page.reload();
   await expect(page.locator("#project-name")).toHaveText("blink");
-  await page.evaluate(() => localStorage.setItem("toolchain.ide.last-project", "deleted-elsewhere"));
+  await page.evaluate(() => localStorage.setItem("toolchain.ide.settings/last-project", "deleted-elsewhere"));
   await page.reload();
   await expect(page.locator("#project-name")).toHaveText("blink");
 });

@@ -1,4 +1,4 @@
-const key = "toolchain.ide.last-project";
+const key = "toolchain.ide.settings/last-project";
 
 export function lastProjectName(names, storage = () => globalThis.localStorage) {
   try {

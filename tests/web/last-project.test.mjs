@@ -16,6 +16,15 @@ test("last project restores selection and follows activation after a rename", ()
   assert.equal(lastProjectName(["a", "renamed"], saved), "renamed");
 });
 
+test("last project key cannot collide with per-project tab state", () => {
+  const values = new Map([["toolchain.ide.settings", '{"openTabs":[]}']]);
+  const saved = () => ({ getItem: key => values.get(key) ?? null,
+    setItem: (key, value) => values.set(key, value), removeItem: key => values.delete(key) });
+  rememberProject("settings", saved);
+  assert.equal(values.get("toolchain.ide.settings"), '{"openTabs":[]}');
+  assert.equal(lastProjectName(["a", "settings"], saved), "settings");
+});
+
 test("missing, deleted and renamed-away selections fall back; empty workspace clears selection", () => {
   const saved = storage();
   assert.equal(lastProjectName(["a", "z"], saved), "a");
