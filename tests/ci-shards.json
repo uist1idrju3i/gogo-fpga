@@ -34,7 +34,8 @@
       "last-project.spec.mjs",
       "openrouter-auth.spec.mjs",
       "browser-guidance.spec.mjs",
-      "surfer.spec.mjs"
+      "surfer.spec.mjs",
+      "surfer-dpr.spec.mjs"
     ],
     [
       "vhdl.spec.mjs",
