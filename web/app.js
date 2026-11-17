@@ -1,5 +1,6 @@
 import { BOARDS, getBoard } from "./lib/boards.mjs";
 import { buildArgs } from "./lib/build-args.mjs";
+import { browserSupportMessage, checkBrowserSupport } from "./lib/browser-support.mjs";
 import { classifyResult } from "./lib/classify-result.mjs";
 import {
   FS_IDCODE_MASK,
@@ -117,23 +118,6 @@ for (const board of BOARDS) {
   option.value = board.id;
   option.textContent = `${board.label} (${board.part})`;
   boardSelect.append(option);
-}
-
-function checkBrowserSupport() {
-  const missing = [];
-  if (typeof navigator.usb?.requestDevice !== "function") {
-    missing.push("WebUSB");
-  }
-  if (!globalThis.crossOriginIsolated) {
-    missing.push("Cross-Origin Isolation");
-  }
-  if (
-    typeof WebAssembly.Suspending !== "function" ||
-    typeof WebAssembly.promising !== "function"
-  ) {
-    missing.push("WebAssembly JSPI");
-  }
-  return missing;
 }
 
 function selected(name) {
@@ -635,9 +619,7 @@ async function startRun(board, options, file, fileIdcode) {
 function initialize() {
   const missing = checkBrowserSupport();
   supportAvailable = missing.length === 0;
-  supportStatus.textContent = supportAvailable
-    ? "このブラウザーを利用できます。"
-    : `このブラウザーでは操作できません。足りない機能：${missing.join("、")}。COOP/COEP が有効な localhost で開いてください。`;
+  supportStatus.textContent = browserSupportMessage(missing);
   updateForm();
 }
 

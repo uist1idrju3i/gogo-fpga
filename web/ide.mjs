@@ -630,7 +630,7 @@ export function initializeIde({
     context?.getExtension("WEBGL_lose_context")?.loseContext();
     if (!context) {
       waveformStatus.textContent =
-        "この環境では WebGL が使えないため、波形を表示できません。選んだ VCD はダウンロードできます。";
+        "この環境では WebGL が使えないため、波形を表示できません。サイトの設定で WebGL を許可し、ブラウザーのハードウェア アクセラレーションを有効にしてください。選んだ VCD はダウンロードできます。";
       return false;
     }
     const frame = document.createElement("iframe");
