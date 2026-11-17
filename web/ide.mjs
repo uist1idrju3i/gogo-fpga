@@ -1,5 +1,6 @@
 import { createOpfsStore } from "./lib/project-store.mjs";
 import { lastProjectName, rememberProject } from "./lib/last-project.mjs";
+import { observeSurferScale } from "./lib/surfer-scale.mjs";
 import {
   findConstraintBoardMismatch,
   prepareProjectInputs,
@@ -218,6 +219,7 @@ export function initializeIde({
   let formalAssetController = null;
   let formalVersion = 0;
   let surferFrame = null;
+  let surferScale = null;
   let surferBridgePromise = null;
   let resolveSurferBridge = null;
   let vcdObjectUrl = null;
@@ -668,6 +670,8 @@ export function initializeIde({
   }
 
   function resetSurferFrame() {
+    surferScale?.dispose();
+    surferScale = null;
     resolveSurferBridge?.(false);
     surferFrame?.remove();
     surferFrame = null;
@@ -1841,8 +1845,11 @@ export function initializeIde({
       event.source !== surferFrame.contentWindow
     ) return;
     if (event.data?.type === "toolchain:surfer-bridge-ready") {
+      surferScale?.dispose();
+      surferScale = observeSurferScale(surferFrame);
       resolveSurferBridge?.(true);
     } else if (event.data?.type === "toolchain:surfer-waveform-loaded") {
+      surferScale?.refresh();
       const inject = surferFrame.contentWindow.inject_message;
       if (typeof inject === "function") {
         const scopes = vcdRootScopes(currentVcd.bytes).map((name) => [name]);
