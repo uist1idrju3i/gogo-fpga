@@ -29,6 +29,10 @@ class FakeWorker {
     }
   }
 
+  emitEvent(type, event) {
+    for (const listener of this.listeners.get(type) ?? []) listener(event);
+  }
+
   terminate() {
     this.terminated = true;
   }
@@ -52,6 +56,45 @@ function successfulBuild(worker) {
     ],
     timings: { synth: 10, pnr: 20 },
     memoryBytes: { yosys: 30, nextpnr: 40 },
+  });
+}
+
+for (const [type, event, expected] of [
+  ["error", { message: "worker stopped", filename: "build-worker.js", lineno: 12, colno: 3,
+    error: new TypeError("allocation failed") }, /worker stopped; allocation failed; TypeError; build-worker.js:12:3/],
+  ["error", { message: "", filename: "worker.js", lineno: 0, colno: 0,
+    error: { name: "RuntimeError" } }, /RuntimeError; worker.js:0:0/],
+  ["error", {}, /^Build worker failed$/],
+  ["messageerror", { message: "invalid clone", filename: "worker.js", lineno: 4 }, /invalid clone; worker.js:4/],
+  ["messageerror", {}, /^Build worker message could not be deserialized$/],
+  ["message", { type: "error", stage: "synth", error: { name: "RangeError" }, filename: "yosys.js" }, /RangeError; yosys.js/],
+  ["message", { type: "error", stage: "synth", message: "" }, /^Build worker failed$/],
+  ["message", { type: "error", stage: "synth", message: "syntax error" }, /^syntax error$/],
+]) {
+  test(`${type} diagnostics are preserved: ${expected}`, async () => {
+    let count = 0;
+    let worker;
+    const runner = createBuildRunner({
+      createBuildWorker: () => {
+        count += 1;
+        worker = new FakeWorker(current => {
+          if (type === "message") current.emit(event);
+          else current.emitEvent(type, event);
+        });
+        return worker;
+      },
+      createPackWorker: () => { throw new Error("packing must not start"); },
+    });
+    await assert.rejects(runner.build({ files: [] }), error => {
+      assert.match(error.message, expected);
+      assert.equal(error.stage, event.stage);
+      if (event.error instanceof Error) assert.equal(error.cause, event.error);
+      return true;
+    });
+    assert.equal(count, 1);
+    assert.equal(worker.terminated, true);
+    for (const listeners of worker.listeners.values()) assert.equal(listeners.size, 0);
+    assert.equal(runner.cancel(), false);
   });
 }
 
