@@ -2,8 +2,75 @@ import { expect, test } from "@playwright/test";
 import { prepareChat, previewAndSend, projectFile, proposalReply, slowChat } from "./ai-chat-helpers.mjs";
 import { homedir } from "node:os";
 import { resolve } from "node:path";
+import { MAX_MODELS_BYTES, MODELS_URL } from "../../web/lib/openrouter-models.mjs";
+
+const modelCatalog = { data: [
+  { id: "example/paid", context_length: 32768, pricing: { prompt: "0.0000025", completion: "0.00001" }, supported_parameters: ["tools", "structured_outputs"] },
+  { id: "example/tiny", context_length: 10, pricing: { prompt: "0", completion: "-1" }, supported_parameters: ["reasoning"] },
+] };
+
+async function mockModels(page, { body = JSON.stringify(modelCatalog), headers = {} } = {}) {
+  const requests = [];
+  await page.route(MODELS_URL, async route => {
+    requests.push(route.request());
+    await route.fulfill({ contentType: "application/json", headers: { "Access-Control-Allow-Origin": new URL(page.url()).origin, ...headers }, body });
+  });
+  return requests;
+}
 
 for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
+  test(`explicit model metadata and context estimate for ${board}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 1100 });
+    const allModelRequests = [];
+    page.on("request", request => { if (request.url() === MODELS_URL) allModelRequests.push(request); });
+    const chats = await prepareChat(page);
+    const requests = await mockModels(page);
+    await page.locator("#new-project-button").click();
+    await page.locator("#new-project-name").fill(`models-${board}`);
+    await page.locator("#new-project-board").selectOption(board);
+    await page.locator("#new-project-create").click();
+    await expect(page.locator("#project-name")).toHaveText(`models-${board}`);
+    await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await page.locator("#right-tab-ai").click();
+    await page.locator("#ai-model").fill("example/paid");
+    await expect(page.locator("#ai-model-details")).toBeHidden();
+    expect(requests).toHaveLength(0); expect(allModelRequests).toHaveLength(0);
+    await page.locator("#ai-models-fetch").click();
+    await expect(page.locator("#ai-models-status")).toContainText("2件");
+    expect(requests).toHaveLength(1);
+    expect(requests[0].method()).toBe("GET");
+    expect(requests[0].headers().authorization).toBeUndefined();
+    expect(requests[0].headers().referer).toBeUndefined();
+    expect(requests[0].headers().cookie).toBeUndefined();
+    expect(await page.locator("#ai-model-options option").evaluateAll(options => options.map(option => option.value))).toEqual(["example/paid", "example/tiny"]);
+    await expect(page.locator("#ai-model-details")).toContainText("32768 トークン");
+    await expect(page.locator("#ai-model-details")).toContainText("入力 $2.5 / 出力 $10");
+    await expect(page.locator("#ai-model-details")).toContainText("構造化出力: 対応・ツール: 対応・推論: 非対応");
+    await page.locator("#ai-model").fill("unknown/model");
+    await expect(page.locator("#ai-model-details")).toHaveText("一覧にないモデルです");
+    await page.locator("#ai-model").fill("example/tiny");
+    await expect(page.locator("#ai-model-details")).toContainText("入力 無料 / 出力 不明");
+    await expect(page.locator("#ai-model-details")).toContainText("推論: 対応");
+    await page.locator("#ai-model-details").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-models-${board}.png`) });
+    await page.locator("#ai-prompt").fill("この設計を説明してください。");
+    await page.locator("#ai-preview-button").click();
+    const body = await page.locator("#ai-preview-body").inputValue();
+    await expect(page.locator("#ai-token-estimate")).toContainText(`推定 ${Buffer.byteLength(body)} トークン`);
+    await expect(page.locator("#ai-context-warning")).toBeVisible();
+    await page.locator("#ai-context-warning").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-models-context-${board}.png`) });
+    expect(requests).toHaveLength(1); expect(chats).toHaveLength(0);
+    await page.locator("#ai-preview-cancel").click();
+    await page.locator("#ai-model").fill("example/paid");
+    await page.locator("#ai-preview-button").click();
+    await expect(page.locator("#ai-context-warning")).toBeHidden();
+    expect(requests).toHaveLength(1);
+    await page.reload(); await page.locator("#right-tab-ai").click();
+    await expect(page.locator("#ai-model-options option")).toHaveCount(0);
+    await expect(page.locator("#ai-model-details")).toBeHidden();
+    expect(requests).toHaveLength(1);
+  });
   test(`response usage accounting for ${board}`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 1100 });
     await prepareChat(page, { usage: { prompt_tokens: 120, completion_tokens: 30, cost: 0.00042,
@@ -47,6 +114,36 @@ for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
     expect(requests).toHaveLength(0);
   });
 }
+
+for (const [name, response, message] of [
+  ["oversized", { body: " ".repeat(MAX_MODELS_BYTES + 1) }, "モデル一覧が大きすぎるため破棄しました。"],
+  ["invalid shape", { body: '{"data":[{"id":"safe"},null]}' }, "モデル一覧を取得できませんでした。"],
+  ["invalid JSON", { body: "not JSON" }, "モデル一覧を取得できませんでした。"],
+  ["empty", { body: '{"data":[]}' }, "0件のモデルを取得しました。"],
+]) {
+  test(`model catalog ${name} fails closed or reports empty`, async ({ page }) => {
+    await prepareChat(page);
+    const requests = await mockModels(page, response);
+    await page.locator("#ai-models-fetch").click();
+    await expect(page.locator("#ai-models-status")).toContainText(message);
+    await expect(page.locator("#ai-model-options option")).toHaveCount(0);
+    if (name === "empty") await expect(page.locator("#ai-model-details")).toHaveText("一覧にないモデルです");
+    else await expect(page.locator("#ai-model-details")).toBeHidden();
+    expect(requests).toHaveLength(1);
+  });
+}
+
+test("a failed refresh discards previously valid model metadata and suggestions", async ({ page }) => {
+  await prepareChat(page);
+  await mockModels(page);
+  await page.locator("#ai-models-fetch").click();
+  await expect(page.locator("#ai-model-options option")).toHaveCount(2);
+  await mockModels(page, { body: "{}" });
+  await page.locator("#ai-models-fetch").click();
+  await expect(page.locator("#ai-models-status")).toContainText("モデル一覧を取得できませんでした。");
+  await expect(page.locator("#ai-model-options option")).toHaveCount(0);
+  await expect(page.locator("#ai-model-details")).toBeHidden();
+});
 
 test("connection comes first, disconnected chat collapses, and mobile diffs scroll above the action bar", async ({ page }) => {
   await prepareChat(page, { reply: proposalReply([{ path: "src/top.v", content: `module top; // ${"long line ".repeat(80)}\nendmodule\n` }]) });
