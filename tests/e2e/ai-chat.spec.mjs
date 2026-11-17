@@ -4,6 +4,24 @@ import { homedir } from "node:os";
 import { resolve } from "node:path";
 
 for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
+  test(`response usage accounting for ${board}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 1100 });
+    await prepareChat(page, { usage: { prompt_tokens: 120, completion_tokens: 30, cost: 0.00042,
+      prompt_tokens_details: { cached_tokens: 40 }, completion_tokens_details: { reasoning_tokens: 10 } } });
+    await page.locator("#new-project-button").click();
+    await page.locator("#new-project-name").fill(`usage-${board}`);
+    await page.locator("#new-project-board").selectOption(board);
+    await page.locator("#new-project-create").click();
+    await expect(page.locator("#project-name")).toHaveText(`usage-${board}`);
+    await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await page.locator("#right-tab-ai").click();
+    await previewAndSend(page);
+    await expect(page.locator("#ai-usage")).toHaveText("入力 120 トークン（キャッシュ 40）・出力 30 トークン（推論 10）・費用 $0.00042");
+    await page.locator("#ai-usage").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-usage-${board}.png`) });
+    await page.locator("#ai-clear").click();
+    await expect(page.locator("#ai-usage")).toBeEmpty();
+  });
   test(`AI skill selector and project summary for ${board}`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 1100 });
     const requests = await prepareChat(page);
@@ -98,6 +116,7 @@ test("preview is inert, exposes exact bytes/history/headers, and every edit requ
   await page.locator("#ai-preview-button").click();
   const sent = await page.locator("#ai-preview-body").inputValue();
   await page.locator("#ai-send").click(); await expect(page.locator("#ai-chat-response")).toHaveText("説明です。");
+  await expect(page.locator("#ai-usage")).toHaveText("使用量は返されませんでした");
   expect(requests).toHaveLength(1); expect(requests[0].postDataBuffer()).toEqual(Buffer.from(sent));
   expect(requests[0].headers()["authorization"]).toBe("Bearer sk-or-chat-test-only");
   expect(requests[0].headers()["http-referer"]).toBe(new URL(page.url()).origin);

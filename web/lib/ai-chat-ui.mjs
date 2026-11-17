@@ -2,6 +2,7 @@ import { createChatPreview, selectableFiles, sendChatPreview } from "./openroute
 import { parseProposals, proposalDiff, proposalSnapshot } from "./ai-proposals.mjs";
 import { AI_CHAT_INITIAL_STATE, transitionAiChat } from "./ai-chat-flow.mjs";
 import { AI_SKILLS } from "./ai-skills.mjs";
+import { formatUsage } from "./ai-usage.mjs";
 export { createProposalEditor } from "./ai-proposals.mjs";
 export { selectableFiles } from "./openrouter-chat.mjs";
 
@@ -48,7 +49,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       <button id="ai-preview-cancel" type="button" class="secondary">内容を編集する</button>
     </section>
     <button id="ai-stop" type="button" class="secondary" hidden>停止</button>
-    <section id="ai-answer" hidden><h4>AI の応答</h4><pre id="ai-chat-response" role="log" aria-live="polite" tabindex="0"></pre></section>
+    <section id="ai-answer" hidden><h4>AI の応答</h4><pre id="ai-chat-response" role="log" aria-live="polite" tabindex="0"></pre><p id="ai-usage" role="status"></p></section>
     <section id="ai-proposals" hidden><h4>変更提案の確認</h4>
       <p>各ファイルの差分を確認して採否を選び、まとめて適用で確定します。選んだ変更は1回で保存します。</p>
       <div id="ai-proposal-files"></div><p id="ai-apply-reason" role="status"></p>
@@ -192,11 +193,14 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     if (state !== "sending") return;
     const abort = new AbortController(); controller = abort;
     q("ai-chat-error").hidden = true; q("ai-chat-response").textContent = ""; q("ai-answer").hidden = false;
+    q("ai-usage").textContent = "";
     renderProposals({ valid: [], rejected: [] }, new Map()); controls();
     try {
       snapshot = await proposalSnapshot(workspace.getContext());
       if (version !== selectedVersion || preview !== selected || getKey() !== key || abort.signal.aborted) throw { code: "preview" };
-      const answer = await sendChatPreview(selected, { key, signal: abort.signal, onDelta: (_delta, text) => {
+      const answer = await sendChatPreview(selected, { key, signal: abort.signal, onUsage: (usage) => {
+        if (run === generation) q("ai-usage").textContent = formatUsage(usage);
+      }, onDelta: (_delta, text) => {
         if (run !== generation) return;
         send("chunk_received"); q("ai-chat-response").textContent = text; controls();
       } });
@@ -227,6 +231,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   function clear(event = "clear_requested") {
     generation++; controller?.abort(); controller = null; history = []; preview = null; snapshot = null;
     q("ai-preview-body").value = ""; q("ai-prompt").value = ""; q("ai-chat-response").textContent = ""; q("ai-answer").hidden = true; q("ai-chat-error").hidden = true;
+    q("ai-usage").textContent = "";
     send(event); renderHistory(); renderProposals({ valid: [], rejected: [] }, new Map()); controls();
   }
   q("ai-clear").addEventListener("click", () => clear());
