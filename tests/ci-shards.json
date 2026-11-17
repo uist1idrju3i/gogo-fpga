@@ -29,6 +29,7 @@
   "e2e": [
     [
       "synthesis.spec.mjs",
+      "formal-no-targets.spec.mjs",
       "workflow.spec.mjs",
       "openrouter-auth.spec.mjs",
       "surfer.spec.mjs"
