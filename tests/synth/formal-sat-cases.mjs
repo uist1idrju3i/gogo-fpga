@@ -26,7 +26,7 @@ export const satFormalCases = [
   { name: "false-induction", kind: "verdict", source: counter, clock: "clk", mode: "prove", expected: "counterexample" },
   { name: "contradictory-assumes", kind: "verdict", source: `module top(input a); always @* begin
     A: assume(a); B: assume(!a); P: assert(a); end endmodule`, expected: "inconsistent-assumptions" },
-  { name: "zero-properties", kind: "error", source: "module top(input a, output y); assign y=a; endmodule", expected: "error" },
+  { name: "zero-properties", kind: "error", source: "module top(input a, output y); assign y=a; endmodule", expected: "no-targets" },
   { name: "wrong-clock", kind: "error", source: counter, clock: "missing", expected: "error" },
   { name: "wrong-edge", kind: "error", source: counter, clock: "clk", edge: "negedge", expected: "error" },
   { name: "unsupported-syntax", kind: "error", source: "module top(input clk); assert property (@(posedge clk) 1); endmodule", expected: "error" },

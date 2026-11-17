@@ -33,6 +33,7 @@ const FORMAL_KIND_LABELS = {
   counterexample: "反例が見つかりました。",
   unknown: "判定できませんでした。",
   "tool-error": "ツールがエラーを返しました。",
+  "no-targets": "形式検証を実行しませんでした。",
   timeout: "時間上限に達しました。",
   cancelled: "停止しました。",
   unavailable: "この製品では実行できません。",

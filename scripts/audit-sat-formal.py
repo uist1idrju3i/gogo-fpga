@@ -149,7 +149,10 @@ def audit_errors(evidence, meta, result):
         mode, depth, phase, exit_code, message = ERROR_CASES[case]
         require(index == list(ERROR_CASES).index(case) * 2 + order.index(runtime), "error row order")
         require(row["mode"] == mode and row["depth"] == depth and row["runtimeIndex"] == order.index(runtime), "error mode/depth")
-        require(row["expected"] == "error" and row["actual"] == "error" and row["exitCode"] == exit_code, "error verdict: " + case)
+        statuses = {"error", "no-targets"} if case == "zero-properties" else {"error"}
+        require(row["expected"] in statuses and row["actual"] == row["expected"] and row["exitCode"] == exit_code, "error verdict: " + case)
+        if row["actual"] == "no-targets":
+            message = "検証対象が見つかりません。assert の性質を追加するか、性質に合うモードを選んでください。"
         require(positive(row["elapsedMs"]), "error elapsed time")
         require(row["sourceSha256"] == digest(evidence.read(f"{case}/native/top.v")), "error source hash")
         require(row["logSha256"] == tree_hash(evidence, case), "error log hash: " + case)

@@ -133,7 +133,7 @@ for (const scenario of [
   { name: "psl-depth5", source: psl, depth: 5, psl: true, expected: "counterexample" },
   { name: "psl-activation", source: counter(`  -- psl default clock is rising_edge(clk);
   -- psl P_BOUND: assert always (a = '1' -> next (count < 3));`), depth: 6, psl: true, expected: "counterexample", covers: 1, assumes: 0 },
-  { name: "psl-off", source: psl, depth: 5, expected: "error" },
+  { name: "psl-off", source: psl, depth: 5, expected: "no-targets" },
   { name: "psl-inconsistent", source: counter(`  -- psl default clock is rising_edge(clk);
   -- psl A_ONE: assume always (a = '1');
   -- psl A_ZERO: assume always (a = '0');

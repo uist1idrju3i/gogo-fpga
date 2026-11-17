@@ -48,7 +48,7 @@ for (const [name, mutate, expected] of [
   ["renamed connection", (x) => { x.emitted.modules.top.netnames = { other: { bits: [4] } }; }, /mapping/],
   ["changed enable", (x) => { x.emitted.modules.top.cells.new.connections.EN = ["0"]; }, /mapping/],
   ["extra property", (x) => { x.emitted.modules.top.cells.extra = structuredClone(x.emitted.modules.top.cells.new); }, /inventory/],
-  ["changed kind", (x) => { x.emitted.modules.top.cells.new.type = "$assume"; }, /No assertion|inventory/],
+  ["changed kind", (x) => { x.emitted.modules.top.cells.new.type = "$assume"; }, /検証対象が見つかりません|inventory/],
   ["changed port direction", (x) => { x.emitted.modules.top.ports.q.direction = "input"; }, /port inventory/],
   ["changed port width", (x) => { x.emitted.modules.top.ports.q.bits.push(5); }, /port inventory/],
   ["missing replay location", (x) => { x.replay.locations = []; }, /Incomplete/],
