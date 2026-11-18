@@ -1,4 +1,9 @@
-import { PROPOSAL_LIMITS, validateProposals } from "./ai-proposals.mjs";
+import { PROPOSAL_LIMITS, parseProposals, validateProposals } from "./ai-proposals.mjs";
+
+export function parseAiAnswer(text, { skill, structured }, files) {
+  if (skill === "teach") return { answer: text, proposals: { valid: [], rejected: [] } };
+  return structured ? parseStructuredAnswer(text, files) : { answer: text, proposals: parseProposals(text, files) };
+}
 
 export function answerSchema() {
   return { type: "object", properties: {

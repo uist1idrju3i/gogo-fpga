@@ -24,11 +24,12 @@ export function selectableFiles(files) {
   });
 }
 
-export function createChatPreview({ model, prompt, skill = "consult", models = null, project = null, history = [], resendHistory = false, files = [], logs = [], problems = [], origin }) {
+export function createChatPreview({ model, prompt, skill = "consult", hintLevel = 1, models = null, project = null, history = [], resendHistory = false, files = [], logs = [], problems = [], origin }) {
   if (typeof model !== "string" || !model.trim() || model.length > 200 ||
       typeof prompt !== "string" || !prompt.trim()) throw new ChatError("empty");
   if (new URL(origin).origin !== origin || !/^https?:/.test(origin)) throw new ChatError("preview");
-  const user = JSON.stringify({ request: prompt, skill, project: summarizeProject(project), files: selectableFiles(new Map(files)).map(([path, content]) => ({ path, content })), logs, problems }, null, 2);
+  if (skill === "teach" && ![1, 2, 3].includes(hintLevel)) throw new ChatError("preview");
+  const user = JSON.stringify({ request: skill === "teach" ? `ヒントの段階: ${hintLevel}\n${prompt}` : prompt, skill, project: summarizeProject(project), files: selectableFiles(new Map(files)).map(([path, content]) => ({ path, content })), logs, problems }, null, 2);
   const allowsChanges = AI_SKILLS.find(item => item.id === skill)?.allowsChanges;
   const supported = models?.find(item => item.id === model.trim())?.supported_parameters?.includes("structured_outputs");
   const structured = Boolean(allowsChanges && supported);
@@ -43,7 +44,7 @@ export function createChatPreview({ model, prompt, skill = "consult", models = n
   } : {}) }, null, 2);
   if (chatByteLength(body) > MAX_CHAT_BYTES) throw new ChatError("size");
   return Object.freeze({ url: CHAT_URL, body, bytes: chatByteLength(body),
-    user, structured, mode, headers: Object.freeze({ "Content-Type": "application/json", "X-OpenRouter-Title": utf8Header("午後のFPGA"), "HTTP-Referer": origin }) });
+    user, skill, structured, mode, headers: Object.freeze({ "Content-Type": "application/json", "X-OpenRouter-Title": utf8Header("午後のFPGA"), "HTTP-Referer": origin }) });
 }
 
 export function createSseParser(onDelta = () => {}) {
