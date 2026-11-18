@@ -1209,7 +1209,13 @@ export function initializeIde({
       workflow.send("build_cancelled");
       onBuildStateChange(libraryBusy);
     }
-    if (designChanged) workflow.edit();
+    if (designChanged) {
+      for (const kind of ["simulation", "formal"]) {
+        latestBuildLogs.delete(kind);
+        explainVerification[kind].hidden = true;
+      }
+      workflow.edit();
+    }
     notifyAiContext();
     clearTimeout(saveTimer);
     setProjectStatus("変更を保存しています。");

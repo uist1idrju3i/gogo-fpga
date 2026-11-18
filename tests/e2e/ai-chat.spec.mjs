@@ -147,6 +147,29 @@ test("AI verification uses the normal simulation availability for a VHDL project
   expect(requests).toHaveLength(1);
 });
 
+test("source edits remove discarded verification logs and explanation actions", async ({ page }) => {
+  const requests = await applyLocalProposal(page, [{ path: "src/top_tb.v", content: "module top_tb; initial begin #10; $finish; end endmodule\n", reason: "波形なしの検査" }]);
+  await acceptLocalProposal(page);
+  await page.locator("#ai-verify-simulation").click();
+  await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "failed");
+  await expect(page.locator("#ai-explain-simulation")).toBeVisible();
+  await page.locator("#formal-button").click();
+  await expect(page.locator("#formal-status")).toHaveAttribute("data-outcome", "failed", { timeout: 120000 });
+  await expect(page.locator("#ai-explain-formal")).toBeVisible();
+  await page.getByRole("button", { name: "src/top.v を開く", exact: true }).click();
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("Control+End");
+  await page.keyboard.insertText("\n// source changed\n");
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await expect(page.locator("#formal-status")).toHaveAttribute("data-outcome", "stopped");
+  await expect(page.locator("#ai-explain-formal")).toBeHidden();
+  await expect(page.locator("#ai-explain-simulation")).toBeHidden();
+  await page.locator("#right-tab-ai").click();
+  await expect(page.locator('#ai-context-logs input[value="simulation"]')).toHaveCount(0);
+  await expect(page.locator('#ai-context-logs input[value="formal"]')).toHaveCount(0);
+  expect(requests).toHaveLength(1);
+});
+
 test("unconfigured tops and unsuccessful apply do not offer local verification", async ({ page }) => {
   await applyLocalProposal(page);
   await page.evaluate(async () => {
