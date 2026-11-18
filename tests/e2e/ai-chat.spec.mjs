@@ -9,6 +9,143 @@ const modelCatalog = { data: [
   { id: "example/tiny", context_length: 10, pricing: { prompt: "0", completion: "-1" }, supported_parameters: ["reasoning"] },
 ] };
 
+async function applyLocalProposal(page, changes = [{ path: "src/ai_check.v", content: "module ai_check; endmodule\n", reason: "検査用" }]) {
+  const requests = await prepareChat(page, { reply: proposalReply(changes) });
+  return requests;
+}
+
+async function acceptLocalProposal(page) {
+  await previewAndSend(page, "変更を提案してください。");
+  await page.locator(".ai-proposal button").filter({ hasText: "この変更を適用" }).click();
+  await page.locator("#ai-apply-selected").click();
+  await expect(page.locator(".ai-proposal")).toHaveCount(0);
+  await expect(page.locator("#ai-local-verify")).toBeVisible();
+}
+
+for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
+  test(`local verification after apply for ${board}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1100 });
+    const requests = await applyLocalProposal(page);
+    await page.locator("#new-project-button").click();
+    await page.locator("#new-project-name").fill(`local-${board}`);
+    await page.locator("#new-project-board").selectOption(board);
+    await page.locator("#new-project-create").click();
+    await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await page.locator("#right-tab-ai").click();
+    await acceptLocalProposal(page);
+    await expect(page.locator("#ai-verify-simulation")).toBeVisible();
+    await expect(page.locator("#ai-verify-formal")).toBeVisible();
+    await page.locator("#ai-local-verify").evaluate(element => element.scrollIntoView({ block: "start" }));
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-verify-${board}.png`) });
+    if (board === "tangnano1k") {
+      const sent = [];
+      page.on("request", request => { if (new URL(request.url()).hostname === "openrouter.ai") sent.push(request.url()); });
+      await page.locator("#ai-verify-build").click();
+      await expect(page.locator("#synthesis-stage")).toHaveText("ビルド完了", { timeout: 120000 });
+      await expect(page.locator("#bottom-tab-log")).toHaveAttribute("aria-selected", "true");
+      expect(sent).toEqual([]);
+      await page.locator("#right-tab-ai").click();
+      await page.locator("#ai-undo").click();
+      await expect(page.locator("#ai-local-verify")).toBeHidden();
+      await expect(page.locator("#ai-undo")).toBeHidden();
+    } else if (board === "tangnano4k") {
+      await page.locator("#ai-preview-button").click();
+      await expect(page.locator("#ai-local-verify")).toBeHidden();
+    } else if (board === "tangnano9k") {
+      await page.locator("#ai-clear").click();
+      await expect(page.locator("#ai-local-verify")).toBeHidden();
+    } else {
+      await page.locator("#project-select").selectOption("blink");
+      await expect(page.locator("#project-name")).toHaveText("blink");
+      await expect(page.locator("#ai-local-verify")).toBeHidden();
+    }
+    expect(requests).toHaveLength(1);
+  });
+}
+
+test("local simulation cannot be stopped by the AI verification action", async ({ page }) => {
+  await page.addInitScript(() => {
+    const NativeWorker = Worker;
+    window.aiSimulationStops = 0;
+    window.Worker = class extends NativeWorker {
+      constructor(url, options) { super(url, options); this.aiSimulation = String(url).includes("sim-worker"); }
+      terminate() { if (this.aiSimulation) window.aiSimulationStops++; return super.terminate(); }
+    };
+  });
+  const requests = await applyLocalProposal(page, [{ path: "src/top_tb.v", content: "module top_tb; reg clk=0; always #1 clk=~clk; initial begin $dumpfile(\"wave.vcd\"); $dumpvars(0,top_tb); end endmodule\n", reason: "停止の検査" }]);
+  await acceptLocalProposal(page);
+  await page.locator("#ai-verify-simulation").click();
+  await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "running");
+  await page.locator("#right-tab-ai").click();
+  await expect(page.locator("#ai-verify-build")).toBeDisabled();
+  await expect(page.locator("#ai-verify-simulation")).toBeDisabled();
+  await expect(page.locator("#ai-verify-formal")).toBeDisabled();
+  const stops = await page.evaluate(() => window.aiSimulationStops);
+  await page.evaluate(() => {
+    document.querySelector("#ai-verify-simulation").dispatchEvent(new MouseEvent("click"));
+    document.dispatchEvent(new CustomEvent("toolchain:ai-verify", { detail: { kind: "simulation" } }));
+  });
+  expect(await page.evaluate(() => window.aiSimulationStops)).toBe(stops);
+  await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "running");
+  await page.locator("#right-tab-verify").click();
+  await page.locator("#simulation-button").click();
+  await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "stopped");
+  expect(requests).toHaveLength(1);
+});
+
+test("failed verification preselects its log without sending", async ({ page }) => {
+  const requests = await applyLocalProposal(page, [{ path: "src/top_tb.v", content: "module top_tb; initial begin #10; $finish; end endmodule\n", reason: "波形なしの検査" }]);
+  await acceptLocalProposal(page);
+  await page.locator("#ai-verify-simulation").click();
+  await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "failed");
+  await page.locator("#ai-explain-simulation").click();
+  await expect(page.locator('#ai-context-logs input[value="simulation"]')).toBeChecked();
+  await expect(page.locator("#ai-skill")).toHaveValue("explain");
+  await page.locator("#ai-preview-button").click();
+  let user = JSON.parse(JSON.parse(await page.locator("#ai-preview-body").inputValue()).messages.at(-1).content);
+  expect(user.logs.find(log => log.tool === "simulation").text).toContain("VCD");
+  await page.locator("#ai-preview-cancel").click();
+  await page.locator("#right-tab-verify").click();
+  await page.locator("#formal-button").click();
+  await expect(page.locator("#formal-status")).toHaveAttribute("data-outcome", "failed", { timeout: 120000 });
+  await page.locator("#ai-explain-formal").click();
+  await expect(page.locator('#ai-context-logs input[value="formal"]')).toBeChecked();
+  await page.locator("#ai-preview-button").click();
+  user = JSON.parse(JSON.parse(await page.locator("#ai-preview-body").inputValue()).messages.at(-1).content);
+  expect(user.logs.find(log => log.tool === "formal").text).toContain("assert");
+  expect(requests).toHaveLength(1);
+});
+
+test("unconfigured tops and unsuccessful apply do not offer local verification", async ({ page }) => {
+  await applyLocalProposal(page);
+  await page.evaluate(async () => {
+    const { initializeAiChatUI } = await import("/lib/ai-chat-ui.bundle.mjs");
+    const panel = document.createElement("aside");
+    document.body.replaceChildren(panel);
+    const context = { projectId: "empty", revision: 0, project: { name: "empty", board: "tangnano9k", top: "top" },
+      files: new Map([["src/top.v", "module top; endmodule\n"]]), logs: new Map(), problems: [], activeFile: "src/top.v" };
+    let failApply = true;
+    window.completeLocalApply = () => { failApply = false; };
+    initializeAiChatUI({ panel, getKey: () => "sk-or-chat-test-only", showPanel() {},
+      workspace: { getContext: () => context, isBusy: () => false },
+      revisions: { canUndo: false, async apply() { if (failApply) throw new Error("apply failed"); } } });
+  });
+  await previewAndSend(page, "変更してください。");
+  await page.locator(".ai-proposal button").filter({ hasText: "この変更を適用" }).click();
+  await page.locator("#ai-apply-selected").click();
+  await expect(page.locator("#ai-chat-error")).toBeVisible();
+  await expect(page.locator("#ai-local-verify")).toBeHidden();
+  await page.evaluate(() => window.completeLocalApply());
+  await page.locator("#ai-apply-selected").click();
+  await expect(page.locator("#ai-local-verify")).toBeVisible();
+  await expect(page.locator("#ai-verify-build")).toBeVisible();
+  await expect(page.locator("#ai-verify-simulation")).toBeHidden();
+  await expect(page.locator("#ai-verify-formal")).toBeHidden();
+  await page.locator("#ai-prompt").fill("");
+  await page.locator("#ai-preview-button").click();
+  await expect(page.locator("#ai-local-verify")).toBeHidden();
+});
+
 test("hashing blocks previews and clearing does not repopulate history", async ({ page }) => {
   await page.addInitScript(() => {
     const digest = crypto.subtle.digest.bind(crypto.subtle);

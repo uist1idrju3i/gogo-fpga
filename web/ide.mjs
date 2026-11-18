@@ -424,6 +424,7 @@ export function initializeIde({
     }
     updateSimulationControls();
     updateFormalControls();
+    document.dispatchEvent(new Event("toolchain:ai-busy-change"));
   }
 
   function renderSimulationSettings() {
@@ -761,6 +762,7 @@ export function initializeIde({
     onSimulationStateChange(true);
     updateSynthesisControls();
     simulationStatus.dataset.outcome = "running";
+    explainVerification.simulation.hidden = true;
     workflow.verify("実行中");
     simulationStatus.textContent = "シミュレーションを実行しています。";
     programLog.textContent = "";
@@ -805,6 +807,7 @@ export function initializeIde({
       if (version === simulationVersion) {
         simulationRunning = false;
         onSimulationStateChange(false);
+        finishAiVerification("simulation", simulationStatus);
         updateSynthesisControls();
       }
     }
@@ -831,6 +834,7 @@ export function initializeIde({
     formalRunning = true;
     updateSynthesisControls();
     formalStatus.dataset.outcome = "running";
+    explainVerification.formal.hidden = true;
     workflow.verify("実行中");
     formalStatus.textContent = "形式検証を実行しています。";
     programLog.textContent = "";
@@ -889,6 +893,7 @@ export function initializeIde({
       if (version === formalVersion) {
         formalAssetController = null;
         formalRunning = false;
+        finishAiVerification("formal", formalStatus);
         updateSynthesisControls();
       }
     }
@@ -1542,6 +1547,7 @@ export function initializeIde({
   function activateProject(loaded) {
     aiProjectVersion++;
     latestBuildLogs = new Map();
+    for (const button of Object.values(explainVerification)) button.hidden = true;
     currentProblems = [];
     document.querySelector("#build-summary").hidden = true;
     workflow.reset();
@@ -1996,6 +2002,31 @@ export function initializeIde({
       project, files, activeFile: activeTab, logs: new Map(latestBuildLogs), problems: [...currentProblems] };
   }
   const aiBusy = () => !project || libraryBusy || saveTimer !== null || projectSaveCount > 0 || buildRunning || simulationRunning || formalRunning || workflow.state === "writing";
+  let aiRequestBusy = false;
+  document.addEventListener("toolchain:ai-request-busy", ({ detail }) => { aiRequestBusy = detail?.busy === true; });
+  document.addEventListener("toolchain:ai-verify", ({ detail }) => {
+    if (aiBusy() || aiRequestBusy) return;
+    const kind = detail?.kind;
+    if (!["build", "simulation", "formal"].includes(kind) || kind !== "build" && !project[kind]?.top?.trim()) return;
+    document.querySelector(`#right-tab-${kind === "build" ? "board" : "verify"}`).click();
+    updateTabs("log");
+    if (kind === "build") void runProjectBuild();
+    else if (kind === "simulation") void runProjectSimulation();
+    else void runProjectFormal();
+  });
+  const explainVerification = {};
+  for (const [kind, label, status] of [["simulation", "シミュレーション", simulationStatus], ["formal", "形式検証", formalStatus]]) {
+    const button = document.createElement("button");
+    button.id = `ai-explain-${kind}`; button.type = "button"; button.className = "secondary"; button.hidden = true;
+    button.textContent = `${label}の失敗を AI に説明してもらう`;
+    status.after(button); explainVerification[kind] = button;
+    button.addEventListener("click", () => document.dispatchEvent(new CustomEvent("toolchain:ai-explain", { detail: { tool: kind, message: status.textContent } })));
+  }
+  function finishAiVerification(kind, status) {
+    latestBuildLogs.set(kind, `${status.textContent}\n${programLog.textContent}`);
+    explainVerification[kind].hidden = !["failed", "timeout"].includes(status.dataset.outcome);
+    notifyAiContext();
+  }
   const explainBuild = document.createElement("button");
   explainBuild.id = "ai-explain-build";
   explainBuild.type = "button";
