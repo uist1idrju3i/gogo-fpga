@@ -466,24 +466,25 @@ export function initializeIde({
     }
   }
 
+  function simulationStartAvailable() {
+    const timeLimit = Number(simulationTimeLimit.value);
+    return !libraryBusy && !simulationRunning && !buildRunning && !formalRunning && canStartSimulation() &&
+      (project?.files ?? []).some(({ path }) => /\.(?:v|vh)$/i.test(path)) &&
+      BOARDS.some(({ id }) => id === boardSelect.value) && Boolean(simulationTop.value.trim()) &&
+      Number.isInteger(timeLimit) && timeLimit >= 1 && timeLimit <= 120;
+  }
+
   function updateSimulationControls() {
     const paths = (project?.files ?? []).map(({ path }) => path);
     const hasVerilog = paths.some((path) => /\.(?:v|vh)$/i.test(path));
     const hasVhdl = paths.some((path) => /\.(?:vhd|vhdl)$/i.test(path));
-    const board = BOARDS.find(({ id }) => id === boardSelect.value);
     simulationButton.textContent = simulationRunning ? "停止" : "シミュレーション";
     simulationReason.textContent = !hasVerilog && hasVhdl
       ? "VHDL のシミュレーションはできません（Verilog の testbench を使ってください）"
       : !hasVerilog
         ? "Verilog ファイルを含むプロジェクトを開いてください。"
         : "";
-    simulationButton.disabled = libraryBusy || (simulationRunning
-      ? false
-      : !hasVerilog || !board || buildRunning || formalRunning || !canStartSimulation() ||
-        !simulationTop.value.trim() ||
-        !Number.isInteger(Number(simulationTimeLimit.value)) ||
-        Number(simulationTimeLimit.value) < 1 ||
-        Number(simulationTimeLimit.value) > 120);
+    simulationButton.disabled = libraryBusy || (!simulationRunning && !simulationStartAvailable());
     simulationTop.disabled = !project || simulationRunning || buildRunning || libraryBusy;
     simulationTimeLimit.disabled = !project || simulationRunning || buildRunning || libraryBusy;
     renderSimulationSettings();
@@ -2007,7 +2008,7 @@ export function initializeIde({
     for (const [path, content] of selectableFiles(files)) files.set(path, content);
     return { projectId: `${project.name}:${aiProjectVersion}`, revision: workflow.revision,
       project, files, activeFile: activeTab, logs: new Map(latestBuildLogs), problems: [...currentProblems],
-      verificationReady: { simulation: !simulationButton.disabled, formal: !formalButton.disabled } };
+      verificationReady: { simulation: simulationStartAvailable(), formal: !formalButton.disabled } };
   }
   const aiBusy = () => !project || libraryBusy || saveTimer !== null || projectSaveCount > 0 || buildRunning || simulationRunning || formalRunning || workflow.state === "writing";
   let aiRequestBusy = false;
@@ -2016,7 +2017,7 @@ export function initializeIde({
     if (aiBusy() || aiRequestBusy) return;
     const kind = detail?.kind;
     if (!["build", "simulation", "formal"].includes(kind) || kind !== "build" && !project[kind]?.top?.trim()) return;
-    if (kind === "simulation" && simulationButton.disabled || kind === "formal" && formalButton.disabled) return;
+    if (kind === "simulation" && !simulationStartAvailable() || kind === "formal" && formalButton.disabled) return;
     document.querySelector(`#right-tab-${kind === "build" ? "board" : "verify"}`).click();
     updateTabs("log");
     if (kind === "build") void runProjectBuild();
