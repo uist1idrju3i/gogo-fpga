@@ -9,6 +9,8 @@ description: 午後のFPGA の AI 相談、用途別の指示、OpenRouter 接�
 
 接続先は `openrouter.ai` だけです。別のホストへの転送や、資料の自動送信を加えません。利用者が「送信内容を確認」で本文を確認し、続いて「送信する」を押すまで相談や資料を送りません。エラー説明の操作も入力と資料の選択だけにとどめます。
 
+モデル一覧の `GET https://openrouter.ai/api/v1/models` だけは、利用者が「モデル一覧を取得」を押した場合に限って照会できます。画面の読み込みやモデル入力では取得しません。認証は任意の公開一覧なので鍵を付けず、Cookie、参照元、キャッシュ、転送も使いません。応答の容量と形式を検査し、不正な応答や上限を超える応答を破棄します。一覧はタブ内のメモリーだけに保持し、保存しません。
+
 確認した本文の UTF-8 バイト列と送信するバイト列を一致させます。送信直前に本文を作り直してはいけません。種類、モデル、相談文、資料、ソースなどの変更では、既存の `inputs_changed` で確認を取り消します。古い確認からの送信を許しません。
 
 利用鍵は API の Authorization ヘッダーだけに付けます。本文、URL、ログ、画面、エラー、テストの成果物に含めず、モデルにも要求・開示させません。既定では接続をタブ内だけに保持し、永続保存は利用者が明示して選んだ場合だけです。鍵の保存と削除は `web/lib/openrouter-auth.mjs` の経路を使います。
@@ -40,6 +42,9 @@ git diff --check
 - [OAuth PKCE](https://openrouter.ai/docs/use-cases/oauth-pkce)
 - [Chat Completions のストリーミング](https://openrouter.ai/docs/api-reference/streaming)
 - [アプリ帰属のヘッダー](https://openrouter.ai/docs/app-attribution)
+- [使用量](https://openrouter.ai/docs/use-cases/usage-accounting)
+- [モデル一覧 API](https://openrouter.ai/docs/api-reference/list-available-models)
+- [モデルの項目と価格](https://openrouter.ai/docs/guides/overview/models)
 - 設計と未確認事項: [エディターと AI](../../../docs/research/editor-and-ai.md)
 
 API の形式、エラー、SSE の区切りや終了条件、ヘッダーを公式資料と照合し、`[DONE]` のない終了を成功扱いしません。試験では OpenRouter を模擬し、模擬応答の成功を実アカウントでの確認と書いてはいけません。実アカウントや実機での確認は本リポジトリーでは試していないものとして明記します。
