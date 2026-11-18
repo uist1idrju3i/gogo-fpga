@@ -4,7 +4,7 @@ export const CHAT_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
 export const chatEvent = (text) => `data: ${JSON.stringify({ choices: [{ delta: { content: text } }] })}\r\n\r\n`;
 export const proposalReply = (changes) => `変更理由を確認してください。\n\`\`\`gogo-fpga-changes\n${JSON.stringify({ changes })}\n\`\`\``;
 
-export async function prepareChat(page, { reply = "説明です。", status = 200 } = {}) {
+export async function prepareChat(page, { reply = "説明です。", status = 200, usage } = {}) {
   const requests = [];
   await page.addInitScript(() => localStorage.setItem("gogo-fpga.welcome.dismissed", "true"));
   await page.route("https://openrouter.ai/**", async (route) => {
@@ -21,7 +21,8 @@ export async function prepareChat(page, { reply = "説明です。", status = 20
       await route.fulfill({ status: 200, headers, contentType: "application/json", body: '{"key":"sk-or-chat-test-only"}' }); return;
     }
     expect(request.url()).toBe(CHAT_ENDPOINT); requests.push(request);
-    await route.fulfill({ status, headers, contentType: "text/event-stream", body: `${chatEvent(reply)}data: [DONE]\r\n\r\n` });
+    const usageEvent = usage === undefined ? "" : `data: ${JSON.stringify({ choices: [], usage })}\r\n\r\n`;
+    await route.fulfill({ status, headers, contentType: "text/event-stream", body: `${chatEvent(reply)}${usageEvent}data: [DONE]\r\n\r\n` });
   });
   await page.goto("/"); await expect(page.locator("#project-status")).toHaveText("保存しました。");
   if ((page.viewportSize()?.width ?? 1280) <= 640) await page.locator("#toggle-board-pane").click();
