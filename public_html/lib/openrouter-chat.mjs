@@ -4,6 +4,7 @@ import { AI_SKILLS, buildSystemPrompt } from "./ai-skills.mjs";
 import { answerSchema } from "./ai-structured.mjs";
 import { summarizeProject } from "./ai-project-summary.mjs";
 import { parseUsage } from "./ai-usage.mjs";
+import { gradeCommentSchema, validateRubric } from "./ai-grading.mjs";
 
 export const CHAT_URL = "https://openrouter.ai/api/v1/chat/completions";
 export const MAX_CHAT_BYTES = 2 * 1024 * 1024;
@@ -24,26 +25,29 @@ export function selectableFiles(files) {
   });
 }
 
-export function createChatPreview({ model, prompt, skill = "consult", models = null, project = null, history = [], resendHistory = false, files = [], logs = [], problems = [], origin }) {
+export function createChatPreview({ model, prompt, skill = "consult", hintLevel = 1, models = null, project = null, history = [], resendHistory = false, files = [], logs = [], problems = [], grading = null, origin }) {
   if (typeof model !== "string" || !model.trim() || model.length > 200 ||
       typeof prompt !== "string" || !prompt.trim()) throw new ChatError("empty");
   if (new URL(origin).origin !== origin || !/^https?:/.test(origin)) throw new ChatError("preview");
-  const user = JSON.stringify({ request: prompt, skill, project: summarizeProject(project), files: selectableFiles(new Map(files)).map(([path, content]) => ({ path, content })), logs, problems }, null, 2);
+  if (skill === "teach" && ![1, 2, 3].includes(hintLevel)) throw new ChatError("preview");
+  if (skill === "grade") validateRubric(grading?.rubric);
+  const user = JSON.stringify({ request: skill === "teach" ? `ヒントの段階: ${hintLevel}\n${prompt}` : prompt, skill, project: summarizeProject(project), files: selectableFiles(new Map(files)).map(([path, content]) => ({ path, content })), logs, problems, ...(skill === "grade" ? { grading } : {}) }, null, 2);
   const allowsChanges = AI_SKILLS.find(item => item.id === skill)?.allowsChanges;
   const supported = models?.find(item => item.id === model.trim())?.supported_parameters?.includes("structured_outputs");
-  const structured = Boolean(allowsChanges && supported);
-  const mode = structured ? "構造化出力を使います（変更を提案する種類で、取得したモデル一覧に対応の記載があります）" : `構造化出力を使いません（${!allowsChanges ? "変更を提案しない種類です" : models === null ? "モデル一覧を取得していません" : "モデルの対応を確認できません"}）`;
+  const eligible = allowsChanges || skill === "grade";
+  const structured = Boolean(eligible && supported);
+  const mode = structured ? "構造化出力を使います（変更提案または採点の講評で、取得したモデル一覧に対応の記載があります）" : `構造化出力を使いません（${!eligible ? "変更を提案しない種類です" : models === null ? "モデル一覧を取得していません" : "モデルの対応を確認できません"}）`;
   const messages = [{ role: "system", content: buildSystemPrompt(skill, { structured }) }, ...history.map(({ role, content, compact }) => {
     if (!["user", "assistant"].includes(role) || typeof content !== "string") throw new ChatError("preview");
     return { role, content: role === "user" && !resendHistory ? (compact ?? content) : content };
   }), { role: "user", content: user }];
   const body = JSON.stringify({ model: model.trim(), stream: true, messages, ...(structured ? {
-    response_format: { type: "json_schema", json_schema: { name: "gogo_fpga_answer", strict: true, schema: answerSchema() } },
+    response_format: { type: "json_schema", json_schema: { name: skill === "grade" ? "gogo_fpga_grade" : "gogo_fpga_answer", strict: true, schema: skill === "grade" ? gradeCommentSchema(grading.rubric) : answerSchema() } },
     provider: { require_parameters: true },
   } : {}) }, null, 2);
   if (chatByteLength(body) > MAX_CHAT_BYTES) throw new ChatError("size");
   return Object.freeze({ url: CHAT_URL, body, bytes: chatByteLength(body),
-    user, structured, mode, headers: Object.freeze({ "Content-Type": "application/json", "X-OpenRouter-Title": utf8Header("午後のFPGA"), "HTTP-Referer": origin }) });
+    user, skill, structured, mode, headers: Object.freeze({ "Content-Type": "application/json", "X-OpenRouter-Title": utf8Header("午後のFPGA"), "HTTP-Referer": origin }) });
 }
 
 export function createSseParser(onDelta = () => {}) {
