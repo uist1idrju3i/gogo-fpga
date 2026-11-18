@@ -47,6 +47,23 @@ test("references preserve exact text offsets, order and repeated locations", () 
   for (const reference of result) assert.equal(text.slice(reference.from, reference.to), `${reference.path}:${reference.line}`);
   assert.deepEqual(parseAiReferences("まずsrc/top.v:2の宣言を見ます。", files), [{ path: "src/top.v", line: 2, from: 2, to: 13 }]);
 });
+test("Markdown emphasis preserves reference-only offsets and path boundaries", () => {
+  for (const marker of ["*", "**", "_", "__"]) {
+    for (const prefix of ["", "見る場所: ", "(", "まず"]) {
+      const text = `${prefix}${marker}src/top.v:2${marker} を確認。`;
+      const from = prefix.length + marker.length;
+      assert.deepEqual(parseAiReferences(text, files), [{ path: "src/top.v", line: 2, from, to: from + "src/top.v:2".length }]);
+    }
+    for (const path of ["foo_src/top.v", "x/src/top.v", "/src/top.v", "https://example.test/src/top.v"]) {
+      assert.deepEqual(parseAiReferences(`${marker}${path}:2${marker}`, files), []);
+    }
+    assert.deepEqual(parseAiReferences(`${marker}src/top.v:99${marker}`, files), []);
+    assert.deepEqual(parseAiReferences(`${marker}src/unknown.v:2${marker}`, files), []);
+  }
+  for (const text of ["foo_src/top.v:2", "x/src/top.v:2", "_src/top.v:2", "foo**src/top.v:2**", "x/**src/top.v:2**"]) {
+    assert.deepEqual(parseAiReferences(text, files), []);
+  }
+});
 test("unknown files, invalid lines, Windows paths and embedded or unsafe strings are not references", () => {
   for (const text of ["src/unknown.v:1", "src/top.v:0", "src/top.v:4", "src/top.v:-1", "src/top.v:01", "src/top.v:1.5",
     "src/top.v:9007199254740993", "src/top.v:2x", "src/top.v:1:3", "C:\\src/top.v:1", "C:/src/top.v:1", "src\\top.v:1",

@@ -6,10 +6,10 @@ export function parseAiReferences(text, files) {
   for (const [path, content] of files) {
     if (typeof path !== "string" || !validatePath(path).ok || /[\x00-\x1f\x7f\\]/.test(path) || typeof content !== "string") continue;
     const escaped = path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const pattern = new RegExp('(^|[\\s(\\[{"\'`]|[^\\x00-\\x7f])(' + escaped + '):([1-9][0-9]*)(?=$|[\\s)\\]}"\'`!?;,]|[^\\x00-\\x7f]|\\.(?![\\w/]))', "gm");
+    const pattern = new RegExp('((?:^|[\\s(\\[{"\'`]|[^\\x00-\\x7f])(\\*{1,2}|_{1,2})?)(' + escaped + '):([1-9][0-9]*)(?=\\2(?:$|[\\s)\\]}"\'`!?;,]|[^\\x00-\\x7f]|\\.(?![\\w/])))', "gm");
     const lines = content.split(/\r\n?|\n/).length;
     for (const match of text.matchAll(pattern)) {
-      const line = Number(match[3]);
+      const line = Number(match[4]);
       if (!Number.isSafeInteger(line) || line > lines) continue;
       const from = match.index + match[1].length;
       references.push({ path, line, from, to: match.index + match[0].length });
