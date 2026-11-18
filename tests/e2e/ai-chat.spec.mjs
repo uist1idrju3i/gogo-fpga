@@ -160,7 +160,7 @@ test("AI formal verification starts the real formal path after applying a propos
   await expect(page.locator("#right-tab-verify")).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("#formal-status")).toHaveAttribute("data-outcome", "failed", { timeout: 120000 });
   expect(await page.evaluate(() => window.aiFormalOutcomes)).toContain("running");
-  await expect(page.locator("#program-log")).toContainText("形式検証の性質: assert 0 件");
+  await expect(page.locator("#formal-status")).toContainText("検証対象が見つかりません。assert の性質を追加するか、性質に合うモードを選んでください。");
   await expect(page.locator("#ai-explain-formal")).toBeVisible();
   expect(requests).toHaveLength(1);
 });
