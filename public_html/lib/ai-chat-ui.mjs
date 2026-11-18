@@ -3,7 +3,8 @@ import { proposalDiff, proposalSnapshot } from "./ai-proposals.mjs";
 import { AI_CHAT_INITIAL_STATE, transitionAiChat } from "./ai-chat-flow.mjs";
 import { AI_SKILLS } from "./ai-skills.mjs";
 import { formatUsage } from "./ai-usage.mjs";
-import { compactUserTurn } from "./ai-history.mjs";
+import { compactUserTurn, compactToolResult } from "./ai-history.mjs";
+import { READ_TOOL_LIMITS, TOOL_REFUSAL, readToolResult, captureToolWorkspace, sameToolWorkspace, toolResultPreview } from "./ai-read-tools.mjs";
 import { parseAiAnswer } from "./ai-structured.mjs";
 import { parseAiReferences } from "./ai-references.mjs";
 import { loadRubric, scoreRubric } from "./ai-grading.mjs";
@@ -56,6 +57,8 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       </select></div>
       <label for="ai-prompt">相談文</label><textarea id="ai-prompt" rows="4" placeholder="エラーや設計について相談してください"></textarea>
       <label id="ai-resend-history-option" hidden><input id="ai-resend-history" type="checkbox">以前の資料も全文で送り直す</label>
+      <label><input id="ai-allow-tools" type="checkbox">AI がファイルの読み取りを求めることを許可する（1件ずつ確認）</label>
+      <p id="ai-tools-availability"></p>
       <button id="ai-preview-button" type="button">送信内容を確認</button>
     </fieldset>
     <p id="ai-models-status" role="status"></p>
@@ -71,6 +74,10 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       <button id="ai-preview-cancel" type="button" class="secondary">内容を編集する</button>
     </section>
     <button id="ai-stop" type="button" class="secondary" hidden>停止</button>
+    <section id="ai-tool-review" hidden><h4>ファイルの読み取り結果を確認</h4>
+      <p id="ai-tool-note" role="status"></p><div id="ai-tool-cards"></div>
+      <button id="ai-tools-reconfirm" type="button" hidden>現在の内容で確認し直す</button>
+    </section>
     <section id="ai-answer" hidden><h4>AI の応答</h4><pre id="ai-chat-response" role="log" aria-live="polite" tabindex="0"></pre><p id="ai-usage" role="status"></p></section>
     <button id="ai-dismiss-annotations" type="button" class="secondary" hidden>行のヒント表示を消す</button>
     <section id="ai-proposals" hidden><h4>変更提案の確認</h4>
@@ -102,6 +109,61 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   let verificationProject = null;
   let annotationContext = null;
   let gradingKey = null, gradeComments = null;
+  let pendingTools = null;
+  function clearToolCards() { pendingTools = null; q("ai-tool-review").hidden = true; }
+  function prepareToolCards() {
+    const current = workspace.getContext();
+    if (!current || !pendingTools) return;
+    pendingTools.captured = captureToolWorkspace(current);
+    pendingTools.results = pendingTools.calls.map((call, index) => index >= READ_TOOL_LIMITS.calls ? TOOL_REFUSAL : readToolResult(call, current.files));
+    pendingTools.decisions = pendingTools.calls.map((call, index) => index >= READ_TOOL_LIMITS.calls || !["read_file", "list_files"].includes(call.function.name) ? pendingTools.results[index] : null);
+    renderToolCards();
+  }
+  function renderToolCards() {
+    if (!pendingTools) return;
+    const stale = !sameToolWorkspace(pendingTools.captured, workspace.getContext());
+    if (stale) pendingTools.decisions.fill(null);
+    q("ai-tool-review").hidden = false;
+    q("ai-tools-reconfirm").hidden = !stale;
+    q("ai-tool-note").textContent = stale ? "ファイルが変わりました。現在の内容で確認し直してください。" : `結果はまだ送信していません。${READ_TOOL_LIMITS.calls}件を超えた要求は自動で拒否します。`;
+    q("ai-tool-cards").replaceChildren();
+    pendingTools.calls.forEach((call, index) => {
+      const card = document.createElement("article"), title = document.createElement("h5"), args = document.createElement("pre"), result = document.createElement("pre"), decision = document.createElement("p");
+      card.className = "ai-tool-card";
+      title.textContent = call.function.name; args.textContent = call.function.arguments;
+      result.textContent = stale ? "古い結果は送信できません。" : pendingTools.results[index];
+      decision.textContent = pendingTools.decisions[index] === null ? "未確認" : "確認済み（次の送信内容で再確認できます）";
+      card.append(title, args, result, decision);
+      if (index < READ_TOOL_LIMITS.calls && ["read_file", "list_files"].includes(call.function.name)) {
+        for (const [label, accept] of [["この結果を返す", true], ["拒否する", false]]) {
+          const button = document.createElement("button"); button.type = "button"; button.textContent = label;
+          button.disabled = stale || busy();
+          button.addEventListener("click", () => {
+            if (!sameToolWorkspace(pendingTools.captured, workspace.getContext()) || busy()) { renderToolCards(); return; }
+            pendingTools.decisions[index] = accept ? pendingTools.results[index] : TOOL_REFUSAL;
+            renderToolCards(); previewToolResults();
+          });
+          card.append(button);
+        }
+      }
+      q("ai-tool-cards").append(card);
+    });
+  }
+  function previewToolResults() {
+    if (busy() || !pendingTools || pendingTools.decisions.some(result => result === null) || !sameToolWorkspace(pendingTools.captured, workspace.getContext())) return;
+    try { showPreview(toolResultPreview(pendingTools.selected, pendingTools.calls, pendingTools.decisions)); }
+    catch (error) { showError(error); }
+  }
+  function showPreview(selected) {
+    preview = selected;
+    q("ai-preview-body").value = preview.body;
+    q("ai-output-mode").textContent = preview.mode;
+    renderModelDetails();
+    q("ai-preview-target").textContent = `${preview.url} / ${preview.bytes} バイト`;
+    q("ai-preview-headers").textContent = JSON.stringify({ ...preview.headers, "X-OpenRouter-Title": "午後のFPGA" }, null, 2);
+    send("preview_requested", { context_valid: true }); controls(); q("ai-preview-body").focus();
+    q("ai-preview-body").setSelectionRange(0, 0); q("ai-preview-body").scrollTop = 0;
+  }
   function currentGrading(current) {
     const loaded = loadRubric(current?.files ?? new Map());
     return loaded.error ? loaded : { ...loaded, score: scoreRubric(loaded.rubric, current?.verificationResults, current?.verificationState) };
@@ -163,6 +225,9 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   function controls() {
     const current = workspace.getContext();
     renderGrading(current);
+    const toolsAvailable = Boolean(models?.find(item => item.id === q("ai-model").value.trim())?.supported_parameters?.includes("tools"));
+    q("ai-allow-tools").disabled = !toolsAvailable;
+    q("ai-tools-availability").textContent = toolsAvailable ? "読み取りは要求ごとの確認後、送信内容を確認して送信するまで外部に送りません。" : "モデル一覧を取得し、ツール対応のモデルを選ぶと利用できます。";
     q("ai-hint-option").hidden = q("ai-skill").value !== "teach";
     q("ai-local-verify").hidden = verificationProject === null || verificationProject !== current?.projectId;
     for (const kind of ["build", "simulation", "formal"]) {
@@ -190,6 +255,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       previewing: "この本文と宛先を確認してから送信してください。", sending: "送信しています。", streaming: "応答を受信しています。", proposal_review: "応答を受信しました。変更は自動で適用されません。", failed: "送信または受信を完了できませんでした。" })[state];
   }
   function invalidate() {
+    clearToolCards();
     version++;
     if (preview) { preview = null; q("ai-preview-body").value = ""; }
     send("inputs_changed"); controls();
@@ -234,6 +300,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   function refresh() {
     const next = workspace.getContext();
     if (!next) { controls(); return; }
+    const previousTools = next.projectId === context?.projectId ? pendingTools : null;
     if (annotationContext && (next.projectId !== annotationContext.projectId ||
         [...annotationContext.files].some(([path, content]) => next.files.get(path) !== content))) dismissAnnotations();
     if (next.projectId !== context?.projectId) {
@@ -250,6 +317,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       checkboxes(`ai-context-${name}`, values, choices[name]);
     }
     selectedSummary(); invalidate();
+    if (previousTools) { pendingTools = previousTools; renderToolCards(); }
   }
   function renderHistory() {
     q("ai-history-messages").replaceChildren();
@@ -301,10 +369,13 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   q("ai-skill").addEventListener("change", invalidate);
   q("ai-hint-level").addEventListener("change", invalidate);
   q("ai-resend-history").addEventListener("change", invalidate);
+  q("ai-allow-tools").addEventListener("change", invalidate);
+  q("ai-tools-reconfirm").addEventListener("click", prepareToolCards);
   q("ai-preview-button").addEventListener("click", () => {
     q("ai-chat-error").hidden = true;
     try {
       if (busy()) return;
+      clearToolCards();
       verificationProject = null;
       controls();
       context = workspace.getContext();
@@ -312,25 +383,23 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       const grading = currentGrading(context);
       if (q("ai-skill").value === "grade" && grading.error) throw { code: "rubric" };
       preview = createChatPreview({ model: q("ai-model").value, prompt: q("ai-prompt").value, history, models,
+        allowTools: q("ai-allow-tools").checked,
         grading: grading.score,
         skill: q("ai-skill").value, hintLevel: Number(q("ai-hint-level").value), resendHistory: q("ai-resend-history").checked, project: { ...context.project, files: context.files },
         files: [...context.files].filter(([p]) => choices.files.has(p)), logs: [...context.logs].filter(([p]) => choices.logs.has(p)).map(([tool, text]) => ({ tool, text })),
         problems: context.problems.filter((p) => choices.problems.has(JSON.stringify(p))), origin: location.origin });
-      q("ai-preview-body").value = preview.body;
-      q("ai-output-mode").textContent = preview.mode;
-      renderModelDetails();
-      q("ai-preview-target").textContent = `${preview.url} / ${preview.bytes} バイト`;
-      q("ai-preview-headers").textContent = JSON.stringify({ ...preview.headers, "X-OpenRouter-Title": "午後のFPGA" }, null, 2);
-      send("preview_requested", { context_valid: true }); controls(); q("ai-preview-body").focus();
-      q("ai-preview-body").setSelectionRange(0, 0);
-      q("ai-preview-body").scrollTop = 0;
+      showPreview(preview);
     } catch (error) { showError(error); }
   });
   q("ai-preview-cancel").addEventListener("click", invalidate);
   q("ai-send").addEventListener("click", async () => {
     if (busy() || !preview || !getKey()) return;
+    if (pendingTools && !sameToolWorkspace(pendingTools.captured, workspace.getContext())) {
+      preview = null; send("inputs_changed"); renderToolCards(); controls(); return;
+    }
     verificationProject = null;
     const selected = preview, key = getKey(), selectedVersion = version, run = ++generation;
+    clearToolCards();
     const selectedGradingState = workspace.getContext()?.verificationState;
     send("send_requested", { connected: true, preview_current: true });
     if (state !== "sending") return;
@@ -343,17 +412,26 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     try {
       snapshot = await proposalSnapshot(workspace.getContext());
       if (version !== selectedVersion || preview !== selected || getKey() !== key || abort.signal.aborted) throw { code: "preview" };
-      const answer = await sendChatPreview(selected, { key, signal: abort.signal, onUsage: (usage) => {
+      let toolCalls = null;
+      const answer = await sendChatPreview(selected, { key, signal: abort.signal, onToolCalls: calls => { toolCalls = calls; }, onUsage: (usage) => {
         if (run === generation) q("ai-usage").textContent = formatUsage(usage);
       }, onDelta: (_delta, text) => {
         if (run !== generation) return;
         send("chunk_received"); q("ai-chat-response").textContent = selected.structured ? "構造化された応答を受信しています" : text; controls();
       } });
       if (run !== generation) return;
-      const compact = await compactUserTurn(selected.user);
+      if (toolCalls) {
+        if (workspace.getContext()?.projectId !== snapshot.projectId) throw { code: "changed" };
+        send("response_completed");
+        pendingTools = { calls: toolCalls, selected };
+        prepareToolCards();
+        return;
+      }
+      const turns = await Promise.all((selected.turnMessages ?? [{ role: "user", content: selected.user }]).map(async message => ({ ...message,
+        ...(message.role === "user" ? { compact: await compactUserTurn(message.content) } : message.role === "tool" ? { compact: await compactToolResult(message.content) } : {}) })));
       if (run !== generation) return;
       abort.signal.throwIfAborted();
-      history.push({ role: "user", content: selected.user, compact }, { role: "assistant", content: answer }); renderHistory();
+      history.push(...turns, { role: "assistant", content: answer }); renderHistory();
       const result = parseAiAnswer(answer, selected, snapshot.files);
       const sentFiles = new Map(JSON.parse(selected.user).files.map(({ path, content }) => [path, content]));
       const current = workspace.getContext();
@@ -371,7 +449,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       if (run !== generation) return;
       send(error.code === "stopped" ? "stop_requested" : "send_failed"); showError(error);
     } finally {
-      if (run === generation) { controller = null; preview = null; controls(); }
+      if (run === generation) { controller = null; preview = null; controls(); if (pendingTools) { renderToolCards(); previewToolResults(); } }
     }
   });
   q("ai-stop").addEventListener("click", () => controller?.abort());
@@ -390,6 +468,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     finally { applying = false; controls(); }
   });
   function clear(event = "clear_requested") {
+    clearToolCards();
     gradeComments = null; gradingKey = null;
     dismissAnnotations();
     verificationProject = null;

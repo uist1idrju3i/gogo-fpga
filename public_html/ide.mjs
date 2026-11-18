@@ -1297,6 +1297,7 @@ export function initializeIde({
 
   function updateEditor() {
     if (!editor) return;
+    editor.setFileContext(`${aiProjectVersion}:${activeTab}`);
     editor.setLanguage(activeTab ? languageForPath(activeTab) : "plain");
     editor.setReadOnly(libraryBusy || workflow.state === "writing" || !activeTab || isLibraryPath(activeTab));
     editor.setText(activeTab ? textForPath(activeTab) : "");
@@ -1615,6 +1616,8 @@ export function initializeIde({
         onChange: persistEditorContent,
         onDiagnostics: renderProblems,
         getProjectTexts: projectTexts,
+        getFileContext: () => ({ key: `${aiProjectVersion}:${activeTab}`, path: activeTab, language: languageForPath(activeTab) }),
+        completionPanel: document.querySelector("#right-panel-ai"),
       });
     } else {
       updateEditor();
