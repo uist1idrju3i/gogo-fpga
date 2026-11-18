@@ -2,8 +2,8 @@ import { autocompletion, completeFromList } from "@codemirror/autocomplete";
 import { basicSetup } from "codemirror";
 import { StreamLanguage } from "@codemirror/language";
 import { lintGutter, setDiagnostics as setLintDiagnostics } from "@codemirror/lint";
-import { Compartment, EditorState } from "@codemirror/state";
-import { EditorView } from "@codemirror/view";
+import { Compartment, EditorState, StateEffect, StateField } from "@codemirror/state";
+import { Decoration, EditorView } from "@codemirror/view";
 import { verilog } from "@codemirror/legacy-modes/mode/verilog";
 import { vhdl } from "@codemirror/legacy-modes/mode/vhdl";
 import { collectIdentifiers, KEYWORDS_BY_LANGUAGE } from "../lib/hdl-keywords.mjs";
@@ -13,6 +13,16 @@ const VERILOG_LANGUAGE = StreamLanguage.define(verilog);
 const VHDL_LANGUAGE = StreamLanguage.define(wrapVhdlMode(vhdl));
 const VALID_LANGUAGES = new Set(["verilog", "vhdl", "plain"]);
 const DIAGNOSTIC_SEVERITIES = new Set(["error", "warning", "info", "hint"]);
+const setHintLines = StateEffect.define();
+const hintLines = StateField.define({
+  create: () => Decoration.none,
+  update(value, transaction) {
+    if (transaction.docChanged) value = Decoration.none;
+    for (const effect of transaction.effects) if (effect.is(setHintLines)) value = effect.value;
+    return value;
+  },
+  provide: field => EditorView.decorations.from(field),
+});
 
 function normalizeLanguage(language) {
   return VALID_LANGUAGES.has(language) ? language : "plain";
@@ -103,6 +113,7 @@ export function createHdlEditor(
       doc,
       extensions: [
         basicSetup,
+        hintLines,
         readOnlyCompartment.of(readOnlyExtension(readOnly)),
         languageCompartment.of(languageExtension(activeLanguage)),
         completionCompartment.of(
@@ -156,6 +167,11 @@ export function createHdlEditor(
       view.dispatch({ effects: readOnlyCompartment.reconfigure(readOnlyExtension(readOnly)) });
     },
     setDiagnostics: setEditorDiagnostics,
+    setLineAnnotations(lines) {
+      const ranges = [...new Set(lines)].filter(line => Number.isInteger(line) && line > 0 && line <= view.state.doc.lines)
+        .sort((a, b) => a - b).map(line => Decoration.line({ class: "cm-ai-hint-line", attributes: { title: "AI のヒント" } }).range(view.state.doc.line(line).from));
+      view.dispatch({ effects: setHintLines.of(Decoration.set(ranges)) });
+    },
     revealLocation(line = 1, column = 1) {
       const target = view.state.doc.line(Math.min(view.state.doc.lines, Math.max(1, Number.isInteger(line) ? line : 1)));
       const anchor = target.from + Math.min(target.length, Math.max(0, Number.isInteger(column) ? column - 1 : 0));

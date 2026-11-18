@@ -13,6 +13,8 @@ export const AI_SKILLS = Object.freeze([
     instructions: "Icarus Verilog 用の自己検査する Verilog-2005 テストベンチを tests/ の下に提案してください。$dumpfile と $dumpvars で VCD を出力し、期待値との不一致を検出し、有限時間で終了してください。" },
   { id: "formal", label: "形式検証の性質", allowsChanges: true,
     instructions: "このリポジトリーの形式検証は $assert、$assume、$cover に変換された性質を扱います。bmc/prove は assert、cover モードは cover が必要です。assume は入力の前提であり証明対象ではありません。$check、$live、$fair は未対応です。順序回路では全レジスターに一致する単一ビット入力クロックとエッジの指定が必要です。SystemVerilog の構文や時間的な性質の対応を仮定せず、提示されたソースと検証フローで扱える assert/assume/cover を提案してください。" },
+  { id: "teach", label: "教師役（ヒント）", allowsChanges: false,
+    instructions: "教師役として学習者が自分で考えるためのヒントを出してください。完全な解答や修正後のコード全文は示さず、変更も提案しないでください。ヒントは指定された段階だけを示してください。段階1は見る場所や概念、段階2はより具体的な方向、段階3は答えに近い説明ですが完全なコードは示しません。場所は今回本文を送ったプロジェクトファイルの path:line で引用してください。" },
 ].map(Object.freeze));
 
 export function buildSystemPrompt(skillId, { structured = false } = {}) {

@@ -199,6 +199,7 @@ export function initializeIde({
   let activeTab = null;
   let selectedPath = null;
   let editor = null;
+  let aiAnnotations = new Map();
   let saveTimer = null;
   let pendingSave = Promise.resolve();
   const projectWrites = new Set();
@@ -1296,6 +1297,7 @@ export function initializeIde({
     editor.setLanguage(activeTab ? languageForPath(activeTab) : "plain");
     editor.setReadOnly(libraryBusy || workflow.state === "writing" || !activeTab || isLibraryPath(activeTab));
     editor.setText(activeTab ? textForPath(activeTab) : "");
+    editor.setLineAnnotations(aiAnnotations.get(activeTab) ?? []);
     saveUiState();
   }
 
@@ -1553,6 +1555,7 @@ export function initializeIde({
   }
 
   function activateProject(loaded) {
+    aiAnnotations.clear();
     aiProjectVersion++;
     latestBuildLogs = new Map();
     for (const button of Object.values(explainVerification)) button.hidden = true;
@@ -2018,6 +2021,23 @@ export function initializeIde({
       project, files, activeFile: activeTab, logs: new Map(latestBuildLogs), problems: [...currentProblems],
       verificationReady: { simulation: simulationStartAvailable(), formal: !formalButton.disabled } };
   }
+  document.addEventListener("toolchain:ai-annotations", ({ detail }) => {
+    aiAnnotations.clear();
+    if (detail?.projectId === aiContext()?.projectId && Array.isArray(detail?.references)) {
+      for (const { path, line } of detail.references) {
+        if (!fileContents.has(path) || detail.files?.get(path) !== textForPath(path) || !Number.isInteger(line) || line < 1 || line > textForPath(path).split(/\r\n?|\n/).length) continue;
+        if (!aiAnnotations.has(path)) aiAnnotations.set(path, []);
+        aiAnnotations.get(path).push(line);
+      }
+    }
+    queueMicrotask(() => editor?.setLineAnnotations(aiAnnotations.get(activeTab) ?? []));
+  });
+  document.addEventListener("toolchain:ai-reference", ({ detail }) => {
+    if (detail?.projectId !== aiContext()?.projectId || !aiAnnotations.get(detail?.path)?.includes(detail?.line)) return;
+    document.dispatchEvent(new Event("toolchain:show-editor"));
+    openFile(detail.path);
+    editor?.revealLocation(detail.line);
+  });
   const aiBusy = () => !project || libraryBusy || !canChangeLibraries() || saveTimer !== null || projectSaveCount > 0 || buildRunning || simulationRunning || formalRunning || workflow.state === "writing";
   let aiRequestBusy = false;
   document.addEventListener("toolchain:ai-request-busy", ({ detail }) => { aiRequestBusy = detail?.busy === true; });
