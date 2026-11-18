@@ -2000,7 +2000,8 @@ export function initializeIde({
     const files = new Map(fileContents);
     for (const [path, content] of selectableFiles(files)) files.set(path, content);
     return { projectId: `${project.name}:${aiProjectVersion}`, revision: workflow.revision,
-      project, files, activeFile: activeTab, logs: new Map(latestBuildLogs), problems: [...currentProblems] };
+      project, files, activeFile: activeTab, logs: new Map(latestBuildLogs), problems: [...currentProblems],
+      verificationReady: { simulation: !simulationButton.disabled, formal: !formalButton.disabled } };
   }
   const aiBusy = () => !project || libraryBusy || saveTimer !== null || projectSaveCount > 0 || buildRunning || simulationRunning || formalRunning || workflow.state === "writing";
   let aiRequestBusy = false;
@@ -2009,6 +2010,7 @@ export function initializeIde({
     if (aiBusy() || aiRequestBusy) return;
     const kind = detail?.kind;
     if (!["build", "simulation", "formal"].includes(kind) || kind !== "build" && !project[kind]?.top?.trim()) return;
+    if (kind === "simulation" && simulationButton.disabled || kind === "formal" && formalButton.disabled) return;
     document.querySelector(`#right-tab-${kind === "build" ? "board" : "verify"}`).click();
     updateTabs("log");
     if (kind === "build") void runProjectBuild();

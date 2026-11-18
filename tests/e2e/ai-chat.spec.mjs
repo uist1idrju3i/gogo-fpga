@@ -126,6 +126,27 @@ test("failed verification preselects its log without sending", async ({ page }) 
   expect(requests).toHaveLength(1);
 });
 
+test("AI verification uses the normal simulation availability for a VHDL project", async ({ page }) => {
+  const requests = await applyLocalProposal(page, [{ path: "src/ai_check.vhd", content: "entity ai_check is end entity; architecture rtl of ai_check is begin end architecture;\n", reason: "VHDL の検査" }]);
+  await page.locator("#new-project-button").click();
+  await page.locator("#new-project-name").fill("local-vhdl");
+  await page.locator("#new-project-language").selectOption("vhdl");
+  await page.locator("#new-project-create").click();
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.locator("#right-tab-ai").click();
+  await acceptLocalProposal(page);
+  await expect(page.locator("#simulation-button")).toBeDisabled();
+  await expect(page.locator("#ai-verify-simulation")).toBeDisabled();
+  const outcome = await page.locator("#simulation-status").getAttribute("data-outcome");
+  await page.evaluate(() => {
+    document.querySelector("#ai-verify-simulation").dispatchEvent(new MouseEvent("click"));
+    document.dispatchEvent(new CustomEvent("toolchain:ai-verify", { detail: { kind: "simulation" } }));
+  });
+  await expect(page.locator("#right-tab-ai")).toHaveAttribute("aria-selected", "true");
+  expect(await page.locator("#simulation-status").getAttribute("data-outcome")).toBe(outcome);
+  expect(requests).toHaveLength(1);
+});
+
 test("unconfigured tops and unsuccessful apply do not offer local verification", async ({ page }) => {
   await applyLocalProposal(page);
   await page.evaluate(async () => {

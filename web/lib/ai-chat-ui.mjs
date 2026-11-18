@@ -95,7 +95,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     for (const kind of ["build", "simulation", "formal"]) {
       const button = q(`ai-verify-${kind}`);
       button.hidden = kind !== "build" && !current?.project?.[kind]?.top?.trim();
-      button.disabled = busy() || loadingModels || applying || workspace.isBusy();
+      button.disabled = busy() || loadingModels || applying || workspace.isBusy() || current?.verificationReady?.[kind] === false;
     }
     document.dispatchEvent(new CustomEvent("toolchain:ai-request-busy", { detail: { busy: busy() || loadingModels || applying } }));
     q("ai-models-fetch").disabled = loadingModels;
@@ -306,6 +306,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     q(`ai-verify-${kind}`).addEventListener("click", () => {
       const current = workspace.getContext();
       if (verificationProject === null || verificationProject !== current?.projectId || busy() || loadingModels || applying || workspace.isBusy() ||
+          current?.verificationReady?.[kind] === false ||
           kind !== "build" && !current.project?.[kind]?.top?.trim()) return;
       document.dispatchEvent(new CustomEvent("toolchain:ai-verify", { detail: { kind } }));
     });
