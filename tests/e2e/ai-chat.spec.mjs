@@ -157,9 +157,11 @@ test("hardware busy changes refresh AI verification buttons", async ({ page }) =
     await route.fallback();
   });
   const requests = await applyLocalProposal(page);
+  await page.locator("#board-select").selectOption("tangnano9k");
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
   await acceptLocalProposal(page);
   await expect(page.locator("#ai-verify-simulation")).toBeEnabled();
-  await page.locator("#right-tab-board").click();
+  await page.locator("#right-tab-write").click();
   await page.locator("#advanced-settings summary").click();
   await page.locator('input[name="operation"][value="erase"]').check();
   await page.getByRole("button", { name: "消去する", exact: true }).click();
