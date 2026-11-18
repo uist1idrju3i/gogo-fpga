@@ -1,4 +1,16 @@
-import { PROPOSAL_LIMITS, validateProposals } from "./ai-proposals.mjs";
+import { PROPOSAL_LIMITS, parseProposals, validateProposals } from "./ai-proposals.mjs";
+import { parseGradeComments } from "./ai-grading.mjs";
+
+export function parseAiAnswer(text, { skill, structured, user }, files) {
+  if (skill === "grade") {
+    let rubric;
+    try { rubric = JSON.parse(user).grading.rubric; } catch { /* Invalid context is rejected by the parser. */ }
+    const grade = parseGradeComments(text, { structured, rubric });
+    return { answer: grade.error ? text : "講評を採点の項目に表示しました。点数は端末で計算したものです。", grade, proposals: { valid: [], rejected: [] } };
+  }
+  if (skill === "teach") return { answer: text, proposals: { valid: [], rejected: [] } };
+  return structured ? parseStructuredAnswer(text, files) : { answer: text, proposals: parseProposals(text, files) };
+}
 
 export function answerSchema() {
   return { type: "object", properties: {

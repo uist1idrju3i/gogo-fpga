@@ -199,6 +199,7 @@ export function initializeIde({
   let activeTab = null;
   let selectedPath = null;
   let editor = null;
+  let aiAnnotations = new Map();
   let saveTimer = null;
   let pendingSave = Promise.resolve();
   const projectWrites = new Set();
@@ -758,6 +759,7 @@ export function initializeIde({
     await flushPendingSave();
     if (project !== simulationProject || simulationRunning || buildRunning || formalRunning || !canStartSimulation()) return;
     const version = ++simulationVersion;
+    const gradingRun = startGradingVerification("simulation");
     clearWaveforms();
     simulationRunning = true;
     onSimulationStateChange(true);
@@ -808,7 +810,7 @@ export function initializeIde({
       if (version === simulationVersion) {
         simulationRunning = false;
         onSimulationStateChange(false);
-        finishAiVerification("simulation", simulationStatus);
+        finishAiVerification("simulation", simulationStatus, gradingRun);
         updateSynthesisControls();
       }
     }
@@ -829,6 +831,7 @@ export function initializeIde({
     await flushPendingSave();
     if (project !== formalProject || formalRunning || buildRunning || simulationRunning) return;
     const version = ++formalVersion;
+    const gradingRun = startGradingVerification("formal");
     const controller = new AbortController();
     formalAssetController = controller;
     clearWaveforms();
@@ -858,6 +861,7 @@ export function initializeIde({
       });
       if (version !== formalVersion) return;
       const kindLabel = FORMAL_KIND_LABELS[outcome.kind] ?? outcome.kind;
+      gradingRun.notRun = ["no-targets", "unavailable", "cancelled"].includes(outcome.kind);
       formalStatus.dataset.outcome =
         outcome.kind === "bounded-pass" || outcome.kind === "proved" || outcome.kind === "covered"
           ? "ok"
@@ -894,7 +898,7 @@ export function initializeIde({
       if (version === formalVersion) {
         formalAssetController = null;
         formalRunning = false;
-        finishAiVerification("formal", formalStatus);
+        finishAiVerification("formal", formalStatus, gradingRun);
         updateSynthesisControls();
       }
     }
@@ -1296,6 +1300,7 @@ export function initializeIde({
     editor.setLanguage(activeTab ? languageForPath(activeTab) : "plain");
     editor.setReadOnly(libraryBusy || workflow.state === "writing" || !activeTab || isLibraryPath(activeTab));
     editor.setText(activeTab ? textForPath(activeTab) : "");
+    editor.setLineAnnotations(aiAnnotations.get(activeTab) ?? []);
     saveUiState();
   }
 
@@ -1553,7 +1558,9 @@ export function initializeIde({
   }
 
   function activateProject(loaded) {
+    aiAnnotations.clear();
     aiProjectVersion++;
+    gradingResults = {};
     latestBuildLogs = new Map();
     for (const button of Object.values(explainVerification)) button.hidden = true;
     currentProblems = [];
@@ -2010,14 +2017,44 @@ export function initializeIde({
   function notifyAiContext() {
     document.dispatchEvent(new Event("toolchain:ai-context-changed"));
   }
+  let gradingResults = {};
+  function gradingState() {
+    return JSON.stringify({ projectId: `${project?.name}:${aiProjectVersion}`, revision: workflow.revision,
+      board: project?.board, top: project?.top, vhdlStandard: project?.vhdlStandard,
+      simulation: project?.simulation, formal: project?.formal });
+  }
+  function startGradingVerification(kind) {
+    const run = { state: gradingState() };
+    gradingResults[kind] = { ...run, outcome: "not-run", reason: "実行中です。完了後に採点します。" };
+    notifyAiContext();
+    return run;
+  }
   function aiContext() {
     if (!project) return null;
     const files = new Map(fileContents);
     for (const [path, content] of selectableFiles(files)) files.set(path, content);
     return { projectId: `${project.name}:${aiProjectVersion}`, revision: workflow.revision,
       project, files, activeFile: activeTab, logs: new Map(latestBuildLogs), problems: [...currentProblems],
+      verificationResults: { ...gradingResults }, verificationState: gradingState(),
       verificationReady: { simulation: simulationStartAvailable(), formal: !formalButton.disabled } };
   }
+  document.addEventListener("toolchain:ai-annotations", ({ detail }) => {
+    aiAnnotations.clear();
+    if (detail?.projectId === aiContext()?.projectId && Array.isArray(detail?.references)) {
+      for (const { path, line } of detail.references) {
+        if (!fileContents.has(path) || detail.files?.get(path) !== textForPath(path) || !Number.isInteger(line) || line < 1 || line > textForPath(path).split(/\r\n?|\n/).length) continue;
+        if (!aiAnnotations.has(path)) aiAnnotations.set(path, []);
+        aiAnnotations.get(path).push(line);
+      }
+    }
+    queueMicrotask(() => editor?.setLineAnnotations(aiAnnotations.get(activeTab) ?? []));
+  });
+  document.addEventListener("toolchain:ai-reference", ({ detail }) => {
+    if (detail?.projectId !== aiContext()?.projectId || !aiAnnotations.get(detail?.path)?.includes(detail?.line)) return;
+    document.dispatchEvent(new Event("toolchain:show-editor"));
+    openFile(detail.path);
+    editor?.revealLocation(detail.line);
+  });
   const aiBusy = () => !project || libraryBusy || !canChangeLibraries() || saveTimer !== null || projectSaveCount > 0 || buildRunning || simulationRunning || formalRunning || workflow.state === "writing";
   let aiRequestBusy = false;
   document.addEventListener("toolchain:ai-request-busy", ({ detail }) => { aiRequestBusy = detail?.busy === true; });
@@ -2040,7 +2077,10 @@ export function initializeIde({
     status.after(button); explainVerification[kind] = button;
     button.addEventListener("click", () => document.dispatchEvent(new CustomEvent("toolchain:ai-explain", { detail: { tool: kind, message: status.textContent } })));
   }
-  function finishAiVerification(kind, status) {
+  function finishAiVerification(kind, status, run) {
+    gradingResults[kind] = { state: run.state,
+      outcome: run.notRun || status.dataset.outcome === "stopped" ? "not-run" : status.dataset.outcome,
+      reason: status.textContent };
     latestBuildLogs.set(kind, `${status.textContent}\n${programLog.textContent}`);
     explainVerification[kind].hidden = !["failed", "timeout"].includes(status.dataset.outcome);
     notifyAiContext();
