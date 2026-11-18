@@ -30,6 +30,7 @@
     [
       "synthesis.spec.mjs",
       "formal-no-targets.spec.mjs",
+      "local-completion.spec.mjs",
       "workflow.spec.mjs",
       "last-project.spec.mjs",
       "openrouter-auth.spec.mjs",
