@@ -9,6 +9,46 @@ const modelCatalog = { data: [
   { id: "example/tiny", context_length: 10, pricing: { prompt: "0", completion: "-1" }, supported_parameters: ["reasoning"] },
 ] };
 
+test("hashing blocks previews and clearing does not repopulate history", async ({ page }) => {
+  await page.addInitScript(() => {
+    const digest = crypto.subtle.digest.bind(crypto.subtle);
+    const throwIfAborted = AbortSignal.prototype.throwIfAborted;
+    AbortSignal.prototype.throwIfAborted = function () {
+      if (window.historyWasCleared) window.postClearAbortChecks++;
+      return throwIfAborted.call(this);
+    };
+    crypto.subtle.digest = async (...args) => {
+      if (document.querySelector("#ai-usage")?.textContent && args[0] === "SHA-256") {
+        window.historyHashStarted = true;
+        await new Promise(resolve => { window.releaseHistoryHash = resolve; });
+      }
+      const result = await digest(...args);
+      if (window.historyHashStarted) window.historyHashFinished = true;
+      return result;
+    };
+  });
+  await prepareChat(page);
+  await page.locator("#ai-prompt").fill("説明してください。");
+  await page.locator("#ai-preview-button").click();
+  await page.locator("#ai-send").click();
+  await expect.poll(() => page.evaluate(() => window.historyHashStarted)).toBe(true);
+  await expect(page.locator("#ai-chat-response")).toHaveText("説明です。");
+  await expect(page.locator("#ai-usage")).toHaveText("使用量は返されませんでした");
+  await expect(page.locator("#ai-preview-button")).toBeDisabled();
+  await page.evaluate(() => document.querySelector("#ai-preview-button").dispatchEvent(new MouseEvent("click")));
+  await expect(page.locator("#ai-chat")).not.toHaveAttribute("data-state", "previewing");
+  await page.locator("#ai-clear").click();
+  await page.evaluate(() => { window.historyWasCleared = true; window.postClearAbortChecks = 0; window.releaseHistoryHash(); });
+  await expect.poll(() => page.evaluate(() => window.historyHashFinished)).toBe(true);
+  expect(await page.evaluate(() => window.postClearAbortChecks)).toBe(0);
+  await expect(page.locator("#ai-history-messages")).toBeEmpty();
+  await expect(page.locator("#ai-resend-history-option")).toBeHidden();
+  await page.locator("#ai-prompt").fill("新しい相談です。");
+  await page.locator("#ai-preview-button").click();
+  const body = JSON.parse(await page.locator("#ai-preview-body").inputValue());
+  expect(body.messages).toHaveLength(2);
+});
+
 async function mockModels(page, { body = JSON.stringify(modelCatalog), headers = {} } = {}) {
   const requests = [];
   await page.route(MODELS_URL, async route => {
@@ -19,6 +59,34 @@ async function mockModels(page, { body = JSON.stringify(modelCatalog), headers =
 }
 
 for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
+  test(`compact history and explicit full resend for ${board}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 1100 });
+    const requests = await prepareChat(page);
+    await page.locator("#new-project-button").click();
+    await page.locator("#new-project-name").fill(`history-${board}`);
+    await page.locator("#new-project-board").selectOption(board);
+    await page.locator("#new-project-create").click();
+    await expect(page.locator("#project-name")).toHaveText(`history-${board}`);
+    await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await page.locator("#right-tab-ai").click();
+    await expect(page.locator("#ai-resend-history-option")).toBeHidden();
+    const first = await previewAndSend(page);
+    const earlier = JSON.parse(JSON.parse(first).messages.at(-1).content);
+    expect(earlier.files.length).toBeGreaterThan(0);
+    expect(requests[0].postData()).toBe(first);
+    await expect(page.locator("#ai-resend-history")).not.toBeChecked();
+    await page.locator("#ai-resend-history-option").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-history-${board}.png`) });
+    const second = await previewAndSend(page, "続けて説明してください。");
+    const old = JSON.parse(JSON.parse(second).messages[1].content);
+    expect(old.files[0]).toEqual({ path: earlier.files[0].path, sha256: expect.stringMatching(/^[a-f0-9]{64}$/), bytes: Buffer.byteLength(earlier.files[0].content) });
+    expect(old.files.every(file => !Object.hasOwn(file, "content"))).toBe(true);
+    expect(requests[1].postData()).toBe(second);
+    await page.locator("#ai-resend-history").check();
+    const third = await previewAndSend(page, "全文も確認してください。");
+    expect(JSON.parse(JSON.parse(third).messages[1].content)).toEqual(earlier);
+    expect(requests[2].postData()).toBe(third);
+  });
   test(`explicit model metadata and context estimate for ${board}`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 1100 });
     const allModelRequests = [];

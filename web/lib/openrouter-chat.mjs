@@ -23,14 +23,14 @@ export function selectableFiles(files) {
   });
 }
 
-export function createChatPreview({ model, prompt, skill = "consult", project = null, history = [], files = [], logs = [], problems = [], origin }) {
+export function createChatPreview({ model, prompt, skill = "consult", project = null, history = [], resendHistory = false, files = [], logs = [], problems = [], origin }) {
   if (typeof model !== "string" || !model.trim() || model.length > 200 ||
       typeof prompt !== "string" || !prompt.trim()) throw new ChatError("empty");
   if (new URL(origin).origin !== origin || !/^https?:/.test(origin)) throw new ChatError("preview");
   const user = JSON.stringify({ request: prompt, skill, project: summarizeProject(project), files: selectableFiles(new Map(files)).map(([path, content]) => ({ path, content })), logs, problems }, null, 2);
-  const messages = [{ role: "system", content: buildSystemPrompt(skill) }, ...history.map(({ role, content }) => {
+  const messages = [{ role: "system", content: buildSystemPrompt(skill) }, ...history.map(({ role, content, compact }) => {
     if (!["user", "assistant"].includes(role) || typeof content !== "string") throw new ChatError("preview");
-    return { role, content };
+    return { role, content: role === "user" && !resendHistory ? (compact ?? content) : content };
   }), { role: "user", content: user }];
   const body = JSON.stringify({ model: model.trim(), stream: true, messages }, null, 2);
   if (chatByteLength(body) > MAX_CHAT_BYTES) throw new ChatError("size");
