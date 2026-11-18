@@ -147,6 +147,24 @@ test("AI verification uses the normal simulation availability for a VHDL project
   expect(requests).toHaveLength(1);
 });
 
+test("AI formal verification starts the real formal path after applying a proposal", async ({ page }) => {
+  const requests = await applyLocalProposal(page);
+  await acceptLocalProposal(page);
+  await page.evaluate(() => {
+    const status = document.querySelector("#formal-status");
+    window.aiFormalOutcomes = [];
+    new MutationObserver(() => window.aiFormalOutcomes.push(status.dataset.outcome))
+      .observe(status, { attributes: true, attributeFilter: ["data-outcome"] });
+  });
+  await page.locator("#ai-verify-formal").click();
+  await expect(page.locator("#right-tab-verify")).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("#formal-status")).toHaveAttribute("data-outcome", "failed", { timeout: 120000 });
+  expect(await page.evaluate(() => window.aiFormalOutcomes)).toContain("running");
+  await expect(page.locator("#program-log")).toContainText("形式検証の性質: assert 0 件");
+  await expect(page.locator("#ai-explain-formal")).toBeVisible();
+  expect(requests).toHaveLength(1);
+});
+
 test("source edits remove discarded verification logs and explanation actions", async ({ page }) => {
   const requests = await applyLocalProposal(page, [{ path: "src/top_tb.v", content: "module top_tb; initial begin #10; $finish; end endmodule\n", reason: "波形なしの検査" }]);
   await acceptLocalProposal(page);
