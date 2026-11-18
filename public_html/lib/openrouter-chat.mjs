@@ -2,6 +2,7 @@ import { isLibraryPath } from "./libraries.mjs";
 import { validatePath } from "./project.mjs";
 import { buildSystemPrompt } from "./ai-skills.mjs";
 import { summarizeProject } from "./ai-project-summary.mjs";
+import { parseUsage } from "./ai-usage.mjs";
 
 export const CHAT_URL = "https://openrouter.ai/api/v1/chat/completions";
 export const MAX_CHAT_BYTES = 2 * 1024 * 1024;
@@ -22,14 +23,14 @@ export function selectableFiles(files) {
   });
 }
 
-export function createChatPreview({ model, prompt, skill = "consult", project = null, history = [], files = [], logs = [], problems = [], origin }) {
+export function createChatPreview({ model, prompt, skill = "consult", project = null, history = [], resendHistory = false, files = [], logs = [], problems = [], origin }) {
   if (typeof model !== "string" || !model.trim() || model.length > 200 ||
       typeof prompt !== "string" || !prompt.trim()) throw new ChatError("empty");
   if (new URL(origin).origin !== origin || !/^https?:/.test(origin)) throw new ChatError("preview");
   const user = JSON.stringify({ request: prompt, skill, project: summarizeProject(project), files: selectableFiles(new Map(files)).map(([path, content]) => ({ path, content })), logs, problems }, null, 2);
-  const messages = [{ role: "system", content: buildSystemPrompt(skill) }, ...history.map(({ role, content }) => {
+  const messages = [{ role: "system", content: buildSystemPrompt(skill) }, ...history.map(({ role, content, compact }) => {
     if (!["user", "assistant"].includes(role) || typeof content !== "string") throw new ChatError("preview");
-    return { role, content };
+    return { role, content: role === "user" && !resendHistory ? (compact ?? content) : content };
   }), { role: "user", content: user }];
   const body = JSON.stringify({ model: model.trim(), stream: true, messages }, null, 2);
   if (chatByteLength(body) > MAX_CHAT_BYTES) throw new ChatError("size");
@@ -41,9 +42,11 @@ export function createSseParser(onDelta = () => {}) {
   let pending = "";
   let text = "";
   let done = false;
+  let usage = null;
   return {
     get text() { return text; },
     get done() { return done; },
+    get usage() { return usage; },
     push(chunk, final = false) {
       if (done) return;
       pending += chunk;
@@ -59,6 +62,7 @@ export function createSseParser(onDelta = () => {}) {
         let value;
         try { value = JSON.parse(data); } catch { throw new ChatError("response"); }
         if (value?.error) throw new ChatError("provider");
+        if (value?.usage !== undefined) usage = parseUsage(value.usage);
         const content = value?.choices?.[0]?.delta?.content;
         if (content === undefined || content === null) continue;
         if (typeof content !== "string") throw new ChatError("response");
@@ -70,7 +74,7 @@ export function createSseParser(onDelta = () => {}) {
   };
 }
 
-export async function sendChatPreview(preview, { key, signal, onDelta, fetchImpl = globalThis.fetch } = {}) {
+export async function sendChatPreview(preview, { key, signal, onDelta, onUsage = () => {}, fetchImpl = globalThis.fetch } = {}) {
   if (!preview || preview.url !== CHAT_URL || typeof preview.body !== "string" ||
       chatByteLength(preview.body) > MAX_CHAT_BYTES || typeof key !== "string" || !key.trim()) throw new ChatError("preview");
   let reader;
@@ -94,6 +98,7 @@ export async function sendChatPreview(preview, { key, signal, onDelta, fetchImpl
     }
     signal?.throwIfAborted();
     if (!parser.done) throw new ChatError("incomplete");
+    onUsage(parser.usage);
     return parser.text;
   } catch (error) {
     if (signal?.aborted) throw new ChatError("stopped");

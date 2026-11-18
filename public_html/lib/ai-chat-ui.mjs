@@ -2,6 +2,9 @@ import { createChatPreview, selectableFiles, sendChatPreview } from "./openroute
 import { parseProposals, proposalDiff, proposalSnapshot } from "./ai-proposals.mjs";
 import { AI_CHAT_INITIAL_STATE, transitionAiChat } from "./ai-chat-flow.mjs";
 import { AI_SKILLS } from "./ai-skills.mjs";
+import { formatUsage } from "./ai-usage.mjs";
+import { compactUserTurn } from "./ai-history.mjs";
+import { fetchModels, formatModelPrice, estimatePreviewTokens } from "./openrouter-models.mjs";
 export { createProposalEditor } from "./ai-proposals.mjs";
 export { selectableFiles } from "./openrouter-chat.mjs";
 
@@ -29,7 +32,9 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     <p id="ai-chat-status" role="status" aria-live="polite"></p>
     <p id="ai-chat-error" role="alert" hidden></p>
     <fieldset id="ai-compose"><legend>相談文と資料</legend>
-      <label for="ai-model">モデル</label><input id="ai-model" type="text" value="openrouter/auto" maxlength="200" autocomplete="off">
+      <label for="ai-model">モデル</label><input id="ai-model" type="text" value="openrouter/auto" maxlength="200" autocomplete="off" list="ai-model-options">
+      <datalist id="ai-model-options"></datalist>
+      <button id="ai-models-fetch" type="button" class="secondary">モデル一覧を取得</button>
       <details id="ai-context-picker"><summary>送る内容を選ぶ</summary>
         <fieldset><legend>プロジェクトのファイル</legend><div id="ai-context-files"></div></fieldset>
         <fieldset><legend>直前のビルドログ</legend><div id="ai-context-logs"></div></fieldset>
@@ -37,9 +42,13 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       </details><p id="ai-context-selection"></p>
       <label for="ai-skill">相談の種類</label><select id="ai-skill"></select>
       <label for="ai-prompt">相談文</label><textarea id="ai-prompt" rows="4" placeholder="エラーや設計について相談してください"></textarea>
+      <label id="ai-resend-history-option" hidden><input id="ai-resend-history" type="checkbox">以前の資料も全文で送り直す</label>
       <button id="ai-preview-button" type="button">送信内容を確認</button>
     </fieldset>
+    <p id="ai-models-status" role="status"></p>
+    <p id="ai-model-details" hidden></p>
     <section id="ai-preview" hidden><h4>送信内容の確認</h4>
+      <p id="ai-token-estimate"></p><p id="ai-context-warning" role="status" hidden>推定トークン数がコンテキスト長を超えています。資料や会話を減らしてください。</p>
       <p id="ai-preview-target"></p><pre id="ai-preview-headers" tabindex="0"></pre>
       <p>Authorization には接続中の鍵を付けます（鍵は表示しません）。日本語のタイトルは UTF-8 のバイト列で送ります。</p>
       <label for="ai-preview-body">実際に送る JSON 本文（編集不可）</label>
@@ -48,7 +57,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       <button id="ai-preview-cancel" type="button" class="secondary">内容を編集する</button>
     </section>
     <button id="ai-stop" type="button" class="secondary" hidden>停止</button>
-    <section id="ai-answer" hidden><h4>AI の応答</h4><pre id="ai-chat-response" role="log" aria-live="polite" tabindex="0"></pre></section>
+    <section id="ai-answer" hidden><h4>AI の応答</h4><pre id="ai-chat-response" role="log" aria-live="polite" tabindex="0"></pre><p id="ai-usage" role="status"></p></section>
     <section id="ai-proposals" hidden><h4>変更提案の確認</h4>
       <p>各ファイルの差分を確認して採否を選び、まとめて適用で確定します。選んだ変更は1回で保存します。</p>
       <div id="ai-proposal-files"></div><p id="ai-apply-reason" role="status"></p>
@@ -68,10 +77,13 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   let history = [], preview = null, proposals = [], snapshot = null, context;
   let state = AI_CHAT_INITIAL_STATE, controller = null, generation = 0, version = 0, applying = false;
   let accepted = new Set(), lastKey = getKey();
+  let models = null, loadingModels = false;
   function send(event, guards) { state = transitionAiChat(state, event, guards); root.dataset.state = state; }
   function busy() { return Boolean(controller); }
   function controls() {
+    q("ai-models-fetch").disabled = loadingModels;
     q("ai-compose").disabled = busy() || applying;
+    q("ai-resend-history-option").hidden = history.length === 0;
     q("ai-compose").hidden = !getKey() || state === "previewing";
     q("ai-chat-intro").hidden = !getKey();
     q("ai-history").hidden = q("ai-clear").hidden = !getKey();
@@ -93,6 +105,29 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     send("inputs_changed"); controls();
   }
   function showError(error) { q("ai-chat-error").textContent = errorText(error); q("ai-chat-error").hidden = false; }
+  function renderModelDetails() {
+    const model = models?.find(item => item.id === q("ai-model").value.trim());
+    q("ai-model-details").hidden = models === null;
+    q("ai-model-details").textContent = model ? `コンテキスト長: ${model.context_length ?? "不明"} トークン・100万トークン当たり: 入力 ${formatModelPrice(model.pricing.prompt)} / 出力 ${formatModelPrice(model.pricing.completion)}・` +
+      [["structured_outputs", "構造化出力"], ["tools", "ツール"], ["reasoning", "推論"]].map(([parameter, label]) => `${label}: ${model.supported_parameters === null ? "不明" : model.supported_parameters.includes(parameter) ? "対応" : "非対応"}`).join("・") : "一覧にないモデルです";
+    const estimate = preview ? estimatePreviewTokens(preview.body) : null;
+    q("ai-token-estimate").textContent = estimate === null ? "" : `推定 ${estimate} トークン（本文の UTF-8 1バイトを1トークンとして計算。実際の使用量とは異なります）`;
+    q("ai-context-warning").hidden = estimate === null || !model?.context_length || estimate <= model.context_length;
+  }
+  q("ai-models-fetch").addEventListener("click", async () => {
+    if (loadingModels) return;
+    loadingModels = true; models = null; q("ai-model-options").replaceChildren();
+    q("ai-models-status").textContent = "モデル一覧を取得しています。"; renderModelDetails(); controls();
+    try {
+      models = await fetchModels();
+      for (const model of models) {
+        const option = document.createElement("option"); option.value = model.id; q("ai-model-options").append(option);
+      }
+      q("ai-models-status").textContent = `${models.length}件のモデルを取得しました。このタブだけに保持します。`;
+    } catch (error) {
+      q("ai-models-status").textContent = error.code === "size" ? "モデル一覧が大きすぎるため破棄しました。" : "モデル一覧を取得できませんでした。通信や応答の形式を確認してください。";
+    } finally { loadingModels = false; renderModelDetails(); controls(); }
+  });
   function selectedSummary() {
     q("ai-context-selection").textContent = `選択中: ${[...choices.files, ...choices.logs].join("、") || "ファイル・ログなし"} / 問題 ${choices.problems.size}件`;
   }
@@ -166,17 +201,20 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     }
     controls();
   }
-  q("ai-model").addEventListener("input", invalidate); q("ai-prompt").addEventListener("input", invalidate);
+  q("ai-model").addEventListener("input", () => { invalidate(); renderModelDetails(); }); q("ai-prompt").addEventListener("input", invalidate);
   q("ai-skill").addEventListener("change", invalidate);
+  q("ai-resend-history").addEventListener("change", invalidate);
   q("ai-preview-button").addEventListener("click", () => {
     q("ai-chat-error").hidden = true;
     try {
+      if (busy()) return;
       if (!context) throw new Error();
       preview = createChatPreview({ model: q("ai-model").value, prompt: q("ai-prompt").value, history,
-        skill: q("ai-skill").value, project: { ...context.project, files: context.files },
+        skill: q("ai-skill").value, resendHistory: q("ai-resend-history").checked, project: { ...context.project, files: context.files },
         files: [...context.files].filter(([p]) => choices.files.has(p)), logs: [...context.logs].filter(([p]) => choices.logs.has(p)).map(([tool, text]) => ({ tool, text })),
         problems: context.problems.filter((p) => choices.problems.has(JSON.stringify(p))), origin: location.origin });
       q("ai-preview-body").value = preview.body;
+      renderModelDetails();
       q("ai-preview-target").textContent = `${preview.url} / ${preview.bytes} バイト`;
       q("ai-preview-headers").textContent = JSON.stringify({ ...preview.headers, "X-OpenRouter-Title": "午後のFPGA" }, null, 2);
       send("preview_requested", { context_valid: true }); controls(); q("ai-preview-body").focus();
@@ -192,16 +230,22 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     if (state !== "sending") return;
     const abort = new AbortController(); controller = abort;
     q("ai-chat-error").hidden = true; q("ai-chat-response").textContent = ""; q("ai-answer").hidden = false;
+    q("ai-usage").textContent = "";
     renderProposals({ valid: [], rejected: [] }, new Map()); controls();
     try {
       snapshot = await proposalSnapshot(workspace.getContext());
       if (version !== selectedVersion || preview !== selected || getKey() !== key || abort.signal.aborted) throw { code: "preview" };
-      const answer = await sendChatPreview(selected, { key, signal: abort.signal, onDelta: (_delta, text) => {
+      const answer = await sendChatPreview(selected, { key, signal: abort.signal, onUsage: (usage) => {
+        if (run === generation) q("ai-usage").textContent = formatUsage(usage);
+      }, onDelta: (_delta, text) => {
         if (run !== generation) return;
         send("chunk_received"); q("ai-chat-response").textContent = text; controls();
       } });
       if (run !== generation) return;
-      history.push({ role: "user", content: selected.user }, { role: "assistant", content: answer }); renderHistory();
+      const compact = await compactUserTurn(selected.user);
+      if (run !== generation) return;
+      abort.signal.throwIfAborted();
+      history.push({ role: "user", content: selected.user, compact }, { role: "assistant", content: answer }); renderHistory();
       send("response_completed"); renderProposals(parseProposals(answer, snapshot.files), snapshot.files);
     } catch (error) {
       if (run !== generation) return;
@@ -226,7 +270,9 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   });
   function clear(event = "clear_requested") {
     generation++; controller?.abort(); controller = null; history = []; preview = null; snapshot = null;
+    q("ai-resend-history").checked = false;
     q("ai-preview-body").value = ""; q("ai-prompt").value = ""; q("ai-chat-response").textContent = ""; q("ai-answer").hidden = true; q("ai-chat-error").hidden = true;
+    q("ai-usage").textContent = "";
     send(event); renderHistory(); renderProposals({ valid: [], rejected: [] }, new Map()); controls();
   }
   q("ai-clear").addEventListener("click", () => clear());
