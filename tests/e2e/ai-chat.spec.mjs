@@ -357,7 +357,7 @@ for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
   test(`structured preview, response, apply and raw history for ${board}`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1100 });
     const changed = "module top(input clk, output led); assign led = clk; endmodule\n";
-    const reply = JSON.stringify({ answer: "クロックを出力へ接続する提案です。適用前に差分を確認してください。", changes: [{ path: "src/top.v", content: changed, reason: "配線の例" }] });
+    const reply = JSON.stringify({ answer: "クロックを出力へ接続する提案です。適用前に差分を確認してください。", changes: [{ path: "src/top.v", content: changed, edits: null, reason: "配線の例" }] });
     await slowChat(page);
     const requests = await prepareChat(page, { reply });
     await page.locator("#new-project-button").click();
@@ -400,6 +400,61 @@ for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
     const next = JSON.parse(await page.locator("#ai-preview-body").inputValue());
     expect(next.messages.find(message => message.role === "assistant").content).toBe(reply);
   });
+}
+
+for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
+  for (const mode of ["fence", "structured"]) {
+    test(`partial edits, rejection and undo in ${mode} mode for ${board}`, async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 1250 });
+      const changes = [
+        { path: "src/top.v", reason: "小さな変更を順番に置換します。", edits: [
+          { search: "module top(", replace: "// 部分編集\nmodule top(" },
+          { search: "// 部分編集", replace: "// 検査する部分編集" },
+        ] },
+        { path: "src/top_tb.v", reason: "一致しない置換はファイル全体を拒否します。", edits: [
+          { search: "module top_tb;", replace: "module changed_tb;" },
+          { search: "missing_partial_edit_target", replace: "unreachable" },
+        ] },
+      ];
+      const reply = mode === "structured"
+        ? JSON.stringify({ answer: "小さな変更の提案です。一致しないファイルは変更しません。", changes: changes.map(change => ({ ...change, content: null })) })
+        : `小さな変更の提案です。\n\`\`\`gogo-fpga-edits\n${JSON.stringify({ changes })}\n\`\`\``;
+      const requests = await prepareChat(page, { reply });
+      await page.locator("#new-project-button").click();
+      await page.locator("#new-project-name").fill(`partial-${mode}-${board}`);
+      await page.locator("#new-project-board").selectOption(board);
+      await page.locator("#new-project-create").click();
+      await expect(page.locator("#project-status")).toHaveText("保存しました。");
+      await page.locator("#right-tab-ai").click();
+      if (mode === "structured") {
+        await mockModels(page);
+        await page.locator("#ai-models-fetch").click();
+        await expect(page.locator("#ai-models-status")).toContainText("2件");
+        await page.locator("#ai-model").fill("example/paid");
+      }
+      await page.locator("#ai-skill").selectOption("change");
+      const before = await projectFile(page);
+      const beforeTestbench = await projectFile(page, "src/top_tb.v");
+      const body = await previewAndSend(page, "既存のファイルを部分編集してください。");
+      expect(requests[0].postData()).toBe(body);
+      expect(Boolean(JSON.parse(body).response_format)).toBe(mode === "structured");
+      await expect(page.locator(".ai-proposal")).toHaveCount(1);
+      await expect(page.locator(".ai-diff")).toContainText("+// 検査する部分編集");
+      await expect(page.locator(".ai-rejected-proposal")).toContainText("src/top_tb.v");
+      await expect(page.locator(".ai-rejected-proposal")).toContainText("置換2: search と一致する箇所がありません");
+      await page.locator("#ai-answer").evaluate(element => element.scrollIntoView({ block: "start" }));
+      await page.screenshot({ path: resolve(homedir(), "shots", `ai-partial-edit-${mode}-${board}.png`) });
+      await page.locator(".ai-proposal button").filter({ hasText: "この変更を適用" }).click();
+      await page.locator("#ai-apply-selected").click();
+      await expect(page.locator(".ai-proposal")).toHaveCount(0);
+      await expect.poll(() => projectFile(page)).toBe(before.replace("module top(", "// 検査する部分編集\nmodule top("));
+      expect(await projectFile(page, "src/top_tb.v")).toBe(beforeTestbench);
+      await page.locator("#ai-undo").click();
+      await expect(page.locator("#ai-undo")).toBeHidden();
+      await expect.poll(() => projectFile(page)).toBe(before);
+      expect(await projectFile(page, "src/top_tb.v")).toBe(beforeTestbench);
+    });
+  }
 }
 
 test("malformed structured reply cannot apply, unsupported model keeps fence path", async ({ page }) => {

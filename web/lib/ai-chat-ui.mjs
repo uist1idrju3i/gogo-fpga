@@ -197,7 +197,10 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     q("ai-proposal-files").replaceChildren();
     q("ai-rejected-paths").replaceChildren(); q("ai-rejected-paths").hidden = !rejected.length;
     for (const { path, reason } of rejected) {
-      const p = document.createElement("p"); p.textContent = `適用できないパス: ${path.slice(0, 200)}: ${reason}`; q("ai-rejected-paths").append(p);
+      const card = document.createElement("article"), heading = document.createElement("h4"), p = document.createElement("p");
+      card.className = "ai-rejected-proposal";
+      heading.textContent = `適用できないパス: ${path.slice(0, 200)}`; p.textContent = reason;
+      card.append(heading, p); q("ai-rejected-paths").append(card);
     }
     for (const change of proposals) {
       const card = document.createElement("article"), heading = document.createElement("h4"), reason = document.createElement("p"), diff = document.createElement("pre");

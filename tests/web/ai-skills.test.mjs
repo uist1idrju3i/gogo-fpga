@@ -20,6 +20,10 @@ test("all frozen skills include data boundaries and only changing skills include
       assert.ok(prompt.includes(`合計${PROPOSAL_LIMITS.total / 1024} KiB`));
       assert.ok(prompt.includes('"changes":[{"path":'));
       assert.ok(prompt.includes("ファイルの全文"));
+      for (const text of ["gogo-fpga-edits", "小さな変更には edits", "新規ファイル", "一字も変えず", "ちょうど1箇所", "記載順"]) assert.ok(prompt.includes(text));
+      const structured = buildSystemPrompt(skill.id, { structured: true });
+      assert.ok(structured.includes("一方だけを null"));
+      assert.ok(structured.includes("小さな変更には edits"));
     } else assert.ok(prompt.includes("コードフェンスは出力しない"));
   }
 });
