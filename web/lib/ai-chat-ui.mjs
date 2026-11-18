@@ -151,7 +151,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   }
   function previewToolResults() {
     if (busy() || !pendingTools || pendingTools.decisions.some(result => result === null) || !sameToolWorkspace(pendingTools.captured, workspace.getContext())) return;
-    try { showPreview(toolResultPreview(pendingTools.selected, pendingTools.calls, pendingTools.decisions)); }
+    try { showPreview(toolResultPreview(pendingTools.selected, pendingTools.calls, pendingTools.decisions, pendingTools.answer, pendingTools.captured.files)); }
     catch (error) { showError(error); }
   }
   function showPreview(selected) {
@@ -399,6 +399,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     }
     verificationProject = null;
     const selected = preview, key = getKey(), selectedVersion = version, run = ++generation;
+    const priorAnswer = (selected.turnMessages ?? []).filter(message => message.role === "assistant" && message.content).map(message => message.content).join("\n\n");
     clearToolCards();
     const selectedGradingState = workspace.getContext()?.verificationState;
     send("send_requested", { connected: true, preview_current: true });
@@ -406,24 +407,24 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     dismissAnnotations();
     gradeComments = null; gradingKey = null;
     const abort = new AbortController(); controller = abort;
-    q("ai-chat-error").hidden = true; q("ai-chat-response").textContent = ""; q("ai-answer").hidden = false;
+    q("ai-chat-error").hidden = true; q("ai-chat-response").textContent = priorAnswer; q("ai-answer").hidden = false;
     q("ai-usage").textContent = "";
     renderProposals({ valid: [], rejected: [] }, new Map()); controls();
     try {
-      snapshot = await proposalSnapshot(workspace.getContext());
+      snapshot = selected.proposalSnapshot ?? await proposalSnapshot(workspace.getContext());
       if (version !== selectedVersion || preview !== selected || getKey() !== key || abort.signal.aborted) throw { code: "preview" };
       let toolCalls = null;
       const answer = await sendChatPreview(selected, { key, signal: abort.signal, onToolCalls: calls => { toolCalls = calls; }, onUsage: (usage) => {
         if (run === generation) q("ai-usage").textContent = formatUsage(usage);
       }, onDelta: (_delta, text) => {
         if (run !== generation) return;
-        send("chunk_received"); q("ai-chat-response").textContent = selected.structured ? "構造化された応答を受信しています" : text; controls();
+        send("chunk_received"); q("ai-chat-response").textContent = [priorAnswer, selected.structured ? "構造化された応答を受信しています" : text].filter(Boolean).join("\n\n"); controls();
       } });
       if (run !== generation) return;
       if (toolCalls) {
         if (workspace.getContext()?.projectId !== snapshot.projectId) throw { code: "changed" };
         send("response_completed");
-        pendingTools = { calls: toolCalls, selected };
+        pendingTools = { calls: toolCalls, answer, selected: { ...selected, proposalSnapshot: snapshot } };
         prepareToolCards();
         return;
       }
@@ -433,7 +434,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       abort.signal.throwIfAborted();
       history.push(...turns, { role: "assistant", content: answer }); renderHistory();
       const result = parseAiAnswer(answer, selected, snapshot.files);
-      const sentFiles = new Map(JSON.parse(selected.user).files.map(({ path, content }) => [path, content]));
+      const sentFiles = selected.sentFiles ?? new Map(JSON.parse(selected.user).files.map(({ path, content }) => [path, content]));
       const current = workspace.getContext();
       if (result.grade) {
         const grading = currentGrading(current);
@@ -442,8 +443,9 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
         if (matches) gradeComments = { ...result.grade, key: gradeKey(current, grading) };
         gradingKey = null;
       }
-      if (current?.projectId === snapshot.projectId && [...sentFiles].every(([path, content]) => current.files.get(path) === content)) renderAnswer(result.answer, selected, sentFiles);
-      else q("ai-chat-response").textContent = result.answer;
+      const visibleAnswer = [priorAnswer, result.answer].filter(Boolean).join("\n\n");
+      if (current?.projectId === snapshot.projectId && [...sentFiles].every(([path, content]) => current.files.get(path) === content)) renderAnswer(visibleAnswer, selected, sentFiles);
+      else q("ai-chat-response").textContent = visibleAnswer;
       send("response_completed"); renderProposals(result.proposals, snapshot.files);
     } catch (error) {
       if (run !== generation) return;
