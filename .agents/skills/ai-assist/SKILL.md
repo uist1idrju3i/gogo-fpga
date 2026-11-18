@@ -23,6 +23,8 @@ description: 午後のFPGA の AI 相談、用途別の指示、OpenRouter 接�
 
 ## 種類を追加する手順
 
+会話履歴は成功した応答だけを保持します。`ai-history.mjs` で以前の資料を SHA-256 と UTF-8 バイト数に置き換え、既定では本文を再送しません。全文の再送は利用者の選択時だけです。今回の資料は全文を送り、どちらも確認と送信のバイト列を一致させます。ハッシュ計算中の確認を拒否し、会話の消去後に計算結果で履歴を戻してはいけません。
+
 1. `web/lib/ai-skills.mjs` の凍結した `AI_SKILLS` に、一意の `id`、日本語の `label` と `instructions`、`allowsChanges` を追加します。共通の役割、資料の境界、回答方針、出力形式は `buildSystemPrompt` に置き、上限値は定数を参照します。不明な ID の拒否を保ちます。
 2. 形式検証の指示を変える前に `web/lib/formal-properties.mjs` を読み、対象セル、モード、クロックの条件と合わせます。プロジェクト要約は `web/lib/ai-project-summary.mjs`、本文の作成と送信は `web/lib/openrouter-chat.mjs`、画面は `web/lib/ai-chat-ui.mjs` を確認します。
 3. `tests/web/ai-skills.test.mjs` で項目、資料の境界、変更を許す場合だけの出力形式、定数の上限、不明 ID を確かめます。要約は通常・空の入力、設定の有無、UTF-8 バイト数、本文の除外を検査します。`tests/web/openrouter-chat.test.mjs` で選択外の本文が漏れず、確認と送信のバイト列が一致することを保ちます。

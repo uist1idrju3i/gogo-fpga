@@ -3,6 +3,7 @@ import { parseProposals, proposalDiff, proposalSnapshot } from "./ai-proposals.m
 import { AI_CHAT_INITIAL_STATE, transitionAiChat } from "./ai-chat-flow.mjs";
 import { AI_SKILLS } from "./ai-skills.mjs";
 import { formatUsage } from "./ai-usage.mjs";
+import { compactUserTurn } from "./ai-history.mjs";
 import { fetchModels, formatModelPrice, estimatePreviewTokens } from "./openrouter-models.mjs";
 export { createProposalEditor } from "./ai-proposals.mjs";
 export { selectableFiles } from "./openrouter-chat.mjs";
@@ -41,6 +42,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       </details><p id="ai-context-selection"></p>
       <label for="ai-skill">相談の種類</label><select id="ai-skill"></select>
       <label for="ai-prompt">相談文</label><textarea id="ai-prompt" rows="4" placeholder="エラーや設計について相談してください"></textarea>
+      <label id="ai-resend-history-option" hidden><input id="ai-resend-history" type="checkbox">以前の資料も全文で送り直す</label>
       <button id="ai-preview-button" type="button">送信内容を確認</button>
     </fieldset>
     <p id="ai-models-status" role="status"></p>
@@ -81,6 +83,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   function controls() {
     q("ai-models-fetch").disabled = loadingModels;
     q("ai-compose").disabled = busy() || applying;
+    q("ai-resend-history-option").hidden = history.length === 0;
     q("ai-compose").hidden = !getKey() || state === "previewing";
     q("ai-chat-intro").hidden = !getKey();
     q("ai-history").hidden = q("ai-clear").hidden = !getKey();
@@ -200,12 +203,14 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   }
   q("ai-model").addEventListener("input", () => { invalidate(); renderModelDetails(); }); q("ai-prompt").addEventListener("input", invalidate);
   q("ai-skill").addEventListener("change", invalidate);
+  q("ai-resend-history").addEventListener("change", invalidate);
   q("ai-preview-button").addEventListener("click", () => {
     q("ai-chat-error").hidden = true;
     try {
+      if (busy()) return;
       if (!context) throw new Error();
       preview = createChatPreview({ model: q("ai-model").value, prompt: q("ai-prompt").value, history,
-        skill: q("ai-skill").value, project: { ...context.project, files: context.files },
+        skill: q("ai-skill").value, resendHistory: q("ai-resend-history").checked, project: { ...context.project, files: context.files },
         files: [...context.files].filter(([p]) => choices.files.has(p)), logs: [...context.logs].filter(([p]) => choices.logs.has(p)).map(([tool, text]) => ({ tool, text })),
         problems: context.problems.filter((p) => choices.problems.has(JSON.stringify(p))), origin: location.origin });
       q("ai-preview-body").value = preview.body;
@@ -237,7 +242,10 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
         send("chunk_received"); q("ai-chat-response").textContent = text; controls();
       } });
       if (run !== generation) return;
-      history.push({ role: "user", content: selected.user }, { role: "assistant", content: answer }); renderHistory();
+      const compact = await compactUserTurn(selected.user);
+      if (run !== generation) return;
+      abort.signal.throwIfAborted();
+      history.push({ role: "user", content: selected.user, compact }, { role: "assistant", content: answer }); renderHistory();
       send("response_completed"); renderProposals(parseProposals(answer, snapshot.files), snapshot.files);
     } catch (error) {
       if (run !== generation) return;
@@ -262,6 +270,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   });
   function clear(event = "clear_requested") {
     generation++; controller?.abort(); controller = null; history = []; preview = null; snapshot = null;
+    q("ai-resend-history").checked = false;
     q("ai-preview-body").value = ""; q("ai-prompt").value = ""; q("ai-chat-response").textContent = ""; q("ai-answer").hidden = true; q("ai-chat-error").hidden = true;
     q("ai-usage").textContent = "";
     send(event); renderHistory(); renderProposals({ valid: [], rejected: [] }, new Map()); controls();
