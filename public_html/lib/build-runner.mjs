@@ -2,8 +2,15 @@ function createWorker(scriptURL) {
   return new Worker(new URL(scriptURL, import.meta.url), { type: "module" });
 }
 
-function buildError(data) {
-  const error = new Error(data.message ?? "Build worker failed");
+function buildError(data, fallback = "Build worker failed") {
+  const details = [data.message, data.error?.message, data.error?.name ?? data.name]
+    .filter(value => typeof value === "string" && value.trim());
+  if (data.filename) {
+    details.push([data.filename, data.lineno, data.colno]
+      .filter(value => value !== undefined && value !== null).join(":"));
+  }
+  const error = new Error([...new Set(details)].join("; ") || fallback);
+  if (data.error instanceof Error) error.cause = data.error;
   error.stage = data.stage;
   return error;
 }
@@ -35,11 +42,11 @@ function request(worker, message, callbacks, operation) {
     };
     const onError = (event) => {
       cleanup();
-      reject(event.error ?? new Error(event.message ?? "Build worker failed"));
+      reject(buildError(event));
     };
-    const onMessageError = () => {
+    const onMessageError = (event) => {
       cleanup();
-      reject(new Error("Build worker message could not be deserialized"));
+      reject(buildError(event, "Build worker message could not be deserialized"));
     };
     operation.abort = abort;
     worker.addEventListener("message", onMessage);

@@ -1,4 +1,6 @@
 import { createOpfsStore } from "./lib/project-store.mjs";
+import { lastProjectName, rememberProject } from "./lib/last-project.mjs";
+import { observeSurferScale } from "./lib/surfer-scale.mjs";
 import {
   findConstraintBoardMismatch,
   prepareProjectInputs,
@@ -13,7 +15,7 @@ import {
 import { createHdlEditor, languageForPath } from "./editor/editor.bundle.mjs";
 import { createBuildRunner } from "./lib/build-runner.mjs";
 import { parseToolDiagnostics } from "./lib/tool-diagnostics.mjs";
-import { selectableFiles } from "./lib/openrouter-chat.mjs";
+import { selectableFiles } from "./lib/ai-chat-ui.bundle.mjs";
 import { parseBuildSummary } from "./lib/build-summary.mjs";
 import { createSimRunner, vcdRootScopes } from "./lib/sim-runner.mjs";
 import { isLibraryPath } from "./lib/libraries.mjs";
@@ -33,6 +35,7 @@ const FORMAL_KIND_LABELS = {
   counterexample: "反例が見つかりました。",
   unknown: "判定できませんでした。",
   "tool-error": "ツールがエラーを返しました。",
+  "no-targets": "形式検証を実行しませんでした。",
   timeout: "時間上限に達しました。",
   cancelled: "停止しました。",
   unavailable: "この製品では実行できません。",
@@ -216,6 +219,7 @@ export function initializeIde({
   let formalAssetController = null;
   let formalVersion = 0;
   let surferFrame = null;
+  let surferScale = null;
   let surferBridgePromise = null;
   let resolveSurferBridge = null;
   let vcdObjectUrl = null;
@@ -628,7 +632,7 @@ export function initializeIde({
     context?.getExtension("WEBGL_lose_context")?.loseContext();
     if (!context) {
       waveformStatus.textContent =
-        "この環境では WebGL が使えないため、波形を表示できません。選んだ VCD はダウンロードできます。";
+        "この環境では WebGL が使えないため、波形を表示できません。サイトの設定で WebGL を許可し、ブラウザーのハードウェア アクセラレーションを有効にしてください。選んだ VCD はダウンロードできます。";
       return false;
     }
     const frame = document.createElement("iframe");
@@ -666,6 +670,8 @@ export function initializeIde({
   }
 
   function resetSurferFrame() {
+    surferScale?.dispose();
+    surferScale = null;
     resolveSurferBridge?.(false);
     surferFrame?.remove();
     surferFrame = null;
@@ -1559,6 +1565,7 @@ export function initializeIde({
     formalStatus.textContent = "";
     formalStatus.dataset.outcome = "";
     project = loaded?.project ?? null;
+    rememberProject(project?.name ?? null);
     if (project) project.vhdlStandard ??= "2008";
     fileContents = loaded?.files ?? new Map();
     if (project?.files.some(({ path }) => path.startsWith("build/") && path.endsWith(".fs"))) {
@@ -1611,7 +1618,7 @@ export function initializeIde({
     try {
       const names = await store.listProjects();
       if (names.length > 0) {
-        activateProject(await store.load(names[0]));
+        activateProject(await store.load(lastProjectName(names)));
       } else if (await store.hasWorkspace()) {
         activateProject(null);
       } else {
@@ -1838,8 +1845,11 @@ export function initializeIde({
       event.source !== surferFrame.contentWindow
     ) return;
     if (event.data?.type === "toolchain:surfer-bridge-ready") {
+      surferScale?.dispose();
+      surferScale = observeSurferScale(surferFrame);
       resolveSurferBridge?.(true);
     } else if (event.data?.type === "toolchain:surfer-waveform-loaded") {
+      surferScale?.refresh();
       const inject = surferFrame.contentWindow.inject_message;
       if (typeof inject === "function") {
         const scopes = vcdRootScopes(currentVcd.bytes).map((name) => [name]);
