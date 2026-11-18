@@ -209,6 +209,7 @@ test("hardware busy changes refresh AI verification buttons", async ({ page }) =
       await expect(page.locator(`#ai-verify-${kind}`)).toBeDisabled();
     }
     await page.evaluate(() => document.dispatchEvent(new CustomEvent("toolchain:ai-verify", { detail: { kind: "formal" } })));
+    await expect(page.locator("#right-tab-ai")).toHaveAttribute("aria-selected", "true");
     await expect(page.locator("#formal-status")).not.toHaveAttribute("data-outcome", "running");
   } finally {
     releaseWorker?.();
