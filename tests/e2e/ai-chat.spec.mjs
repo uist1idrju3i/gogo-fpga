@@ -12,23 +12,36 @@ const modelCatalog = { data: [
 test("hashing blocks previews and clearing does not repopulate history", async ({ page }) => {
   await page.addInitScript(() => {
     const digest = crypto.subtle.digest.bind(crypto.subtle);
+    const throwIfAborted = AbortSignal.prototype.throwIfAborted;
+    AbortSignal.prototype.throwIfAborted = function () {
+      if (window.historyWasCleared) window.postClearAbortChecks++;
+      return throwIfAborted.call(this);
+    };
     crypto.subtle.digest = async (...args) => {
-      if (window.delayHistoryHash && args[0] === "SHA-256") {
+      if (document.querySelector("#ai-usage")?.textContent && args[0] === "SHA-256") {
         window.historyHashStarted = true;
         await new Promise(resolve => { window.releaseHistoryHash = resolve; });
       }
-      return digest(...args);
+      const result = await digest(...args);
+      if (window.historyHashStarted) window.historyHashFinished = true;
+      return result;
     };
   });
   await prepareChat(page);
-  await page.evaluate(() => { window.delayHistoryHash = true; });
   await page.locator("#ai-prompt").fill("説明してください。");
   await page.locator("#ai-preview-button").click();
   await page.locator("#ai-send").click();
   await expect.poll(() => page.evaluate(() => window.historyHashStarted)).toBe(true);
+  await expect(page.locator("#ai-chat-response")).toHaveText("説明です。");
+  await expect(page.locator("#ai-usage")).toHaveText("使用量は返されませんでした");
   await expect(page.locator("#ai-preview-button")).toBeDisabled();
+  await page.evaluate(() => document.querySelector("#ai-preview-button").dispatchEvent(new MouseEvent("click")));
+  await expect(page.locator("#ai-chat")).not.toHaveAttribute("data-state", "previewing");
   await page.locator("#ai-clear").click();
-  await page.evaluate(() => { window.delayHistoryHash = false; window.releaseHistoryHash(); });
+  await page.evaluate(() => { window.historyWasCleared = true; window.postClearAbortChecks = 0; window.releaseHistoryHash(); });
+  await expect.poll(() => page.evaluate(() => window.historyHashFinished)).toBe(true);
+  expect(await page.evaluate(() => window.postClearAbortChecks)).toBe(0);
+  await expect(page.locator("#ai-history-messages")).toBeEmpty();
   await expect(page.locator("#ai-resend-history-option")).toBeHidden();
   await page.locator("#ai-prompt").fill("新しい相談です。");
   await page.locator("#ai-preview-button").click();
