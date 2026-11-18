@@ -95,6 +95,7 @@ for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
     const before = await projectFile(page);
     await page.locator(".ai-proposal button").filter({ hasText: "この変更を適用" }).click();
     await page.locator("#ai-apply-selected").click();
+    await expect(page.locator(".ai-proposal")).toHaveCount(0);
     await expect.poll(() => projectFile(page)).toBe(changed);
     await page.locator("#ai-undo").click();
     await expect(page.locator("#ai-undo")).toBeHidden();
