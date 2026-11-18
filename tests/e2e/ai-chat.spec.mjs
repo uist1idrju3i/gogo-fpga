@@ -148,6 +148,42 @@ test("AI verification uses the normal simulation availability for a VHDL project
   expect(requests).toHaveLength(1);
 });
 
+test("simulation file and time limit edits survive form input events", async ({ page }) => {
+  await applyLocalProposal(page);
+  await page.locator("#right-tab-verify").click();
+  const source = page.locator('#simulation-files input[value="src/top.v"]');
+  await source.uncheck();
+  await expect(source).not.toBeChecked();
+  await page.locator("#simulation-time-limit").fill("17");
+  await page.locator("#simulation-time-limit").blur();
+  await expect(page.locator("#simulation-time-limit")).toHaveValue("17");
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  const settings = await page.evaluate(async () => {
+    const { createOpfsStore } = await import("/lib/project-store.mjs");
+    return (await createOpfsStore(navigator.storage).load(document.querySelector("#project-name").textContent)).project.simulation;
+  });
+  expect(settings.files).not.toContain("src/top.v");
+  expect(settings.files).toContain("src/top_tb.v");
+  expect(settings.timeLimitSeconds).toBe(17);
+});
+
+test("write frequency changes preserve the exact AI send preview", async ({ page }) => {
+  const requests = await applyLocalProposal(page);
+  await page.locator("#ai-prompt").fill("設計を説明してください。");
+  await page.locator("#ai-preview-button").click();
+  const body = await page.locator("#ai-preview-body").inputValue();
+  await page.locator("#right-tab-write").click();
+  await page.locator("#advanced-settings summary").click();
+  await page.locator("#frequency-option").selectOption("1000000");
+  await page.locator("#right-tab-ai").click();
+  await expect(page.locator("#ai-preview")).toBeVisible();
+  await expect(page.locator("#ai-preview-body")).toHaveValue(body);
+  await page.locator("#ai-send").click();
+  await expect(page.locator("#ai-chat")).toHaveAttribute("data-state", "proposal_review");
+  expect(requests).toHaveLength(1);
+  expect(requests[0].postData()).toBe(body);
+});
+
 test("hardware busy changes refresh AI verification buttons", async ({ page }) => {
   await stubPageUsb(page);
   await routeWorkerWithFakeUsb(page, { idcode: 0x0000081b });

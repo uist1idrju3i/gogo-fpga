@@ -1990,10 +1990,14 @@ export function initializeIde({
     } catch (error) { projectActionStatus.dataset.outcome = "error"; projectActionStatus.textContent = error.message; }
   });
   renderFsSource(true);
+  let hardwareBusy = !canChangeLibraries();
   document.addEventListener("toolchain:device-busy-change", () => {
     updateProjectDeletionControl();
+    const nextHardwareBusy = !canChangeLibraries();
+    if (hardwareBusy === nextHardwareBusy) return;
+    hardwareBusy = nextHardwareBusy;
     updateSimulationControls();
-    notifyAiContext();
+    document.dispatchEvent(new Event("toolchain:ai-busy-change"));
   });
   document.addEventListener("toolchain:flow-change", () => {
     if (editor) updateEditor();
