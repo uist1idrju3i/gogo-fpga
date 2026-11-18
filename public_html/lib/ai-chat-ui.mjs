@@ -1,7 +1,9 @@
 import { createChatPreview, selectableFiles, sendChatPreview } from "./openrouter-chat.mjs";
 import { parseProposals, proposalDiff, proposalSnapshot } from "./ai-proposals.mjs";
 import { AI_CHAT_INITIAL_STATE, transitionAiChat } from "./ai-chat-flow.mjs";
+import { AI_SKILLS } from "./ai-skills.mjs";
 export { createProposalEditor } from "./ai-proposals.mjs";
+export { selectableFiles } from "./openrouter-chat.mjs";
 
 const ERRORS = {
   empty: "相談文とモデルを入力してください。",
@@ -33,6 +35,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
         <fieldset><legend>直前のビルドログ</legend><div id="ai-context-logs"></div></fieldset>
         <fieldset><legend>問題</legend><div id="ai-context-problems"></div></fieldset>
       </details><p id="ai-context-selection"></p>
+      <label for="ai-skill">相談の種類</label><select id="ai-skill"></select>
       <label for="ai-prompt">相談文</label><textarea id="ai-prompt" rows="4" placeholder="エラーや設計について相談してください"></textarea>
       <button id="ai-preview-button" type="button">送信内容を確認</button>
     </fieldset>
@@ -57,6 +60,10 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     <button id="ai-clear" type="button" class="secondary">会話を消す</button>`;
   panel.append(root);
   const q = (id) => root.querySelector(`#${id}`);
+  for (const { id, label } of AI_SKILLS) {
+    const option = document.createElement("option");
+    option.value = id; option.textContent = label; q("ai-skill").append(option);
+  }
   const choices = { files: new Set(), logs: new Set(), problems: new Set() };
   let history = [], preview = null, proposals = [], snapshot = null, context;
   let state = AI_CHAT_INITIAL_STATE, controller = null, generation = 0, version = 0, applying = false;
@@ -160,11 +167,13 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     controls();
   }
   q("ai-model").addEventListener("input", invalidate); q("ai-prompt").addEventListener("input", invalidate);
+  q("ai-skill").addEventListener("change", invalidate);
   q("ai-preview-button").addEventListener("click", () => {
     q("ai-chat-error").hidden = true;
     try {
       if (!context) throw new Error();
       preview = createChatPreview({ model: q("ai-model").value, prompt: q("ai-prompt").value, history,
+        skill: q("ai-skill").value, project: { ...context.project, files: context.files },
         files: [...context.files].filter(([p]) => choices.files.has(p)), logs: [...context.logs].filter(([p]) => choices.logs.has(p)).map(([tool, text]) => ({ tool, text })),
         problems: context.problems.filter((p) => choices.problems.has(JSON.stringify(p))), origin: location.origin });
       q("ai-preview-body").value = preview.body;
@@ -234,7 +243,8 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     if (file && selectableFiles(context.files).some(([p]) => p === file)) choices.files.add(file);
     const tool = problem?.tool ?? (/\.vhdl?$/.test(file ?? "") ? "ghdl" : /\.cst$/.test(file ?? "") ? "nextpnr" : "yosys");
     if (context.logs.has(tool)) choices.logs.add(tool); else for (const name of context.logs.keys()) choices.logs.add(name);
-    q("ai-prompt").value = `次の問題の原因と修正案を説明してください。変更はファイルごとの全文で提案してください。\n${problem?.message ?? "直前のビルドが失敗しました。"}`;
+    q("ai-skill").value = "explain";
+    q("ai-prompt").value = `次の問題の原因、根拠、修正の手順を説明してください。\n${problem?.message ?? "直前のビルドが失敗しました。"}`;
     refresh(); showPanel(); q("ai-prompt").focus();
   });
   refresh(); send("clear_requested"); controls();
