@@ -113,6 +113,16 @@ test("failed verification preselects its log without sending", async ({ page }) 
   await page.locator("#ai-preview-button").click();
   user = JSON.parse(JSON.parse(await page.locator("#ai-preview-body").inputValue()).messages.at(-1).content);
   expect(user.logs.find(log => log.tool === "formal").text).toContain("assert");
+  await page.locator("#ai-preview-cancel").click();
+  await page.locator("#right-tab-board").click();
+  await page.locator("#synthesis-button").click();
+  await expect(page.locator("#synthesis-stage")).toHaveText("ビルド完了", { timeout: 120000 });
+  await page.locator("#right-tab-verify").click();
+  await expect(page.locator("#ai-explain-simulation")).toBeHidden();
+  await expect(page.locator("#ai-explain-formal")).toBeHidden();
+  await page.locator("#right-tab-ai").click();
+  await expect(page.locator('#ai-context-logs input[value="simulation"]')).toHaveCount(0);
+  await expect(page.locator('#ai-context-logs input[value="formal"]')).toHaveCount(0);
   expect(requests).toHaveLength(1);
 });
 

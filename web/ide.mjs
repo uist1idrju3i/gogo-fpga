@@ -925,6 +925,7 @@ export function initializeIde({
     const diagnostics = [];
     const toolText = new Map();
     latestBuildLogs = toolText;
+    for (const button of Object.values(explainVerification)) button.hidden = true;
     notifyAiContext();
     try {
       await flushPendingSave();
