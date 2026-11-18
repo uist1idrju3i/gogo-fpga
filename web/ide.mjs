@@ -585,6 +585,7 @@ export function initializeIde({
   }
 
   function updateFormalControls() {
+    renderFormalSettings();
     const paths = (project?.files ?? []).map(({ path }) => path);
     const hasHdl = paths.some((path) => /\.(?:v|vh|vhd|vhdl)$/i.test(path));
     const depth = Number(formalDepth.value);
@@ -611,7 +612,6 @@ export function initializeIde({
     formalEdge.disabled = editing;
     formalSolverField.hidden = formalEngine.value !== "smtbmc";
     formalSolver.disabled = editing || formalEngine.value !== "smtbmc";
-    renderFormalSettings();
   }
 
   function persistFormalSettings() {

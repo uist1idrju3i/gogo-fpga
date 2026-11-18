@@ -147,6 +147,18 @@ test("AI verification uses the normal simulation availability for a VHDL project
   expect(requests).toHaveLength(1);
 });
 
+test("switching formal engines enables both start buttons with the default solver", async ({ page }) => {
+  await applyLocalProposal(page);
+  await acceptLocalProposal(page);
+  await page.locator("#right-tab-verify").click();
+  await page.locator("#formal-engine").selectOption("smtbmc");
+  await expect(page.locator("#formal-solver")).not.toHaveValue("");
+  await expect(page.locator("#formal-button")).toBeEnabled();
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.locator("#right-tab-ai").click();
+  await expect(page.locator("#ai-verify-formal")).toBeEnabled();
+});
+
 test("AI formal verification starts the real formal path after applying a proposal", async ({ page }) => {
   const requests = await applyLocalProposal(page);
   await acceptLocalProposal(page);
