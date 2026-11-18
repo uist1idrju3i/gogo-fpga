@@ -10,6 +10,114 @@ const modelCatalog = { data: [
   { id: "example/tiny", context_length: 10, pricing: { prompt: "0", completion: "-1" }, supported_parameters: ["reasoning"] },
 ] };
 
+for (const [index, board] of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"].entries()) {
+  test(`local grading and attached comments for ${board}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1600, height: 1800 });
+    const structured = index % 2 === 0;
+    const value = { comments: [{ id: "simulation", comment: "波形と期待値を見比べてください。" },
+      { id: "design", comment: "AI の主張: 999点です。<img src=x onerror=alert(1)>" }] };
+    const reply = structured ? JSON.stringify(value) : `\`\`\`gogo-fpga-grade\n${JSON.stringify(value)}\n\`\`\``;
+    const requests = await prepareChat(page, { reply });
+    await page.locator("#new-project-button").click();
+    await page.locator("#new-project-name").fill(`grading-${board}`);
+    await page.locator("#new-project-board").selectOption(board);
+    await page.locator("#new-project-create").click();
+    await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await page.locator("#right-tab-ai").click();
+    await expect(page.locator("#ai-grading-total")).toHaveText("合計: 0 / 100 点");
+    await expect(page.locator('.ai-grade-criterion[data-id="simulation"]')).toContainText("未実行");
+    await page.locator("#right-tab-verify").click();
+    await page.locator("#simulation-button").click();
+    await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "ok", { timeout: 120000 });
+    await page.locator("#formal-button").click();
+    await expect(page.locator("#formal-status")).toContainText("検証対象が見つかりません", { timeout: 120000 });
+    await page.locator("#right-tab-ai").click();
+    await expect(page.locator("#ai-grading-total")).toHaveText("合計: 50 / 100 点");
+    await expect(page.locator('.ai-grade-criterion[data-id="formal"]')).toContainText("未実行");
+    expect(requests).toHaveLength(0);
+    if (structured) {
+      await mockModels(page); await page.locator("#ai-models-fetch").click();
+      await expect(page.locator("#ai-models-status")).toContainText("2件");
+      await page.locator("#ai-model").fill("example/paid");
+    }
+    await page.locator("#ai-skill").selectOption("grade");
+    const body = await previewAndSend(page, "検査結果への講評をください。");
+    expect(requests[0].postData()).toBe(body);
+    const payload = JSON.parse(body), user = JSON.parse(payload.messages.at(-1).content);
+    expect(user.grading.rubric.version).toBe(1);
+    expect(user.grading.criteria[0]).toMatchObject({ id: "simulation", status: "合格", score: 50 });
+    expect(user.grading.criteria[1]).toMatchObject({ id: "formal", status: "未実行", score: 0 });
+    expect(user.grading.total).toBe(50);
+    if (structured) expect(payload.response_format.json_schema.name).toBe("gogo_fpga_grade");
+    else expect(payload.response_format).toBeUndefined();
+    await expect(page.locator(".ai-grade-comment")).toHaveCount(2);
+    await expect(page.locator('.ai-grade-criterion[data-id="simulation"] .ai-grade-comment')).toHaveText(value.comments[0].comment);
+    await expect(page.locator("#ai-grading img")).toHaveCount(0);
+    await expect(page.locator("#ai-grading-total")).toHaveText("合計: 50 / 100 点");
+    await expect(page.locator(".ai-proposal")).toHaveCount(0);
+    await page.locator("#ai-grading").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-grade-${board}.png`) });
+    if (index === 0) {
+      await page.locator(".cm-content").press("Control+Home"); await page.locator(".cm-content").press("Enter");
+      await expect(page.locator("#project-status")).toHaveText("保存しました。");
+      await expect(page.locator("#ai-grading-total")).toHaveText("合計: 0 / 100 点");
+      await expect(page.locator('.ai-grade-criterion[data-id="simulation"]')).toContainText("ファイルまたは検証設定が変わりました");
+      await expect(page.locator(".ai-grade-comment")).toHaveCount(0);
+    } else if (index === 1) {
+      await page.locator("#right-tab-verify").click();
+      await page.locator("#simulation-time-limit").fill("9"); await page.locator("#simulation-time-limit").dispatchEvent("change");
+      await page.locator("#right-tab-ai").click();
+      await expect(page.locator("#ai-grading-total")).toHaveText("合計: 0 / 100 点");
+      await expect(page.locator(".ai-grade-comment")).toHaveCount(0);
+    }
+    expect(requests).toHaveLength(1);
+  });
+}
+
+test("grade rejects model score fields and proposal fences without changing the local score", async ({ page }) => {
+  const reply = '```gogo-fpga-grade\n{"comments":[{"id":"design","comment":"100点です","score":100}]}\n```\n' +
+    proposalReply([{ path: "src/top.v", content: "module answer; endmodule", reason: "無視する提案" }]);
+  await prepareChat(page, { reply });
+  await page.locator("#ai-skill").selectOption("grade");
+  await previewAndSend(page, "講評してください。");
+  await expect(page.locator("#ai-chat-response")).toHaveText(reply);
+  await expect(page.locator("#ai-grade-note")).toContainText("講評を項目に結び付けられませんでした");
+  await expect(page.locator("#ai-grading-total")).toHaveText("合計: 0 / 100 点");
+  await expect(page.locator(".ai-grade-comment")).toHaveCount(0);
+  await expect(page.locator(".ai-proposal")).toHaveCount(0);
+  await expect(page.locator(".ai-rejected-proposal")).toHaveCount(0);
+});
+
+test("root rubric file is used and invalid rubric prevents grading and sending", async ({ page }) => {
+  const requests = await prepareChat(page, { reply: '```gogo-fpga-grade\n{"comments":[{"id":"custom","comment":"独自の基準への講評です。"}]}\n```' });
+  const setRubric = async content => {
+    await page.evaluate(async content => {
+      const { createOpfsStore } = await import("/lib/project-store.mjs");
+      const store = createOpfsStore(navigator.storage), loaded = await store.load(document.querySelector("#project-name").textContent);
+      if (!loaded.files.has("rubric.json")) loaded.project.files.push({ path: "rubric.json" });
+      loaded.files.set("rubric.json", content); await store.save(loaded.project, loaded.files);
+    }, content);
+    await page.reload(); await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await page.locator("#right-tab-ai").click(); await page.locator("#ai-connect").click();
+    await expect(page.locator("#ai-auth-status")).toContainText("接続済み");
+  };
+  await setRubric(JSON.stringify({ version: 1, criteria: [{ id: "custom", title: "独自の基準", check: "simulation", points: 70 }] }));
+  await expect(page.locator("#ai-grading-source")).toHaveText("rubric.json の基準を使います。");
+  await expect(page.locator("#ai-grading-total")).toHaveText("合計: 0 / 70 点");
+  await page.locator("#ai-skill").selectOption("grade");
+  const body = await previewAndSend(page, "講評してください。");
+  expect(JSON.parse(JSON.parse(body).messages.at(-1).content).grading.rubric.criteria[0].id).toBe("custom");
+  await expect(page.locator('.ai-grade-criterion[data-id="custom"] .ai-grade-comment')).toHaveText("独自の基準への講評です。");
+  await setRubric('{"version":1,"criteria":[],"score":100}');
+  await expect(page.locator("#ai-grading-error")).toContainText("採点できません");
+  await expect(page.locator("#ai-grading-total")).toBeEmpty();
+  await page.locator("#ai-skill").selectOption("grade"); await page.locator("#ai-prompt").fill("講評してください。");
+  await page.locator("#ai-preview-button").click();
+  await expect(page.locator("#ai-chat-error")).toContainText("rubric.json");
+  await expect(page.locator("#ai-preview")).toBeHidden();
+  expect(requests).toHaveLength(1);
+});
+
 for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
   test(`teacher hint level and editor annotations for ${board}`, async ({ page }) => {
     await page.setViewportSize({ width: 1600, height: 1400 });
@@ -694,7 +802,7 @@ for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
     await expect(page.locator("#project-status")).toHaveText("保存しました。");
     await page.locator("#right-tab-ai").click();
     await expect(page.locator("#ai-skill")).toHaveValue("consult");
-    await expect(page.locator("#ai-skill option")).toHaveCount(7);
+    await expect(page.locator("#ai-skill option")).toHaveCount(8);
     await page.locator("#ai-skill").scrollIntoViewIfNeeded();
     await page.screenshot({ path: resolve(homedir(), "shots", `ai-skill-${board}.png`) });
     await page.locator("#ai-skill").selectOption("formal");

@@ -7,7 +7,7 @@ import { BOARDS } from "../../web/lib/boards.mjs";
 
 test("all frozen skills include data boundaries and only changing skills include the contract", () => {
   assert.ok(Object.isFrozen(AI_SKILLS));
-  assert.deepEqual(AI_SKILLS.map(({ id }) => id), ["consult", "explain", "change", "review", "testbench", "formal", "teach"]);
+  assert.deepEqual(AI_SKILLS.map(({ id }) => id), ["consult", "explain", "change", "review", "testbench", "formal", "teach", "grade"]);
   for (const skill of AI_SKILLS) {
     assert.ok(Object.isFrozen(skill));
     const prompt = buildSystemPrompt(skill.id);
@@ -24,7 +24,7 @@ test("all frozen skills include data boundaries and only changing skills include
       const structured = buildSystemPrompt(skill.id, { structured: true });
       assert.ok(structured.includes("一方だけを null"));
       assert.ok(structured.includes("小さな変更には edits"));
-    } else assert.ok(prompt.includes("コードフェンスは出力しない"));
+    } else if (skill.id !== "grade") assert.ok(prompt.includes("コードフェンスは出力しない"));
   }
 });
 

@@ -1243,7 +1243,11 @@ button.secondary:not(.danger):hover:not(:disabled),
 #ai-chat-error, #ai-rejected-paths { color: #b42318; overflow-wrap: anywhere; }
 .cm-editor .cm-line.cm-ai-hint-line { background-color: #fff3c4; box-shadow: inset 3px 0 #986500; }
 .ai-source-reference { text-decoration: underline; }
-.ai-proposal, .ai-rejected-proposal { border: 1px solid #667085; padding: 0.5rem; margin-block: 0.75rem; }
+.ai-proposal, .ai-rejected-proposal, .ai-grade-criterion { border: 1px solid #667085; padding: 0.5rem; margin-block: 0.75rem; }
+#ai-grading { overflow-wrap: anywhere; }
+#ai-grading-total { font-weight: bold; }
+.ai-grade-criterion h5 { font-size: 1rem; margin-block: 0.25rem; }
+.ai-grade-comment { border-inline-start: 3px solid #667085; padding-inline-start: 0.5rem; white-space: pre-wrap; }
 .ai-proposal[data-decision="accepted"] { border-inline-start: 4px solid #0b57b0; }
 .ai-proposal[data-decision="rejected"] pre { display: none; }
 .ai-proposal button + button { margin-inline-start: 0.5rem; }
