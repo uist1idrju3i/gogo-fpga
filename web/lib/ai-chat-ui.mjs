@@ -1,10 +1,11 @@
 import { createChatPreview, selectableFiles, sendChatPreview } from "./openrouter-chat.mjs";
-import { parseProposals, proposalDiff, proposalSnapshot } from "./ai-proposals.mjs";
+import { proposalDiff, proposalSnapshot } from "./ai-proposals.mjs";
 import { AI_CHAT_INITIAL_STATE, transitionAiChat } from "./ai-chat-flow.mjs";
 import { AI_SKILLS } from "./ai-skills.mjs";
 import { formatUsage } from "./ai-usage.mjs";
 import { compactUserTurn } from "./ai-history.mjs";
-import { parseStructuredAnswer } from "./ai-structured.mjs";
+import { parseAiAnswer } from "./ai-structured.mjs";
+import { parseAiReferences } from "./ai-references.mjs";
 import { fetchModels, formatModelPrice, estimatePreviewTokens } from "./openrouter-models.mjs";
 export { createProposalEditor } from "./ai-proposals.mjs";
 export { selectableFiles } from "./openrouter-chat.mjs";
@@ -42,6 +43,9 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
         <fieldset><legend>問題</legend><div id="ai-context-problems"></div></fieldset>
       </details><p id="ai-context-selection"></p>
       <label for="ai-skill">相談の種類</label><select id="ai-skill"></select>
+      <div id="ai-hint-option" hidden><label for="ai-hint-level">ヒントの段階</label><select id="ai-hint-level">
+        <option value="1">1: 見る場所・概念</option><option value="2">2: 具体的な方向</option><option value="3">3: 答えに近い説明（完全なコードなし）</option>
+      </select></div>
       <label for="ai-prompt">相談文</label><textarea id="ai-prompt" rows="4" placeholder="エラーや設計について相談してください"></textarea>
       <label id="ai-resend-history-option" hidden><input id="ai-resend-history" type="checkbox">以前の資料も全文で送り直す</label>
       <button id="ai-preview-button" type="button">送信内容を確認</button>
@@ -60,6 +64,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     </section>
     <button id="ai-stop" type="button" class="secondary" hidden>停止</button>
     <section id="ai-answer" hidden><h4>AI の応答</h4><pre id="ai-chat-response" role="log" aria-live="polite" tabindex="0"></pre><p id="ai-usage" role="status"></p></section>
+    <button id="ai-dismiss-annotations" type="button" class="secondary" hidden>行のヒント表示を消す</button>
     <section id="ai-proposals" hidden><h4>変更提案の確認</h4>
       <p>各ファイルの差分を確認して採否を選び、まとめて適用で確定します。選んだ変更は1回で保存します。</p>
       <div id="ai-proposal-files"></div><p id="ai-apply-reason" role="status"></p>
@@ -87,10 +92,40 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   let accepted = new Set(), lastKey = getKey();
   let models = null, loadingModels = false;
   let verificationProject = null;
+  let annotationContext = null;
+  function dismissAnnotations() {
+    annotationContext = null;
+    q("ai-dismiss-annotations").hidden = true;
+    q("ai-chat-response").textContent = q("ai-chat-response").textContent;
+    document.dispatchEvent(new CustomEvent("toolchain:ai-annotations", { detail: { references: [] } }));
+  }
+  function renderAnswer(text, selected, files) {
+    const response = q("ai-chat-response"); response.textContent = "";
+    const references = selected.skill === "teach" ? parseAiReferences(text, files) : [];
+    let from = 0;
+    for (const reference of references) {
+      const before = document.createElement("span"); before.textContent = text.slice(from, reference.from);
+      const link = document.createElement("a"); link.href = "#editor-mount";
+      link.textContent = text.slice(reference.from, reference.to); link.className = "ai-source-reference";
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        if (!annotationContext) return;
+        document.dispatchEvent(new CustomEvent("toolchain:ai-reference", { detail: { ...reference, projectId: annotationContext.projectId } }));
+      });
+      response.append(before, link); from = reference.to;
+    }
+    const after = document.createElement("span"); after.textContent = text.slice(from); response.append(after);
+    if (references.length) {
+      annotationContext = { projectId: snapshot.projectId, files };
+      q("ai-dismiss-annotations").hidden = false;
+      document.dispatchEvent(new CustomEvent("toolchain:ai-annotations", { detail: { ...annotationContext, references } }));
+    }
+  }
   function send(event, guards) { state = transitionAiChat(state, event, guards); root.dataset.state = state; }
   function busy() { return Boolean(controller); }
   function controls() {
     const current = workspace.getContext();
+    q("ai-hint-option").hidden = q("ai-skill").value !== "teach";
     q("ai-local-verify").hidden = verificationProject === null || verificationProject !== current?.projectId;
     for (const kind of ["build", "simulation", "formal"]) {
       const button = q(`ai-verify-${kind}`);
@@ -161,6 +196,8 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   function refresh() {
     const next = workspace.getContext();
     if (!next) { controls(); return; }
+    if (annotationContext && (next.projectId !== annotationContext.projectId ||
+        [...annotationContext.files].some(([path, content]) => next.files.get(path) !== content))) dismissAnnotations();
     if (next.projectId !== context?.projectId) {
       verificationProject = null;
       for (const selected of Object.values(choices)) selected.clear();
@@ -224,6 +261,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   }
   q("ai-model").addEventListener("input", () => { invalidate(); renderModelDetails(); }); q("ai-prompt").addEventListener("input", invalidate);
   q("ai-skill").addEventListener("change", invalidate);
+  q("ai-hint-level").addEventListener("change", invalidate);
   q("ai-resend-history").addEventListener("change", invalidate);
   q("ai-preview-button").addEventListener("click", () => {
     q("ai-chat-error").hidden = true;
@@ -233,7 +271,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       controls();
       if (!context) throw new Error();
       preview = createChatPreview({ model: q("ai-model").value, prompt: q("ai-prompt").value, history, models,
-        skill: q("ai-skill").value, resendHistory: q("ai-resend-history").checked, project: { ...context.project, files: context.files },
+        skill: q("ai-skill").value, hintLevel: Number(q("ai-hint-level").value), resendHistory: q("ai-resend-history").checked, project: { ...context.project, files: context.files },
         files: [...context.files].filter(([p]) => choices.files.has(p)), logs: [...context.logs].filter(([p]) => choices.logs.has(p)).map(([tool, text]) => ({ tool, text })),
         problems: context.problems.filter((p) => choices.problems.has(JSON.stringify(p))), origin: location.origin });
       q("ai-preview-body").value = preview.body;
@@ -253,6 +291,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     const selected = preview, key = getKey(), selectedVersion = version, run = ++generation;
     send("send_requested", { connected: true, preview_current: true });
     if (state !== "sending") return;
+    dismissAnnotations();
     const abort = new AbortController(); controller = abort;
     q("ai-chat-error").hidden = true; q("ai-chat-response").textContent = ""; q("ai-answer").hidden = false;
     q("ai-usage").textContent = "";
@@ -271,8 +310,11 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       if (run !== generation) return;
       abort.signal.throwIfAborted();
       history.push({ role: "user", content: selected.user, compact }, { role: "assistant", content: answer }); renderHistory();
-      const result = selected.structured ? parseStructuredAnswer(answer, snapshot.files) : { answer, proposals: parseProposals(answer, snapshot.files) };
-      q("ai-chat-response").textContent = result.answer;
+      const result = parseAiAnswer(answer, selected, snapshot.files);
+      const sentFiles = new Map(JSON.parse(selected.user).files.map(({ path, content }) => [path, content]));
+      const current = workspace.getContext();
+      if (current?.projectId === snapshot.projectId && [...sentFiles].every(([path, content]) => current.files.get(path) === content)) renderAnswer(result.answer, selected, sentFiles);
+      else q("ai-chat-response").textContent = result.answer;
       send("response_completed"); renderProposals(result.proposals, snapshot.files);
     } catch (error) {
       if (run !== generation) return;
@@ -297,6 +339,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     finally { applying = false; controls(); }
   });
   function clear(event = "clear_requested") {
+    dismissAnnotations();
     verificationProject = null;
     generation++; controller?.abort(); controller = null; history = []; preview = null; snapshot = null;
     q("ai-resend-history").checked = false;
@@ -305,6 +348,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     send(event); renderHistory(); renderProposals({ valid: [], rejected: [] }, new Map()); controls();
   }
   q("ai-clear").addEventListener("click", () => clear());
+  q("ai-dismiss-annotations").addEventListener("click", dismissAnnotations);
   for (const kind of ["build", "simulation", "formal"]) {
     q(`ai-verify-${kind}`).addEventListener("click", () => {
       const current = workspace.getContext();

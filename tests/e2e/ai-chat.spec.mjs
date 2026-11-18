@@ -10,6 +10,100 @@ const modelCatalog = { data: [
   { id: "example/tiny", context_length: 10, pricing: { prompt: "0", completion: "-1" }, supported_parameters: ["reasoning"] },
 ] };
 
+for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
+  test(`teacher hint level and editor annotations for ${board}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1600, height: 1400 });
+    const requests = await prepareChat(page, { reply: "ヒント2: src/top.v:3 の信号と src/top_tb.v:4 の入力を見比べてください。\n不明な場所: src/missing.v:1、範囲外: src/top.v:99999。\n<img src=x onerror=alert(1)>" });
+    await page.locator("#new-project-button").click();
+    await page.locator("#new-project-name").fill(`teacher-${board}`);
+    await page.locator("#new-project-board").selectOption(board);
+    await page.locator("#new-project-create").click();
+    await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await page.locator("#right-tab-ai").click();
+    await mockModels(page);
+    await page.locator("#ai-models-fetch").click();
+    await expect(page.locator("#ai-models-status")).toContainText("2件");
+    await page.locator("#ai-model").fill("example/paid");
+    await page.locator("#ai-skill").selectOption("teach");
+    await expect(page.locator("#ai-hint-level")).toHaveValue("1");
+    await page.locator("#ai-context-picker summary").click();
+    await page.locator('#ai-context-files input[value="src/top.v"]').check();
+    await page.locator('#ai-context-files input[value="src/top_tb.v"]').check();
+    await page.locator("#ai-context-picker summary").click();
+    await page.locator("#ai-prompt").fill("回路を自分で直すためのヒントをください。");
+    await page.locator("#ai-preview-button").click();
+    const initial = JSON.parse(await page.locator("#ai-preview-body").inputValue());
+    expect(JSON.parse(initial.messages.at(-1).content).request).toContain("ヒントの段階: 1");
+    await page.locator("#ai-preview-cancel").click();
+    await page.locator("#ai-hint-level").selectOption("2");
+    const body = await previewAndSend(page, "回路を自分で直すためのヒントをください。");
+    expect(requests[0].postData()).toBe(body);
+    expect(JSON.parse(JSON.parse(body).messages.at(-1).content).request).toContain("ヒントの段階: 2");
+    expect(JSON.parse(body).response_format).toBeUndefined();
+    expect(JSON.parse(body).provider).toBeUndefined();
+    await expect(page.locator(".ai-source-reference")).toHaveCount(2);
+    await expect(page.locator("#ai-chat-response img")).toHaveCount(0);
+    await expect(page.locator("#ai-chat-response")).toContainText("<img src=x onerror=alert(1)>");
+    await expect(page.locator(".ai-proposal")).toHaveCount(0);
+    const testbench = await projectFile(page, "src/top_tb.v");
+    await page.getByRole("link", { name: "src/top_tb.v:4", exact: true }).click();
+    await expect(page.locator('#editor-tabs [role="tab"][aria-selected="true"]')).toContainText("top_tb.v");
+    await expect(page.locator(".cm-ai-hint-line")).toHaveText(testbench.split("\n")[3]);
+    await expect(page.locator(".cm-ai-hint-line")).toHaveCSS("background-color", "rgb(255, 243, 196)");
+    await expect.poll(() => page.locator(".cm-content").evaluate(element => {
+      const node = element.ownerDocument.getSelection()?.anchorNode;
+      return (node?.nodeType === Node.ELEMENT_NODE ? node : node?.parentElement)?.closest(".cm-line")?.textContent;
+    })).toBe(testbench.split("\n")[3]);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-teacher-${board}.png`), fullPage: true });
+    await page.locator("#ai-dismiss-annotations").click();
+    await expect(page.locator(".cm-ai-hint-line")).toHaveCount(0);
+    await expect(page.locator(".ai-source-reference")).toHaveCount(0);
+    expect(requests).toHaveLength(1);
+  });
+}
+
+test("teacher ignores proposal fences and clears annotations on send, edits and project switch", async ({ page }) => {
+  await slowChat(page);
+  const reply = "src/top.v:3 と、送信していない src/top_tb.v:4 を調べてください。\n" +
+    proposalReply([{ path: "src/top.v", content: "module answer; endmodule", reason: "無視する提案" }]) +
+    '\n```gogo-fpga-edits\n{"changes":[{"path":"src/top.v","edits":[{"search":"module top","replace":"module answer"}]}]}\n```';
+  const requests = await prepareChat(page, { reply });
+  await page.locator("#ai-skill").selectOption("teach");
+  await page.locator("#ai-hint-level").selectOption("3");
+  const original = await projectFile(page);
+  await previewAndSend(page, "段階3のヒントをください。");
+  await expect(page.locator(".ai-source-reference")).toHaveCount(1);
+  await expect(page.locator(".ai-proposal")).toHaveCount(0);
+  await expect(page.locator(".ai-rejected-proposal")).toHaveCount(0);
+  await expect(page.locator("#ai-apply-selected")).toBeHidden();
+  expect(await projectFile(page)).toBe(original);
+  await page.locator("#ai-prompt").fill("もう一度ヒントをください。");
+  await page.locator("#ai-preview-button").click();
+  await expect(page.locator(".cm-ai-hint-line")).toHaveCount(1);
+  await page.locator("#ai-send").click();
+  await expect(page.locator("#ai-chat")).toHaveAttribute("data-state", "streaming");
+  await expect(page.locator(".cm-ai-hint-line")).toHaveCount(0);
+  await expect(page.locator("#ai-dismiss-annotations")).toBeHidden();
+  await expect(page.locator(".ai-source-reference")).toHaveCount(1);
+  await page.locator(".ai-source-reference").click();
+  await page.locator(".cm-content").press("Control+Home");
+  await page.locator(".cm-content").press("Enter");
+  await expect(page.locator(".cm-ai-hint-line")).toHaveCount(0);
+  await expect(page.locator(".ai-source-reference")).toHaveCount(0);
+  await expect(page.locator("#ai-dismiss-annotations")).toBeHidden();
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await previewAndSend(page, "今の内容を見てください。");
+  await expect(page.locator(".ai-source-reference")).toHaveCount(1);
+  await page.locator("#new-project-button").click();
+  await page.locator("#new-project-name").fill("teacher-other");
+  await page.locator("#new-project-create").click();
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await expect(page.locator(".cm-ai-hint-line")).toHaveCount(0);
+  await expect(page.locator(".ai-source-reference")).toHaveCount(0);
+  expect(requests).toHaveLength(3);
+});
+
 async function applyLocalProposal(page, changes = [{ path: "src/ai_check.v", content: "module ai_check; endmodule\n", reason: "検査用" }]) {
   const requests = await prepareChat(page, { reply: proposalReply(changes) });
   return requests;
@@ -600,7 +694,7 @@ for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
     await expect(page.locator("#project-status")).toHaveText("保存しました。");
     await page.locator("#right-tab-ai").click();
     await expect(page.locator("#ai-skill")).toHaveValue("consult");
-    await expect(page.locator("#ai-skill option")).toHaveCount(6);
+    await expect(page.locator("#ai-skill option")).toHaveCount(7);
     await page.locator("#ai-skill").scrollIntoViewIfNeeded();
     await page.screenshot({ path: resolve(homedir(), "shots", `ai-skill-${board}.png`) });
     await page.locator("#ai-skill").selectOption("formal");

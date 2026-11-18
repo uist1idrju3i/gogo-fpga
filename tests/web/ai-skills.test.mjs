@@ -7,7 +7,7 @@ import { BOARDS } from "../../web/lib/boards.mjs";
 
 test("all frozen skills include data boundaries and only changing skills include the contract", () => {
   assert.ok(Object.isFrozen(AI_SKILLS));
-  assert.deepEqual(AI_SKILLS.map(({ id }) => id), ["consult", "explain", "change", "review", "testbench", "formal"]);
+  assert.deepEqual(AI_SKILLS.map(({ id }) => id), ["consult", "explain", "change", "review", "testbench", "formal", "teach"]);
   for (const skill of AI_SKILLS) {
     assert.ok(Object.isFrozen(skill));
     const prompt = buildSystemPrompt(skill.id);
