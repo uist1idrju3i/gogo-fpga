@@ -424,6 +424,7 @@ export function initializeIde({
     }
     updateSimulationControls();
     updateFormalControls();
+    document.dispatchEvent(new Event("toolchain:ai-busy-change"));
   }
 
   function renderSimulationSettings() {
@@ -465,24 +466,25 @@ export function initializeIde({
     }
   }
 
+  function simulationStartAvailable() {
+    const timeLimit = Number(simulationTimeLimit.value);
+    return !libraryBusy && !simulationRunning && !buildRunning && !formalRunning && canStartSimulation() &&
+      (project?.files ?? []).some(({ path }) => /\.(?:v|vh)$/i.test(path)) &&
+      BOARDS.some(({ id }) => id === boardSelect.value) && Boolean(simulationTop.value.trim()) &&
+      Number.isInteger(timeLimit) && timeLimit >= 1 && timeLimit <= 120;
+  }
+
   function updateSimulationControls() {
     const paths = (project?.files ?? []).map(({ path }) => path);
     const hasVerilog = paths.some((path) => /\.(?:v|vh)$/i.test(path));
     const hasVhdl = paths.some((path) => /\.(?:vhd|vhdl)$/i.test(path));
-    const board = BOARDS.find(({ id }) => id === boardSelect.value);
     simulationButton.textContent = simulationRunning ? "停止" : "シミュレーション";
     simulationReason.textContent = !hasVerilog && hasVhdl
       ? "VHDL のシミュレーションはできません（Verilog の testbench を使ってください）"
       : !hasVerilog
         ? "Verilog ファイルを含むプロジェクトを開いてください。"
         : "";
-    simulationButton.disabled = libraryBusy || (simulationRunning
-      ? false
-      : !hasVerilog || !board || buildRunning || formalRunning || !canStartSimulation() ||
-        !simulationTop.value.trim() ||
-        !Number.isInteger(Number(simulationTimeLimit.value)) ||
-        Number(simulationTimeLimit.value) < 1 ||
-        Number(simulationTimeLimit.value) > 120);
+    simulationButton.disabled = libraryBusy || (!simulationRunning && !simulationStartAvailable());
     simulationTop.disabled = !project || simulationRunning || buildRunning || libraryBusy;
     simulationTimeLimit.disabled = !project || simulationRunning || buildRunning || libraryBusy;
     renderSimulationSettings();
@@ -583,6 +585,7 @@ export function initializeIde({
   }
 
   function updateFormalControls() {
+    renderFormalSettings();
     const paths = (project?.files ?? []).map(({ path }) => path);
     const hasHdl = paths.some((path) => /\.(?:v|vh|vhd|vhdl)$/i.test(path));
     const depth = Number(formalDepth.value);
@@ -609,7 +612,6 @@ export function initializeIde({
     formalEdge.disabled = editing;
     formalSolverField.hidden = formalEngine.value !== "smtbmc";
     formalSolver.disabled = editing || formalEngine.value !== "smtbmc";
-    renderFormalSettings();
   }
 
   function persistFormalSettings() {
@@ -761,6 +763,7 @@ export function initializeIde({
     onSimulationStateChange(true);
     updateSynthesisControls();
     simulationStatus.dataset.outcome = "running";
+    explainVerification.simulation.hidden = true;
     workflow.verify("実行中");
     simulationStatus.textContent = "シミュレーションを実行しています。";
     programLog.textContent = "";
@@ -805,6 +808,7 @@ export function initializeIde({
       if (version === simulationVersion) {
         simulationRunning = false;
         onSimulationStateChange(false);
+        finishAiVerification("simulation", simulationStatus);
         updateSynthesisControls();
       }
     }
@@ -831,6 +835,7 @@ export function initializeIde({
     formalRunning = true;
     updateSynthesisControls();
     formalStatus.dataset.outcome = "running";
+    explainVerification.formal.hidden = true;
     workflow.verify("実行中");
     formalStatus.textContent = "形式検証を実行しています。";
     programLog.textContent = "";
@@ -889,6 +894,7 @@ export function initializeIde({
       if (version === formalVersion) {
         formalAssetController = null;
         formalRunning = false;
+        finishAiVerification("formal", formalStatus);
         updateSynthesisControls();
       }
     }
@@ -920,6 +926,7 @@ export function initializeIde({
     const diagnostics = [];
     const toolText = new Map();
     latestBuildLogs = toolText;
+    for (const button of Object.values(explainVerification)) button.hidden = true;
     notifyAiContext();
     try {
       await flushPendingSave();
@@ -1203,7 +1210,13 @@ export function initializeIde({
       workflow.send("build_cancelled");
       onBuildStateChange(libraryBusy);
     }
-    if (designChanged) workflow.edit();
+    if (designChanged) {
+      for (const kind of ["simulation", "formal"]) {
+        latestBuildLogs.delete(kind);
+        explainVerification[kind].hidden = true;
+      }
+      workflow.edit();
+    }
     notifyAiContext();
     clearTimeout(saveTimer);
     setProjectStatus("変更を保存しています。");
@@ -1542,6 +1555,7 @@ export function initializeIde({
   function activateProject(loaded) {
     aiProjectVersion++;
     latestBuildLogs = new Map();
+    for (const button of Object.values(explainVerification)) button.hidden = true;
     currentProblems = [];
     document.querySelector("#build-summary").hidden = true;
     workflow.reset();
@@ -1976,7 +1990,15 @@ export function initializeIde({
     } catch (error) { projectActionStatus.dataset.outcome = "error"; projectActionStatus.textContent = error.message; }
   });
   renderFsSource(true);
-  document.addEventListener("toolchain:device-busy-change", updateProjectDeletionControl);
+  let hardwareBusy = !canChangeLibraries();
+  document.addEventListener("toolchain:device-busy-change", () => {
+    updateProjectDeletionControl();
+    const nextHardwareBusy = !canChangeLibraries();
+    if (hardwareBusy === nextHardwareBusy) return;
+    hardwareBusy = nextHardwareBusy;
+    updateSimulationControls();
+    document.dispatchEvent(new Event("toolchain:ai-busy-change"));
+  });
   document.addEventListener("toolchain:flow-change", () => {
     if (editor) updateEditor();
     updateBoardInformation();
@@ -1993,9 +2015,36 @@ export function initializeIde({
     const files = new Map(fileContents);
     for (const [path, content] of selectableFiles(files)) files.set(path, content);
     return { projectId: `${project.name}:${aiProjectVersion}`, revision: workflow.revision,
-      project, files, activeFile: activeTab, logs: new Map(latestBuildLogs), problems: [...currentProblems] };
+      project, files, activeFile: activeTab, logs: new Map(latestBuildLogs), problems: [...currentProblems],
+      verificationReady: { simulation: simulationStartAvailable(), formal: !formalButton.disabled } };
   }
-  const aiBusy = () => !project || libraryBusy || saveTimer !== null || projectSaveCount > 0 || buildRunning || simulationRunning || formalRunning || workflow.state === "writing";
+  const aiBusy = () => !project || libraryBusy || !canChangeLibraries() || saveTimer !== null || projectSaveCount > 0 || buildRunning || simulationRunning || formalRunning || workflow.state === "writing";
+  let aiRequestBusy = false;
+  document.addEventListener("toolchain:ai-request-busy", ({ detail }) => { aiRequestBusy = detail?.busy === true; });
+  document.addEventListener("toolchain:ai-verify", ({ detail }) => {
+    if (aiBusy() || aiRequestBusy) return;
+    const kind = detail?.kind;
+    if (!["build", "simulation", "formal"].includes(kind) || kind !== "build" && !project[kind]?.top?.trim()) return;
+    if (kind === "simulation" && !simulationStartAvailable() || kind === "formal" && formalButton.disabled) return;
+    document.querySelector(`#right-tab-${kind === "build" ? "board" : "verify"}`).click();
+    updateTabs("log");
+    if (kind === "build") void runProjectBuild();
+    else if (kind === "simulation") void runProjectSimulation();
+    else void runProjectFormal();
+  });
+  const explainVerification = {};
+  for (const [kind, label, status] of [["simulation", "シミュレーション", simulationStatus], ["formal", "形式検証", formalStatus]]) {
+    const button = document.createElement("button");
+    button.id = `ai-explain-${kind}`; button.type = "button"; button.className = "secondary"; button.hidden = true;
+    button.textContent = `${label}の失敗を AI に説明してもらう`;
+    status.after(button); explainVerification[kind] = button;
+    button.addEventListener("click", () => document.dispatchEvent(new CustomEvent("toolchain:ai-explain", { detail: { tool: kind, message: status.textContent } })));
+  }
+  function finishAiVerification(kind, status) {
+    latestBuildLogs.set(kind, `${status.textContent}\n${programLog.textContent}`);
+    explainVerification[kind].hidden = !["failed", "timeout"].includes(status.dataset.outcome);
+    notifyAiContext();
+  }
   const explainBuild = document.createElement("button");
   explainBuild.id = "ai-explain-build";
   explainBuild.type = "button";

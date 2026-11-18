@@ -3,11 +3,306 @@ import { prepareChat, previewAndSend, projectFile, proposalReply, slowChat } fro
 import { homedir } from "node:os";
 import { resolve } from "node:path";
 import { MAX_MODELS_BYTES, MODELS_URL } from "../../web/lib/openrouter-models.mjs";
+import { routeWorkerWithFakeUsb, stubPageUsb } from "./fake-usb-helpers.mjs";
 
 const modelCatalog = { data: [
   { id: "example/paid", context_length: 32768, pricing: { prompt: "0.0000025", completion: "0.00001" }, supported_parameters: ["tools", "structured_outputs"] },
   { id: "example/tiny", context_length: 10, pricing: { prompt: "0", completion: "-1" }, supported_parameters: ["reasoning"] },
 ] };
+
+async function applyLocalProposal(page, changes = [{ path: "src/ai_check.v", content: "module ai_check; endmodule\n", reason: "検査用" }]) {
+  const requests = await prepareChat(page, { reply: proposalReply(changes) });
+  return requests;
+}
+
+async function acceptLocalProposal(page) {
+  await previewAndSend(page, "変更を提案してください。");
+  await page.locator(".ai-proposal button").filter({ hasText: "この変更を適用" }).click();
+  await page.locator("#ai-apply-selected").click();
+  await expect(page.locator(".ai-proposal")).toHaveCount(0);
+  await expect(page.locator("#ai-local-verify")).toBeVisible();
+}
+
+for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
+  test(`local verification after apply for ${board}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1100 });
+    const requests = await applyLocalProposal(page);
+    await page.locator("#new-project-button").click();
+    await page.locator("#new-project-name").fill(`local-${board}`);
+    await page.locator("#new-project-board").selectOption(board);
+    await page.locator("#new-project-create").click();
+    await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await page.locator("#right-tab-ai").click();
+    await acceptLocalProposal(page);
+    await expect(page.locator("#ai-verify-simulation")).toBeVisible();
+    await expect(page.locator("#ai-verify-formal")).toBeVisible();
+    await page.locator("#ai-local-verify").evaluate(element => element.scrollIntoView({ block: "start" }));
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-verify-${board}.png`) });
+    if (board === "tangnano1k") {
+      const sent = [];
+      page.on("request", request => { if (new URL(request.url()).hostname === "openrouter.ai") sent.push(request.url()); });
+      await page.locator("#ai-verify-build").click();
+      await expect(page.locator("#synthesis-stage")).toHaveText("ビルド完了", { timeout: 120000 });
+      await expect(page.locator("#bottom-tab-log")).toHaveAttribute("aria-selected", "true");
+      expect(sent).toEqual([]);
+      await page.locator("#right-tab-ai").click();
+      await page.locator("#ai-undo").click();
+      await expect(page.locator("#ai-local-verify")).toBeHidden();
+      await expect(page.locator("#ai-undo")).toBeHidden();
+    } else if (board === "tangnano4k") {
+      await page.locator("#ai-preview-button").click();
+      await expect(page.locator("#ai-local-verify")).toBeHidden();
+    } else if (board === "tangnano9k") {
+      await page.locator("#ai-clear").click();
+      await expect(page.locator("#ai-local-verify")).toBeHidden();
+    } else {
+      await page.locator("#project-select").selectOption("blink");
+      await expect(page.locator("#project-name")).toHaveText("blink");
+      await expect(page.locator("#ai-local-verify")).toBeHidden();
+    }
+    expect(requests).toHaveLength(1);
+  });
+}
+
+test("local simulation cannot be stopped by the AI verification action", async ({ page }) => {
+  await page.addInitScript(() => {
+    const NativeWorker = Worker;
+    window.aiSimulationStops = 0;
+    window.Worker = class extends NativeWorker {
+      constructor(url, options) { super(url, options); this.aiSimulation = String(url).includes("sim-worker"); }
+      terminate() { if (this.aiSimulation) window.aiSimulationStops++; return super.terminate(); }
+    };
+  });
+  const requests = await applyLocalProposal(page, [{ path: "src/top_tb.v", content: "module top_tb; reg clk=0; always #1 clk=~clk; initial begin $dumpfile(\"wave.vcd\"); $dumpvars(0,top_tb); end endmodule\n", reason: "停止の検査" }]);
+  await acceptLocalProposal(page);
+  await page.locator("#ai-verify-simulation").click();
+  await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "running");
+  await page.locator("#right-tab-ai").click();
+  await expect(page.locator("#ai-verify-build")).toBeDisabled();
+  await expect(page.locator("#ai-verify-simulation")).toBeDisabled();
+  await expect(page.locator("#ai-verify-formal")).toBeDisabled();
+  const stops = await page.evaluate(() => window.aiSimulationStops);
+  await page.evaluate(() => {
+    document.querySelector("#ai-verify-simulation").dispatchEvent(new MouseEvent("click"));
+    document.dispatchEvent(new CustomEvent("toolchain:ai-verify", { detail: { kind: "simulation" } }));
+  });
+  expect(await page.evaluate(() => window.aiSimulationStops)).toBe(stops);
+  await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "running");
+  await page.locator("#right-tab-verify").click();
+  await page.locator("#simulation-button").click();
+  await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "stopped");
+  expect(requests).toHaveLength(1);
+});
+
+test("failed verification preselects its log without sending", async ({ page }) => {
+  const requests = await applyLocalProposal(page, [{ path: "src/top_tb.v", content: "module top_tb; initial begin #10; $finish; end endmodule\n", reason: "波形なしの検査" }]);
+  await acceptLocalProposal(page);
+  await page.locator("#ai-verify-simulation").click();
+  await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "failed");
+  await page.locator("#ai-explain-simulation").click();
+  await expect(page.locator('#ai-context-logs input[value="simulation"]')).toBeChecked();
+  await expect(page.locator("#ai-skill")).toHaveValue("explain");
+  await page.locator("#ai-preview-button").click();
+  let user = JSON.parse(JSON.parse(await page.locator("#ai-preview-body").inputValue()).messages.at(-1).content);
+  expect(user.logs.find(log => log.tool === "simulation").text).toContain("VCD");
+  await page.locator("#ai-preview-cancel").click();
+  await page.locator("#right-tab-verify").click();
+  await page.locator("#formal-button").click();
+  await expect(page.locator("#formal-status")).toHaveAttribute("data-outcome", "failed", { timeout: 120000 });
+  await page.locator("#ai-explain-formal").click();
+  await expect(page.locator('#ai-context-logs input[value="formal"]')).toBeChecked();
+  await page.locator("#ai-preview-button").click();
+  user = JSON.parse(JSON.parse(await page.locator("#ai-preview-body").inputValue()).messages.at(-1).content);
+  expect(user.logs.find(log => log.tool === "formal").text).toContain("assert");
+  await page.locator("#ai-preview-cancel").click();
+  await page.locator("#right-tab-board").click();
+  await page.locator("#synthesis-button").click();
+  await expect(page.locator("#synthesis-stage")).toHaveText("ビルド完了", { timeout: 120000 });
+  await page.locator("#right-tab-verify").click();
+  await expect(page.locator("#ai-explain-simulation")).toBeHidden();
+  await expect(page.locator("#ai-explain-formal")).toBeHidden();
+  await page.locator("#right-tab-ai").click();
+  await expect(page.locator('#ai-context-logs input[value="simulation"]')).toHaveCount(0);
+  await expect(page.locator('#ai-context-logs input[value="formal"]')).toHaveCount(0);
+  expect(requests).toHaveLength(1);
+});
+
+test("AI verification uses the normal simulation availability for a VHDL project", async ({ page }) => {
+  const requests = await applyLocalProposal(page, [{ path: "src/ai_check.vhd", content: "entity ai_check is end entity; architecture rtl of ai_check is begin end architecture;\n", reason: "VHDL の検査" }]);
+  await page.locator("#new-project-button").click();
+  await page.locator("#new-project-name").fill("local-vhdl");
+  await page.locator("#new-project-language").selectOption("vhdl");
+  await page.locator("#new-project-create").click();
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.locator("#right-tab-ai").click();
+  await acceptLocalProposal(page);
+  await expect(page.locator("#simulation-button")).toBeDisabled();
+  await expect(page.locator("#ai-verify-simulation")).toBeDisabled();
+  const outcome = await page.locator("#simulation-status").getAttribute("data-outcome");
+  await page.evaluate(() => {
+    document.querySelector("#ai-verify-simulation").dispatchEvent(new MouseEvent("click"));
+    document.dispatchEvent(new CustomEvent("toolchain:ai-verify", { detail: { kind: "simulation" } }));
+  });
+  await expect(page.locator("#right-tab-ai")).toHaveAttribute("aria-selected", "true");
+  expect(await page.locator("#simulation-status").getAttribute("data-outcome")).toBe(outcome);
+  expect(requests).toHaveLength(1);
+});
+
+test("simulation file and time limit edits survive form input events", async ({ page }) => {
+  await applyLocalProposal(page);
+  await page.locator("#right-tab-verify").click();
+  const source = page.locator('#simulation-files input[value="src/top.v"]');
+  await source.uncheck();
+  await expect(source).not.toBeChecked();
+  await page.locator("#simulation-time-limit").fill("17");
+  await page.locator("#simulation-time-limit").blur();
+  await expect(page.locator("#simulation-time-limit")).toHaveValue("17");
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  const settings = await page.evaluate(async () => {
+    const { createOpfsStore } = await import("/lib/project-store.mjs");
+    return (await createOpfsStore(navigator.storage).load(document.querySelector("#project-name").textContent)).project.simulation;
+  });
+  expect(settings.files).not.toContain("src/top.v");
+  expect(settings.files).toContain("src/top_tb.v");
+  expect(settings.timeLimitSeconds).toBe(17);
+});
+
+test("write frequency changes preserve the exact AI send preview", async ({ page }) => {
+  const requests = await applyLocalProposal(page);
+  await page.locator("#ai-prompt").fill("設計を説明してください。");
+  await page.locator("#ai-preview-button").click();
+  const body = await page.locator("#ai-preview-body").inputValue();
+  await page.locator("#right-tab-write").click();
+  await page.locator("#advanced-settings summary").click();
+  await page.locator("#frequency-option").selectOption("1000000");
+  await page.locator("#right-tab-ai").click();
+  await expect(page.locator("#ai-preview")).toBeVisible();
+  await expect(page.locator("#ai-preview-body")).toHaveValue(body);
+  await page.locator("#ai-send").click();
+  await expect(page.locator("#ai-chat")).toHaveAttribute("data-state", "proposal_review");
+  expect(requests).toHaveLength(1);
+  expect(requests[0].postData()).toBe(body);
+});
+
+test("hardware busy changes refresh AI verification buttons", async ({ page }) => {
+  await stubPageUsb(page);
+  await routeWorkerWithFakeUsb(page, { idcode: 0x0000081b });
+  let releaseWorker;
+  await page.route("**/worker.js", async (route) => {
+    await new Promise((resolve) => { releaseWorker = resolve; });
+    await route.fallback();
+  });
+  const requests = await applyLocalProposal(page);
+  await page.locator("#board-select").selectOption("tangnano20k");
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await acceptLocalProposal(page);
+  await expect(page.locator("#ai-verify-simulation")).toBeEnabled();
+  await page.locator("#right-tab-write").click();
+  await page.locator("#advanced-settings summary").click();
+  await page.locator('input[name="operation"][value="erase"]').check();
+  await page.getByRole("button", { name: "消去する", exact: true }).click();
+  await page.locator("#erase-confirm").click();
+  try {
+    await expect.poll(() => typeof releaseWorker).toBe("function");
+    await page.locator("#right-tab-ai").click();
+    for (const kind of ["build", "simulation", "formal"]) {
+      await expect(page.locator(`#ai-verify-${kind}`)).toBeDisabled();
+    }
+    await page.evaluate(() => document.dispatchEvent(new CustomEvent("toolchain:ai-verify", { detail: { kind: "formal" } })));
+    await expect(page.locator("#right-tab-ai")).toHaveAttribute("aria-selected", "true");
+    await expect(page.locator("#formal-status")).not.toHaveAttribute("data-outcome", "running");
+  } finally {
+    releaseWorker?.();
+  }
+  await expect(page.locator("#result-status")).toHaveText("成功");
+  for (const kind of ["build", "simulation", "formal"]) {
+    await expect(page.locator(`#ai-verify-${kind}`)).toBeEnabled();
+  }
+  expect(requests).toHaveLength(1);
+});
+
+test("switching formal engines enables both start buttons with the default solver", async ({ page }) => {
+  await applyLocalProposal(page);
+  await acceptLocalProposal(page);
+  await page.locator("#right-tab-verify").click();
+  await page.locator("#formal-engine").selectOption("smtbmc");
+  await expect(page.locator("#formal-solver")).not.toHaveValue("");
+  await expect(page.locator("#formal-button")).toBeEnabled();
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.locator("#right-tab-ai").click();
+  await expect(page.locator("#ai-verify-formal")).toBeEnabled();
+});
+
+test("AI formal verification starts the real formal path after applying a proposal", async ({ page }) => {
+  const requests = await applyLocalProposal(page);
+  await acceptLocalProposal(page);
+  await page.evaluate(() => {
+    const status = document.querySelector("#formal-status");
+    window.aiFormalOutcomes = [];
+    new MutationObserver(() => window.aiFormalOutcomes.push(status.dataset.outcome))
+      .observe(status, { attributes: true, attributeFilter: ["data-outcome"] });
+  });
+  await page.locator("#ai-verify-formal").click();
+  await expect(page.locator("#right-tab-verify")).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("#formal-status")).toHaveAttribute("data-outcome", "failed", { timeout: 120000 });
+  expect(await page.evaluate(() => window.aiFormalOutcomes)).toContain("running");
+  await expect(page.locator("#formal-status")).toContainText("検証対象が見つかりません。assert の性質を追加するか、性質に合うモードを選んでください。");
+  await expect(page.locator("#ai-explain-formal")).toBeVisible();
+  expect(requests).toHaveLength(1);
+});
+
+test("source edits remove discarded verification logs and explanation actions", async ({ page }) => {
+  const requests = await applyLocalProposal(page, [{ path: "src/top_tb.v", content: "module top_tb; initial begin #10; $finish; end endmodule\n", reason: "波形なしの検査" }]);
+  await acceptLocalProposal(page);
+  await page.locator("#ai-verify-simulation").click();
+  await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "failed");
+  await expect(page.locator("#ai-explain-simulation")).toBeVisible();
+  await page.locator("#formal-button").click();
+  await expect(page.locator("#formal-status")).toHaveAttribute("data-outcome", "failed", { timeout: 120000 });
+  await expect(page.locator("#ai-explain-formal")).toBeVisible();
+  await page.getByRole("button", { name: "src/top.v を開く", exact: true }).click();
+  await page.locator(".cm-content").click();
+  await page.keyboard.press("Control+End");
+  await page.keyboard.insertText("\n// source changed\n");
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await expect(page.locator("#formal-status")).toHaveAttribute("data-outcome", "stopped");
+  await expect(page.locator("#ai-explain-formal")).toBeHidden();
+  await expect(page.locator("#ai-explain-simulation")).toBeHidden();
+  await page.locator("#right-tab-ai").click();
+  await expect(page.locator('#ai-context-logs input[value="simulation"]')).toHaveCount(0);
+  await expect(page.locator('#ai-context-logs input[value="formal"]')).toHaveCount(0);
+  expect(requests).toHaveLength(1);
+});
+
+test("unconfigured tops and unsuccessful apply do not offer local verification", async ({ page }) => {
+  await applyLocalProposal(page);
+  await page.evaluate(async () => {
+    const { initializeAiChatUI } = await import("/lib/ai-chat-ui.bundle.mjs");
+    const panel = document.createElement("aside");
+    document.body.replaceChildren(panel);
+    const context = { projectId: "empty", revision: 0, project: { name: "empty", board: "tangnano9k", top: "top" },
+      files: new Map([["src/top.v", "module top; endmodule\n"]]), logs: new Map(), problems: [], activeFile: "src/top.v" };
+    let failApply = true;
+    window.completeLocalApply = () => { failApply = false; };
+    initializeAiChatUI({ panel, getKey: () => "sk-or-chat-test-only", showPanel() {},
+      workspace: { getContext: () => context, isBusy: () => false },
+      revisions: { canUndo: false, async apply() { if (failApply) throw new Error("apply failed"); } } });
+  });
+  await previewAndSend(page, "変更してください。");
+  await page.locator(".ai-proposal button").filter({ hasText: "この変更を適用" }).click();
+  await page.locator("#ai-apply-selected").click();
+  await expect(page.locator("#ai-chat-error")).toBeVisible();
+  await expect(page.locator("#ai-local-verify")).toBeHidden();
+  await page.evaluate(() => window.completeLocalApply());
+  await page.locator("#ai-apply-selected").click();
+  await expect(page.locator("#ai-local-verify")).toBeVisible();
+  await expect(page.locator("#ai-verify-build")).toBeVisible();
+  await expect(page.locator("#ai-verify-simulation")).toBeHidden();
+  await expect(page.locator("#ai-verify-formal")).toBeHidden();
+  await page.locator("#ai-prompt").fill("");
+  await page.locator("#ai-preview-button").click();
+  await expect(page.locator("#ai-local-verify")).toBeHidden();
+});
 
 test("hashing blocks previews and clearing does not repopulate history", async ({ page }) => {
   await page.addInitScript(() => {

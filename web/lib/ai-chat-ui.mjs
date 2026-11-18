@@ -67,6 +67,12 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     </section>
     <div id="ai-rejected-paths" role="status" hidden></div>
     <button id="ai-undo" type="button" class="secondary" hidden>元に戻す</button>
+    <section id="ai-local-verify" hidden><h4>適用した変更を手元で確かめる</h4>
+      <p>検査はこの端末で実行します。AI には送信しません。</p>
+      <button id="ai-verify-build" type="button">合成</button>
+      <button id="ai-verify-simulation" type="button">シミュレーション</button>
+      <button id="ai-verify-formal" type="button">形式検証</button>
+    </section>
     <details id="ai-history"><summary>これまでの会話（このタブだけ）</summary><div id="ai-history-messages"></div></details>
     <button id="ai-clear" type="button" class="secondary">会話を消す</button>`;
   panel.append(root);
@@ -80,9 +86,18 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   let state = AI_CHAT_INITIAL_STATE, controller = null, generation = 0, version = 0, applying = false;
   let accepted = new Set(), lastKey = getKey();
   let models = null, loadingModels = false;
+  let verificationProject = null;
   function send(event, guards) { state = transitionAiChat(state, event, guards); root.dataset.state = state; }
   function busy() { return Boolean(controller); }
   function controls() {
+    const current = workspace.getContext();
+    q("ai-local-verify").hidden = verificationProject === null || verificationProject !== current?.projectId;
+    for (const kind of ["build", "simulation", "formal"]) {
+      const button = q(`ai-verify-${kind}`);
+      button.hidden = kind !== "build" && !current?.project?.[kind]?.top?.trim();
+      button.disabled = busy() || loadingModels || applying || workspace.isBusy() || current?.verificationReady?.[kind] === false;
+    }
+    document.dispatchEvent(new CustomEvent("toolchain:ai-request-busy", { detail: { busy: busy() || loadingModels || applying } }));
     q("ai-models-fetch").disabled = loadingModels;
     q("ai-compose").disabled = busy() || applying;
     q("ai-resend-history-option").hidden = history.length === 0;
@@ -147,6 +162,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     const next = workspace.getContext();
     if (!next) { controls(); return; }
     if (next.projectId !== context?.projectId) {
+      verificationProject = null;
       for (const selected of Object.values(choices)) selected.clear();
       if (selectableFiles(next.files).some(([p]) => p === next.activeFile)) choices.files.add(next.activeFile);
     }
@@ -210,6 +226,8 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     q("ai-chat-error").hidden = true;
     try {
       if (busy()) return;
+      verificationProject = null;
+      controls();
       if (!context) throw new Error();
       preview = createChatPreview({ model: q("ai-model").value, prompt: q("ai-prompt").value, history, models,
         skill: q("ai-skill").value, resendHistory: q("ai-resend-history").checked, project: { ...context.project, files: context.files },
@@ -228,6 +246,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   q("ai-preview-cancel").addEventListener("click", invalidate);
   q("ai-send").addEventListener("click", async () => {
     if (busy() || !preview || !getKey()) return;
+    verificationProject = null;
     const selected = preview, key = getKey(), selectedVersion = version, run = ++generation;
     send("send_requested", { connected: true, preview_current: true });
     if (state !== "sending") return;
@@ -263,17 +282,19 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   q("ai-apply-selected").addEventListener("click", async () => {
     if (applying || busy()) return;
     applying = true; controls(); q("ai-chat-error").hidden = true;
-    try { await revisions.apply(proposals.filter((p) => accepted.has(p.path)), snapshot); renderProposals({ valid: [], rejected: [] }, new Map()); q("ai-chat-status").textContent = "変更を保存しました。合成し直してください。"; }
+    try { await revisions.apply(proposals.filter((p) => accepted.has(p.path)), snapshot); verificationProject = workspace.getContext()?.projectId ?? null; renderProposals({ valid: [], rejected: [] }, new Map()); q("ai-chat-status").textContent = "変更を保存しました。合成し直してください。"; }
     catch (error) { showError(error); }
     finally { applying = false; controls(); }
   });
   q("ai-undo").addEventListener("click", async () => {
     if (applying || busy()) return;
+    verificationProject = null;
     applying = true; controls(); q("ai-chat-error").hidden = true;
     try { await revisions.undo(); } catch (error) { showError(error); }
     finally { applying = false; controls(); }
   });
   function clear(event = "clear_requested") {
+    verificationProject = null;
     generation++; controller?.abort(); controller = null; history = []; preview = null; snapshot = null;
     q("ai-resend-history").checked = false;
     q("ai-preview-body").value = ""; q("ai-prompt").value = ""; q("ai-chat-response").textContent = ""; q("ai-answer").hidden = true; q("ai-chat-error").hidden = true;
@@ -281,6 +302,15 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     send(event); renderHistory(); renderProposals({ valid: [], rejected: [] }, new Map()); controls();
   }
   q("ai-clear").addEventListener("click", () => clear());
+  for (const kind of ["build", "simulation", "formal"]) {
+    q(`ai-verify-${kind}`).addEventListener("click", () => {
+      const current = workspace.getContext();
+      if (verificationProject === null || verificationProject !== current?.projectId || busy() || loadingModels || applying || workspace.isBusy() ||
+          current?.verificationReady?.[kind] === false ||
+          kind !== "build" && !current.project?.[kind]?.top?.trim()) return;
+      document.dispatchEvent(new CustomEvent("toolchain:ai-verify", { detail: { kind } }));
+    });
+  }
   panel.addEventListener("toolchain:ai-auth-change", () => { const key = getKey(); if (lastKey && key !== lastKey) clear("disconnected"); lastKey = key; controls(); });
   document.addEventListener("toolchain:ai-context-changed", refresh);
   document.addEventListener("toolchain:flow-change", controls);
@@ -292,10 +322,10 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     if (problem) choices.problems.add(JSON.stringify(problem));
     const file = problem?.file ?? context?.activeFile;
     if (file && selectableFiles(context.files).some(([p]) => p === file)) choices.files.add(file);
-    const tool = problem?.tool ?? (/\.vhdl?$/.test(file ?? "") ? "ghdl" : /\.cst$/.test(file ?? "") ? "nextpnr" : "yosys");
+    const tool = detail?.tool ?? problem?.tool ?? (/\.vhdl?$/.test(file ?? "") ? "ghdl" : /\.cst$/.test(file ?? "") ? "nextpnr" : "yosys");
     if (context.logs.has(tool)) choices.logs.add(tool); else for (const name of context.logs.keys()) choices.logs.add(name);
     q("ai-skill").value = "explain";
-    q("ai-prompt").value = `次の問題の原因、根拠、修正の手順を説明してください。\n${problem?.message ?? "直前のビルドが失敗しました。"}`;
+    q("ai-prompt").value = `次の問題の原因、根拠、修正の手順を説明してください。\n${detail?.message ?? problem?.message ?? "直前のビルドが失敗しました。"}`;
     refresh(); showPanel(); q("ai-prompt").focus();
   });
   refresh(); send("clear_requested"); controls();
