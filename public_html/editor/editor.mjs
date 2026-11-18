@@ -2,12 +2,36 @@ import { autocompletion, completeFromList } from "@codemirror/autocomplete";
 import { basicSetup } from "codemirror";
 import { StreamLanguage } from "@codemirror/language";
 import { lintGutter, setDiagnostics as setLintDiagnostics } from "@codemirror/lint";
-import { Compartment, EditorState, StateEffect, StateField } from "@codemirror/state";
-import { Decoration, EditorView } from "@codemirror/view";
+import { Compartment, EditorState, Prec, StateEffect, StateField } from "@codemirror/state";
+import { Decoration, EditorView, keymap, WidgetType } from "@codemirror/view";
 import { verilog } from "@codemirror/legacy-modes/mode/verilog";
 import { vhdl } from "@codemirror/legacy-modes/mode/vhdl";
 import { collectIdentifiers, KEYWORDS_BY_LANGUAGE } from "../lib/hdl-keywords.mjs";
 import { wrapVhdlMode } from "../lib/hdl-mode.mjs";
+import { COMPLETION_LIMITS, completionContext, createLocalCompleter, initializeCompletionUI } from "../lib/local-completion.mjs";
+
+const setGhost = StateEffect.define();
+const ghostText = StateField.define({
+  create: () => null,
+  update(value, transaction) {
+    if (transaction.docChanged || transaction.selection) value = null;
+    for (const effect of transaction.effects) if (effect.is(setGhost)) value = effect.value;
+    return value;
+  },
+  provide: field => EditorView.decorations.from(field, value => value
+    ? Decoration.set([Decoration.widget({ widget: new CompletionWidget(value.text), side: 1 }).range(value.position)]) : Decoration.none),
+});
+class CompletionWidget extends WidgetType {
+  constructor(text) { super(); this.text = text; }
+  eq(other) { return this.text === other.text; }
+  get lineBreaks() { return this.text.split("\n").length - 1; }
+  toDOM() {
+    const node = document.createElement("span"); node.className = "cm-local-completion";
+    node.textContent = this.text; node.setAttribute("aria-label", "端末内 AI の補完候補");
+    return node;
+  }
+  ignoreEvent() { return true; }
+}
 
 const VERILOG_LANGUAGE = StreamLanguage.define(verilog);
 const VHDL_LANGUAGE = StreamLanguage.define(wrapVhdlMode(vhdl));
@@ -101,12 +125,31 @@ export function createHdlEditor(
     onChange = () => {},
     onDiagnostics = () => {},
     getProjectTexts = () => [doc],
+    getFileContext = () => null,
+    completionPanel = null,
   } = {},
 ) {
   let activeLanguage = normalizeLanguage(language);
   const languageCompartment = new Compartment();
   const completionCompartment = new Compartment();
   const readOnlyCompartment = new Compartment();
+  let timer = null, requestVersion = 0, fileKey = getFileContext()?.key;
+  let renderCompletion = () => {};
+  const completer = createLocalCompleter({ onStatus: state => renderCompletion(state) });
+  function cancelCompletion() {
+    clearTimeout(timer); requestVersion++; completer.cancel();
+  }
+  function clearCompletion() {
+    cancelCompletion(); view.dispatch({ effects: setGhost.of(null) });
+  }
+  async function requestCompletion() {
+    clearCompletion();
+    const selection = view.state.selection.main, file = getFileContext();
+    if (!file?.path || !selection.empty || view.state.readOnly || !view.hasFocus) return;
+    const version = requestVersion, position = selection.head;
+    const text = await completer.complete(completionContext({ text: view.state.doc.toString(), cursor: position, ...file }));
+    if (version === requestVersion && text && view.hasFocus) view.dispatch({ effects: setGhost.of({ text, position }) });
+  }
   const view = new EditorView({
     parent,
     state: EditorState.create({
@@ -114,6 +157,18 @@ export function createHdlEditor(
       extensions: [
         basicSetup,
         hintLines,
+        ghostText,
+        Prec.highest(keymap.of([
+          { key: "Tab", run() {
+            const ghost = view.state.field(ghostText);
+            if (!ghost || view.state.readOnly) return false;
+            cancelCompletion();
+            view.dispatch({ changes: { from: ghost.position, insert: ghost.text }, selection: { anchor: ghost.position + ghost.text.length }, userEvent: "input.complete" });
+            return true;
+          } },
+          { key: "Escape", run() { if (!view.state.field(ghostText)) return false; clearCompletion(); return true; } },
+          { key: "Alt-\\", run() { if (!completer.state.enabled) return false; void requestCompletion(); return true; } },
+        ])),
         readOnlyCompartment.of(readOnlyExtension(readOnly)),
         languageCompartment.of(languageExtension(activeLanguage)),
         completionCompartment.of(
@@ -123,11 +178,21 @@ export function createHdlEditor(
         ),
         lintGutter(),
         EditorView.updateListener.of((update) => {
+          if (update.docChanged || update.selectionSet) {
+            cancelCompletion();
+            if (update.docChanged && completer.state.enabled && update.transactions.some(transaction => transaction.isUserEvent("input") && !transaction.isUserEvent("input.complete"))) {
+              timer = setTimeout(() => void requestCompletion(), COMPLETION_LIMITS.delay);
+            }
+          }
           if (update.docChanged) onChange(update.state.doc.toString());
         }),
       ],
     }),
   });
+  if (completionPanel) {
+    renderCompletion = initializeCompletionUI(completionPanel, completer, clearCompletion);
+    renderCompletion(completer.state); void completer.probe();
+  }
 
   function setLanguage(nextLanguage) {
     activeLanguage = normalizeLanguage(nextLanguage);
@@ -163,6 +228,9 @@ export function createHdlEditor(
       }
     },
     setLanguage,
+    setFileContext(key) {
+      if (key !== fileKey) { fileKey = key; clearCompletion(); }
+    },
     setReadOnly(readOnly) {
       view.dispatch({ effects: readOnlyCompartment.reconfigure(readOnlyExtension(readOnly)) });
     },
@@ -182,6 +250,7 @@ export function createHdlEditor(
       view.focus();
     },
     destroy() {
+      cancelCompletion(); completer.disable();
       view.destroy();
     },
   };
