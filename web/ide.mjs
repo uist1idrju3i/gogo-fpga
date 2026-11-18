@@ -1990,7 +1990,11 @@ export function initializeIde({
     } catch (error) { projectActionStatus.dataset.outcome = "error"; projectActionStatus.textContent = error.message; }
   });
   renderFsSource(true);
-  document.addEventListener("toolchain:device-busy-change", updateProjectDeletionControl);
+  document.addEventListener("toolchain:device-busy-change", () => {
+    updateProjectDeletionControl();
+    updateSimulationControls();
+    notifyAiContext();
+  });
   document.addEventListener("toolchain:flow-change", () => {
     if (editor) updateEditor();
     updateBoardInformation();
@@ -2010,7 +2014,7 @@ export function initializeIde({
       project, files, activeFile: activeTab, logs: new Map(latestBuildLogs), problems: [...currentProblems],
       verificationReady: { simulation: simulationStartAvailable(), formal: !formalButton.disabled } };
   }
-  const aiBusy = () => !project || libraryBusy || saveTimer !== null || projectSaveCount > 0 || buildRunning || simulationRunning || formalRunning || workflow.state === "writing";
+  const aiBusy = () => !project || libraryBusy || !canChangeLibraries() || saveTimer !== null || projectSaveCount > 0 || buildRunning || simulationRunning || formalRunning || workflow.state === "writing";
   let aiRequestBusy = false;
   document.addEventListener("toolchain:ai-request-busy", ({ detail }) => { aiRequestBusy = detail?.busy === true; });
   document.addEventListener("toolchain:ai-verify", ({ detail }) => {

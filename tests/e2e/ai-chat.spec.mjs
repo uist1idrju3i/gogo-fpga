@@ -3,6 +3,7 @@ import { prepareChat, previewAndSend, projectFile, proposalReply, slowChat } fro
 import { homedir } from "node:os";
 import { resolve } from "node:path";
 import { MAX_MODELS_BYTES, MODELS_URL } from "../../web/lib/openrouter-models.mjs";
+import { routeWorkerWithFakeUsb, stubPageUsb } from "./fake-usb-helpers.mjs";
 
 const modelCatalog = { data: [
   { id: "example/paid", context_length: 32768, pricing: { prompt: "0.0000025", completion: "0.00001" }, supported_parameters: ["tools", "structured_outputs"] },
@@ -144,6 +145,40 @@ test("AI verification uses the normal simulation availability for a VHDL project
   });
   await expect(page.locator("#right-tab-ai")).toHaveAttribute("aria-selected", "true");
   expect(await page.locator("#simulation-status").getAttribute("data-outcome")).toBe(outcome);
+  expect(requests).toHaveLength(1);
+});
+
+test("hardware busy changes refresh AI verification buttons", async ({ page }) => {
+  await stubPageUsb(page);
+  await routeWorkerWithFakeUsb(page);
+  let releaseWorker;
+  await page.route("**/worker.js", async (route) => {
+    await new Promise((resolve) => { releaseWorker = resolve; });
+    await route.fallback();
+  });
+  const requests = await applyLocalProposal(page);
+  await acceptLocalProposal(page);
+  await expect(page.locator("#ai-verify-simulation")).toBeEnabled();
+  await page.locator("#right-tab-board").click();
+  await page.locator("#advanced-settings summary").click();
+  await page.locator('input[name="operation"][value="erase"]').check();
+  await page.getByRole("button", { name: "消去する", exact: true }).click();
+  await page.locator("#erase-confirm").click();
+  try {
+    await expect.poll(() => typeof releaseWorker).toBe("function");
+    await page.locator("#right-tab-ai").click();
+    for (const kind of ["build", "simulation", "formal"]) {
+      await expect(page.locator(`#ai-verify-${kind}`)).toBeDisabled();
+    }
+    await page.evaluate(() => document.dispatchEvent(new CustomEvent("toolchain:ai-verify", { detail: { kind: "formal" } })));
+    await expect(page.locator("#formal-status")).not.toHaveAttribute("data-outcome", "running");
+  } finally {
+    releaseWorker?.();
+  }
+  await expect(page.locator("#result-status")).toHaveText("成功");
+  for (const kind of ["build", "simulation", "formal"]) {
+    await expect(page.locator(`#ai-verify-${kind}`)).toBeEnabled();
+  }
   expect(requests).toHaveLength(1);
 });
 
