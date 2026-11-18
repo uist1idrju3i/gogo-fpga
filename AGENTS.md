@@ -73,6 +73,7 @@ Dependabot の PR を含むすべての更新で「vendor-update」スキルの�
 | `experiment-record` | 実験・測定・比較の計画、実行、再現できる記録 |
 | `fake-usb` | 仮想の FT2232・GOWIN TAP・NOR フラッシュの拡張と、負の対照 |
 | `document-structure` | 文書の意味単位による分割、索引・旧リンク・証拠の保持、サイズと例外の検査 |
+| `ai-assist` | AI の用途別の指示、OpenRouter 接続、送信前の確認、変更提案と取り消しの変更 |
 
 ## 8. yomiyasu（日本語推敲スキル）
 
