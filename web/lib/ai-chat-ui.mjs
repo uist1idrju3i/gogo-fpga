@@ -4,6 +4,7 @@ import { AI_CHAT_INITIAL_STATE, transitionAiChat } from "./ai-chat-flow.mjs";
 import { AI_SKILLS } from "./ai-skills.mjs";
 import { formatUsage } from "./ai-usage.mjs";
 import { compactUserTurn } from "./ai-history.mjs";
+import { parseStructuredAnswer } from "./ai-structured.mjs";
 import { fetchModels, formatModelPrice, estimatePreviewTokens } from "./openrouter-models.mjs";
 export { createProposalEditor } from "./ai-proposals.mjs";
 export { selectableFiles } from "./openrouter-chat.mjs";
@@ -48,6 +49,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     <p id="ai-models-status" role="status"></p>
     <p id="ai-model-details" hidden></p>
     <section id="ai-preview" hidden><h4>送信内容の確認</h4>
+      <p id="ai-output-mode"></p>
       <p id="ai-token-estimate"></p><p id="ai-context-warning" role="status" hidden>推定トークン数がコンテキスト長を超えています。資料や会話を減らしてください。</p>
       <p id="ai-preview-target"></p><pre id="ai-preview-headers" tabindex="0"></pre>
       <p>Authorization には接続中の鍵を付けます（鍵は表示しません）。日本語のタイトルは UTF-8 のバイト列で送ります。</p>
@@ -116,7 +118,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
   }
   q("ai-models-fetch").addEventListener("click", async () => {
     if (loadingModels) return;
-    loadingModels = true; models = null; q("ai-model-options").replaceChildren();
+    loadingModels = true; models = null; invalidate(); q("ai-model-options").replaceChildren();
     q("ai-models-status").textContent = "モデル一覧を取得しています。"; renderModelDetails(); controls();
     try {
       models = await fetchModels();
@@ -126,7 +128,7 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
       q("ai-models-status").textContent = `${models.length}件のモデルを取得しました。このタブだけに保持します。`;
     } catch (error) {
       q("ai-models-status").textContent = error.code === "size" ? "モデル一覧が大きすぎるため破棄しました。" : "モデル一覧を取得できませんでした。通信や応答の形式を確認してください。";
-    } finally { loadingModels = false; renderModelDetails(); controls(); }
+    } finally { loadingModels = false; invalidate(); renderModelDetails(); controls(); }
   });
   function selectedSummary() {
     q("ai-context-selection").textContent = `選択中: ${[...choices.files, ...choices.logs].join("、") || "ファイル・ログなし"} / 問題 ${choices.problems.size}件`;
@@ -209,11 +211,12 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
     try {
       if (busy()) return;
       if (!context) throw new Error();
-      preview = createChatPreview({ model: q("ai-model").value, prompt: q("ai-prompt").value, history,
+      preview = createChatPreview({ model: q("ai-model").value, prompt: q("ai-prompt").value, history, models,
         skill: q("ai-skill").value, resendHistory: q("ai-resend-history").checked, project: { ...context.project, files: context.files },
         files: [...context.files].filter(([p]) => choices.files.has(p)), logs: [...context.logs].filter(([p]) => choices.logs.has(p)).map(([tool, text]) => ({ tool, text })),
         problems: context.problems.filter((p) => choices.problems.has(JSON.stringify(p))), origin: location.origin });
       q("ai-preview-body").value = preview.body;
+      q("ai-output-mode").textContent = preview.mode;
       renderModelDetails();
       q("ai-preview-target").textContent = `${preview.url} / ${preview.bytes} バイト`;
       q("ai-preview-headers").textContent = JSON.stringify({ ...preview.headers, "X-OpenRouter-Title": "午後のFPGA" }, null, 2);
@@ -239,14 +242,16 @@ export function initializeAiChatUI({ panel, getKey, workspace, revisions, showPa
         if (run === generation) q("ai-usage").textContent = formatUsage(usage);
       }, onDelta: (_delta, text) => {
         if (run !== generation) return;
-        send("chunk_received"); q("ai-chat-response").textContent = text; controls();
+        send("chunk_received"); q("ai-chat-response").textContent = selected.structured ? "構造化された応答を受信しています" : text; controls();
       } });
       if (run !== generation) return;
       const compact = await compactUserTurn(selected.user);
       if (run !== generation) return;
       abort.signal.throwIfAborted();
       history.push({ role: "user", content: selected.user, compact }, { role: "assistant", content: answer }); renderHistory();
-      send("response_completed"); renderProposals(parseProposals(answer, snapshot.files), snapshot.files);
+      const result = selected.structured ? parseStructuredAnswer(answer, snapshot.files) : { answer, proposals: parseProposals(answer, snapshot.files) };
+      q("ai-chat-response").textContent = result.answer;
+      send("response_completed"); renderProposals(result.proposals, snapshot.files);
     } catch (error) {
       if (run !== generation) return;
       send(error.code === "stopped" ? "stop_requested" : "send_failed"); showError(error);

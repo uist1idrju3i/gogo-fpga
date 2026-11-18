@@ -59,6 +59,88 @@ async function mockModels(page, { body = JSON.stringify(modelCatalog), headers =
 }
 
 for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
+  test(`structured preview, response, apply and raw history for ${board}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1100 });
+    const changed = "module top(input clk, output led); assign led = clk; endmodule\n";
+    const reply = JSON.stringify({ answer: "クロックを出力へ接続する提案です。適用前に差分を確認してください。", changes: [{ path: "src/top.v", content: changed, reason: "配線の例" }] });
+    await slowChat(page);
+    const requests = await prepareChat(page, { reply });
+    await page.locator("#new-project-button").click();
+    await page.locator("#new-project-name").fill(`structured-${board}`);
+    await page.locator("#new-project-board").selectOption(board);
+    await page.locator("#new-project-create").click();
+    await expect(page.locator("#project-status")).toHaveText("保存しました。");
+    await page.locator("#right-tab-ai").click();
+    await mockModels(page);
+    await page.locator("#ai-models-fetch").click();
+    await expect(page.locator("#ai-models-status")).toContainText("2件");
+    await page.locator("#ai-model").fill("example/paid");
+    await page.locator("#ai-skill").selectOption("change");
+    await page.locator("#ai-prompt").fill("変更を提案してください。");
+    await page.locator("#ai-preview-button").click();
+    await expect(page.locator("#ai-output-mode")).toContainText("構造化出力を使います");
+    const body = await page.locator("#ai-preview-body").inputValue();
+    expect(JSON.parse(body).response_format.json_schema.strict).toBe(true);
+    expect(JSON.parse(body).provider).toEqual({ require_parameters: true });
+    await page.locator("#ai-output-mode").evaluate(element => element.scrollIntoView({ block: "start" }));
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-structured-preview-${board}.png`) });
+    await page.locator("#ai-send").click();
+    await expect(page.locator("#ai-chat-response")).toHaveText("構造化された応答を受信しています");
+    await expect(page.locator("#ai-chat")).toHaveAttribute("data-state", "proposal_review");
+    expect(requests[0].postData()).toBe(body);
+    await expect(page.locator("#ai-chat-response")).toHaveText(JSON.parse(reply).answer);
+    await expect(page.locator(".ai-proposal")).toHaveCount(1);
+    await page.locator("#ai-answer").evaluate(element => element.scrollIntoView({ block: "start" }));
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-structured-answer-${board}.png`) });
+    const before = await projectFile(page);
+    await page.locator(".ai-proposal button").filter({ hasText: "この変更を適用" }).click();
+    await page.locator("#ai-apply-selected").click();
+    await expect(page.locator(".ai-proposal")).toHaveCount(0);
+    await expect.poll(() => projectFile(page)).toBe(changed);
+    await page.locator("#ai-undo").click();
+    await expect(page.locator("#ai-undo")).toBeHidden();
+    await expect.poll(() => projectFile(page)).toBe(before);
+    await page.locator("#ai-prompt").fill("続けて説明してください。");
+    await page.locator("#ai-preview-button").click();
+    const next = JSON.parse(await page.locator("#ai-preview-body").inputValue());
+    expect(next.messages.find(message => message.role === "assistant").content).toBe(reply);
+  });
+}
+
+test("malformed structured reply cannot apply, unsupported model keeps fence path", async ({ page }) => {
+  const raw = '{"answer":"説明","changes":[],"extra":true}';
+  const requests = await prepareChat(page, { reply: raw });
+  await mockModels(page);
+  await page.locator("#ai-models-fetch").click();
+  await expect(page.locator("#ai-models-status")).toContainText("2件");
+  await page.locator("#ai-model").fill("example/paid");
+  await page.locator("#ai-skill").selectOption("change");
+  await previewAndSend(page);
+  await expect(page.locator("#ai-chat-response")).toHaveText(raw);
+  await expect(page.locator("#ai-rejected-paths")).toContainText("提案の JSON を確認できません");
+  await expect(page.locator("#ai-apply-selected")).toBeDisabled();
+  await expect(page.locator(".ai-proposal")).toHaveCount(0);
+  await page.locator("#ai-clear").click();
+  await page.locator("#ai-model").fill("example/tiny");
+  const changed = "module top; endmodule\n";
+  await page.route("https://openrouter.ai/api/v1/chat/completions", route => route.fulfill({
+    contentType: "text/event-stream", headers: { "Access-Control-Allow-Origin": new URL(page.url()).origin },
+    body: `data: ${JSON.stringify({ choices: [{ delta: { content: proposalReply([{ path: "src/top.v", content: changed, reason: "例" }]) } }] })}\n\ndata: [DONE]\n\n`,
+  }));
+  await page.locator("#ai-prompt").fill("提案してください。");
+  await page.locator("#ai-preview-button").click();
+  await expect(page.locator("#ai-output-mode")).toContainText("構造化出力を使いません");
+  const body = await page.locator("#ai-preview-body").inputValue();
+  expect(Object.keys(JSON.parse(body))).toEqual(["model", "stream", "messages"]);
+  expect(JSON.parse(body).messages[0].content).toContain("gogo-fpga-changes");
+  const sent = page.waitForRequest("https://openrouter.ai/api/v1/chat/completions");
+  await page.locator("#ai-send").click();
+  expect((await sent).postData()).toBe(body);
+  await expect(page.locator(".ai-proposal")).toHaveCount(1);
+  expect(requests).toHaveLength(1);
+});
+
+for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
   test(`compact history and explicit full resend for ${board}`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 1100 });
     const requests = await prepareChat(page);

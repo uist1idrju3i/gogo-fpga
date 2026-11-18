@@ -1,6 +1,7 @@
 import { isLibraryPath } from "./libraries.mjs";
 import { validatePath } from "./project.mjs";
-import { buildSystemPrompt } from "./ai-skills.mjs";
+import { AI_SKILLS, buildSystemPrompt } from "./ai-skills.mjs";
+import { answerSchema } from "./ai-structured.mjs";
 import { summarizeProject } from "./ai-project-summary.mjs";
 import { parseUsage } from "./ai-usage.mjs";
 
@@ -23,19 +24,26 @@ export function selectableFiles(files) {
   });
 }
 
-export function createChatPreview({ model, prompt, skill = "consult", project = null, history = [], resendHistory = false, files = [], logs = [], problems = [], origin }) {
+export function createChatPreview({ model, prompt, skill = "consult", models = null, project = null, history = [], resendHistory = false, files = [], logs = [], problems = [], origin }) {
   if (typeof model !== "string" || !model.trim() || model.length > 200 ||
       typeof prompt !== "string" || !prompt.trim()) throw new ChatError("empty");
   if (new URL(origin).origin !== origin || !/^https?:/.test(origin)) throw new ChatError("preview");
   const user = JSON.stringify({ request: prompt, skill, project: summarizeProject(project), files: selectableFiles(new Map(files)).map(([path, content]) => ({ path, content })), logs, problems }, null, 2);
-  const messages = [{ role: "system", content: buildSystemPrompt(skill) }, ...history.map(({ role, content, compact }) => {
+  const allowsChanges = AI_SKILLS.find(item => item.id === skill)?.allowsChanges;
+  const supported = models?.find(item => item.id === model.trim())?.supported_parameters?.includes("structured_outputs");
+  const structured = Boolean(allowsChanges && supported);
+  const mode = structured ? "構造化出力を使います（変更を提案する種類で、取得したモデル一覧に対応の記載があります）" : `構造化出力を使いません（${!allowsChanges ? "変更を提案しない種類です" : models === null ? "モデル一覧を取得していません" : "モデルの対応を確認できません"}）`;
+  const messages = [{ role: "system", content: buildSystemPrompt(skill, { structured }) }, ...history.map(({ role, content, compact }) => {
     if (!["user", "assistant"].includes(role) || typeof content !== "string") throw new ChatError("preview");
     return { role, content: role === "user" && !resendHistory ? (compact ?? content) : content };
   }), { role: "user", content: user }];
-  const body = JSON.stringify({ model: model.trim(), stream: true, messages }, null, 2);
+  const body = JSON.stringify({ model: model.trim(), stream: true, messages, ...(structured ? {
+    response_format: { type: "json_schema", json_schema: { name: "gogo_fpga_answer", strict: true, schema: answerSchema() } },
+    provider: { require_parameters: true },
+  } : {}) }, null, 2);
   if (chatByteLength(body) > MAX_CHAT_BYTES) throw new ChatError("size");
   return Object.freeze({ url: CHAT_URL, body, bytes: chatByteLength(body),
-    user, headers: Object.freeze({ "Content-Type": "application/json", "X-OpenRouter-Title": utf8Header("午後のFPGA"), "HTTP-Referer": origin }) });
+    user, structured, mode, headers: Object.freeze({ "Content-Type": "application/json", "X-OpenRouter-Title": utf8Header("午後のFPGA"), "HTTP-Referer": origin }) });
 }
 
 export function createSseParser(onDelta = () => {}) {

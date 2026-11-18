@@ -23,6 +23,8 @@ description: 午後のFPGA の AI 相談、用途別の指示、OpenRouter 接�
 
 ## 種類を追加する手順
 
+構造化出力は変更を許す種類で、明示取得したモデル一覧に `structured_outputs` の対応がある場合だけ使います。`response_format` の厳密な JSON Schema と `provider.require_parameters: true` を確認本文に含めます。受信途中は JSON を表示せず、完了後も形式と余分な項目を検査し、`changes` を既存の `validateProposals` に通します。不正な応答は本文だけを表示して適用を拒否し、会話には受信した原文を保持します。非対応時は従来のコードフェンスを使い、自動再送はしません。
+
 会話履歴は成功した応答だけを保持します。`ai-history.mjs` で以前の資料を SHA-256 と UTF-8 バイト数に置き換え、既定では本文を再送しません。全文の再送は利用者の選択時だけです。今回の資料は全文を送り、どちらも確認と送信のバイト列を一致させます。ハッシュ計算中の確認を拒否し、会話の消去後に計算結果で履歴を戻してはいけません。
 
 1. `web/lib/ai-skills.mjs` の凍結した `AI_SKILLS` に、一意の `id`、日本語の `label` と `instructions`、`allowsChanges` を追加します。共通の役割、資料の境界、回答方針、出力形式は `buildSystemPrompt` に置き、上限値は定数を参照します。不明な ID の拒否を保ちます。
@@ -47,6 +49,8 @@ git diff --check
 - [使用量](https://openrouter.ai/docs/use-cases/usage-accounting)
 - [モデル一覧 API](https://openrouter.ai/docs/api-reference/list-available-models)
 - [モデルの項目と価格](https://openrouter.ai/docs/guides/overview/models)
+- [構造化出力とストリーミング](https://openrouter.ai/docs/guides/features/structured-outputs)
+- [プロバイダーのパラメーター対応](https://openrouter.ai/docs/guides/routing/provider-selection)
 - 設計と未確認事項: [エディターと AI](../../../docs/research/editor-and-ai.md)
 
 API の形式、エラー、SSE の区切りや終了条件、ヘッダーを公式資料と照合し、`[DONE]` のない終了を成功扱いしません。試験では OpenRouter を模擬し、模擬応答の成功を実アカウントでの確認と書いてはいけません。実アカウントや実機での確認は本リポジトリーでは試していないものとして明記します。
