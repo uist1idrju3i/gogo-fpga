@@ -150,14 +150,14 @@ test("AI verification uses the normal simulation availability for a VHDL project
 
 test("hardware busy changes refresh AI verification buttons", async ({ page }) => {
   await stubPageUsb(page);
-  await routeWorkerWithFakeUsb(page);
+  await routeWorkerWithFakeUsb(page, { idcode: 0x0000081b });
   let releaseWorker;
   await page.route("**/worker.js", async (route) => {
     await new Promise((resolve) => { releaseWorker = resolve; });
     await route.fallback();
   });
   const requests = await applyLocalProposal(page);
-  await page.locator("#board-select").selectOption("tangnano9k");
+  await page.locator("#board-select").selectOption("tangnano20k");
   await expect(page.locator("#project-status")).toHaveText("保存しました。");
   await acceptLocalProposal(page);
   await expect(page.locator("#ai-verify-simulation")).toBeEnabled();
