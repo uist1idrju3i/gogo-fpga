@@ -10,13 +10,13 @@ const modelCatalog = { data: [
   { id: "example/tiny", context_length: 10, pricing: { prompt: "0", completion: "-1" }, supported_parameters: ["reasoning"] },
 ] };
 
-async function toolChat(page, calls, final = "確認した結果の説明です。") {
+async function toolChat(page, calls, final = "確認した結果の説明です。", introduction = "") {
   const requests = [];
   await page.route("https://openrouter.ai/api/v1/chat/completions", async route => {
     if (route.request().method() === "OPTIONS") return route.fulfill({ status: 204, headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "*" } });
     requests.push(route.request());
     const event = choice => `data: ${JSON.stringify({ choices: [choice] })}\n\n`;
-    const body = requests.length === 1 ? event({ delta: { tool_calls: calls.map((call, index) => ({ index, id: `read_${index}`, type: "function", function: { name: call.name, arguments: call.args.slice(0, 4) } })) } }) +
+    const body = requests.length === 1 ? event({ delta: { content: introduction, tool_calls: calls.map((call, index) => ({ index, id: `read_${index}`, type: "function", function: { name: call.name, arguments: call.args.slice(0, 4) } })) } }) +
       event({ delta: { tool_calls: calls.map((call, index) => ({ index, function: { arguments: call.args.slice(4) } })) }, finish_reason: "tool_calls" }) : event({ delta: { content: final }, finish_reason: "stop" });
     await route.fulfill({ contentType: "text/event-stream", headers: { "Access-Control-Allow-Origin": "*" }, body: body + "data: [DONE]\n\n" });
   });
@@ -28,6 +28,51 @@ async function toolChat(page, calls, final = "確認した結果の説明です�
   return requests;
 }
 
+test("continuation proposals cannot overwrite edits made while tools were pending", async ({ page }) => {
+  await prepareChat(page);
+  const original = await projectFile(page);
+  await toolChat(page, [{ name: "list_files", args: '{}' }], proposalReply([{ path: "src/top.v", reason: "説明", content: original + "\n// proposed\n" }]));
+  await previewAndSend(page);
+  await page.locator(".cm-content").press("Control+Home"); await page.locator(".cm-content").pressSequentially("// keep my edit\n");
+  await expect(page.locator("#project-status")).toHaveText("保存しました。");
+  await page.locator("#ai-tools-reconfirm").click();
+  await page.locator(".ai-tool-card").getByRole("button", { name: "この結果を返す" }).click();
+  await page.locator("#ai-send").click(); await expect(page.locator(".ai-proposal")).toHaveCount(1);
+  await page.locator(".ai-proposal").getByRole("button", { name: "この変更を適用", exact: true }).click(); await page.locator("#ai-apply-selected").click();
+  await expect(page.locator("#ai-chat-error")).toBeVisible();
+  expect(await projectFile(page)).toContain("// keep my edit");
+});
+
+test("mixed tool text stays visible and survives continuation and history", async ({ page }) => {
+  await prepareChat(page);
+  const intro = "入力は負論理として確認します。";
+  const requests = await toolChat(page, [{ name: "list_files", args: '{}' }], "確認しました。", intro);
+  await previewAndSend(page); await expect(page.locator("#ai-chat-response")).toHaveText(intro);
+  await page.locator(".ai-tool-card").getByRole("button", { name: "この結果を返す" }).click();
+  expect(JSON.parse(await page.locator("#ai-preview-body").inputValue()).messages.at(-2).content).toBe(intro);
+  await page.locator("#ai-send").click(); await expect(page.locator("#ai-chat-response")).toContainText("確認しました。");
+  await expect(page.locator("#ai-chat-response")).toContainText(intro);
+  await expect(page.locator("#ai-history-messages")).toContainText(intro);
+  expect(requests).toHaveLength(2);
+});
+
+test("teacher links approved tool-only files and clears links after edits", async ({ page }) => {
+  await prepareChat(page);
+  await toolChat(page, [{ name: "read_file", args: '{"path":"src/top_tb.v"}' }], "src/top_tb.v:4 を確認してください。");
+  await page.locator("#ai-skill").selectOption("teach");
+  await page.locator("#ai-context-picker summary").click();
+  await page.locator('#ai-context-files input[value="src/top_tb.v"]').uncheck();
+  await page.locator("#ai-context-picker summary").click();
+  const first = await previewAndSend(page);
+  expect(JSON.parse(JSON.parse(first).messages.at(-1).content).files.some(file => file.path === "src/top_tb.v")).toBe(false);
+  await page.locator(".ai-tool-card").getByRole("button", { name: "この結果を返す" }).click();
+  await page.locator("#ai-send").click();
+  await page.getByRole("link", { name: "src/top_tb.v:4", exact: true }).click();
+  await expect(page.locator(".cm-ai-hint-line")).toHaveText((await projectFile(page, "src/top_tb.v")).split("\n")[3]);
+  await page.locator(".cm-content").pressSequentially(" ");
+  await expect(page.locator(".ai-source-reference")).toHaveCount(0);
+});
+
 for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
   test(`read-only tool confirmation and explicit second send for ${board}`, async ({ page }) => {
     await page.setViewportSize({ width: 1600, height: 1800 });
@@ -36,7 +81,7 @@ for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
     await page.locator("#new-project-board").selectOption(board); await page.locator("#new-project-create").click();
     await expect(page.locator("#project-status")).toHaveText("保存しました。"); await page.locator("#right-tab-ai").click();
     const content = await projectFile(page);
-    const requests = await toolChat(page, [{ name: "read_file", args: '{"path":"src/top.v"}' }], proposalReply([{ path: "src/top.v", reason: "確認した変更", content: content + "\n// checked\n" }]));
+    const requests = await toolChat(page, [{ name: "read_file", args: '{"path":"src/top.v"}' }], proposalReply([{ path: "src/top.v", reason: "確認した変更", content: content + "\n// checked\n" }]), "入力は負論理として確認します。");
     const first = await previewAndSend(page);
     expect(JSON.parse(first).tools).toHaveLength(2);
     await expect(page.locator(".ai-tool-card")).toContainText(content);
@@ -50,6 +95,9 @@ for (const board of ["tangnano1k", "tangnano4k", "tangnano9k", "tangnano20k"]) {
     expect(payload.messages.at(-1)).toEqual({ role: "tool", tool_call_id: "read_0", content });
     await page.locator("#ai-send").click(); await expect(page.locator(".ai-proposal")).toHaveCount(1);
     expect(requests).toHaveLength(2); expect(requests[1].postData()).toBe(next);
+    await expect(page.locator("#ai-chat-response")).toContainText("入力は負論理として確認します。");
+    await page.locator("#ai-answer").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: resolve(homedir(), "shots", `ai-tools-fix-${board}.png`) });
     await page.locator("#ai-prompt").fill("続けて説明してください。"); await page.locator("#ai-preview-button").click();
     const later = JSON.parse(await page.locator("#ai-preview-body").inputValue());
     const compact = JSON.parse(later.messages.find(item => item.role === "tool").content);

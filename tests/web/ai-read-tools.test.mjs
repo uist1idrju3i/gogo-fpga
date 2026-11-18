@@ -82,3 +82,19 @@ test("workspace confirmation detects changes, additions, removals and project sw
   workspace.files.get("bad.txt")[0] = 1;
   assert.equal(sameToolWorkspace(captured, workspace), false);
 });
+test("continuation retains original proposal snapshot and mixed assistant content", () => {
+  const proposalSnapshot = { files: new Map(files) };
+  const selected = { ...createChatPreview({ ...options, models, allowTools: true }), proposalSnapshot };
+  const next = toolResultPreview(selected, [call()], [files.get("src/top.v")], "先に説明します。", files);
+  assert.equal(next.proposalSnapshot, proposalSnapshot);
+  assert.equal(JSON.parse(next.body).messages.at(-2).content, "先に説明します。");
+  assert.equal(next.turnMessages.at(-2).content, "先に説明します。");
+  assert.equal(next.sentFiles.get("src/top.v"), files.get("src/top.v"));
+});
+test("only complete approved text reads become reference materials", () => {
+  const selected = createChatPreview({ ...options, models, allowTools: true, skill: "teach" });
+  for (const [input, result, included] of [[files, "資料", true], [files, TOOL_REFUSAL, false], [new Map([["text.txt", "あ".repeat(READ_TOOL_LIMITS.bytes)]]), capToolResult("あ".repeat(READ_TOOL_LIMITS.bytes)), false]]) {
+    const next = toolResultPreview(selected, [call("read_file", { path: "text.txt" })], [result], null, input);
+    assert.equal(next.sentFiles.has("text.txt"), included);
+  }
+});

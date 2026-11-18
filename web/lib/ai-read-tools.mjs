@@ -42,9 +42,9 @@ export function sameToolWorkspace(captured, current) {
   });
 }
 
-export function toolResultPreview(selected, calls, results) {
+export function toolResultPreview(selected, calls, results, content = null, files = new Map()) {
   if (calls.length !== results.length || !selected.toolsEnabled || (selected.toolRound ?? 0) >= READ_TOOL_LIMITS.rounds) throw new ChatError("preview");
-  const assistant = { role: "assistant", content: null, tool_calls: calls };
+  const assistant = { role: "assistant", content, tool_calls: calls };
   const messages = [assistant, ...calls.map((call, index) => ({ role: "tool", tool_call_id: call.id, content: index >= READ_TOOL_LIMITS.calls ? TOOL_REFUSAL : results[index] }))];
   if (messages.some(message => message.role === "tool" && typeof message.content !== "string")) throw new ChatError("preview");
   const payload = JSON.parse(selected.body), toolRound = (selected.toolRound ?? 0) + 1;
@@ -52,7 +52,15 @@ export function toolResultPreview(selected, calls, results) {
   if (toolRound >= READ_TOOL_LIMITS.rounds) { delete payload.tools; delete payload.tool_choice; }
   const body = JSON.stringify(payload, null, 2);
   if (chatByteLength(body) > MAX_CHAT_BYTES) throw new ChatError("size");
-  return Object.freeze({ ...selected, body, bytes: chatByteLength(body), toolRound, toolsEnabled: toolRound < READ_TOOL_LIMITS.rounds,
+  const sentFiles = new Map(selected.sentFiles ?? JSON.parse(selected.user).files.map(({ path, content }) => [path, content]));
+  calls.slice(0, READ_TOOL_LIMITS.calls).forEach((call, index) => {
+    if (call.function.name !== "read_file") return;
+    let args;
+    try { args = JSON.parse(call.function.arguments); } catch { return; }
+    const text = new Map(selectableFiles(files)).get(args?.path);
+    if (exactKeys(args, ["path"]) && validatePath(args.path).ok && text !== undefined && chatByteLength(text) <= READ_TOOL_LIMITS.bytes && results[index] === text) sentFiles.set(args.path, text);
+  });
+  return Object.freeze({ ...selected, sentFiles, body, bytes: chatByteLength(body), toolRound, toolsEnabled: toolRound < READ_TOOL_LIMITS.rounds,
     mode: toolRound >= READ_TOOL_LIMITS.rounds ? "読み取りの往復の上限に達したため、次はツールを付けずに送信します。" : selected.mode,
     turnMessages: [...(selected.turnMessages ?? [{ role: "user", content: selected.user }]), ...messages] });
 }
