@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { AI_SKILLS, buildSystemPrompt } from "../../web/lib/ai-skills.mjs";
 import { PROPOSAL_LIMITS } from "../../web/lib/ai-proposals.mjs";
+import { GRADING_LIMITS } from "../../web/lib/ai-grading.mjs";
 import { summarizeProject } from "../../web/lib/ai-project-summary.mjs";
 import { BOARDS } from "../../web/lib/boards.mjs";
 
@@ -25,6 +26,12 @@ test("all frozen skills include data boundaries and only changing skills include
       assert.ok(structured.includes("一方だけを null"));
       assert.ok(structured.includes("小さな変更には edits"));
     } else if (skill.id !== "grade") assert.ok(prompt.includes("コードフェンスは出力しない"));
+  }
+});
+
+test("grade guidance derives comment limits from grading validation in both output modes", () => {
+  for (const structured of [false, true]) {
+    assert.ok(buildSystemPrompt("grade", { structured }).includes(`講評は各${GRADING_LIMITS.comment}文字以内`));
   }
 });
 
