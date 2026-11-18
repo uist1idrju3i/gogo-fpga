@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createProposalEditor, parseProposals, proposalDiff, proposalSnapshot, validateProposals } from "../../web/lib/ai-proposals.mjs";
+import { PROPOSAL_LIMITS, createProposalEditor, parseProposals, proposalDiff, proposalSnapshot, validateProposals } from "../../web/lib/ai-proposals.mjs";
 
 const initial = () => new Map([["src/top.v", "old\n"], ["constraints/tangnano9k.cst", "pins"], ["libraries/demo/sources/x.v", "library"], ["build/top.fs", new Uint8Array([0, 1])]]);
 const change = (path = "src/top.v", content = "new\n") => ({ path, content, reason: "test" });
@@ -68,4 +68,76 @@ test("empty acceptance and concurrent apply never produce extra revisions", asyn
   const first = f.editor.apply([change()], snapshot);
   await assert.rejects(f.editor.apply([change()], snapshot), { code: "busy" });
   await first; assert.equal(f.saves, 1);
+});
+
+const partial = (edits, path = "src/top.v") => ({ path, edits, reason: "部分編集" });
+test("partial edits use exact sequential matches and literal replacement text", () => {
+  const files = new Map([["src/top.v", "日本語\r\nold\n"]]);
+  const result = validateProposals([partial([
+    { search: "old", replace: "$&new" },
+    { search: "$&new", replace: "new\nnext" },
+    { search: "日本語\r\n", replace: "" },
+  ])], files);
+  assert.deepEqual(result, { valid: [{ path: "src/top.v", content: "new\nnext\n", reason: "部分編集" }], rejected: [] });
+  assert.equal(files.get("src/top.v"), "日本語\r\nold\n");
+});
+test("failed matching rejects the entire file, including overlapping and later matches", () => {
+  const files = new Map([["src/top.v", "aaa\nold\n"]]);
+  for (const [edits, reason] of [
+    [[{ search: "missing", replace: "x" }], /一致する箇所がありません/],
+    [[{ search: "aa", replace: "x" }], /複数/],
+    [[{ search: "old", replace: "new" }, { search: "old", replace: "x" }], /置換2.*一致する箇所がありません/],
+    [[{ search: "old", replace: "aaa" }, { search: "aaa", replace: "x" }], /置換2.*複数/],
+  ]) {
+    const result = validateProposals([partial(edits), change("tests/ok.v", "valid")], files);
+    assert.deepEqual(result.valid.map(({ path }) => path), ["tests/ok.v"]);
+    assert.match(result.rejected[0].reason, reason);
+    assert.equal(files.get("src/top.v"), "aaa\nold\n");
+  }
+});
+test("partial edits reject empty or malformed edits, conflicting forms and new files", () => {
+  const files = initial();
+  for (const edits of [[], {}, "old", [null], [{ search: "", replace: "x" }], [{ search: 1, replace: "x" }],
+    [{ search: "old", replace: null }], [{ search: "old" }], [{ search: "old", replace: "new", extra: true }]]) {
+    const result = validateProposals([partial(edits)], files);
+    assert.equal(result.valid.length, 0);
+    assert.equal(result.rejected.length, 1);
+  }
+  assert.match(validateProposals([partial([{ search: "x", replace: "y" }], "src/new.v")], files).rejected[0].reason, /新しいファイル/);
+  assert.match(validateProposals([{ ...partial([{ search: "old", replace: "new" }]), content: "whole" }], files).rejected[0].reason, /一方だけ/);
+  assert.equal(validateProposals([{ path: "src/top.v", content: null, edits: null }], files).valid.length, 0);
+});
+test("assembled partial edits retain all limits and protected path checks", () => {
+  const files = initial();
+  const edits = [{ search: "old", replace: "new" }];
+  for (const path of ["constraints/tangnano9k.cst", "libraries/demo/sources/x.v", "build/top.fs", "../bad.v"]) {
+    files.set(path, "old");
+    assert.equal(validateProposals([partial(edits, path)], files).valid.length, 0);
+  }
+  assert.equal(validateProposals([partial([{ search: "old", replace: "x".repeat(PROPOSAL_LIMITS.perFile) }])], files).valid.length, 0);
+  assert.equal(validateProposals([partial([{ search: "old", replace: "x\0y" }])], files).valid.length, 0);
+  const many = new Map(Array.from({ length: 5 }, (_, index) => [`src/f${index}.v`, "x"]));
+  const result = validateProposals([...many.keys()].map(path => partial([{ search: "x", replace: "y".repeat(PROPOSAL_LIMITS.perFile) }], path)), many);
+  assert.match(result.rejected[0].reason, /512 KiB/);
+  assert.equal(result.valid.length, 0);
+});
+test("edit fences coexist with full-content fences but multiple proposal blocks fail closed", () => {
+  const files = initial();
+  const fence = `\`\`\`gogo-fpga-edits\n${JSON.stringify({ changes: [partial([{ search: "old", replace: "new" }])] })}\n\`\`\``;
+  assert.deepEqual(parseProposals(fence, files).valid, [{ path: "src/top.v", content: "new\n", reason: "部分編集" }]);
+  const full = `\`\`\`gogo-fpga-changes\n${JSON.stringify({ changes: [change()] })}\n\`\`\``;
+  assert.equal(parseProposals(`${fence}\n${full}`, files).valid.length, 0);
+  assert.match(parseProposals("```gogo-fpga-edits\n{bad}\n```", files).rejected[0].reason, /JSON/);
+});
+test("partial edits apply as one full revision and undo restores the captured file", async () => {
+  const f = fixture(), snapshot = await proposalSnapshot(f.current);
+  await f.editor.apply([partial([{ search: "old", replace: "new" }])], snapshot);
+  assert.equal(f.current.files.get("src/top.v"), "new\n");
+  assert.equal(f.saves, 1);
+  await f.editor.undo();
+  assert.equal(f.current.files.get("src/top.v"), "old\n");
+  assert.equal(f.saves, 2);
+  const changed = await proposalSnapshot(f.current);
+  f.current.files.set("src/top.v", "current\n");
+  await assert.rejects(f.editor.apply([partial([{ search: "old", replace: "new" }])], changed), { code: "changed" });
 });
