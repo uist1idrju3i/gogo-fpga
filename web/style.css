@@ -1246,6 +1246,7 @@ button.secondary:not(.danger):hover:not(:disabled),
 .ai-proposal, .ai-rejected-proposal, .ai-grade-criterion { border: 1px solid #667085; padding: 0.5rem; margin-block: 0.75rem; }
 .ai-tool-card { border: 1px solid #667085; padding: 0.5rem; margin-block: 0.75rem; overflow-wrap: anywhere; }
 .ai-tool-card pre { white-space: pre-wrap; max-height: 20rem; overflow: auto; }
+.cm-local-completion { color: #667085; opacity: 0.8; white-space: pre-wrap; pointer-events: none; }
 #ai-grading { overflow-wrap: anywhere; }
 #ai-grading-total { font-weight: bold; }
 .ai-grade-criterion h5 { font-size: 1rem; margin-block: 0.25rem; }
