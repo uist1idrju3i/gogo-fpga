@@ -91,6 +91,8 @@ OpenRouter の実際のアカウントでのログインは、本リポジトリ
 
 ### A2: 相談・エラー説明・変更提案
 
+変更を許す種類で、明示取得したモデル一覧の `supported_parameters` に `structured_outputs` がある場合だけ、[構造化出力](https://openrouter.ai/docs/guides/features/structured-outputs)を使います。Chat Completions の `response_format` に厳密な JSON Schema を指定し、[プロバイダーの選択](https://openrouter.ai/docs/guides/routing/provider-selection)に `require_parameters: true` を指定します。説明は `answer`、全文置換の提案は `changes` で受け取り、従来のパス・容量検査を通します。途中の JSON は表示せず、完了後の形式が不正なら原文と拒否理由だけを表示し、適用しません。会話履歴には受信した原文を残します。確認画面には使う形式と実際の本文を表示し、非対応時は従来のコードフェンスを使います。`strict` の保証はプロバイダーで異なるため、応答の検査は省きません。
+
 会話はタブ内だけで保持します。以前の資料は既定で本文を省き、ファイルのパスまたはログのツール名と、本文の SHA-256・UTF-8 バイト数を送ります。相談文、種類、プロジェクト要約、問題と応答は残し、今回選んだ資料は全文を送ります。「以前の資料も全文で送り直す」を選ぶと過去の本文も再送します。どちらも送信前の確認に実際の JSON 本文を表示します。ハッシュの計算中は次の確認を待ち、会話を消去した場合は計算結果も履歴に戻しません。
 
 応答の下には、返された入力・出力トークン数、キャッシュ・推論トークン数、費用を表示します。不正な値や欠けた項目は表示せず、使用量がなければその旨を示します。[Usage Accounting](https://openrouter.ai/docs/use-cases/usage-accounting) では Chat Completions も使用量を自動で返すため、要求パラメーターの追加や別の照会はしません。正常に応答を受け取り終えた場合だけ表示し、次の送信や会話の消去で前回の表示を消します。

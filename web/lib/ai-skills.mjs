@@ -15,7 +15,7 @@ export const AI_SKILLS = Object.freeze([
     instructions: "このリポジトリーの形式検証は $assert、$assume、$cover に変換された性質を扱います。bmc/prove は assert、cover モードは cover が必要です。assume は入力の前提であり証明対象ではありません。$check、$live、$fair は未対応です。順序回路では全レジスターに一致する単一ビット入力クロックとエッジの指定が必要です。SystemVerilog の構文や時間的な性質の対応を仮定せず、提示されたソースと検証フローで扱える assert/assume/cover を提案してください。" },
 ].map(Object.freeze));
 
-export function buildSystemPrompt(skillId) {
+export function buildSystemPrompt(skillId, { structured = false } = {}) {
   const skill = AI_SKILLS.find(({ id }) => id === skillId);
   if (!skill) throw new RangeError("Unknown AI skill");
   return [
@@ -25,7 +25,10 @@ export function buildSystemPrompt(skillId) {
     skill.instructions,
     "以前の会話の資料で sha256 があり本文がないものは、送信済みの本文を省略したものです。内容を推測せず、今回の本文を使ってください。必要なら利用者に全文の再送を依頼してください。",
     skill.allowsChanges
-      ? `変更は gogo-fpga-changes という名前のコードフェンス内に JSON で出力してください。形式は {"changes":[{"path":"src/x.v","content":"変更後の全文","reason":"理由"}]} です。差分でなくファイルの全文を示してください。最大${PROPOSAL_LIMITS.files}ファイル、各${PROPOSAL_LIMITS.perFile / 1024} KiB、合計${PROPOSAL_LIMITS.total / 1024} KiBです。正規化されたプロジェクト内の相対パスだけを使い、.cst、ライブラリー、バイナリーは変更しないでください。新規 HDL ファイルは src/ または tests/ の下に置いてください。`
+      ? (structured
+        ? "JSON の answer に説明、changes に変更を入れてください。変更がなければ空の配列にし、コードフェンスは使わないでください。各変更は path、content、reason の文字列です。"
+        : '変更は gogo-fpga-changes という名前のコードフェンス内に JSON で出力してください。形式は {"changes":[{"path":"src/x.v","content":"変更後の全文","reason":"理由"}]} です。') +
+        `差分でなくファイルの全文を示してください。最大${PROPOSAL_LIMITS.files}ファイル、各${PROPOSAL_LIMITS.perFile / 1024} KiB、合計${PROPOSAL_LIMITS.total / 1024} KiBです。正規化されたプロジェクト内の相対パスだけを使い、.cst、ライブラリー、バイナリーは変更しないでください。新規 HDL ファイルは src/ または tests/ の下に置いてください。`
       : "変更用のコードフェンスは出力しないでください。",
   ].join("\n\n");
 }
