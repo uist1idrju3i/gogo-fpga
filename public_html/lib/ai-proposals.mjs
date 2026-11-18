@@ -5,8 +5,31 @@ import { chatByteLength, selectableFiles } from "./openrouter-chat.mjs";
 
 export const PROPOSAL_LIMITS = Object.freeze({ files: 8, perFile: 128 * 1024, total: 512 * 1024 });
 const rejected = (path, reason) => ({ path: typeof path === "string" ? path : "（パスなし）", reason });
+function resolveEdits(change, files) {
+  const fail = (reason) => ({ change, reason });
+  if (change?.edits == null) return change?.content == null
+    ? fail("content と edits はどちらか一方だけを指定してください。") : { change };
+  if (change.content != null) return fail("content と edits はどちらか一方だけを指定してください。");
+  if (!Array.isArray(change.edits) || change.edits.length === 0) return fail("edits は空でない置換の配列にしてください。");
+  if (!files.has(change.path)) return fail("新しいファイルには edits ではなく content で全文を指定してください。");
+  let content = files.get(change.path);
+  if (typeof content !== "string") return fail("テキストファイルだけを部分編集できます。");
+  for (const [index, edit] of change.edits.entries()) {
+    if (!edit || Object.keys(edit).length !== 2 || typeof edit.search !== "string" || typeof edit.replace !== "string" || edit.search.length === 0) {
+      return fail(`置換${index + 1}: search は空でない文字列、replace は文字列にしてください。`);
+    }
+    const start = content.indexOf(edit.search);
+    if (start < 0) return fail(`置換${index + 1}: search と一致する箇所がありません。このファイルは変更しません。`);
+    if (content.indexOf(edit.search, start + 1) >= 0) return fail(`置換${index + 1}: search が複数の箇所に一致します。このファイルは変更しません。`);
+    content = content.slice(0, start) + edit.replace + content.slice(start + edit.search.length);
+  }
+  return { change: { ...change, content } };
+}
+
 export function validateProposals(changes, files) {
   if (!Array.isArray(changes) || changes.length > PROPOSAL_LIMITS.files) return { valid: [], rejected: [rejected("", "提案は最大8ファイルです。形式と件数を確認してください。")] };
+  const resolved = changes.map((change) => resolveEdits(change, files));
+  changes = resolved.map(({ change }) => change);
   const counts = new Map();
   for (const change of changes) counts.set(change?.path, (counts.get(change?.path) ?? 0) + 1);
   if (changes.reduce((n, c) => n + (typeof c?.content === "string" ? chatByteLength(c.content) : 0), 0) > PROPOSAL_LIMITS.total) {
@@ -14,7 +37,7 @@ export function validateProposals(changes, files) {
   }
   const valid = [], errors = [];
   const editable = new Map(selectableFiles(files));
-  for (const change of changes) {
+  for (const [index, change] of changes.entries()) {
     const path = change?.path;
     let reason;
     if (typeof path !== "string" || !validatePath(path).ok || /[\x00-\x1f\x7f]/.test(path)) reason = "正規化されたプロジェクト内の相対パスではありません。";
@@ -22,6 +45,7 @@ export function validateProposals(changes, files) {
     else if (/\.cst$/i.test(path)) reason = ".cst は生成されるため変更できません。ボードのピン設定を使ってください。";
     else if (counts.get(path) > 1) reason = "同じパスが重複しています。";
     else if ([...files.keys(), ...counts.keys()].some((other) => typeof other === "string" && other !== path && (path.startsWith(`${other}/`) || other.startsWith(`${path}/`)))) reason = "ファイルとディレクトリーのパスが衝突しています。";
+    else if (resolved[index].reason) reason = resolved[index].reason;
     else if (typeof change.content !== "string" || chatByteLength(change.content) > PROPOSAL_LIMITS.perFile) reason = "内容は128 KiB以内の文字列にしてください。";
     else if (/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/.test(change.content) || /\.(?:fs|bin)$/i.test(path) || files.has(path) && !editable.has(path)) reason = "バイナリーファイルは変更できません。";
     else if (!files.has(path) && !/^(?:src|tests)\/.+\.(?:v|vh|sv|vhd|vhdl)$/.test(path)) reason = "新しい HDL ファイルは src/ または tests/ に作成してください。";
@@ -32,7 +56,7 @@ export function validateProposals(changes, files) {
 }
 
 export function parseProposals(text, files) {
-  const blocks = [...text.matchAll(/^```gogo-fpga-changes[^\S\r\n]*\r?\n([\s\S]*?)\r?\n```[^\S\r\n]*$/gm)];
+  const blocks = [...text.matchAll(/^```gogo-fpga-(?:changes|edits)[^\S\r\n]*\r?\n([\s\S]*?)\r?\n```[^\S\r\n]*$/gm)];
   if (!blocks.length) return { valid: [], rejected: [] };
   try {
     if (blocks.length !== 1) throw new Error();
