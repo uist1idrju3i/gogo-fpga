@@ -31,18 +31,18 @@ vendor submodule の commit は次のとおりです。pin checker がこの表�
 | zlib | v1.4 | `99623ef7097352da7993ba614161fd6a311e046e` | `https://github.com/madler/zlib.git` |
 | zstd | v1.5.7 | `f8745da6ff1ad1e7bab384bd1f9d742439278e99` | `https://github.com/facebook/zstd.git` |
 | xz-embedded | v2024-12-30 | `ae63ae3a36ed01724674e8f3d750dc47bf125410` | `https://github.com/tukaani-project/xz-embedded.git` |
-| emsdk | 7.0.0 | `1693ce7359fc9694f198694f902a2cc061239b86` | `https://github.com/emscripten-core/emsdk.git` |
-| yomiyasu | 3.1.0 | `db78b9bc5e868549b517a037df7a4d1c93edac23` | `https://github.com/nanaism/yomiyasu.git` |
+| emsdk | 7.0.1 | `a7c808831a666cc903fedb906c171a718cd97341` | `https://github.com/emscripten-core/emsdk.git` |
+| yomiyasu | 3.2.3 | `c49d5f1bee91258e33e1febc3569c6c87be7669e` | `https://github.com/nanaism/yomiyasu.git` |
 | yosys | v0.71 | `b4c586fd37d0ec61bb38fc1a85fd6a2fde48fcd1` | `https://github.com/YosysHQ/yosys.git` |
 | nextpnr | nextpnr-0.11.1 | `62e659ed6748e9f60b2a4aa25dd4fe79a9605881` | `https://github.com/YosysHQ/nextpnr.git` |
 | ghdl | v6.0.0 | `e589c698c351369ac5bcfe7abe1f1152ac5d4727` | `https://github.com/ghdl/ghdl.git` |
 | iverilog | v13_0 | `dfeee909ed9f20b4870dd93423156c0170c0e1ff` | `https://github.com/steveicarus/iverilog.git` |
 | surfer | v0.7.0 | `bd749b1f786c1c62cd67893ca71346cbe6983915` | `https://gitlab.com/surfer-project/surfer.git` |
-| sby | snapshot | `79fc9eddca5e33a28cc2f2cd19c9825efd9a7255` | `https://github.com/YosysHQ/sby.git` |
-| yices2 | yices-2.7.0 | `85cf17e44eac76b5d14b297c09fc9bfecf47ef65` | `https://github.com/SRI-CSL/yices2.git` |
+| sby | snapshot | `b21f778333efc1e7c33fe22b56d43f87e4f759d4` | `https://github.com/YosysHQ/sby.git` |
+| yices2 | yices-2.8.0 | `1fbee54ad4620893f40836a50d74f91d4bf58bb4` | `https://github.com/SRI-CSL/yices2.git` |
 | z3 | z3-5.4.1 | `145c0c51570a357cc558ce898ce77573ba9d4fbf` | `https://github.com/Z3Prover/z3.git` |
 | boolector | 3.2.4 | `393cdfba3735d334bb4e6525500b8a0280dd41e6` | `https://github.com/Boolector/boolector.git` |
-| bitwuzla | 0.10.0 | `d25226df00650ae2006769c03ba9533b1a658698` | `https://github.com/bitwuzla/bitwuzla.git` |
+| bitwuzla | 0.11.0 | `381547632149ad52998f8ef202823d67fa694895` | `https://github.com/bitwuzla/bitwuzla.git` |
 | click | 8.5.1 | `cf19179e8e2fd54c601378cec9e0d21bb12b6fb1` | `https://github.com/pallets/click.git` |
 
 WASI SDK の固定値は pin checker とビルドスクリプトが読む次の表を正とします。
@@ -61,7 +61,7 @@ Surfer WASM build tools:
 | Tool | Version | SHA-256 | URL |
 |---|---|---|---|
 | rust | 1.100.0 | - | `https://static.rust-lang.org/dist/channel-rust-stable.toml` |
-| trunk | 0.22.1 | `2ab8d548fd5ed9cda50906f61fd8654204e7893bd52ebbfd90533862b7d71ee1` | `https://github.com/trunk-rs/trunk/releases/download/v0.22.1/trunk-x86_64-unknown-linux-gnu.tar.gz` |
+| trunk | 0.22.2 | `26fca8a9952e46cd7d8b8b9a2e2c1786c090fc14b8e10b6678ab4d0f9f1a385f` | `https://github.com/trunk-rs/trunk/releases/download/v0.22.2/trunk-x86_64-unknown-linux-gnu.tar.gz` |
 | wasm-bindgen-cli | 0.2.118 | `00b519c9fc2d6e087265da1a00f29160bfcc6a823993482bc2e691910287427b` | `https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.118/wasm-bindgen-0.2.118-x86_64-unknown-linux-musl.tar.gz` |
 | binaryen | version_133 | `2dc9c7813f5375db93d96ead4b78222fcc3e2677bbb832297af4797782a37489` | `https://github.com/WebAssembly/binaryen/releases/download/version_133/binaryen-version_133-x86_64-linux.tar.gz` |
 
@@ -86,7 +86,7 @@ T0 では書き込み部だけが実装されています。合成、配置配�
 | Icarus Verilog (`iverilog` / `vvp`) | C | GPL-2.0-or-later。`tgt-vvp` は LGPL-2.1 | [VeriSim](https://github.com/senolgulgonul/verisim) が Emscripten で `ivlpp`、`ivl`、`vvp` を個別に WASM 化 | T4。3 つの WASM を JavaScript で順番に呼ぶ方式を基礎にする。詳しくは[広域調査](docs/research/oss-survey.md)を参照 |
 | Verilator | C++ | LGPL-3.0 | [tiny-tpu](https://github.com/deaneeth/tiny-tpu) は事前ビルドした WASM を配布。ブラウザー内で C++ をコンパイルする例ではない | 将来。生成コードを実行する C++ コンパイラーをブラウザー内で用意する方法が必要。詳しくは[広域調査](docs/research/oss-survey.md)を参照 |
 | SymbiYosys / `yosys-smtbmc` | Python | 未確認 | YoWASP の Yosys は確認したが、Python 側の WASM 実行例は未確認 | T6。Yosys と Python 側の実行環境を分けて検証する |
-| Yices2 | C | GPL-3.0 | 非公式の WASM パッケージと wasi-libc の制約を報告した issue がある | T6。ライセンスと issue は[広域調査](docs/research/oss-survey.md)を参照し、Emscripten 版を含めビルドと実行を検証する |
+| Yices2 | C | BSD-3-Clause(2.8.0 で GPL-3.0 から変更) | 非公式の WASM パッケージと wasi-libc の制約を報告した issue がある | T6。ライセンスと issue は[広域調査](docs/research/oss-survey.md)を参照し、Emscripten 版を含めビルドと実行を検証する |
 | Z3 | C++ | MIT | 公式 npm [`z3-solver`](https://www.npmjs.com/package/z3-solver) 5.3.2 が WASM を含む | T6。公式パッケージの API と solver の実行時間を小さな証明で測る。詳しくは[広域調査](docs/research/oss-survey.md)を参照 |
 | Boolector | C | 未確認 | YoWASP が WASI 版を配布 | T6。ライセンスと必要な API、solver の実行時間を確認する。詳しくは[広域調査](docs/research/oss-survey.md)を参照 |
 | [sv-elab（旧 yosys-slang）](https://github.com/povik/sv-elab) | C++ | ISC | この調査では WASM 版を確認できていない | 将来。SystemVerilog 対応の段階で調査する。詳しくは[広域調査](docs/research/oss-survey.md)を参照 |
@@ -128,9 +128,9 @@ CIの出力キャッシュを拡張する前に、直近の成功5 runを [S16](
 
 ### Pyodide 上の Apicula `gowin_pack`
 
-S3 では Apicula 0.35 の Python wheel を配布物に含め、Node.js の Pyodide 314.0.7 から実行します。Pyodide の lock は Python 3.14.2、micropip 0.11.1、NumPy 2.4.6（SHA-256 `a292c1f5d7d8a2208cd5e94fc467604c131cabcd2fc14fed6eefde121e7fabdf`）、msgspec 0.20.0（SHA-256 `2a4075cee8afc2c0424c63ae1a9b0655e727478df7fa2eb78f86f846fc5fb4bd`）を指定します。これらの wheel hash はビルド時に Pyodide の lock から読み、Apicula wheel の hash は `requirements-nextpnr.txt` の固定値を使います。
+S3 では Apicula 0.35 の Python wheel を配布物に含め、Node.js の Pyodide 314.0.8 から実行します。Pyodide の lock は Python 3.14.2、micropip 0.11.1、NumPy 2.4.6（SHA-256 `a292c1f5d7d8a2208cd5e94fc467604c131cabcd2fc14fed6eefde121e7fabdf`）、msgspec 0.20.0（SHA-256 `2a4075cee8afc2c0424c63ae1a9b0655e727478df7fa2eb78f86f846fc5fb4bd`）を指定します。これらの wheel hash はビルド時に Pyodide の lock から読み、Apicula wheel の hash は `requirements-nextpnr.txt` の固定値を使います。
 
-Pyodide は新規依存として導入し、upstream の 314.0.0〜314.0.7 の変更履歴を確認しました。314.0.0 で Python 3.14.2 と Emscripten 5.0.3 に更新され、`lzma` が標準ライブラリーに含まれます。`pyodide.asm.mjs` への ES module 名変更は Node の実行には影響しませんが、S4 の Worker は module worker を使う必要があります。314.0.1〜314.0.6 の修正・性能改善はこの file-based 実行で使う API を変えません。314.0.7 の `dedent` オプションは既定値が従来動作を保つため採用不要です。`loadPackage` は lock 内の名前を指定し、依存解決を切った `micropip.install` でローカル wheel を入れるため、314.0.6 の requirement-specifier 処理変更にも依存しません。
+Pyodide は新規依存として導入し、upstream の変更履歴を確認しました。314.0.0 で Python 3.14.2 と Emscripten 5.0.3 に更新され、`lzma` が標準ライブラリーに含まれます。`pyodide.asm.mjs` への ES module 名変更は Node の実行には影響しませんが、S4 の Worker は module worker を使う必要があります。314.0.1〜314.0.8 の修正と `dedent` オプションは、この file-based 実行で使う API を変えません。`loadPackage` は lock 内の名前を指定し、依存解決を切った `micropip.install` でローカル wheel を入れるため、requirement-specifier の処理変更にも依存しません。採否は[更新評価の記録](docs/research/issue21-dependency-update.md)に残します。
 
 Apicula 0.35 の wheel は 4,281,385 bytes、SHA-256 `6495d1c7cdc3cf6ac0a74bf7246932e96e5af84e24c17c1fef7296ebe7ed82fe` です。wheel に同梱された chipdb を `importlib.resources` で読み、圧縮データの展開に `lzma` を使います。`lzma` は Pyodide core に含まれることを実行時に検査します。`fastcrc` は Pyodide にないため、Apicula は CRC table fallback を選び、その警告を stderr に残します。Cattrs は使用しません。
 

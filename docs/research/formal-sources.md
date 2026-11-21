@@ -9,10 +9,10 @@
 | ソース | 採用版 | 確認した公開release | ライセンス原本 | 配布と実行の状態 |
 |---|---|---|---|---|
 | SBY | mainの固定snapshot | latest release APIは404。latest releaseとは呼ばない | [ISC](https://github.com/YosysHQ/sby/blob/79fc9eddca5e33a28cc2f2cd19c9825efd9a7255/COPYING) | ソースのみ。process adapter未接続 |
-| Yices2 | yices-2.7.0 | [2025-07-16公開](https://github.com/SRI-CSL/yices2/releases/tag/yices-2.7.0) | [GPL本文](https://github.com/SRI-CSL/yices2/blob/85cf17e44eac76b5d14b297c09fc9bfecf47ef65/LICENSE.txt)と[GPL-3.0-or-later表示](https://github.com/SRI-CSL/yices2/blob/85cf17e44eac76b5d14b297c09fc9bfecf47ef65/copyright.txt) | 優先するビルド候補。未実行 |
+| Yices2 | yices-2.8.0 | [2026-11-11公開](https://github.com/SRI-CSL/yices2/releases/tag/yices-2.8.0) | [BSD-3-Clause](https://github.com/SRI-CSL/yices2/blob/1fbee54ad4620893f40836a50d74f91d4bf58bb4/LICENSE.txt)。2.7.0までのGPL-3.0-or-laterから変更 | 優先するビルド候補。未実行 |
 | Z3 | z3-5.3.3 | [2026-10-29公開](https://github.com/Z3Prover/z3/releases/tag/z3-5.3.3) | [MIT](https://github.com/Z3Prover/z3/blob/430d19e697e2ec9bad79ff210d41b4a7a5fcfa3e/LICENSE.txt) | 優先するビルド候補。未実行 |
 | Boolector | 3.2.4 | [2024-08-23の最終release](https://github.com/Boolector/boolector/releases/tag/3.2.4) | [MIT](https://github.com/Boolector/boolector/blob/393cdfba3735d334bb4e6525500b8a0280dd41e6/COPYING) | 開発・保守終了、archive済み。比較候補であり推奨しない |
-| Bitwuzla | 0.9.1 | [2026-05-21公開](https://github.com/bitwuzla/bitwuzla/releases/tag/0.9.1) | [MIT](https://github.com/bitwuzla/bitwuzla/blob/8d1eb01093ae54d9b4586456b69c3bf31000a4c2/COPYING) | Boolector後継の比較候補。追加依存とWASMは未検証 |
+| Bitwuzla | 0.11.0 | [2026-11-14公開](https://github.com/bitwuzla/bitwuzla/releases/tag/0.11.0) | [MIT](https://github.com/bitwuzla/bitwuzla/blob/381547632149ad52998f8ef202823d67fa694895/COPYING) | Boolector後継の比較候補。隔離した診断のみ |
 | Click | 8.3.1 | [タグ](https://github.com/pallets/click/releases/tag/8.3.1)を採用 | [BSD-3-Clause](https://github.com/pallets/click/blob/1d038f270701498433cb432f54db89f95f07a845/LICENSE.txt) | SBYのPython依存。ソースを登録 |
 | GMP | 6.3.0 | [GNU公式配布索引](https://ftp.gnu.org/gnu/gmp/) | archive内のREADMEとCOPYING各本文 | Yices2の候補依存。原archiveをsource archiveへ保存 |
 
