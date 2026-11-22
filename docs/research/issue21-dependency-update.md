@@ -79,3 +79,27 @@ UVVMの大きいライセンス差分は、追加された`p2l2_vip_mdio/LICENSE
 版の確認、原文の取得、candidate checkoutだけでは製品認定を完了した扱いにしません。書き込み部の再現ビルド、4ボードの仮想USB、YosysのWASI/native比較、Pyodide pack、ライブラリーの実行と負の対照、配信物の監査、全実装後の画面確認を更新候補の検査対象とします。
 
 Tang Nano実機は本リポジトリでは試していません。仮想USBでの時間は実機の値ではありません。VHDL原文による反例の独立再実行も、今回の依存更新で完了したとは扱いません。
+
+## 2026-11-22 の更新
+
+「固定版の更新確認」で報告された更新を、前回と同じ基準で評価しました。変更履歴は各 release・compare・changelog の全件を確認し、四つに分けて記録します。
+
+| 依存 | 旧版からの候補 | 変更履歴の原典 | 採否に関係する変更と対応 |
+|---|---|---|---|
+| Emscripten | 7.0.0 → 7.0.1 | [ChangeLog](https://github.com/emscripten-core/emscripten/blob/7.0.1/ChangeLog.md) | JS ツール群の rolldown 化、embind の link-time invoker、zlib port 1.4、MT+assertions での `addFunction` 警告、Safari の `emscripten_get_now` 修正を確認します。`-sJSPI` が最小ブラウザー版（Chrome 137・Firefox 153・Safari 27・Node 24）を既定で設定するようになり、本リポジトリの既存要件と一致するため採用します。廃止設定への対応は不要です。 |
+| Yices2 | yices-2.7.0 → yices-2.8.0 | [release](https://github.com/SRI-CSL/yices2/releases/tag/yices-2.8.0) | 有限体の C API、MCSAT・model generalization の拡張、SAT-delegate 統合、正しさと SMT-LIB 処理の修正を確認します。C API の追加のみで、WASI ビルドの設定変更は不要です。`make_source_version` が `YICES_SOURCE_REVISION` を受け付ける構成に変わったため、`patches/yices2/reproducible-version.patch` を新スクリプトに合わせて更新します。`SOURCE_DATE_EPOCH` の日付と `.gitcommit` の commit を維持します。 |
+| Bitwuzla | 0.10.0 → 0.11.0 | [NEWS](https://github.com/bitwuzla/bitwuzla/blob/0.11.0/NEWS.md) | Rust binding、option 名 API、option 範囲検査の厳格化を確認します。C API の `bitwuzla_push`/`bitwuzla_pop` の戻り値が `uint32_t` へ変更ですが、製品経路では CLI 境界のみを使うため影響しません。隔離した診断のままとし、既定 solver の昇格はしません。 |
+| SBY | 79fc9eddca5e → b21f778333ef | [compare](https://github.com/YosysHQ/sby/compare/79fc9eddca5e33a28cc2f2cd19c9825efd9a7255...b21f778333efc1e7c33fe22b56d43f87e4f759d4) | SymbiYosys から SBY への改名と文書修正です。`sbysrc/` の構造と `COPYING`（ISC）は不変で、staging と 2 件の patch を `--fuzz=0` で確認済みです。 |
+| yomiyasu | v3.1.0 → v3.2.3 | [releases](https://github.com/nanaism/yomiyasu/releases) | lint の読点修正と diff 検査（限定語・境目・保証・再発防止の言い方比較）の追加です。`.agents/skills/yomiyasu` のリンク先を維持します。 |
+| trunk | 0.22.1 → 0.22.2 | [差分](https://github.com/trunk-rs/trunk/compare/v0.22.1...v0.22.2) | wasm binary への gzip 圧縮対応（既定 off）、dist path glob の保持、node package 展開時の symlink 回避、bindgen cache の無効化修正です。破壊的変更はありません。 |
+| zizmor | 1.31.1 → 1.32.0 | [release](https://github.com/zizmorcore/zizmor/releases/tag/v1.32.0) | workflow lockfile の実験対応、root-aware の入力収集、bot-conditions・obfuscation・template-injection の誤検出・見落とし修正です。 |
+| @playwright/test | 1.64.1 → 1.65.1 | [releases](https://github.com/microsoft/playwright/releases) | Bun での test runner 実行、failures reporter、reporter の `onlyFailures` を確認します。1.65.1 で decorated class の読み込み退行を修正しています。Chromium 159.0.8154.6 で JSPI と WebUSB を E2E で確かめます。 |
+| @codemirror/lint | 6.9.7 → 6.9.8 | [changelog](https://github.com/codemirror/lint/blob/main/CHANGELOG.md) | 修正版のみ。editor bundle の再生成で取り込みます。 |
+| pyodide | 314.0.7 → 314.0.8 | [changelog](https://pyodide.org/en/stable/project/changelog.html#version-314-0-8) | 修正版のみ。lock 内の Python 3.14.2・NumPy 2.4.6・msgspec 0.20.0・micropip 0.11.1 は不変で、file-based 実行の API に変更はありません。 |
+| yowasp-yosys（fixture） | 0.70.0.0.post1259 → 0.71.0.0.post1285 | [YoWASP](https://github.com/YoWASP/yosys/releases) | Yosys 0.71 追従の fixture 更新です。4 ボードの `.fs` を再生成して照合します。Apycula は nextpnr wheel の `Apycula==0.32` 指定により 0.32 を維持します。 |
+| NEORV32 | 87c8c98bc34e → b119883b23d9（v1.13.8） | [compare](https://github.com/stnolting/neorv32/compare/87c8c98bc34e...b119883b23d9) | fence decoding の修正と複数部品の変更です。既存の RV32E 構成と ROM を検査します。 |
+| Ibex | 3d524f19ee8e → 041098fe2380（pulpissimo-v6.1.1） | [compare](https://github.com/lowRISC/ibex/compare/3d524f19ee8e...041098fe2380) | CHERIoT mode switch の文書と clock-gate の fault 対策です。SystemVerilog の未対応表示を保持します。 |
+| VexiiRiscv | 22510fc004a6 → 90a38f39f839 | [compare](https://github.com/SpinalHDL/VexiiRiscv/compare/22510fc004a6...90a38f39f839) | VU mode での mret 例外報告の修正です。Scala 生成が必要な未対応表示を保持します。 |
+| VUnit | 3fff9e52c7ba → 5d6ff35471fc | [compare](https://github.com/VUnit/vunit/compare/3fff9e52c7ba...5d6ff35471fc) | release notes の整列のみです。既存の未対応表示を保持します。 |
+
+wasm-bindgen-cli 0.2.130 は前回と同じ理由で据え置きます。Surfer v0.7.0 の `Cargo.lock` が要求する `wasm-bindgen 0.2.118` crate と CLI の版を一致させる必要があり、vendor の Surfer を編集しない限り単独更新できません。
