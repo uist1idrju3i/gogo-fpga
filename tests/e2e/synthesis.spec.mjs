@@ -36,7 +36,8 @@ async function captureNetworkResponses(context) {
     const body = await response.body();
     if (
       request.method() === "GET" &&
-      ["127.0.0.1", "localhost", "[::1]"].includes(url.hostname) &&
+      ["127.0.0.1", "localhost", "[::1]", process.env.PLAYWRIGHT_ASSET_HOST]
+        .includes(url.hostname) &&
       response.status() >= 200 &&
       response.status() < 300
     ) {

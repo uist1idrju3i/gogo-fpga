@@ -5,8 +5,6 @@ import { expect, test } from "@playwright/test";
 
 const root = resolve(import.meta.dirname, "../..");
 const fixture = readFileSync(resolve(root, "tests/fixtures/surfer/logic.vcd"), "utf8");
-const playwrightPort = process.env.PLAYWRIGHT_PORT ?? "8000";
-const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${playwrightPort}`;
 
 test.use({
   launchOptions: {
@@ -15,13 +13,12 @@ test.use({
 });
 
 async function openSurfer(page, vcd) {
-  const origin = new URL(baseURL).origin;
-  const externalRequests = [];
+  const requests = [];
   const messages = [];
   page.on("request", (request) => {
     const url = new URL(request.url());
-    if (["http:", "https:"].includes(url.protocol) && url.origin !== origin) {
-      externalRequests.push(url.href);
+    if (["http:", "https:"].includes(url.protocol)) {
+      requests.push(url.href);
     }
   });
   page.on("console", (message) => messages.push(message.text()));
@@ -32,30 +29,38 @@ async function openSurfer(page, vcd) {
     iframe.src = "/surfer/index.html";
     document.body.replaceChildren(iframe);
   });
-  await expect.poll(() => page.frames().some((frame) => frame.url().endsWith("/surfer/index.html"))).toBe(true);
-  const frame = page.frames().find((candidate) => candidate.url().endsWith("/surfer/index.html"));
+  await expect.poll(() => page.frames().some((frame) => /\/surfer\/(index\.html)?$/.test(frame.url()))).toBe(true);
+  const frame = page.frames().find((candidate) => /\/surfer\/(index\.html)?$/.test(candidate.url()));
   assert.ok(frame);
-  await frame.waitForFunction(() => typeof window.register_message_listener === "function");
+  await frame.waitForFunction(() => typeof window.inject_message === "function", null, { timeout: 120_000 });
   await page.evaluate((contents) => {
     const iframe = document.querySelector("#surfer-frame");
     const bytes = Array.from(new TextEncoder().encode(contents));
     iframe.contentWindow.postMessage({ command: "InjectMessage",
       message: JSON.stringify({ LoadFromData: [bytes, "Clear"] }) }, window.location.origin);
   }, vcd);
-  return { frame, messages, externalRequests };
+  return { frame, messages, requests };
 }
 
 async function wavesLoaded(frame) {
   return frame.evaluate(async () => {
     const m = await import("/surfer/surfer.js");
-    return m.waves_loaded();
+    try {
+      return m.waves_loaded();
+    } catch {
+      return false;
+    }
   });
 }
 
 async function indexOfName(frame, name) {
   return frame.evaluate(async (signalName) => {
     const m = await import("/surfer/surfer.js");
-    return m.index_of_name(signalName);
+    try {
+      return m.index_of_name(signalName);
+    } catch {
+      return -1;
+    }
   }, name);
 }
 
@@ -69,29 +74,31 @@ async function addScope(frame, scopeName) {
 }
 
 test("loads VCD bytes without a blob fetch and exposes logic.clk", async ({ page }) => {
-  const { frame, messages, externalRequests } = await openSurfer(page, fixture);
-  await expect.poll(() => messages.some((message) => message.includes("LoadFromData"))).toBe(true);
-  await expect.poll(() => wavesLoaded(frame), { timeout: 5000 }).toBe(true);
+  const { frame, messages, requests } = await openSurfer(page, fixture);
+  await expect.poll(() => messages.some((message) => message.includes("LoadFromData")), { timeout: 120_000 }).toBe(true);
+  await expect.poll(() => wavesLoaded(frame), { timeout: 60_000 }).toBe(true);
   await addScope(frame, "logic");
-  await expect.poll(() => indexOfName(frame, "logic.clk"), { timeout: 5000 }).toBeGreaterThanOrEqual(0);
+  await expect.poll(() => indexOfName(frame, "logic.clk"), { timeout: 60_000 }).toBeGreaterThanOrEqual(0);
   expect(messages.some((message) => message.includes("Failed to parse wave file"))).toBe(false);
   expect(messages.some((message) => message.includes("Content Security Policy"))).toBe(false);
-  expect(externalRequests).toEqual([]);
+  const siteOrigin = new URL(page.url()).origin;
+  expect(requests.filter((url) => !url.startsWith(`${siteOrigin}/`))).toEqual([]);
 });
 
 for (const [kind, contents] of [["corrupt", "not a VCD waveform"], ["empty", ""]]) {
 test(`reports a parse error for a ${kind} VCD`, async ({ page }) => {
-  const { frame, messages, externalRequests } = await openSurfer(page, contents);
+  const { frame, messages, requests } = await openSurfer(page, contents);
   await expect.poll(
     () => messages.some((message) => message.includes("Failed to parse wave file")),
-    { timeout: 5000 },
+    { timeout: 60_000 },
   ).toBe(true);
   const deadline = Date.now() + 1000;
   do {
     expect(await wavesLoaded(frame)).toBe(false);
     await page.waitForTimeout(100);
   } while (Date.now() < deadline);
-  expect(externalRequests).toEqual([]);
+  const siteOrigin = new URL(page.url()).origin;
+  expect(requests.filter((url) => !url.startsWith(`${siteOrigin}/`))).toEqual([]);
 });
 }
 

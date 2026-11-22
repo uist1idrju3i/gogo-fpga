@@ -168,7 +168,8 @@ test("right tabs contain verification settings, keyboard navigation and idle AI 
   await expect(page.locator("#right-tab-ai")).toBeFocused();
   await expect(page.locator("#right-panel-ai")).toContainText("相談や資料は送信しません");
   await expect(page.locator("#ai-connect")).toBeVisible();
-  expect(external).toEqual([]);
+  const siteOrigin = new URL(page.url()).origin;
+  expect(external.filter((url) => !url.startsWith(`${siteOrigin}/`))).toEqual([]);
   await page.setViewportSize({ width: 390, height: 900 });
   await page.locator("#toggle-board-pane").click();
   await expect(page.locator("#board-pane")).toHaveAttribute("aria-modal", "true");

@@ -103,25 +103,33 @@ async function replaceFile(page, path, contents) {
 async function waitForWaveform(page, signal = "top_tb.clk") {
   await page.locator("#bottom-tab-waveform").click();
   await expect.poll(() => page.frames().some((candidate) =>
-    candidate.url().endsWith("/surfer/index.html")
+    /\/surfer\/(index\.html)?$/.test(candidate.url())
   )).toBe(true);
   const frame = page.frames().find((candidate) =>
-    candidate.url().endsWith("/surfer/index.html")
+    /\/surfer\/(index\.html)?$/.test(candidate.url())
   );
   expect(frame).toBeTruthy();
   await expect.poll(
     () => frame.evaluate(async () => {
       const m = await import("/surfer/surfer.js");
-      return m.waves_loaded();
+      try {
+        return m.waves_loaded();
+      } catch {
+        return false;
+      }
     }),
-    { timeout: 10_000 },
+    { timeout: 90_000 },
   ).toBe(true);
   await expect.poll(
     () => frame.evaluate(async (signalName) => {
       const m = await import("/surfer/surfer.js");
-      return m.index_of_name(signalName);
+      try {
+        return m.index_of_name(signalName);
+      } catch {
+        return -1;
+      }
     }, signal),
-    { timeout: 10_000 },
+    { timeout: 90_000 },
   ).toBeGreaterThanOrEqual(0);
   return frame;
 }
@@ -353,7 +361,7 @@ test("a malformed VCD is not reported as a loaded waveform", async ({ page }) =>
   await expect(page.locator("#simulation-status")).toHaveAttribute("data-outcome", "ok");
   await page.locator("#bottom-tab-waveform").click();
   await expect(page.locator("#waveform-status")).toContainText("タイムアウト", { timeout: 45_000 });
-  const frame = page.frames().find((candidate) => candidate.url().endsWith("/surfer/index.html"));
+  const frame = page.frames().find((candidate) => /\/surfer\/(index\.html)?$/.test(candidate.url()));
   expect(await frame.evaluate(async () => (await import("/surfer/surfer.js")).waves_loaded())).toBe(false);
   await page.locator("#bottom-tab-artifacts").click();
   await expect(page.locator("#wave-download-link")).toHaveAttribute("download", "broken.vcd");

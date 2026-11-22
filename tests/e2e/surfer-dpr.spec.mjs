@@ -17,7 +17,7 @@ async function simulate(page) {
   const close = page.locator("#close-board-pane");
   if (await close.isVisible()) await close.click();
   await expect(page.locator("#waveform-status")).toHaveText("波形を表示しています。");
-  const frame = page.frames().find(frame => frame.url().endsWith("/surfer/index.html"));
+  const frame = page.frames().find(frame => /\/surfer\/(index\.html)?$/.test(frame.url()));
   await expect.poll(() => frame.evaluate(async () => {
     const surfer = await import("/surfer/surfer.js");
     return surfer.index_of_name("top_tb.clk");
