@@ -46,7 +46,8 @@
       "ide.spec.mjs",
       "project-deletion.spec.mjs",
       "publication-info.spec.mjs",
-      "s5-synthesis.spec.mjs"
+      "s5-synthesis.spec.mjs",
+      "boards-flash.spec.mjs"
     ]
   ]
 }
