@@ -1,4 +1,6 @@
 import { randomUUID } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 import { BOARDS } from "../../web/lib/boards.mjs";
 import { fsIdcode, fsIdcodeMatchesBoard } from "../../web/lib/fs-idcode.mjs";
@@ -7,6 +9,19 @@ import { storedFile } from "./project-storage-helpers.mjs";
 
 // Validates that each board template builds a .fs with the right IDCODE and
 // that the fake-USB flash path completes, both locally and on the deployed site.
+
+// The fake-USB route replaces the flasher worker with the repository copy, so a
+// stale or broken worker.js on the server would go unnoticed: compare the
+// served bytes against web/worker.js first.
+test("served flasher worker matches the repository worker", async ({
+  request,
+}) => {
+  const response = await request.get("/worker.js");
+  expect(response.ok()).toBe(true);
+  expect(Buffer.from(await response.body())).toEqual(
+    readFileSync(resolve(import.meta.dirname, "../../web/worker.js")),
+  );
+});
 
 async function deleteProject(page, name) {
   await page.evaluate(async (projectName) => {
