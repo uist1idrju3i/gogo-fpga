@@ -26,7 +26,7 @@ WASMをgzipした比較用のbyte数は584,595です。emsdk 7.0.1のJSPI既定�
 
 ## 形式検証solver
 
-Yices2 2.8.0をWASIへビルドし、`build-formal-solvers.py verify`が成功しました（2,041,855 B）。upstreamが`utils/make_source_version`を書き換え、`YICES_SOURCE_REVISION`の環境変数とwork tree境界のgit検査を備えたため、`patches/yices2/reproducible-version.patch`は新しい構造に合わせて書き直しました。`SOURCE_DATE_EPOCH`の日付化と`.gitcommit`フォールバックを保持し、`patch --fuzz=0`での適用を確かめました。`unsupported-wasi-alarm.patch`はオフセット-14でそのまま適用されます。
+Yices2 2.8.0をWASIへビルドし、`build-formal-solvers.py verify`が成功しました（2,041,855 B、SHA-256 `af03f88cd4434a9dc6eddd4e0f24ace48a0266d130feef0e2065ad20f2a72fd2`）。検証は配布と同じパッチ入力で再実行しています。upstreamが`utils/make_source_version`を書き換え、`YICES_SOURCE_REVISION`の環境変数とwork tree境界のgit検査を備えたため、`patches/yices2/reproducible-version.patch`は新しい構造に合わせて書き直しました。`SOURCE_DATE_EPOCH`の日付化と`.gitcommit`フォールバックを保持し、`patch --fuzz=0`での適用を確かめました。`unsupported-wasi-alarm.patch`はオフセット-14でそのまま適用されます。
 
 Bitwuzla 0.11.0は入力ソースの更新のみで、隔離診断のままです。製品の既定solverはYices2のままです。
 
