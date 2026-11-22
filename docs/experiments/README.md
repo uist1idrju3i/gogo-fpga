@@ -6,6 +6,7 @@
 
 | 記録 | 内容 | 状態 |
 |---|---|---|
+| [S18 依存更新の回帰（2026-11）](S18-deps-update-2026-11.md) | 15件更新の再現ビルド、Yices2 2.8.0、仮想USB、fixture期待値、画面・packの検査範囲 | WASM・MJSのSHA-256一致、仮想USB43件とsolver検証が成功。実機は未確認 |
 | [S17 Issue #21の依存更新](S17-issue21-dependencies.md) | 正式版・branchの採否、資材サイズとhash、再現ビルド、仮想USB、合成・HDL・CPU・形式検証と失敗試行 | 候補の仮想USB43件、Yosys比較19件、VHDL・HDL28件、CPU9件、製品形式検証39件が成功。基準の9K失敗と追試を保持。実機は未確認 |
 | [S15 Yices2の製品配信とSBY実行](S15-yices2-product.md) | 固定ソース・GMP・SDK、HTTP配信、Git-free再生成、実runnerとSQLite・反例 | Verilog 6条件を各5回。言語・再実行・画面の全体認定は継続 |
 | [S15 形式検証の言語・反例再実行・停止](S15-formal-product-integration.md) | GHDLからSAT/SBYへの接続、Icarusの原文再実行、実workerの停止・期限と負の対照 | 43条件を各5回、215判定成功。大小文字・対象一覧の修正後も同数成功。画面は次の記録へ分離 |

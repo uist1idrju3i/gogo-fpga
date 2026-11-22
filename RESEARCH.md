@@ -177,7 +177,7 @@ Emscripten 7のlibusb用patchとcxxoptsのinclude指定、その理由と照合�
 
 [Issue #21の依存更新の確認](docs/research/issue21-dependency-update.md)に、正式版とbranchの候補、誤検出、互換性、ライセンス、単独更新を見送る理由を記録しました。
 
-資材比較、再現ビルド、各ツールの回帰と失敗試行は[S17の互換性確認](docs/experiments/S17-issue21-dependencies.md)に記録します。Tang Nano実機は本リポジトリでは試していません。
+再現ビルドと回帰は[S17](docs/experiments/S17-issue21-dependencies.md)、2026-11分は[S18](docs/experiments/S18-deps-update-2026-11.md)に記録します。Tang Nano実機は本リポジトリでは試していません。
 
 Z3 WASIのlink失敗とSDK例外library・fork登録の対処は、[ソルバー調査](docs/research/formal-solvers.md)と[S15の診断記録](docs/experiments/S15-z3-wasi-link.md)に保存しました。手動18条件を経てclean buildと[両solverの正式反復](docs/experiments/S15-solver-native-wasi.md)まで実施しました。
 
