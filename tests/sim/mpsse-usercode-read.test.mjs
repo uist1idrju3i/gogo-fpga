@@ -53,22 +53,22 @@ test("the fake returns the MPSSE checkCRC usercode read without stale bytes", as
   await shiftTms(device, [0]);
   await loadInstruction(device, 0x3c);
   assert.equal(device.tap.instruction, 0x3c);
-  assert.equal(device.tap.usercode, 0x0000aaee);
+  assert.equal(device.tap.usercode, 0x000014ce);
   await loadInstruction(device, 0x13);
   assert.equal(device.tap.instruction, 0x13);
   await shiftTms(device, [1, 0, 0]);
-  assert.equal(device.tap.drShift, 0x0000aaee);
+  assert.equal(device.tap.drShift, 0x000014ce);
 
   await send(device, [0x39, 0x02, 0x00, 0x00, 0x00, 0x00]);
   await send(device, [0x3b, 0x06, 0x00]);
   await send(device, [0x6b, 0x00, 0x81]);
 
-  assert.deepEqual(device.mpsseOutput, [0xee, 0xaa, 0x00, 0x00, 0x00]);
+  assert.deepEqual(device.mpsseOutput, [0xce, 0x14, 0x00, 0x00, 0x00]);
 
   const response = await device.transferIn(1, 512);
   assert.deepEqual(
     [...new Uint8Array(response.data.buffer, response.data.byteOffset, response.data.byteLength)],
-    [0x01, 0x60, 0xee, 0xaa, 0x00, 0x00, 0x00],
+    [0x01, 0x60, 0xce, 0x14, 0x00, 0x00, 0x00],
   );
   assert.deepEqual(device.mpsseOutput, []);
 });

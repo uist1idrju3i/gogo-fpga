@@ -80,7 +80,7 @@ before(async () => {
   );
   assert.equal(versions.status, 0, `Could not read native dependency versions:\n${versions.stderr}`);
   console.log(
-    `Pyodide 314.0.7/Python 3.14.2 setup ${pyodideSetupMs.toFixed(1)} ms; ` +
+    `Pyodide 314.0.8/Python 3.14.2 setup ${pyodideSetupMs.toFixed(1)} ms; ` +
       `native ${versions.stdout.trim()}; nextpnr WASM ${statSync(nextpnrWasmPath).size} bytes`,
   );
 });

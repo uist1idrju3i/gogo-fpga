@@ -50,7 +50,7 @@ test("Gowin fixture checksums match the expected configuration checksums", () =>
       readFileSync(resolve(repoRoot, "build/fixtures", `${board}.fs`), "ascii"),
     ),
   );
-  assert.deepEqual(checksums, [0xa9ee, 0x214f, 0xc5d5]);
+  assert.deepEqual(checksums, [0x13ce, 0x7485, 0xed57]);
 });
 
 function runProgram(board, args, faults = {}, timeout = 90_000, inputFiles = {}) {
