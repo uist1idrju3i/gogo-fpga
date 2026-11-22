@@ -5,7 +5,8 @@ import { defineConfig, devices } from "@playwright/test";
 //
 // Tests that need locally-built native baselines or the local dist tree are
 // excluded below (they run in CI via playwright.config.mjs):
-// - .fs byte comparisons against the native reference build
+// - .fs byte comparisons against the native reference build (including the
+//   mixed-language instantiates tests in vhdl.spec.mjs)
 // - the S5 baseline download comparison and fixture-loaded project builds
 // - cached-asset checks that list files in the local dist tree
 // - web-flasher.spec.mjs (a pre-flight check on files produced by
@@ -21,7 +22,7 @@ export default defineConfig({
   testDir: "./tests/e2e",
   testIgnore: /web-flasher\.spec\.mjs/,
   grepInvert:
-    /built distribution|native \.fs|native-identical|S5 Chromium build matches the baseline|fixture-loaded project|cached synthesis assets survive/,
+    /built distribution|native \.fs|native-identical|instantiates|S5 Chromium build matches the baseline|fixture-loaded project|cached synthesis assets survive/,
   timeout: 180_000,
   expect: {
     timeout: 45_000,
