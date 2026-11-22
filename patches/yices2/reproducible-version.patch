@@ -10,7 +10,7 @@
 +else
 +  now=`date +"%Y-%m-%d"`
 +fi
- 
+
  #
  # Revision.
 @@ -77,6 +81,11 @@
