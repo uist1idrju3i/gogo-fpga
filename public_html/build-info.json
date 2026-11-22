@@ -1,20 +1,20 @@
 {
   "artifacts": {
-    "openFPGALoader.mjs": "e8feeda6855fc6894287f443ad8f8fbe05d24c79e5bafb4de68ad85a55575934",
-    "openFPGALoader.wasm": "090bb5c1f06cc6297f196eef51bcb83e814f29bacf1eacc74018c5204786db98"
+    "openFPGALoader.mjs": "24ab174e13807073140d6d0de66d3b9e8259f91ad2010311cae1a7741928627a",
+    "openFPGALoader.wasm": "90a20bce971dae5340caa97edf43a875369ddb912c54a44bc2391112aca7685c"
   },
   "async_mode": "jspi",
   "build_script_sha256": "a644a76e6bcc08e6f25f036987276503875750ae0958cbe503b3e3f2dac76334",
-  "emcc_version": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 7.0.0 (777e6e5db7b4990bcaeb1b9998ed642cc84e6629)",
+  "emcc_version": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 7.0.1 (ac0578743420bcbe9a4f77d0b6599c25f8d43702)",
   "libusb_patch_sha256": "3aef49eecfe151472f33f6771dc86c89ec731bec18fc8b4f36183a6d5218cb10",
   "submodule_shas": {
-    "vendor/emsdk": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "vendor/emsdk": "a7c808831a666cc903fedb906c171a718cd97341",
     "vendor/iverilog": "dfeee909ed9f20b4870dd93423156c0170c0e1ff",
     "vendor/libftdi": "92d657bcb543a9622947d984d4a8e725fb680e8c",
     "vendor/libusb": "87a55632db62c9bdc58cd31d3ccfa673f1bb017f",
     "vendor/openFPGALoader": "befbab4f646207dbaf1daf8b144dd980ad283dd5",
     "vendor/surfer": "bd749b1f786c1c62cd67893ca71346cbe6983915",
-    "vendor/yomiyasu": "db78b9bc5e868549b517a037df7a4d1c93edac23",
+    "vendor/yomiyasu": "c49d5f1bee91258e33e1febc3569c6c87be7669e",
     "vendor/yosys": "b4c586fd37d0ec61bb38fc1a85fd6a2fde48fcd1",
     "vendor/zlib": "99623ef7097352da7993ba614161fd6a311e046e"
   },

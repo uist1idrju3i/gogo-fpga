@@ -10,26 +10,26 @@
     },
     {
       "path": "pyodide/pyodide.asm.mjs",
-      "sha256": "f7cdc8ece80678ceb712f8e65ebe6d3a83203a180c399865f49612a051693635",
-      "size": 1250344
+      "sha256": "22514b8be6980e28a02c8b1d6387ce8dfe666fc4edf8d547cff5dce29ff4d972",
+      "size": 1250259
     },
     {
-      "compressed_sha256": "fd5bc2f1b13b8be8174285f14bf603813575d7bafec16d9144f889792642d06f",
-      "compressed_size": 2890689,
+      "compressed_sha256": "2004bdb2237a86a0e80bfe63446b00fdafe43689075f1be901b8a56acacd9aa1",
+      "compressed_size": 2890523,
       "encoding": "zstd",
       "path": "pyodide/pyodide.asm.wasm",
-      "sha256": "cc36e3cab04fdfc9a63ff13eb52eae2b911bf46c025cc7b281f394bd3de1d5e6",
-      "size": 9598218
+      "sha256": "e14d49ceca9b4a0e274ea918f3a898de2d3880b6e5573a6cfe1a2267ecc70329",
+      "size": 9597892
     },
     {
       "path": "pyodide/pyodide.mjs",
-      "sha256": "6f1d60f7bf529beb300f0f47983c921d3982363640ba20af0e38efdddbc66109",
-      "size": 17931
+      "sha256": "1bb8cc14f9405aaa7cd4e00c12edd0a8539de9cc026618d6ee5a9663f367dc70",
+      "size": 17758
     },
     {
       "path": "pyodide/python_stdlib.zip",
-      "sha256": "fa1957e5777068fc4f7437f96d860ae2fbe9c19732ba06c84e004ec16dd7dd7a",
-      "size": 2545637
+      "sha256": "2bd3394a145bfbbe5bbc9d9d6ab9136abbb986c6fef6c142b3a2962227aa5c28",
+      "size": 2545550
     },
     {
       "path": "wheels/apycula-0.35-py3-none-any.whl",
