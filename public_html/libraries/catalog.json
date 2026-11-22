@@ -636,8 +636,8 @@
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_package.vhd",
-              "size": 79363,
-              "sha256": "d9bc0767529d9910d0b852a9a62834a48e14378cd829974473a062bb6edafb8d"
+              "size": 79859,
+              "sha256": "da1c637f01aca57f0dabf10b8065d84e56ae4639f21838d74010f4a28a85ab54"
             },
             {
               "path": "rtl/core/neorv32_prim.vhd",
@@ -652,16 +652,16 @@
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu.vhd",
-              "size": 33205,
-              "sha256": "91d186b86ce3d1ce76d4059fd88985b25c7caa3ad8f5e7b24d6a05f79953ed6f"
+              "size": 33460,
+              "sha256": "bad0add17dad6c3e7fbbc7acd96bfa263d8179ee2044387852846df6d2506981"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu.vhd",
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_alu.vhd",
-              "size": 17555,
-              "sha256": "e7ac5507bbac1b0b9e28b2e92dd4395ef12e4ace5b00d7b9894cb684a1e334a5"
+              "size": 17683,
+              "sha256": "641b7c871a026470eddddc328792bafe841198a13d8ef425339df7209a4c682b"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu_bitmanip.vhd",
@@ -676,8 +676,8 @@
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_alu_cfu.vhd",
-              "size": 9708,
-              "sha256": "f6172da1bee4fc4750187833f4492f3d38a1121524a64518a62122a6a79627e0"
+              "size": 9788,
+              "sha256": "251db231b0c41cc2bb19f5dbb9a7d5190e69e0b59f6a3cf1a0c9d754fa2a5265"
             },
             {
               "path": "rtl/core/neorv32_cpu_alu_cond.vhd",
@@ -724,8 +724,8 @@
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_control.vhd",
-              "size": 76427,
-              "sha256": "f4a4f823c58714dddda8d99eb803af4a08d11a74cbef7af89e77e7dfbb2bb056"
+              "size": 76598,
+              "sha256": "c1bcd50e56a46eba5f24623ed1cb98ced7d664495fc5878a11a87e45f625db58"
             },
             {
               "path": "rtl/core/neorv32_cpu_counters.vhd",
@@ -764,8 +764,8 @@
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_lsu.vhd",
-              "size": 8590,
-              "sha256": "a4d844bd4fa0f0fa32b5e9b7f9845b35b2013ff29ffdcfd905b7aace064ab5b0"
+              "size": 8545,
+              "sha256": "198b5677209850808635728d23ae76c88eaad16e6d39129a2ebbefd78a2d97c8"
             },
             {
               "path": "rtl/core/neorv32_cpu_pmp.vhd",
@@ -780,8 +780,8 @@
               "language": "vhdl",
               "library": "neorv32",
               "asset": "neorv32/rtl/core/neorv32_cpu_regfile.vhd",
-              "size": 8510,
-              "sha256": "77a1469117ea0bc6f0a4ffe9f684c6e388d4dd24415755e1ae36110dfef801b1"
+              "size": 9691,
+              "sha256": "88cfce406ff11de3b6487645eb6f184a4d8097e8bd5361e50fa40dc83406b948"
             },
             {
               "path": "rtl/core/neorv32_cpu_trace.vhd",
@@ -814,7 +814,7 @@
       ],
       "source": {
         "url": "https://github.com/stnolting/neorv32.git",
-        "revision": "87c8c98bc34e858dea7255245a1e615053337ef1"
+        "revision": "b119883b23d929f5a9571d9ee8593e3ed54a95b4"
       }
     },
     {
@@ -1379,7 +1379,7 @@
       "components": [],
       "source": {
         "url": "https://github.com/lowRISC/ibex.git",
-        "revision": "3d524f19ee8e464b3fb0e29c77dc9ff45934815a"
+        "revision": "041098fe2380124dea536a0985cb85469fb206c4"
       }
     },
     {
@@ -1431,7 +1431,7 @@
       "components": [],
       "source": {
         "url": "https://github.com/SpinalHDL/VexiiRiscv.git",
-        "revision": "22510fc004a6e817e2aa293bdd2877d897f5b8ce"
+        "revision": "90a38f39f83906046ea650cc22c69e5b95af3531"
       }
     },
     {
@@ -1510,7 +1510,7 @@
       "components": [],
       "source": {
         "url": "https://github.com/VUnit/vunit.git",
-        "revision": "3fff9e52c7ba7aa1b2753c1783f146238b361493"
+        "revision": "5d6ff35471fcd9e1441aadbc4717358c6b558984"
       }
     },
     {

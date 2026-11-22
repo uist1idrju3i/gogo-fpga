@@ -102,8 +102,8 @@
     },
     {
       "path": "licenses/sby-COPYING",
-      "sha256": "6fca2f7a0a28abfb6aa97ad591d82ce3298fef9f80f0f584298b5b3cb1ed5dd2",
-      "size": 830
+      "sha256": "8c4da1cb5c73984bc4fe4c254c3e5d0d8c70a7c22468d5271751494b314aea57",
+      "size": 817
     },
     {
       "path": "licenses/yosys-COPYING",
@@ -112,13 +112,13 @@
     },
     {
       "path": "sby.py",
-      "sha256": "4cd17eaf5283b817145f14b7b0a347e920ff3ba0e78d1a1c665d156cc0e27583",
-      "size": 19969
+      "sha256": "5ca364a5ceeed9b5311390a4082be68df9ad38dc3ddc51b2fe0669a4a1ae2fad",
+      "size": 19956
     },
     {
       "path": "sby_autotune.py",
-      "sha256": "11d3f849bf7b75ce9fab41e36e3f42cfbac2ef50932dae2e620af74d89b77948",
-      "size": 25325
+      "sha256": "88398abb80439dbab1e1a3d047e99cdf535972e26aaf64e898e477725d96da43",
+      "size": 25312
     },
     {
       "path": "sby_cmdline.py",
@@ -127,28 +127,28 @@
     },
     {
       "path": "sby_core.py",
-      "sha256": "cf06691f04f47d726f89016149f954dd45859b41fbda945e2699175d822f04f5",
-      "size": 67110
+      "sha256": "be381467489903a3b10d5ad4b652eff05ba10a976f1091e9a1e81034d622b914",
+      "size": 67097
     },
     {
       "path": "sby_design.py",
-      "sha256": "60b59491dadbbcd5a979acd8d68b2160f91e7a94a55dcac8a783a3d379a2978b",
-      "size": 9150
+      "sha256": "43e2d6cf560ab43c9234ba62028ce629c06280470dab90d15ad4a55f02050436",
+      "size": 9137
     },
     {
       "path": "sby_engine_abc.py",
-      "sha256": "84019808db4668425a42d8600b2e7ab05cef0d3539e67217d2bbd1414d4513e5",
-      "size": 9976
+      "sha256": "7bf42382b87d5be5c53a8a48f85bf0ee90894b6595766551e4eafe5a928c63cf",
+      "size": 9963
     },
     {
       "path": "sby_engine_aiger.py",
-      "sha256": "60c9ddfa7e97e9824aa60e5c38cc16f270618c7377a256c81a140a7fcabf59a3",
-      "size": 11980
+      "sha256": "87deb31fc64977101fde9fd01b505231977b4304508942765ef342c7df3ce1f3",
+      "size": 11967
     },
     {
       "path": "sby_engine_btor.py",
-      "sha256": "9d072b8bdfc85d5c828efa583e036c4e9c5b679a4d38d01c72a5e9f1b8f0528d",
-      "size": 14948
+      "sha256": "d9aecc3c19070b88e33ed13deefc3edc464f1271615b60060af568b14daf2b93",
+      "size": 14935
     },
     {
       "path": "sby_engine_itp.py",
@@ -157,38 +157,38 @@
     },
     {
       "path": "sby_engine_smtbmc.py",
-      "sha256": "e6b27b7806528431dc980bd12aa913e92c65e92f2895626a45cf801b12f30a89",
-      "size": 12827
+      "sha256": "4588db429baa266ae9c4d325105a90a1e4efc75120408854bc4f19b80b73606f",
+      "size": 12814
     },
     {
       "path": "sby_jobserver.py",
-      "sha256": "9beb2a20428fb8fafbc024400714c2fe30968d02d403a02634ea38bbc191bddc",
-      "size": 12685
+      "sha256": "e292901c00603f566a8b84b1a7de49bda593a9d14b0daf018efa8faadaad41c8",
+      "size": 12672
     },
     {
       "path": "sby_mode_bmc.py",
-      "sha256": "0304d57d681290f1b9b151205c1d9c39b3a1f3a871f8ae4173938fad066da6e8",
-      "size": 2040
+      "sha256": "7ca6670040a73ff902302c9cb1e9a0ab1a839850aaebdb19ba48869f39967661",
+      "size": 2027
     },
     {
       "path": "sby_mode_cover.py",
-      "sha256": "247b753436a870afa3d24906b897f8a26e3b98c271ac45476b95cc8f2c899218",
-      "size": 1598
+      "sha256": "502448815ce259b6307fd0b36248efcb39669dc76acbdf5713f31f4e36f8522a",
+      "size": 1585
     },
     {
       "path": "sby_mode_live.py",
-      "sha256": "8e920dcde0f8b4464386c54e45b7e0ded21765b039cfe6c6afe2f61c78bcdcad",
-      "size": 1491
+      "sha256": "73f956a228467b9b6838723a1062a8d1db950c067df08599994faa80d3340deb",
+      "size": 1478
     },
     {
       "path": "sby_mode_prove.py",
-      "sha256": "931967c2de52fa5e3f63a92203038224b5255cf908348ed659d9d0dd378ddf4e",
-      "size": 2212
+      "sha256": "4b0653628b97e73eebfd4afbff6e42b6bff82e88cfcac4ea25ca029f12f5a72f",
+      "size": 2199
     },
     {
       "path": "sby_sim.py",
-      "sha256": "2bf848ba341071adddedb882fe5de3b5caba53b404c1fd1186ecf32d175f9d8e",
-      "size": 4532
+      "sha256": "ce808b4f95fb50f8fa41bb7c3c49152753b1ad73d8adf1fe05a9230ddd583b65",
+      "size": 4519
     },
     {
       "path": "sby_status.py",
@@ -314,7 +314,7 @@
       "submodule": "click"
     },
     "licenses/sby-COPYING": {
-      "original_sha256": "6fca2f7a0a28abfb6aa97ad591d82ce3298fef9f80f0f584298b5b3cb1ed5dd2",
+      "original_sha256": "8c4da1cb5c73984bc4fe4c254c3e5d0d8c70a7c22468d5271751494b314aea57",
       "source": "COPYING",
       "submodule": "sby"
     },
@@ -324,12 +324,12 @@
       "submodule": "yosys"
     },
     "sby.py": {
-      "original_sha256": "f915f9d9bd717a36cf127270a791d0a054699ec87c404a6f4fd1aa330192bebb",
+      "original_sha256": "d93fc5becd90d36945e178433b78d9fae29bcb1f24eb19d9bf762b17fd355d88",
       "source": "sbysrc/sby.py",
       "submodule": "sby"
     },
     "sby_autotune.py": {
-      "original_sha256": "11d3f849bf7b75ce9fab41e36e3f42cfbac2ef50932dae2e620af74d89b77948",
+      "original_sha256": "88398abb80439dbab1e1a3d047e99cdf535972e26aaf64e898e477725d96da43",
       "source": "sbysrc/sby_autotune.py",
       "submodule": "sby"
     },
@@ -339,27 +339,27 @@
       "submodule": "sby"
     },
     "sby_core.py": {
-      "original_sha256": "b0e764bc4de17f91029e60a12cc073a8d2b8adb27781331eee2787af4e16b36e",
+      "original_sha256": "ae2534a286ff33a75bdc2ac567d53714a231ef9e9107870e676abf5b2f189cb6",
       "source": "sbysrc/sby_core.py",
       "submodule": "sby"
     },
     "sby_design.py": {
-      "original_sha256": "60b59491dadbbcd5a979acd8d68b2160f91e7a94a55dcac8a783a3d379a2978b",
+      "original_sha256": "43e2d6cf560ab43c9234ba62028ce629c06280470dab90d15ad4a55f02050436",
       "source": "sbysrc/sby_design.py",
       "submodule": "sby"
     },
     "sby_engine_abc.py": {
-      "original_sha256": "84019808db4668425a42d8600b2e7ab05cef0d3539e67217d2bbd1414d4513e5",
+      "original_sha256": "7bf42382b87d5be5c53a8a48f85bf0ee90894b6595766551e4eafe5a928c63cf",
       "source": "sbysrc/sby_engine_abc.py",
       "submodule": "sby"
     },
     "sby_engine_aiger.py": {
-      "original_sha256": "60c9ddfa7e97e9824aa60e5c38cc16f270618c7377a256c81a140a7fcabf59a3",
+      "original_sha256": "87deb31fc64977101fde9fd01b505231977b4304508942765ef342c7df3ce1f3",
       "source": "sbysrc/sby_engine_aiger.py",
       "submodule": "sby"
     },
     "sby_engine_btor.py": {
-      "original_sha256": "9d072b8bdfc85d5c828efa583e036c4e9c5b679a4d38d01c72a5e9f1b8f0528d",
+      "original_sha256": "d9aecc3c19070b88e33ed13deefc3edc464f1271615b60060af568b14daf2b93",
       "source": "sbysrc/sby_engine_btor.py",
       "submodule": "sby"
     },
@@ -369,37 +369,37 @@
       "submodule": "sby"
     },
     "sby_engine_smtbmc.py": {
-      "original_sha256": "e6b27b7806528431dc980bd12aa913e92c65e92f2895626a45cf801b12f30a89",
+      "original_sha256": "4588db429baa266ae9c4d325105a90a1e4efc75120408854bc4f19b80b73606f",
       "source": "sbysrc/sby_engine_smtbmc.py",
       "submodule": "sby"
     },
     "sby_jobserver.py": {
-      "original_sha256": "100d87cca86456317e278ac0b3d09ec359c425b74d976df89f8d2a346e11de59",
+      "original_sha256": "b63c97ccceddfa2e12ef84bff07ba32e6de9e1721e5e0e7c0c82ca049af0a5fd",
       "source": "sbysrc/sby_jobserver.py",
       "submodule": "sby"
     },
     "sby_mode_bmc.py": {
-      "original_sha256": "0304d57d681290f1b9b151205c1d9c39b3a1f3a871f8ae4173938fad066da6e8",
+      "original_sha256": "7ca6670040a73ff902302c9cb1e9a0ab1a839850aaebdb19ba48869f39967661",
       "source": "sbysrc/sby_mode_bmc.py",
       "submodule": "sby"
     },
     "sby_mode_cover.py": {
-      "original_sha256": "247b753436a870afa3d24906b897f8a26e3b98c271ac45476b95cc8f2c899218",
+      "original_sha256": "502448815ce259b6307fd0b36248efcb39669dc76acbdf5713f31f4e36f8522a",
       "source": "sbysrc/sby_mode_cover.py",
       "submodule": "sby"
     },
     "sby_mode_live.py": {
-      "original_sha256": "8e920dcde0f8b4464386c54e45b7e0ded21765b039cfe6c6afe2f61c78bcdcad",
+      "original_sha256": "73f956a228467b9b6838723a1062a8d1db950c067df08599994faa80d3340deb",
       "source": "sbysrc/sby_mode_live.py",
       "submodule": "sby"
     },
     "sby_mode_prove.py": {
-      "original_sha256": "931967c2de52fa5e3f63a92203038224b5255cf908348ed659d9d0dd378ddf4e",
+      "original_sha256": "4b0653628b97e73eebfd4afbff6e42b6bff82e88cfcac4ea25ca029f12f5a72f",
       "source": "sbysrc/sby_mode_prove.py",
       "submodule": "sby"
     },
     "sby_sim.py": {
-      "original_sha256": "2bf848ba341071adddedb882fe5de3b5caba53b404c1fd1186ecf32d175f9d8e",
+      "original_sha256": "ce808b4f95fb50f8fa41bb7c3c49152753b1ad73d8adf1fe05a9230ddd583b65",
       "source": "sbysrc/sby_sim.py",
       "submodule": "sby"
     },
@@ -441,7 +441,7 @@
   },
   "pins": {
     "click": "cf19179e8e2fd54c601378cec9e0d21bb12b6fb1",
-    "sby": "79fc9eddca5e33a28cc2f2cd19c9825efd9a7255",
+    "sby": "b21f778333efc1e7c33fe22b56d43f87e4f759d4",
     "yosys": "b4c586fd37d0ec61bb38fc1a85fd6a2fde48fcd1"
   }
 }

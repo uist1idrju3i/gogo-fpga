@@ -93,9 +93,7 @@ entity neorv32_cpu is
     firq_i     : in  std_ulogic_vector(15 downto 0); -- custom fast interrupts
     dbi_i      : in  std_ulogic;                     -- RISC-V debug halt request interrupt
     -- memory ordering --
-    fence_r_o  : out std_ulogic;                     -- data read/load (acquire) fence
-    fence_w_o  : out std_ulogic;                     -- data write/store (release) fence
-    fence_x_o  : out std_ulogic;                     -- instruction execute/fetch fence
+    fence_o    : out std_ulogic_vector(2 downto 0);  -- fence request (r/w/x)
     fenced_i   : in  std_ulogic;                     -- fence operation completed
     -- instruction bus interface --
     ibus_req_o : out bus_req_t;                      -- request bus
@@ -110,6 +108,7 @@ architecture neorv32_cpu_rtl of neorv32_cpu is
 
   -- auto-configuration --
   constant rf_awidth_c   : natural := sel_natural_f(RISCV_ISA_E, 4, 5); -- register file address width
+  constant rf_rs3_en_c   : boolean := RISCV_ISA_Xcfu; -- third register file read port
   constant any_amo_c     : boolean := RISCV_ISA_Zaamo or RISCV_ISA_Zalrsc; -- any AMO extension available
   constant riscv_a_c     : boolean := RISCV_ISA_Zaamo and RISCV_ISA_Zalrsc; -- A: atomic memory operations
   constant riscv_b_c     : boolean := RISCV_ISA_Zba and RISCV_ISA_Zbb and RISCV_ISA_Zbs; -- B: bit manipulation
@@ -135,6 +134,7 @@ architecture neorv32_cpu_rtl of neorv32_cpu is
   signal rf_wdata    : std_ulogic_vector(31 downto 0); -- register file write data
   signal rs1         : std_ulogic_vector(31 downto 0); -- source register 1
   signal rs2         : std_ulogic_vector(31 downto 0); -- source register 2
+  signal rs3         : std_ulogic_vector(31 downto 0); -- source register 3
   signal alu_res     : std_ulogic_vector(31 downto 0); -- ALU result
   signal alu_add     : std_ulogic_vector(31 downto 0); -- ALU address result
   signal alu_cmp     : std_ulogic_vector(1 downto 0);  -- comparator result
@@ -340,15 +340,15 @@ begin
   sleep_o <= not ctrl.cnt_event(cnt_event_cy_c);
 
   -- memory ordering --
-  fence_r_o <= ctrl.fence_r;
-  fence_w_o <= ctrl.fence_w;
-  fence_x_o <= ctrl.fence_x;
+  fence_o(0) <= ctrl.fence_r; -- data read/load (acquire) fence
+  fence_o(1) <= ctrl.fence_w; -- data write/store (release) fence
+  fence_o(2) <= ctrl.fence_x; -- instruction execute/fetch fence
 
 
   -- Hardware Trigger Module (Sdtrig) -------------------------------------------------------
   -- -------------------------------------------------------------------------------------------
   trigger_module_enabled:
-  if (RISCV_ISA_Sdtrig = true) and (NUM_HW_TRIGGERS > 0) generate
+  if RISCV_ISA_Sdtrig and (NUM_HW_TRIGGERS > 0) generate
     cpu_hwtrig_inst: entity neorv32.neorv32_cpu_hwtrig
     generic map (
       NUM_TRIGGERS => NUM_HW_TRIGGERS, -- number of implemented hardware triggers
@@ -368,7 +368,7 @@ begin
   end generate;
 
   trigger_module_disabled:
-  if (RISCV_ISA_Sdtrig = false) or (NUM_HW_TRIGGERS = 0) generate
+  if (not RISCV_ISA_Sdtrig) or (NUM_HW_TRIGGERS = 0) generate
     xcsr_tm <= (others => '0');
     hwtrig  <= '0';
   end generate;
@@ -410,8 +410,9 @@ begin
   -- [NOTE] Use component instantiation here to allow easy replacement by external (Verilog) IP.
   cpu_regfile_inst: neorv32_cpu_regfile -- component declaration in package file
   generic map (
-    AWIDTH  => rf_awidth_c,    -- address width
-    ARCHSEL => CPU_RF_ARCH_SEL -- architecture style select
+    AWIDTH  => rf_awidth_c,     -- address width
+    ARCHSEL => CPU_RF_ARCH_SEL, -- architecture style select
+    RS3_EN  => rf_rs3_en_c      -- enable third read port
   )
   port map (
     -- global control --
@@ -425,9 +426,12 @@ begin
     -- read port 1 (rs1) --
     rs1_addr_i => ctrl.rf_rs1,
     rs1_data_o => rs1,
-    -- read port 1 (rs2) --
+    -- read port 2 (rs2) --
     rs2_addr_i => ctrl.rf_rs2,
-    rs2_data_o => rs2
+    rs2_data_o => rs2,
+    -- read port 3 (rs3) --
+    rs3_addr_i => ctrl.rf_rs3,
+    rs3_data_o => rs3
   );
 
   -- all buses are zero unless there is an according operation --
@@ -470,6 +474,7 @@ begin
     -- data input --
     rs1_i  => rs1,        -- rf source 1
     rs2_i  => rs2,        -- rf source 2
+    rs3_i  => rs3,        -- rf source 3
     -- data output --
     cmp_o  => alu_cmp,    -- comparator status
     res_o  => alu_res,    -- ALU result

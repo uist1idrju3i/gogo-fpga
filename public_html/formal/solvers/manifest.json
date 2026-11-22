@@ -2,12 +2,12 @@
   "assets": [
     {
       "path": "yices2.wasm",
-      "sha256": "893f8d55b4d0a21bc61f311fa48806a0400cdc0e1f7be4b0073f24b0a7719c2d",
-      "size": 1970004
+      "sha256": "af03f88cd4434a9dc6eddd4e0f24ace48a0266d130feef0e2065ad20f2a72fd2",
+      "size": 2041855
     },
     {
       "path": "yices2-build.json",
-      "sha256": "3822f819d4b00adc3870b33d9a90e61e30911c2435b06d676eccad72483b18c1",
+      "sha256": "73aec9f1d0695292e44a6a16a4d73c3cd687bef03da9f1d787a9a92adc20e922",
       "size": 8186
     }
   ],
@@ -25,10 +25,10 @@
       "gmp-COPYING.LESSERv3": "a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c",
       "gmp-COPYINGv2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
       "gmp-COPYINGv3": "e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195",
-      "yices2-LICENSE.txt": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+      "yices2-LICENSE.txt": "c8c007df07ca34dfd629a9ca921700ecf4bd40c8bae47b8f20d91cac3d00587c"
     },
     "patches": {
-      "yices2/reproducible-version.patch": "c3636c8824d952041bc719e1445aa2b189efb7805a0aa03c9cf2d1c03e822573",
+      "yices2/reproducible-version.patch": "cefb4352734b27ddc31023568c90e106735f3fb41117687352a819dd1797b49a",
       "yices2/unsupported-wasi-alarm.patch": "ae7cdb4e94677551455294cf01af1ddb85ae8ec3f4de7fcc4ecd43ee4de8343e"
     },
     "reproducible_paths": true,
@@ -40,12 +40,12 @@
     "smtbmc": "yices",
     "solver": "yices2",
     "source": {
-      "commit": "85cf17e44eac76b5d14b297c09fc9bfecf47ef65",
+      "commit": "1fbee54ad4620893f40836a50d74f91d4bf58bb4",
       "url": "https://github.com/SRI-CSL/yices2.git",
-      "version": "yices-2.7.0"
+      "version": "yices-2.8.0"
     },
     "source_date_epoch": "0",
-    "source_snapshot_sha256": "167b8af129b4b31248ab9b46625ca3b9542a3f6f0882bc99be55ebab5996b8af",
+    "source_snapshot_sha256": "a1d2b958de128cab49bf9bfffe76f40c4d69e367b9b8055347931cf77bcf62df",
     "wasi_sdk": {
       "asset": "wasi-sdk-34.0-x86_64-linux.tar.gz",
       "sha256": "b761e3a0721dbae9c09a0059e5fdb2bf917d1b4a8a7b430fb3b5aafb0984b2c4",

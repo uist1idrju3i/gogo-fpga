@@ -398,9 +398,9 @@ begin
             if (exec.ir(instr_funct3_lsb_c) = '1') then -- fence.i
               ctrl_nxt.fence_x <= '1'; -- instruction execute/fetch fence
               exec_nxt.state   <= S_FENCE;
-            elsif (or_reduce_f(exec.ir(27 downto 20)) = '1') then -- fence with any PRED/SUCC
-              ctrl_nxt.fence_r <= exec.ir(25) or exec.ir(21); -- PRED.r or SUCC.r
-              ctrl_nxt.fence_w <= exec.ir(24) or exec.ir(20); -- PRED.w or SUCC.w
+            elsif (or_reduce_f(exec.ir(25 downto 24) or exec.ir(21 downto 20)) = '1') then -- fence with any PRED.rw/SUCC.rw
+              ctrl_nxt.fence_r <= exec.ir(25) or exec.ir(21); -- PRED.r or SUCC.r: data read/load (acquire) fence
+              ctrl_nxt.fence_w <= exec.ir(24) or exec.ir(20); -- PRED.w or SUCC.w: data write/store (release) fence
               exec_nxt.state   <= S_FENCE;
             else -- NOP
               exec_nxt.state <= S_DISPATCH;
@@ -517,6 +517,7 @@ begin
   ctrl_o.rf_wb_en     <= ctrl.rf_wb_en and (not or_reduce_f(exc_buf(exc_laccess_c downto exc_iaccess_c))); -- write if no sync exception
   ctrl_o.rf_rs1       <= exec.ir(instr_rs1_msb_c downto instr_rs1_lsb_c);
   ctrl_o.rf_rs2       <= exec.ir(instr_rs2_msb_c downto instr_rs2_lsb_c);
+  ctrl_o.rf_rs3       <= exec.ir(instr_rs3_msb_c downto instr_rs3_lsb_c);
   ctrl_o.rf_rd        <= exec.ir(instr_rd_msb_c downto instr_rd_lsb_c);
   ctrl_o.rf_zero      <= ctrl.rf_zero;
   -- alu --
