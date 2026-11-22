@@ -52,7 +52,7 @@ begin
       clk_i => clk, rstn_i => resetn, mtime_i => (others => '0'),
       trace_o => open, sleep_o => open,
       -- Match the upstream core complex with no caches or queued writes.
-      fence_r_o => open, fence_w_o => open, fence_x_o => open, fenced_i => '1',
+      fence_o => open, fenced_i => '1',
       msi_i => '0', mei_i => '0', mti_i => '0', firq_i => (others => '0'), dbi_i => '0',
       ibus_req_o => instruction_request, ibus_rsp_i => instruction_response,
       dbus_req_o => data_request, dbus_rsp_i => data_response
