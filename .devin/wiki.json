@@ -38,10 +38,10 @@
       "parent": null,
       "page_notes": [
         {
-          "content": "根拠は、`README.md`、`web/index.html`、`web/lib/browser-support.mjs`、`tests/e2e/workflow.spec.mjs`、`docs/research/pages-delivery.md`です。"
+          "content": "根拠は、`README.md`、`web/index.html`、`web/lib/workspace-ui.mjs`、`web/lib/browser-support.mjs`、`tests/e2e/workflow.spec.mjs`、`docs/research/pages-delivery.md`です。"
         },
         {
-          "content": "冒頭に https://fpga.moe/ を置いてください。対応ブラウザーで「Lチカから始める」を開き、ボードを選び、「Lチカのテンプレートで始める」から「合成・配置配線」へ進む流れを示します。物理ボードを接続した利用者には、SRAM を書き込み先として確認したうえで「書き込む」、WebUSB の機器選択、LED の確認へ進むよう案内してください。"
+          "content": "冒頭に https://fpga.moe/ を置いてください。対応ブラウザーで「Lチカから始める」の案内を確認し、画面幅が 820 px 以下なら「ボードとLチカの手順」を開きます。ボードを選び、「Lチカのテンプレートで始める」から「合成・配置配線」へ進む流れを示してください。物理ボードを接続した利用者には、SRAM を書き込み先として確認したうえで「書き込む」、WebUSB の機器選択、LED の確認へ進むよう案内してください。"
         },
         {
           "content": "VHDL・Verilog の編集・ビルド、Verilog のシミュレーション、4 種の Tang Nano への書き込みを示します。IDE、ボード、実装、開発者向けの順に案内し、配信先は Cloudflare Pages と明記します。実機は本リポジトリーでは試していないこと、AI 相談の送信は任意であることを添えます。"
