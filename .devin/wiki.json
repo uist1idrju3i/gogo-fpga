@@ -89,7 +89,7 @@
           "content": "scripts/build-pnr-wasm.sh、scripts/prepare-pnr-source.py、scripts/diagnose-pnr-layout.mjs、tests/synth/nextpnr.test.mjs、docs/research/yosys-nextpnr-wasi.md を参照してください。"
         },
         {
-          "content": "ボード名、FPGA device、chipdb、.cst、容量超過、未対応の関係を分けてください。CPU候補の容量超過とfrontend非対応は失敗ではなく、選択制限として保持する分類です。"
+          "content": "ボード名、FPGA device、chipdb、.cst、容量超過、未対応の関係を分けてください。CPU候補の容量超過とfrontend非対応は製品の選択制限として保持しますが、検査記録では配置エラーやIcarus解析エラーとして成功と区別してください。"
         },
         {
           "content": "S13、S14、S14Aの反復測定とfp-contractの調査を根拠に、native/WASI一致の条件と残る環境差を説明してください。配置配線の時間や成功を実機動作の根拠にしないでください。"
