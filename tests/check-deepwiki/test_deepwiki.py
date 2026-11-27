@@ -64,7 +64,9 @@ class DeepWikiTests(unittest.TestCase):
         pages = CHECK.load_config(ROOT / ".devin/wiki.json")["pages"]
         for page in pages:
             with self.subTest(page=page["title"]):
-                paths = re.findall(r"`([^`]+)`", page["page_notes"][0]["content"])
+                evidence = page["page_notes"][0]["content"]
+                paths = re.findall(r"`([^`]+)`", evidence)
+                self.assertEqual(evidence.count("`"), 2 * len(paths), evidence)
                 self.assertGreaterEqual(len(paths), 2)
                 for path in paths:
                     reference = Path(path)
