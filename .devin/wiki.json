@@ -7,19 +7,28 @@
       "content": "Wikiの本文と見出しは日本語で書き、コード、識別子、パス、コマンドは英語のままにしてください。README.mdを入口、RESEARCH.mdとdocs/research/ を判断・制約の根拠、docs/experiments/ を固定条件・失敗・反復測定の証拠、docs/ux/ を画面契約の根拠として使います。初期計画、後続の検証、現在の実装が食い違う場合は、時点と検証範囲を分けてコードとテストへリンクし、調査成功だけで製品対応を断定しないでください。"
     },
     {
-      "content": "web/、scripts/、tests/、.github/workflows/と手書き文書を優先します。vendor/とthird_party/は固定した外部ソースなので、上流全体の解説より製品からの接続、patches/、pin、原文ライセンスを説明してください。生成されたpublic_html/やdocs/ux/out/ を正本として重複説明せず、web/とUX DSLへ戻ってください。mainが追跡するpublic_html/index.htmlは案内用のプレースホルダーで、実際のアプリとは異なります。これは読取りの優先度の指示で、技術的な索引除外設定ではありません。"
+      "content": "web/、scripts/、tests/、.github/workflows/と手書き文書を優先します。vendor/とthird_party/は固定した外部ソースなので、上流全体の解説より製品からの接続、patches/、pin、原文ライセンスを説明してください。生成物のpublic_html/、build/、docs/ux/out/ は正本として扱わず、生成元と検査へ戻ってください。"
     },
     {
-      "content": "主要な流れはYosys・ABCとGHDLによる合成、nextpnr-himbaechelによる配置配線、Pyodide上のApiculaによるビットストリーム作成、openFPGALoaderとWebUSBによる書き込みです。Worker、WASI、Emscripten、共有メモリー、圧縮資材の境界を区別します。書き込み部のJSPI・pthreadの選定を全ツールへ一般化せず、各ビルドスクリプトと実験記録に従ってください。通常の開発処理はブラウザー内で行い、任意のAI機能の通信とは分けて説明します。"
+      "content": "主要な流れはYosys・ABCとGHDLによる合成、nextpnr-himbaechelによる配置配線、Pyodide上のApiculaによるビットストリーム作成、openFPGALoaderとWebUSBによる書き込みです。Worker、WASI、Emscripten、共有メモリー、圧縮資材の境界を区別します。書き込み部のJSPI・pthreadの選定を全ツールへ一般化せず、各ビルドスクリプトと実験記録に従ってください。通常の開発処理はブラウザー内で完結しますが、OpenRouterだけは任意の外部サービスです。"
     },
     {
       "content": "安全性の説明では、.fsのIDCODEと選択ボードの照合、WebUSBの利用者による選択、終了コード0でもログのFAILを失敗とする判定を外さないでください。実機のTang Nanoでは試していません。仮想FT2232・GOWIN TAP・NORフラッシュでの成功や時間を実機の保証にしないでください。未対応、容量超過、unknown、停止、期限切れを成功や証明に読み替えないでください。"
     },
     {
-      "content": "公開はmainの成功した全build検査と検証済みartifactからpages-update/*の承認PRを作り、人間がpreviewを確認してpagesへマージする流れです。mainへのマージだけで本番公開を承認したことにはなりません。scripts/publish-pages.pyとdocs/research/pages-delivery.md を根拠に、元run・SHA・digestの照合、同一内容の処理、権限と失敗時の停止を説明してください。エージェントは承認PRをマージせず、Cloudflareや保護規則の設定済み状態を推測しません。"
+      "content": "公開はmainで成功した全build検査と検証済みartifactからpages-update/*の承認PRを作り、人間がpreviewを確認してpagesへマージする流れです。mainへのマージだけで本番公開を承認したことにはなりません。scripts/publish-pages.pyとdocs/research/pages-delivery.md を根拠に、元run・SHA・digestの照合、同一内容の処理、権限と失敗時の停止を説明してください。エージェントは承認PRをマージせず、Cloudflareや保護規則の設定済み状態を推測しません。"
     },
     {
       "content": "OpenRouterは任意の外部サービスです。接続のPKCE通信と、利用者が正確な本文を確認して送るAI相談を区別してください。キーは既定でタブのメモリーだけに持ち、明示的な選択後だけIndexedDBへ保存します。CSPと実装の通信先制限を根拠にしてください。実OpenRouterへのログイン・課金・応答品質を、mockのテストから確認済みとは書かないでください。"
+    },
+    {
+      "content": "形式検証は、内蔵SAT、SBY・SMTBMC、solver、反例再実行、製品の有効化条件を分けて説明してください。検査経路やNodeでの反復測定、資材の準備、画面統合、製品としての提供は別の段階です。有界PASS、証明、cover到達、unknown、資材未準備、frontend非対応を同一の成功として扱わないでください。"
+    },
+    {
+      "content": "依存の版、hash、submoduleのcommit、Actionsのpinは二重の正本にしません。Wikiでは固定値を繰り返すより、.github/scripts/check-pins.py、lockファイル、.gitmodules、requirements、docs/research/actions-lock.md を参照させてください。Dependabotや固定版の更新確認で見つかった差を、変更履歴と回帰検査なしに採用済みと書かないでください。"
+    },
+    {
+      "content": "AI機能は、OpenRouter接続、本文確認つき相談、教師役、採点、読取りツール承認、端末内補完を分けて説明してください。AIが提案した差分は利用者がファイルごとに採否し、適用は別のrevisionとして記録されます。外部AIへ送る本文、端末内だけで処理する補完、mockで検査した挙動を混同しないでください。"
     }
   ],
   "pages": [
@@ -27,121 +36,481 @@
       "title": "午後のFPGAの全体像",
       "purpose": "ブラウザー内でのHDL開発、対象ボード、現在の機能と未確認事項、各ページへの読み順を示す。",
       "parent": null,
-      "page_notes": [{ "content": "README.md、RESEARCH.mdの目的・未確認事項、web/app.js、web/ide.mjsを照合します。旧製品名と統合の経緯はdocs/research/repository-consolidation.md で確認してください。" }]
+      "page_notes": [
+        {
+          "content": "README.md、RESEARCH.mdの目的・開発状況・未確認事項、web/app.js、web/ide.mjsを照合します。旧製品名と統合の経緯はdocs/research/repository-consolidation.md で確認してください。"
+        },
+        {
+          "content": "T0からT4の実装済み範囲、T5のライブラリー、T6の形式検証の残件を分けてください。README.mdの『目指します』という長期目標と、現在確認できる実装を混同しないでください。"
+        },
+        {
+          "content": "実機のTang Nano、実OpenRouter、実際のCloudflare運用は本リポジトリーで確認済みとしないでください。仮想検証、mock、推奨設定、人間が行う公開承認の区別を各詳細ページへ引き継いでください。"
+        }
+      ]
     },
     {
       "title": "ブラウザー内の構成とデータの流れ",
       "purpose": "工程ごとの入出力、WorkerとWASMの責務、保存と成果物の失効、配布資材の読込みを図で結ぶ。",
       "parent": "午後のFPGAの全体像",
-      "page_notes": [{ "content": "web/ide.mjs、web/worker.js、web/lib/、scripts/build-web.shを起点に、呼出し元とファイル形式を追います。合成・配置配線・pack・書き込みを一つのWASMとして説明しないでください。" }]
+      "page_notes": [
+        {
+          "content": "web/ide.mjs、web/worker.js、web/build-worker.js、web/pack-worker.js、web/sim-worker.js、web/lib/、scripts/build-web.shを起点に、呼出し元とファイル形式を追います。"
+        },
+        {
+          "content": "合成・配置配線・pack・書き込みを一つのWASMとして説明しないでください。WASI、Emscripten、Pyodide、WebUSB、OPFS、Worker間メッセージの境界を入出力と一緒に示してください。"
+        },
+        {
+          "content": "成果物失効、圧縮資材のdigest照合、エラー分類、実行中の操作制限はユーザーへ見える振る舞いです。内部モデルだけでなくtests/web/とtests/e2e/で確認している挙動へリンクしてください。"
+        }
+      ]
     },
     {
       "title": "Yosys・GHDLによる合成",
       "purpose": "VerilogとVHDLの入力経路、GHDLとYosys・ABCの接続、netlistと診断、名前付きライブラリー、WASI実行を説明する。",
       "parent": "ブラウザー内の構成とデータの流れ",
-      "page_notes": [{ "content": "scripts/build-synth-wasm.sh、scripts/build-ghdl-wasm.sh、web/lib/、tests/synth/、docs/research/ghdl-wasm.md 、docs/research/yosys-nextpnr-wasi.md を根拠にします。通常合成と形式出力の経路を区別してください。" }]
+      "page_notes": [
+        {
+          "content": "scripts/build-synth-wasm.sh、scripts/build-ghdl-wasm.sh、scripts/build-synth-assets.py、web/lib/ghdl-host.mjs、web/lib/vhdl-order.mjs、tests/synth/を根拠にします。"
+        },
+        {
+          "content": "docs/research/ghdl-wasm.md とdocs/research/yosys-nextpnr-wasi.md を読み、通常合成と形式出力、VHDL解析順、名前付きライブラリー、frontend非対応を区別してください。"
+        },
+        {
+          "content": "native/WASI比較は版やmetadataの差を正規化で隠すためのものではありません。固定条件、出力差、失敗した試行を実験記録へ残す方針を説明し、合成成功だけで後続工程の成功を示唆しないでください。"
+        }
+      ]
     },
     {
       "title": "nextpnrによる配置配線",
       "purpose": "netlist、ボード・デバイス・制約とchipdbを入力に、配置配線結果、資源・タイミングと失敗分類を説明する。",
       "parent": "ブラウザー内の構成とデータの流れ",
-      "page_notes": [{ "content": "scripts/build-pnr-wasm.sh、web/lib/、tests/synth/nextpnr.test.mjs、docs/research/yosys-nextpnr-wasi.md を参照し、native/WASIの比較条件とボードごとの容量超過を保持してください。" }]
+      "page_notes": [
+        {
+          "content": "scripts/build-pnr-wasm.sh、scripts/prepare-pnr-source.py、scripts/diagnose-pnr-layout.mjs、tests/synth/nextpnr.test.mjs、docs/research/yosys-nextpnr-wasi.md を参照してください。"
+        },
+        {
+          "content": "ボード名、FPGA device、chipdb、.cst、容量超過、未対応の関係を分けてください。CPU候補の容量超過とfrontend非対応は製品の選択制限として保持しますが、検査記録では配置エラーやIcarus解析エラーとして成功と区別してください。"
+        },
+        {
+          "content": "S13、S14、S14Aの反復測定とfp-contractの調査を根拠に、native/WASI一致の条件と残る環境差を説明してください。配置配線の時間や成功を実機動作の根拠にしないでください。"
+        }
+      ]
     },
     {
       "title": "Apicula・Pyodideによるビットストリーム作成",
       "purpose": "配置配線結果から.fsを作るpack工程、Python依存の資材、Workerの実行と進捗、配布サイズの制約を説明する。",
       "parent": "ブラウザー内の構成とデータの流れ",
-      "page_notes": [{ "content": "scripts/build-pack-assets.sh、scripts/build-pack-assets.py、tests/synth/gowin-pack.test.mjs、docs/experiments/S3A-pyodide-gowin-pack.md を参照します。依存とhashの正本はpin checkerとlockファイルで確認し、Wikiに版を重複固定しないでください。" }]
+      "page_notes": [
+        {
+          "content": "scripts/build-pack-assets.sh、scripts/build-pack-assets.py、web/pack-worker.js、web/lib/gowin-pack.mjs、tests/synth/gowin-pack.test.mjs、docs/experiments/S3A-pyodide-gowin-pack.md を参照します。"
+        },
+        {
+          "content": "Apicula、Pyodide、NumPy、msgspec、micropipの版とhashの正本はpin checkerとlockファイルです。Wikiへ値を転記せず、wheel不足やhash不一致をfail closedで拒否する検査を説明してください。"
+        },
+        {
+          "content": "nativeとPyodideの.fs一致は固定入力の検査です。bitstream生成成功を書き込み成功や実機動作として扱わず、配布サイズ25 MiB未満の制約と圧縮資材の境界も示してください。"
+        }
+      ]
     },
     {
       "title": "openFPGALoader・WebUSBと書き込みの安全性",
       "purpose": ".fsとIDCODEの事前照合、USB選択、Worker、SRAM・フラッシュの操作条件と失敗検出を説明する。",
       "parent": "ブラウザー内の構成とデータの流れ",
-      "page_notes": [{ "content": "web/app.js、web/worker.js、web/lib/build-args.mjs、web/lib/options.mjs、web/lib/classify-result.mjs、docs/research/flasher-integration.md を参照します。FAILログ、IDCODE不一致、実機未確認の制限を必ず記載してください。" }]
+      "page_notes": [
+        {
+          "content": "web/app.js、web/worker.js、web/lib/build-args.mjs、web/lib/options.mjs、web/lib/classify-result.mjs、web/lib/fs-idcode.mjs、docs/research/flasher-integration.md を参照します。"
+        },
+        {
+          "content": "IDCODE不一致、ボード選択、SRAMとフラッシュの違い、利用者によるUSBデバイス選択を省略しないでください。終了コード0でもログにFAILがあれば失敗とする判定を必ず書いてください。"
+        },
+        {
+          "content": "仮想USBでの成功や時間は実機の保証ではありません。docs/research/flasher-history.md のupstream調査とtests/sim/、tests/e2e/の確認範囲を分け、未対応操作を推測で有効にしないでください。"
+        }
+      ]
     },
     {
       "title": "シミュレーションと波形",
       "purpose": "Icarus Verilogによる実行、テストベンチ、VCDとSurferの表示、WASM実行とブラウザー制約を説明する。",
       "parent": "ブラウザー内の構成とデータの流れ",
-      "page_notes": [{ "content": "scripts/build-iverilog-wasm.sh、web/ide.mjs、web/surfer-bridge.js、tests/e2e/、docs/research/browser-build-and-delivery.md 、docs/experiments/S12C-surfer-reproducibility.md を参照します。NVCなどの候補調査と製品の経路を混同しないでください。" }]
+      "page_notes": [
+        {
+          "content": "scripts/build-iverilog-wasm.sh、web/sim-worker.js、web/lib/iverilog-host.mjs、web/lib/sim-runner.mjs、web/surfer-bridge.js、tests/e2e/を参照します。"
+        },
+        {
+          "content": "VerilogシミュレーションとVHDLシミュレーションを分けてください。Icarus frontend非対応、NVCの研究結果、製品で選択できる経路を混同しないでください。"
+        },
+        {
+          "content": "VCD生成、timescale、波形表示、失敗ログの分類はtests/web/とS12Bで確認します。Surferの組込み詳細は子ページへ譲り、ここでは工程全体の入出力を説明してください。"
+        }
+      ]
     },
     {
       "title": "形式検証の経路と有効化条件",
       "purpose": "内蔵SAT、SBY・SMTBMCとsolver、propertyと反例の再実行、製品の有効・無効と研究上の検証範囲を分けて説明する。",
       "parent": "ブラウザー内の構成とデータの流れ",
-      "page_notes": [{ "content": "web/lib/formal-capabilities.mjs、web/lib/formal-runner.mjs、docs/research/formal-capabilities.md 、docs/research/formal-verification.md 、docs/research/formal-solvers.md とS15を優先します。初期の未実装記述や実験のPASSだけで現在の対応を決めず、有界PASS、証明、cover、unknownを区別してください。" }]
+      "page_notes": [
+        {
+          "content": "web/lib/formal-capabilities.mjs、web/lib/formal-runner.mjs、web/lib/formal-properties.mjs、web/lib/formal-replay.mjs、tests/product/formal.test.mjsを優先してください。"
+        },
+        {
+          "content": "docs/research/formal-capabilities.md、docs/research/formal-verification.md、docs/research/formal-solvers.md とS15を読み、候補一覧・検査経路・製品資材・画面統合を分けてください。"
+        },
+        {
+          "content": "有界PASS、証明、cover、unknown、solver不在、資材未準備、frontend非対応を区別してください。初期の未実装記述や実験のPASSだけで現在の対応を決めず、子ページへ詳細を振り分けてください。"
+        }
+      ]
+    },
+    {
+      "title": "Surfer組込みと表示倍率の調整",
+      "purpose": "SurferのWASM資産、iframeとpostMessage、VCD読込み、高DPRの倍率調整、再現性とライセンス照合を説明する。",
+      "parent": "シミュレーションと波形",
+      "page_notes": [
+        {
+          "content": "scripts/build-surfer.sh、scripts/surfer-build-metadata.py、scripts/collect-surfer-licenses.py、web/surfer-bridge.js、web/lib/surfer-scale.mjsを参照してください。"
+        },
+        {
+          "content": "docs/experiments/S12-surfer-wasm.md とdocs/experiments/S12C-surfer-reproducibility.md を根拠に、upstream変更、WASM化、配布資産の日時・版の由来、license収集を分けてください。"
+        },
+        {
+          "content": "postMessageのready・load・poll、iframe境界、WebGL要件、高DPRの倍率はtests/web/surfer-scale.test.mjsと関連E2Eで確認します。波形表示の見えたことを論理正しさの証明にしないでください。"
+        }
+      ]
+    },
+    {
+      "title": "solverのビルドと通信規約",
+      "purpose": "Yices2・Z3・追加solverのWASIビルド、stdin/stdout通信、応答framing、unknownと異常終了の検査を説明する。",
+      "parent": "形式検証の経路と有効化条件",
+      "page_notes": [
+        {
+          "content": "scripts/build-solver-probe.py、scripts/measure-solver-protocol.mjs、web/lib/smt-response-framer.mjs、tests/synth/solver-protocol-helpers.mjs、tests/check-solver-protocol/を参照してください。"
+        },
+        {
+          "content": "docs/research/formal-solvers.md、docs/experiments/S15-solver-build-and-transport.md、S15-solver-native-wasi.md、S15-extra-solver-* を段階の違いが分かるように使ってください。"
+        },
+        {
+          "content": "構文エラーの終了0、長い応答、bit-vector・array、worker異常、timeout、unknownを成功に読み替えないでください。patches/のWASI適応は製品保証ではなく、理由と負の対照へリンクしてください。"
+        }
+      ]
+    },
+    {
+      "title": "SBYとPython側の実行基盤",
+      "purpose": "Pyodide上のPython実行、仮想process、SBY status、workspace delta、WASI workerと取消・期限の基盤を説明する。",
+      "parent": "形式検証の経路と有効化条件",
+      "page_notes": [
+        {
+          "content": "web/formal_process.py、web/formal-wasi-worker.mjs、web/lib/formal-python-job.mjs、web/lib/formal-wasi-job.mjs、web/lib/wasi-p1.mjs、web/lib/formal-workspace.mjsを参照してください。"
+        },
+        {
+          "content": "docs/experiments/S15-sby-process.md、S15-sby-runtime.md、S15-sby-artifact-audit.md、S15-sby-repeated.md、S15-sby-controls.md、S15-sby-witness.md を検査段階順に追ってください。"
+        },
+        {
+          "content": "SBYの-j 1制限、process・pipe・待機の仮想化、statusと終了結果の照合、全成果物hash監査を省略しないでください。研究経路の一致を画面統合済みや全mode対応とは書かないでください。"
+        }
+      ]
+    },
+    {
+      "title": "反例再実行の監査証跡",
+      "purpose": "SAT witnessとSMT traceの独立再実行、元VHDL・下位化Verilog比較、CSV列・hash・負の対照による監査を説明する。",
+      "parent": "形式検証の経路と有効化条件",
+      "page_notes": [
+        {
+          "content": "web/formal_trace.py、web/lib/formal-replay.mjs、scripts/audit-formal-trace.py、scripts/audit-sat-formal.py、scripts/audit-smt-replay.py、scripts/audit-smt-vhdl-replay.pyを参照してください。"
+        },
+        {
+          "content": "docs/experiments/S15-smt-original-replay.md、S15-vhdl-native-replay.md、S15-vhdl-lowered-replay.md、S15-smt-trace-audit.md を根拠に、元回路と下位化後の比較対象を分けてください。"
+        },
+        {
+          "content": "X・未初期化・memory・組合せループなどの未対応理由を消さないでください。空虚な有界結果を証明と呼ばず、独立再実行、反復回数、全列監査、負の対照の範囲を明示してください。"
+        }
+      ]
     },
     {
       "title": "Web IDEとプロジェクト管理",
       "purpose": "ファイル編集、OPFS保存、revision、ZIP入出力、診断、成果物失効、デスクトップとモバイルの操作を説明する。",
       "parent": "午後のFPGAの全体像",
-      "page_notes": [{ "content": "web/ide.mjs、web/lib/workspace-ui.mjs、web/lib/、tests/web/、tests/e2e/、docs/research/editor-and-ai.md を根拠にし、保存失敗や実行中の編集制限を省かないでください。" }]
+      "page_notes": [
+        {
+          "content": "web/ide.mjs、web/lib/workspace-ui.mjs、web/lib/project-store.mjs、web/lib/project-zip.mjs、web/lib/project.mjs、tests/web/、tests/e2e/、docs/research/editor-and-ai.md を根拠にします。"
+        },
+        {
+          "content": "保存失敗、容量、revisionの切替え、実行中の編集制限、生成物失効を省かないでください。OPFSはブラウザー内保存であり、外部サーバーへの自動同期ではありません。"
+        },
+        {
+          "content": "CodeMirrorの編集体験、ファイルツリー、ZIP入出力、診断表示を分け、子ページのUX契約・AI・補完・ブラウザー要件へ詳細を振り分けてください。"
+        }
+      ]
     },
     {
       "title": "UX契約と状態遷移",
       "purpose": "主操作、タブ、案内、状態chartと実装の対応、DSLからの生成とgate検査の手順を説明する。",
       "parent": "Web IDEとプロジェクト管理",
-      "page_notes": [{ "content": "docs/ux/README.md 、docs/ux/gogo-fpga.ux.rb 、docs/ux/gogo-fpga.ux.json 、web/lib/と対応テストを参照します。docs/ux/out/ は生成結果として照合し、手編集の正本にしないでください。" }]
+      "page_notes": [
+        {
+          "content": "docs/ux/README.md、docs/ux/gogo-fpga.ux.rb、docs/ux/gogo-fpga.ux.json、web/lib/と対応テストを参照します。docs/ux/out/ は生成結果として照合し、手編集の正本にしないでください。"
+        },
+        {
+          "content": "状態chart、画面文言、ボタン有効条件、エラー案内は実装と生成物の両方で確認します。DSLにない見た目の変更を仕様済みと扱わないでください。"
+        },
+        {
+          "content": "画面変更時は4ボードの表示確認が必要です。デスクトップと390px幅、実行中・失敗・未対応の状態を分け、1画面の成功だけで全体を確認済みにしないでください。"
+        }
+      ]
     },
     {
       "title": "OpenRouter接続とキーの保護",
       "purpose": "PKCE S256、stateと期限、動的callback、URLの消去、タブ内のキー保持と明示保存、CSPを説明する。",
       "parent": "Web IDEとプロジェクト管理",
-      "page_notes": [{ "content": "web/lib/openrouter-auth.mjs、web/lib/openrouter-ui.mjs、web/_headers、web/serve.py、docs/research/editor-and-ai.md のA1、tests/e2e/openrouter-auth.spec.mjsを参照します。sessionStorageの一時値削除、localStorage不使用、キーをURL・ログへ出さない条件を保持してください。" }]
+      "page_notes": [
+        {
+          "content": "web/lib/openrouter-auth.mjs、web/lib/openrouter-ui.mjs、web/_headers、web/serve.py、docs/research/editor-and-ai.md のA1、tests/e2e/openrouter-auth.spec.mjsを参照します。"
+        },
+        {
+          "content": "sessionStorageの一時値削除、localStorage不使用、キーをURL・ログへ出さない条件を保持してください。PKCE通信とAI相談本文の送信は別の段階です。"
+        },
+        {
+          "content": "mockで確認したcallback、state期限、保存選択を実OpenRouterのログイン・課金・応答品質の確認と混同しないでください。CSPの接続先制限と利用者操作も説明してください。"
+        }
+      ]
     },
     {
       "title": "AI相談・エラー説明と差分の採否",
       "purpose": "送信本文の確認と同一バイト列での送信、streamingと停止、文脈選択、ファイルごとの採否、一括revisionと成果物失効を説明する。",
       "parent": "Web IDEとプロジェクト管理",
-      "page_notes": [{ "content": "web/lib/openrouter-chat.mjs、web/lib/ai-chat-ui.mjs、web/lib/ai-chat-flow.mjs、web/lib/ai-proposals.mjs、docs/research/editor-and-ai.md のA2と対応テストを参照します。.cst、ライブラリー、binary、不正パスの拒否を示し、教師役・inline補完などの将来案を実装済みとしないでください。" }]
+      "page_notes": [
+        {
+          "content": "web/lib/openrouter-chat.mjs、web/lib/ai-chat-ui.mjs、web/lib/ai-chat-flow.mjs、web/lib/ai-proposals.mjs、docs/research/editor-and-ai.md のA2と対応テストを参照します。"
+        },
+        {
+          "content": ".cst、ライブラリー、binary、不正パスの拒否を示し、structured outputs、tools、reasoningの対応表示と実際の検査を分けてください。将来案を実装済みとしないでください。"
+        },
+        {
+          "content": "提案は利用者が確認し、ファイルごとに採否します。採用は一括revisionとして記録され、成果物は失効します。streamingの表示途中と確定応答、停止、送信前確認を混同しないでください。"
+        }
+      ]
+    },
+    {
+      "title": "教師役・採点とAI利用量の管理",
+      "purpose": "段階的ヒント、参照検証、ルブリック採点、読取りツール承認、モデル別・用途別のAI利用量表示を説明する。",
+      "parent": "Web IDEとプロジェクト管理",
+      "page_notes": [
+        {
+          "content": "web/lib/ai-grading.mjs、web/lib/ai-history.mjs、web/lib/ai-read-tools.mjs、web/lib/ai-references.mjs、web/lib/ai-usage.mjs、tests/web/ai-*.test.mjsを参照してください。"
+        },
+        {
+          "content": "教師役の段階的ヒントは答えを直接出さないための制御です。参照抽出と検証、端末でのルブリック採点、外部AIの講評を分けてください。AIの講評は端末で計算した得点を変更せず、論理正しさの証明にもしません。"
+        },
+        {
+          "content": "読取りツールはファイル範囲と承認フローで制限します。利用量はモデル別・用途別の表示であり、課金額やOpenRouter側の最終請求を保証するものではありません。"
+        }
+      ]
+    },
+    {
+      "title": "端末内補完と出力表示",
+      "purpose": "端末内AI補完の文脈切出し、UTF-8境界、session管理、ログ整形、進捗抽出、結果分類を説明する。",
+      "parent": "Web IDEとプロジェクト管理",
+      "page_notes": [
+        {
+          "content": "web/editor/editor.mjs、web/lib/local-completion.mjs、web/lib/terminal-output.mjs、web/lib/parse-progress.mjs、web/lib/classify-result.mjs、docs/research/on-device-completion.md を参照してください。"
+        },
+        {
+          "content": "端末内補完はOpenRouterへ送らない経路です。ブラウザーのAI API、文脈切出し、session cleanup、非対応時の退避を外部AI相談と混同しないでください。"
+        },
+        {
+          "content": "ログ整形と結果分類は書き込み失敗のFAIL検出にも関係します。tests/web/local-completion.test.mjs、terminal-output.test.mjs、parse-progress.test.mjs、classify-result.test.mjsで確認範囲を示してください。"
+        }
+      ]
     },
     {
       "title": "HDLライブラリーとCPUコア",
       "purpose": "固定版カタログ、依存解決、利用条件、ボード別の制限、名前付きVHDLライブラリーと配布ソース照合を説明する。",
       "parent": "Web IDEとプロジェクト管理",
-      "page_notes": [{ "content": "docs/research/hdl-libraries.md 、docs/research/hdl-validation-history.md 、scripts/build-library-assets.py、third_party/の固定参照とS14を参照します。上流の全機能ではなく製品で検証した構成とライセンスを扱ってください。" }]
+      "page_notes": [
+        {
+          "content": "docs/research/hdl-libraries.md、docs/research/hdl-validation-history.md、scripts/build-library-assets.py、third_party/の固定参照とS14を参照します。"
+        },
+        {
+          "content": "検証済み、未検証、容量超過、frontend非対応、言語非対応を分けてください。理由付きで残した候補を選択可能とせず、全ボード同一の制限とボード別制限を混同しないでください。"
+        },
+        {
+          "content": "catalog、依存解析、ZIP同梱、source/license asset、Git情報なし再生成の照合は一体です。upstream全機能ではなく、製品で固定・検証した構成とライセンスを扱ってください。"
+        }
+      ]
+    },
+    {
+      "title": "ブラウザー要件と非対応時の案内",
+      "purpose": "WebAssembly、JSPI、WebUSB、Cross-Origin Isolation、COOP/COEP、localhostでの代替案と非対応ブラウザーへの案内を説明する。",
+      "parent": "Web IDEとプロジェクト管理",
+      "page_notes": [
+        {
+          "content": "web/lib/browser-support.mjs、web/app.js、tests/web/browser-support.test.mjs、web/_headers、web/serve.pyを参照してください。"
+        },
+        {
+          "content": "実装ではWebUSBも起動判定の対象です。書き込みに必要な機能と全体の起動判定、localhostと本番配信の違いを分けてください。Chrome 137以降の案内を全機能の最低版と誤記しないでください。"
+        },
+        {
+          "content": "非対応時の案内は利用者が次に取れる行動を示す必要があります。mock環境での判定テストを実ブラウザー全機種の動作保証として扱わないでください。"
+        }
+      ]
     },
     {
       "title": "対応ボードと制約",
       "purpose": "Tang Nano 1K・4K・9K・20Kの識別、FPGAとIDCODE、SRAM・フラッシュ、ピン制約とテンプレート、容量の制限を説明する。",
       "parent": "午後のFPGAの全体像",
-      "page_notes": [{ "content": "web/内のボード定義・制約テンプレート、tests/fixtures/、README.md、docs/research/hdl-libraries.md を根拠にします。生成する.cstを手編集する手順や、別ボードでの実機動作保証を書かないでください。" }]
+      "page_notes": [
+        {
+          "content": "web/lib/boards.mjs、web/lib/templates.mjs、web/lib/fs-idcode.mjs、tests/fixtures/、README.md、docs/research/hdl-libraries.md を根拠にします。"
+        },
+        {
+          "content": "生成する.cstを手編集する手順や、別ボードでの実機動作保証を書かないでください。FPGA型番、openFPGALoader名、nextpnr device、IDCODEの対応は正本の定義へ戻ってください。"
+        },
+        {
+          "content": "1K・4K・9K・20KでSRAMとフラッシュの構成、容量、I/O制約が違います。容量超過やfrontend非対応をボード故障とせず、実機未確認の前提を必ず残してください。"
+        }
+      ]
     },
     {
       "title": "ビルドとCIの検査",
       "purpose": "WASMと静的アプリの組立て、固定ツール、native/WASI比較、unit・E2E・仮想USBの分担、releaseとライセンス検証を説明する。",
       "parent": "午後のFPGAの全体像",
-      "page_notes": [{ "content": "scripts/、.github/workflows/、package.json、tests/、THIRD_PARTY_NOTICES.mdを参照します。localのbuildコマンドは製品CLIではありません。build-web.shが案内用public_html/index.htmlを上書きする二段階運用と復元をdocs/research/pages-delivery.md で確認してください。" }]
+      "page_notes": [
+        {
+          "content": "scripts/、.github/workflows/、package.json、tests/、THIRD_PARTY_NOTICES.mdを参照します。localのbuildコマンドは製品CLIではありません。"
+        },
+        {
+          "content": "build-web.shが案内用public_html/index.htmlを上書きする二段階運用と復元をdocs/research/pages-delivery.md で確認してください。生成物をmainへ commit しない境界も示してください。"
+        },
+        {
+          "content": "unit、NodeのWASI検査、仮想USB、Playwright、product test、coverage jobの役割を分けてください。CI成功の種類を実機確認や公開承認に読み替えないでください。"
+        }
+      ]
     },
     {
       "title": "再現ビルドと配布の完全性",
       "purpose": "pinとlock、WASM manifest、圧縮資材とdigest、Surferの日時・版の由来、配布ソースと原文ライセンスの照合を説明する。",
       "parent": "ビルドとCIの検査",
-      "page_notes": [{ "content": "scripts/build-info.py、scripts/package-release.sh、tests/check-release-closure/、docs/experiments/S12C-surfer-reproducibility.md 、docs/research/formal-sources.md を根拠にします。不一致を正規化で隠さず、親リポジトリーの日時を依存の版として埋め込まない条件を説明してください。" }]
+      "page_notes": [
+        {
+          "content": "scripts/build-info.py、scripts/package-release.sh、tests/check-release-closure/、docs/experiments/S12C-surfer-reproducibility.md、docs/research/formal-sources.md を根拠にします。"
+        },
+        {
+          "content": "不一致を正規化で隠さず、親リポジトリーの日時を依存の版として埋め込まない条件を説明してください。固定値の正本はpin checkerとlockファイルです。"
+        },
+        {
+          "content": "配布ZIP、source TAR、license、manifest、全ファイルhash、欠落・余分ファイルの負の対照を分けてください。Git情報なし再生成の成功をCI全成功や実機確認と混同しないでください。"
+        }
+      ]
     },
     {
       "title": "Pages公開の承認と配信",
       "purpose": "mainの検証済みartifactからpagesへの承認PR、preview、人間による本番承認、同一内容の扱いと失敗時の停止を説明する。",
       "parent": "ビルドとCIの検査",
-      "page_notes": [{ "content": ".github/workflows/pages-delivery.yml、scripts/publish-pages.py、tests/check-pages-publish/、docs/research/pages-delivery.md を根拠にします。mainの案内ページをアプリとして配布しない条件と、実装・推奨設定・実際の配信観測の区別を示してください。" }]
+      "page_notes": [
+        {
+          "content": ".github/workflows/pages-delivery.yml、scripts/publish-pages.py、tests/check-pages-publish/、docs/research/pages-delivery.md を根拠にします。"
+        },
+        {
+          "content": "mainの案内ページをアプリとして配布しない条件と、実装・推奨設定・実際の配信観測の区別を示してください。pages-update/*の承認PRをエージェントがマージする手順はありません。"
+        },
+        {
+          "content": "元run、SHA、digest、artifactの照合、同一内容時の扱い、権限不足や不一致での停止を説明してください。Cloudflareの実設定は人間が確認する範囲です。"
+        }
+      ]
     },
     {
       "title": "仮想USBと失敗を確かめるテスト",
       "purpose": "仮想FT2232・GOWIN TAP・NORフラッシュ、4ボードの書き込み対照、ログと終了の判定、shard網羅性と実機との差を説明する。",
       "parent": "ビルドとCIの検査",
-      "page_notes": [{ "content": "tests/sim/fake-webusb.mjs、tests/sim/、tests/check-sim-shards/、tests/e2e/、docs/research/flasher-integration.md とS7を参照します。仮想USBで試せない電気的条件や実機の時間を確認済みとは扱わないでください。" }]
+      "page_notes": [
+        {
+          "content": "tests/sim/fake-webusb.mjs、tests/sim/、tests/check-sim-shards/、tests/e2e/、docs/research/flasher-integration.md とS7を参照します。"
+        },
+        {
+          "content": "仮想デバイスはupstreamの手順に合わせ、負の対照で失敗を検出できることを確認します。模擬した挙動を実機の電気的条件や時間の証拠にしないでください。"
+        },
+        {
+          "content": "shard網羅性は全件一覧と実行結果の和集合・重複で検査します。4ボード成功、FAILログ検出、終了コード0の罠を分けて説明してください。"
+        }
+      ]
+    },
+    {
+      "title": "外部ソースへのpatch群",
+      "purpose": "WASI・Emscripten適応、GHDL形式property、CaDiCaLやsolverの制約回避、patch適用位置とupstreamとの差を説明する。",
+      "parent": "ビルドとCIの検査",
+      "page_notes": [
+        {
+          "content": "patches/、scripts/prepare-pnr-source.py、scripts/build-formal-solvers.py、scripts/build-ghdl-wasm.sh、.gitmodules、docs/research/formal-sources.md を参照してください。"
+        },
+        {
+          "content": "patchはupstream本体の改善ではなく、固定版へ製品ビルドを通すための差分です。何の制約を避けるか、upstreamソースのどこに適用するか、負の対照を示してください。"
+        },
+        {
+          "content": "NVCやsolverの研究用patchを製品有効化と混同しないでください。不要になったpatchの除去、upstreamへの提案、ライセンス保持は人間の判断と記録が必要です。"
+        }
+      ]
+    },
+    {
+      "title": "ビルド高速化とCI計測",
+      "purpose": "cache、shard分割、coverage、CI時間測定、buildオプション比較、採用条件と未確認の残件を説明する。",
+      "parent": "ビルドとCIの検査",
+      "page_notes": [
+        {
+          "content": "scripts/ci-build-cache.py、scripts/ci-build-timings.py、scripts/check-ci-shards.mjs、scripts/run-ci-shard.mjs、docs/research/ci-build-cache.md を参照してください。"
+        },
+        {
+          "content": "S3、S8、S8B、S16、S5、S5Bの測定は条件つきの実験です。raw CSV、中央値、失敗run、cache hit/miss、shard分割の違いを時系列で説明してください。"
+        },
+        {
+          "content": "高速化のために検査を省かないでください。coverage job、全ファイルhash、固定入力キー、main限定保存、corrupted cache検出の未確認範囲を区別してください。"
+        }
+      ]
     },
     {
       "title": "開発参加とエージェントの規則",
       "purpose": "main保護、日本語・JIS X 0213、fail closed、外部コードのpin・patch・ライセンス、スキルと変更時の検査を案内する。",
       "parent": "午後のFPGAの全体像",
-      "page_notes": [{ "content": "AGENTS.md、CLAUDE.md、.agents/skills/、.claude/skills/、.github/dependabot.yml、.github/workflows/pins-check.ymlを参照します。版の正本はpin checkerで確認し、エージェントによるPRマージや無断の上流書込みを勧めないでください。" }]
+      "page_notes": [
+        {
+          "content": "AGENTS.md、CLAUDE.md、.agents/skills/、.claude/skills/、.github/dependabot.yml、.github/workflows/pins-check.ymlを参照します。"
+        },
+        {
+          "content": "版の正本はpin checkerで確認し、エージェントによるPRマージや無断の上流書込みを勧めないでください。mainへ直接pushせず、人間が公開承認する境界を説明してください。"
+        },
+        {
+          "content": "日本語文書はyomiyasuで推敲し、文字はJIS X 0213の範囲に保ちます。スキル追加・改名・削除では.agents/skills/と.claude/skills/の対応を同じ変更で維持してください。"
+        }
+      ]
     },
     {
       "title": "調査記録とWikiの保守",
       "purpose": "主題別調査・実験・UX契約を読む方法、現在の結論・過去の失敗・未確認の区別、Wiki設定の更新手順を説明する。",
       "parent": "開発参加とエージェントの規則",
-      "page_notes": [{ "content": "RESEARCH.mdの7・8章、docs/experiments/README.md 、docs/research/document-structure.md 、docs/research/deepwiki.md 、.devin/wiki.jsonを参照します。Wikiは派生した案内であり、実装や原記録の代わりではありません。" }]
+      "page_notes": [
+        {
+          "content": "RESEARCH.mdの7・8章、docs/experiments/README.md、docs/research/document-structure.md、docs/research/deepwiki.md、.devin/wiki.jsonを参照します。"
+        },
+        {
+          "content": "Wikiは派生した案内であり、実装や原記録の代わりではありません。実験は目的、固定条件、事前基準、反復、失敗、raw CSVをたどれる形で説明してください。"
+        },
+        {
+          "content": "Wiki設定を変えるときは公式仕様を再確認し、ページとノート上限、公開中構成との差、再生成後の人間確認を記録します。設定のJSON検査成功を内容の正しさと同一視しないでください。"
+        }
+      ]
+    },
+    {
+      "title": "文書の自動検査とlint",
+      "purpose": "DeepWiki設定、文書リンク、JIS X 0213、文書サイズ、個人環境パス、shellとworkflowのfail closed検査を説明する。",
+      "parent": "開発参加とエージェントの規則",
+      "page_notes": [
+        {
+          "content": ".github/scripts/check-deepwiki.py、check-links.py、check-jisx0213.py、check-document-size.py、check-document-paths.py、.github/workflows/lint.yml、agent-docs.ymlを参照してください。"
+        },
+        {
+          "content": "検査は読取り失敗や解析不能を成功にしないfail closedです。allowlistは例外の理由付き記録であり、自分で書く文章を検査から逃がす仕組みではありません。"
+        },
+        {
+          "content": "DeepWiki設定の構造検査はページ・ノート数やJSON形状を確認しますが、生成結果の正確さは保証しません。文書分割、旧リンク保持、原典とライセンスの保持を子文書へたどってください。"
+        }
+      ]
     }
   ]
 }

@@ -20,9 +20,26 @@ def config():
 
 class DeepWikiTests(unittest.TestCase):
     def test_repository_config(self):
-        pages, notes = CHECK.validate(CHECK.load_config(ROOT / ".devin/wiki.json"))
-        self.assertGreater(pages, 0)
-        self.assertLessEqual(notes, CHECK.MAX_NOTES)
+        config = CHECK.load_config(ROOT / ".devin/wiki.json")
+        pages, notes = CHECK.validate(config)
+        self.assertEqual(pages, CHECK.MAX_PAGES)
+        self.assertEqual(notes, CHECK.MAX_NOTES)
+        self.assertEqual(len(config["repo_notes"]), 10)
+        self.assertTrue(all(len(page.get("page_notes", [])) == 3 for page in config["pages"]))
+        titles = {page["title"] for page in config["pages"]}
+        for title in [
+            "ブラウザー要件と非対応時の案内",
+            "教師役・採点とAI利用量の管理",
+            "端末内補完と出力表示",
+            "外部ソースへのpatch群",
+            "ビルド高速化とCI計測",
+            "文書の自動検査とlint",
+            "Surfer組込みと表示倍率の調整",
+            "solverのビルドと通信規約",
+            "SBYとPython側の実行基盤",
+            "反例再実行の監査証跡",
+        ]:
+            self.assertIn(title, titles)
 
     def test_minimal_and_optional_fields(self):
         value = config()
