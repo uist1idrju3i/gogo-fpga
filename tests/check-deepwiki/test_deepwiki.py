@@ -2,6 +2,7 @@ import copy
 import importlib.util
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 import tempfile
@@ -40,6 +41,36 @@ class DeepWikiTests(unittest.TestCase):
             "反例再実行の監査証跡",
         ]:
             self.assertIn(title, titles)
+
+    def test_reader_navigation(self):
+        pages = CHECK.load_config(ROOT / ".devin/wiki.json")["pages"]
+        overview = "午後のFPGAの全体像"
+        ide = "Web IDEとプロジェクト管理"
+        boards = "対応ボードと制約"
+        self.assertEqual(pages[0]["title"], overview)
+        self.assertEqual([page["title"] for page in pages if page.get("parent") == overview], [
+            ide,
+            boards,
+            "ブラウザー内の構成とデータの流れ",
+            "ビルドとCIの検査",
+            "開発参加とエージェントの規則",
+        ])
+        ide_pages = [page["title"] for page in pages if page.get("parent") == ide]
+        self.assertEqual(ide_pages[:2], ["ブラウザー要件と非対応時の案内", "シミュレーションと波形"])
+        self.assertIn("openFPGALoader・WebUSBと書き込みの安全性",
+                      [page["title"] for page in pages if page.get("parent") == boards])
+
+    def test_page_evidence_references_repository_paths(self):
+        pages = CHECK.load_config(ROOT / ".devin/wiki.json")["pages"]
+        for page in pages:
+            with self.subTest(page=page["title"]):
+                paths = re.findall(r"`([^`]+)`", page["page_notes"][0]["content"])
+                self.assertGreaterEqual(len(paths), 2)
+                for path in paths:
+                    reference = Path(path)
+                    self.assertFalse(reference.is_absolute(), path)
+                    self.assertNotIn("..", reference.parts, path)
+                    self.assertTrue((ROOT / reference).exists(), path)
 
     def test_minimal_and_optional_fields(self):
         value = config()
