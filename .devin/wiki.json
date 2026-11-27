@@ -297,7 +297,7 @@
           "content": "web/lib/ai-grading.mjs、web/lib/ai-history.mjs、web/lib/ai-read-tools.mjs、web/lib/ai-references.mjs、web/lib/ai-usage.mjs、tests/web/ai-*.test.mjsを参照してください。"
         },
         {
-          "content": "教師役の段階的ヒントは答えを直接出さないための制御です。参照抽出と検証、採点ルブリック、構造化出力の利用条件を分け、AIの講評を論理正しさの証明にしないでください。"
+          "content": "教師役の段階的ヒントは答えを直接出さないための制御です。参照抽出と検証、端末でのルブリック採点、外部AIの講評を分けてください。AIの講評は端末で計算した得点を変更せず、論理正しさの証明にもしません。"
         },
         {
           "content": "読取りツールはファイル範囲と承認フローで制限します。利用量はモデル別・用途別の表示であり、課金額やOpenRouter側の最終請求を保証するものではありません。"
