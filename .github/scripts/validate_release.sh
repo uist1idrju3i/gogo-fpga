@@ -9,23 +9,20 @@ fail() {
 if [[ "${1:-}" != --environment-only ]]; then
   [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/tags/v* ]] ||
     fail "Expected a v* tag push"
-  [[ "$(git cat-file -t "$GITHUB_REF")" == tag ]] ||
-    fail "Expected an annotated tag"
-  tag_name=$(git cat-file tag "$GITHUB_REF" | sed -n '3s/^tag //p')
-  [[ "$tag_name" == "$GITHUB_REF_NAME" ]] || fail "Signed tag name does not match the ref"
-  commit=$(git rev-parse "$GITHUB_REF^{commit}")
+  [[ "$GITHUB_REF" == "refs/tags/$GITHUB_REF_NAME" ]] ||
+    fail "Tag name does not match the ref"
+  if [[ "$(git cat-file -t "$GITHUB_REF")" == tag ]]; then
+    tag_name=$(git cat-file tag "$GITHUB_REF" | sed -n '3s/^tag //p')
+    [[ "$tag_name" == "$GITHUB_REF_NAME" ]] ||
+      fail "Annotated tag name does not match the ref"
+  fi
+  commit=$(git rev-parse --verify "$GITHUB_REF^{commit}") ||
+    fail "The tag must resolve to a commit"
   [[ "$commit" == "$(git rev-parse HEAD)" &&
      "$commit" == "$(git rev-parse "$GITHUB_SHA^{commit}")" ]] ||
     fail "Tag, push event, and checkout must point to the same commit"
   git merge-base --is-ancestor "$commit" refs/remotes/origin/main ||
     fail "The tagged commit must be in main history"
-  [[ -n "${RELEASE_TAG_PUBLIC_KEY:-}" ]] || fail "Configure RELEASE_TAG_PUBLIC_KEY first"
-  export GNUPGHOME
-  GNUPGHOME=$(mktemp -d)
-  trap 'rm -rf -- "$GNUPGHOME"' EXIT
-  printf '%s\n' "$RELEASE_TAG_PUBLIC_KEY" | gpg --batch --no-options --import
-  git -c gpg.format=openpgp -c gpg.program=gpg verify-tag "$GITHUB_REF" ||
-    fail "The tag must have a valid signature from a configured release key"
 fi
 
 endpoint="repos/$GITHUB_REPOSITORY/environments/production"

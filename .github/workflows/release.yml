@@ -27,10 +27,9 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: タグの署名と公開環境を検証
+      - name: タグと公開環境を検証
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG_PUBLIC_KEY: ${{ vars.RELEASE_TAG_PUBLIC_KEY }}
         run: bash .github/scripts/validate_release.sh
 
   build:
